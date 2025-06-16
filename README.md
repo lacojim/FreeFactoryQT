@@ -18,3 +18,7 @@ Create a folder in /opt called FreeFactory and create a /bin folder inside that.
 You need to have ffmpeg installed in /usr/bin/
 
 For now, start it using python3 main.py. This will change soon.
+
+![image](https://github.com/user-attachments/assets/d3b490a0-f5b9-47ec-930c-caa274dfe101)
+
+![image](https://github.com/user-attachments/assets/a1866f6b-c9ac-4064-bb48-d623b3cf3474)
