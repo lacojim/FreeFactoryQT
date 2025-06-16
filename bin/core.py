@@ -141,13 +141,17 @@ class FreeFactoryCore:
 
     def build_ffmpeg_command(self, input_path, factory_data):
         output_dir = factory_data.get("OUTPUTDIRECTORY") or "."
-        suffix = factory_data.get("OUTPUTFILESUFFIX", "")
+        suffix = factory_data.get("OUTPUTFILESUFFIX", "")   #No longer used by here for compatibility 
         wrapper = factory_data.get("VIDEOWRAPPER") or factory_data.get("AUDIOFILEEXTENSION") or ".mp4"
         wrapper = wrapper.lstrip(".")
-        codec = factory_data.get("VIDEOCODECS", "").strip()
+        video_codec = factory_data.get("VIDEOCODECS", "").strip()
         size = factory_data.get("VIDEOSIZE", "").strip()
         subtitle = factory_data.get("SUBTITLECODECS", "").strip()
-        audio = factory_data.get("AUDIOCODECS", "").strip()
+        audio_codec = factory_data.get("AUDIOCODECS", "").strip()
+        audio_bitrate = factory_data.get("AUDIOBITRATE", "").strip()
+        sample_rate = factory_data.get("AUDIOSAMPLERATE", "").strip()
+        audio_channels = factory_data.get("AUDIOCHANNELS", "").strip()
+        
         manual = factory_data.get("MANUALOPTIONS", "").strip()
         
         video_stream_id = factory_data.get("VIDEOSTREAMID", "").strip()
@@ -159,15 +163,21 @@ class FreeFactoryCore:
 
         cmd = ["ffmpeg", "-hide_banner", "-y", "-i", input_path]
 
-        # Only add video codec if explicitly defined
-        if codec:
-            cmd += ["-c:v", codec]
-        if size and codec:
+        # Only add if explicitly defined
+        if video_codec:
+            cmd += ["-c:v", video_codec]
+        if size and video_codec:
             cmd += ["-s", size]
         if subtitle:
             cmd += ["-c:s", subtitle]
-        if audio:
-            cmd += ["-c:a", audio]
+        if audio_codec:
+            cmd += ["-c:a", audio_codec]
+        if audio_bitrate:
+            cmd += ["-b:a", audio_bitrate]
+        if sample_rate:
+            cmd += ["-ar", sample_rate]
+        if audio_channels:
+            cmd += ["-ac", audio_channels]
 
 
         if video_stream_id:

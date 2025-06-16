@@ -4879,7 +4879,7 @@ or Factory Testing</string>
         <x>10</x>
         <y>10</y>
         <width>1021</width>
-        <height>271</height>
+        <height>521</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -4894,7 +4894,7 @@ or Factory Testing</string>
          <x>120</x>
          <y>30</y>
          <width>891</width>
-         <height>192</height>
+         <height>431</height>
         </rect>
        </property>
        <property name="columnCount">
@@ -4921,7 +4921,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>230</y>
+         <y>490</y>
          <width>1001</width>
          <height>23</height>
         </rect>
@@ -4986,7 +4986,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>210</y>
+         <y>470</y>
          <width>62</width>
          <height>16</height>
         </rect>
@@ -5006,9 +5006,9 @@ or Factory Testing</string>
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>290</y>
+        <y>540</y>
         <width>1021</width>
-        <height>291</height>
+        <height>101</height>
        </rect>
       </property>
       <property name="toolTip">
@@ -5077,7 +5077,7 @@ or Factory Testing</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="ActionButtonGroup"/>
   <buttongroup name="RunFromButtonGroup"/>
+  <buttongroup name="ActionButtonGroup"/>
  </buttongroups>
 </ui>
