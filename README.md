@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/9cca7be8-736b-4768-8cd6-79cbd008605a)
+
 # FreeFactoryQT
 
 ![image](https://github.com/user-attachments/assets/d3b490a0-f5b9-47ec-930c-caa274dfe101)
