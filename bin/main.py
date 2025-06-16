@@ -14,6 +14,11 @@ from PyQt6.QtWidgets import (
 from PyQt6.uic import loadUi
 from config_manager import ConfigManager
 
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QPlainTextEdit
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import Qt
+import os
+
 
 
 from core import FFmpegWorker, FreeFactoryCore, FFmpegWorkerZone
@@ -23,18 +28,35 @@ from droptextedit import DropTextEdit
 class LicenseDialog(QDialog):
     def __init__(self, license_text, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("License")
+        self.setWindowTitle("FreeFactory License")
         self.setMinimumSize(600, 400)
 
-        layout = QVBoxLayout(self)
-        text_area = QPlainTextEdit(self)
-        text_area.setPlainText(license_text)
-        text_area.setReadOnly(True)
-        layout.addWidget(text_area)
+        layout = QVBoxLayout()
 
+        # Portable GPT logo path
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        logo_path = os.path.abspath(os.path.join(script_dir, "..", "Pics", "gplv3-88x31.png"))
+
+        logo_label = QLabel()
+        if os.path.exists(logo_path):
+            pixmap = QPixmap(logo_path)
+            logo_label.setPixmap(pixmap)
+            logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            layout.addWidget(logo_label)
+
+        # License text area
+        text_edit = QPlainTextEdit()
+        text_edit.setReadOnly(True)
+        text_edit.setPlainText(license_text)
+        layout.addWidget(text_edit)
+
+        # Close button
         close_btn = QPushButton("Close", self)
         close_btn.clicked.connect(self.accept)
         layout.addWidget(close_btn)
+
+        self.setLayout(layout)
+
 
 # Main app class
 class FreeFactoryApp(QMainWindow):

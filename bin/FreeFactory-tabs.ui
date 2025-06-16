@@ -2961,7 +2961,7 @@ here that are not available via this GUI.</string>
      <widget class="QPushButton" name="NewFactory">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>233</x>
         <y>10</y>
         <width>31</width>
         <height>31</height>
@@ -2987,7 +2987,7 @@ here that are not available via this GUI.</string>
      <widget class="QPushButton" name="SaveFactory">
       <property name="geometry">
        <rect>
-        <x>50</x>
+        <x>273</x>
         <y>10</y>
         <width>31</width>
         <height>31</height>
@@ -3013,7 +3013,7 @@ here that are not available via this GUI.</string>
      <widget class="QPushButton" name="DeleteFactory">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>313</x>
         <y>10</y>
         <width>31</width>
         <height>31</height>
@@ -3121,7 +3121,7 @@ here that are not available via this GUI.</string>
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>../Pics/factory.ico</normaloff>../Pics/factory.ico</iconset>
+        <normaloff>../Pics/FreeFactoryQT.ico</normaloff>../Pics/FreeFactoryQT.ico</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -3162,6 +3162,22 @@ or Factory Testing</string>
       </property>
       <property name="placeholderText">
        <string>Drop Media Files Here</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>4</y>
+        <width>141</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>../Pics/FreeFactoryProgramLogo.png</pixmap>
       </property>
      </widget>
     </widget>
