@@ -13,7 +13,7 @@ LICENSE.txt
 main.py
 FreeFactory-tabs.ui
 
-Create a folder in /opt called FreeFactory and create a /bin folder inside that. Copy all these files into it.
+Create a folder in /opt called FreeFactory and create a /bin folder inside that. Copy all these files into it. You also need the Pics folder in the root of /opt/FreeFactory.
 
 You need to have ffmpeg installed in /usr/bin/
 
