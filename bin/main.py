@@ -354,7 +354,7 @@ class FreeFactoryApp(QMainWindow):
                 key, value = line.strip().split('=', 1)
                 factory_data[key.strip()] = value.strip()
 
-        # Populate QLineEdits (excluding FactoryFilename)
+#=======Populate QLineEdits (excluding FactoryFilename)
         for key in [
             "FactoryDescription", "NotifyDirectory", "OutputDirectory",
             "OutputFileSuffix", "FTPUrl", "FTPUsername", "FTPPassword", "FTPRemotePath",
@@ -430,7 +430,7 @@ class FreeFactoryApp(QMainWindow):
                 if button:
                     button.setChecked(True)
 
-    # ... other methods remain unchanged ...
+#========other methods remain unchanged ...
 
 
     def save_current_factory(self):
@@ -498,7 +498,7 @@ class FreeFactoryApp(QMainWindow):
         QMessageBox.information(self, "Factory Saved", f"Factory saved: {filename}")
 
 
-# Delete factory with confirmation
+# Delete factory button with confirmation
     def delete_current_factory(self):
         filename = self.FactoryFilename.text().strip()
         if not filename:
@@ -526,8 +526,7 @@ class FreeFactoryApp(QMainWindow):
         for key in [
             "FactoryFilename", "FactoryDescription", "NotifyDirectory", "OutputDirectory",
             "OutputFileSuffix", "FTPUrl", "FTPUsername", "FTPPassword", "FTPRemotePath",
-            "EmailName", "EmailAddress", "ManualOptions", "CommandLine", "CompanyNameGlobal",
-            "AppleDelaySeconds"
+            "EmailName", "EmailAddress", "ManualOptions", "CommandLine"
         ]:
             widget = getattr(self, key, None)
             if widget:
@@ -558,7 +557,7 @@ class FreeFactoryApp(QMainWindow):
 
 # Show GPL license
     def show_license(self):
-        license_path = Path(__file__).parent / "LICENSE.txt"
+        license_path = Path(__file__).parent / "license.txt"
         text = license_path.read_text() if license_path.exists() else "License file not found."
         dlg = LicenseDialog(text, self)
         dlg.exec()
