@@ -1,0 +1,10 @@
+Start Of Install Log For Free Factory v1.00.00
+Checking for TCL
+Found TCL
+Checking for TK
+Found TK
+Checking for Itcl
+Found Itcl
+Checking for tcllib
+Downloading and intalling tcllib
+tcllib was not downloaded and/or installed must exit install

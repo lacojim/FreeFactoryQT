@@ -1,0 +1,14 @@
+[Unit]
+Description=FreeFactory Drop Folder Monitor
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/opt/FreeFactory/bin/FreeFactoryNotifyRunner.sh
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
