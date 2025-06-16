@@ -22,3 +22,5 @@ For now, start it using python3 main.py. This will change soon.
 ![image](https://github.com/user-attachments/assets/d3b490a0-f5b9-47ec-930c-caa274dfe101)
 
 ![image](https://github.com/user-attachments/assets/a1866f6b-c9ac-4064-bb48-d623b3cf3474)
+
+![image](https://github.com/user-attachments/assets/88e3e969-e527-43d4-bfa2-853e34817864)
