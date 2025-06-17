@@ -2,7 +2,8 @@
 
 # FreeFactoryQT
 
-![image](https://github.com/user-attachments/assets/d3b490a0-f5b9-47ec-930c-caa274dfe101)
+![image](https://github.com/user-attachments/assets/089fe6e0-7d18-4ae1-a1d6-f01d6d52dd00)
+
 
 FreeFactory is a long time project that went many years without any updates. While it originally supported both ffmpeg and ffmbc it is time to retire ffmbc support as that project has not been updated in many years, just as this one had not, until now. FFmpeg also supports most everything (if not all) that FFmbc once did.
 
