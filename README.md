@@ -32,9 +32,10 @@ For now, start it using:
 python3 main.py
 ```
 
-![image](https://github.com/user-attachments/assets/a1866f6b-c9ac-4064-bb48-d623b3cf3474)
+![image](https://github.com/user-attachments/assets/fcf75090-092c-4d59-9910-d3edb7a01c2a)
 
-![455338057-88e3e969-e527-43d4-bfa2-853e34817864](https://github.com/user-attachments/assets/f53171b2-3698-4b90-9612-33b637fba7b6)
+![image](https://github.com/user-attachments/assets/56e8962a-9877-4658-94bc-874de6afdc4f)
+
 
 # An AI comparison of FreeFactoryQT
 
