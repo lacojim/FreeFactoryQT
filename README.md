@@ -32,9 +32,69 @@ For now, start it using:
 python3 main.py
 ```
 
-
-
 ![image](https://github.com/user-attachments/assets/a1866f6b-c9ac-4064-bb48-d623b3cf3474)
 
 ![455338057-88e3e969-e527-43d4-bfa2-853e34817864](https://github.com/user-attachments/assets/f53171b2-3698-4b90-9612-33b637fba7b6)
 
+# An AI comparison of FreeFactoryQT
+
+Comparison of FFmpeg GUI Applications and FreeFactory’s Unique Value
+
+Common FFmpeg GUIs and Feature Support
+1. HandBrake
+    • Supports hardware acceleration (e.g., VAAPI, NVENC, QSV)
+    • No support for custom FFmpeg flags
+    • No arbitrary metadata injection
+    • No drag-and-drop with preset profile queuing
+    • Not suitable for professional broadcast workflows (e.g., captioning)
+2. FFQueue
+    • Allows manual command-line customization
+    • Supports metadata if manually entered
+    • Supports batch encoding
+    • Limited hardware acceleration support
+    • No drag-and-drop automation
+3. Shutter Encoder
+    • Supports metadata injection
+    • Supports basic hardware acceleration (pre-bundled FFmpeg)
+    • Subtitle support (burned or soft-subbed)
+    • Drag-and-drop enabled
+    • No support for factory-like presets
+    • No support for broadcast-grade closed captions
+4. Avidemux
+    • Basic hardware acceleration
+    • No FFmpeg command-line access
+    • No metadata injection
+    • No independent batch profile system
+    • No professional features like captioning
+
+FreeFactory: A Unique Approach
+FreeFactory introduces several capabilities not found in any single FFmpeg GUI:
+    • Per-Factory Hardware Acceleration
+        ◦ GPU options (e.g., NVENC, QSV) defined per factory profile
+        ◦ Assumes user knowledge and codec compatibility
+            • Drag-and-Drop Conversion Queue
+        ◦ Files can be dropped into a designated GUI area
+        ◦ Requires a factory to be selected first
+        ◦ Multiple files handled as queued jobs using the same factory config
+    • Custom Metadata Injection
+        ◦ Per-factory setting for embedding fields like -metadata comment="Created by FreeFactory"
+    • Professional Broadcast Support
+        ◦ Closed captioning (EIA-608) already supported
+        ◦ Future support planned for advanced subtitle workflows
+    • Transparent FFmpeg Access
+        ◦ Each factory profile maps directly to structured FFmpeg flags
+        ◦ Allows deep control without overwhelming novice users
+    • Open Source, Extendable Architecture
+        ◦ Modular Python codebase with PyQt GUI
+        ◦ Configuration stored in readable files for easy editing and sharing
+
+Summary
+FreeFactory is poised to be the first open-source FFmpeg GUI to unite professional broadcasting needs and hobbyist-friendly workflows, offering:
+    • True automation
+    • Per-profile acceleration
+    • Metadata embedding
+    • Transparent customization
+    • Drag-and-drop simplicity
+Ideal for both experienced engineers and new users alike.
+Contains several pre-built factories for most commonly used AV formats.
+        
