@@ -15,6 +15,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -598,6 +601,9 @@
          <string>Video Codec: Adds the flag -c:v to the command line.
 If you need a codec not listed, use Manual Options.</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -760,6 +766,9 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="toolTip">
          <string>Video Wrapper</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -841,6 +850,31 @@ If you need a codec not listed, use Manual Options.</string>
           <string>.vob</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>PHOTO FORMATS</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>.png</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>.jpg</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>.jpeg</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>.gif</string>
+         </property>
+        </item>
        </widget>
        <widget class="QLabel" name="l_Vwrapper">
         <property name="geometry">
@@ -881,6 +915,9 @@ If you need a codec not listed, use Manual Options.</string>
         </property>
         <property name="toolTip">
          <string>Video Framerate: Adds the flag -r to the command line</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -988,6 +1025,9 @@ If you need a codec not listed, use Manual Options.</string>
         </property>
         <property name="toolTip">
          <string>Video Frame Size: Adds the flag -s to the command line</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -1186,6 +1226,9 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="toolTip">
          <string>Video Bitrate: Adds the flag -b:v to the command line</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -1293,6 +1336,9 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="toolTip">
          <string>Aspect Ratio: Adds the flag -aspect to the command line</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -1364,6 +1410,9 @@ If you need a codec not listed, use Manual Options.</string>
         </property>
         <property name="toolTip">
          <string>Video Target</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -1462,6 +1511,9 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="toolTip">
          <string>Video Tags</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -1548,6 +1600,9 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="toolTip">
          <string>ffmpeg threads</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -1625,6 +1680,9 @@ If you need a codec not listed, use Manual Options.</string>
         </property>
         <property name="toolTip">
          <string>Video Presets for libx264</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -2123,6 +2181,9 @@ Adds the flag -f to the command line</string>
  Some codecs are not compatible with all video formats.
 Adds the flag -c:s to the command line</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -2240,6 +2301,9 @@ This setting will also work on audio only files.</string>
         <property name="toolTip">
          <string>Audio Codec: Adds the flag -c:a to the command line.
 If you need a codec not listed, use Manual Options.</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -2377,6 +2441,9 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="toolTip">
          <string>Audio Bitrate:Adds the flag -b:a to the command line</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -2504,6 +2571,9 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="toolTip">
          <string>Audio Samplerate:Adds the flag -ar to the command line</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -2611,6 +2681,9 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="toolTip">
          <string>Audio File Extension</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -2694,6 +2767,9 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="toolTip">
          <string>Audio Channels:Adds the flag -ac to the command line</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -2775,6 +2851,9 @@ If you need a codec not listed, use Manual Options.</string>
         </property>
         <property name="toolTip">
          <string>Audio Tags</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -3851,12 +3930,15 @@ or Factory Testing</string>
       </widget>
      </widget>
      <widget class="QGroupBox" name="ffmxprogramglob">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>170</y>
+        <y>100</y>
         <width>481</width>
-        <height>211</height>
+        <height>461</height>
        </rect>
       </property>
       <property name="font">
@@ -3871,8 +3953,8 @@ or Factory Testing</string>
       <widget class="QLineEdit" name="AppleDelaySecondsGlobal">
        <property name="geometry">
         <rect>
-         <x>105</x>
-         <y>28</y>
+         <x>77</x>
+         <y>27</y>
          <width>41</width>
          <height>25</height>
         </rect>
@@ -3884,7 +3966,7 @@ or Factory Testing</string>
         </font>
        </property>
        <property name="text">
-        <string>30</string>
+        <string/>
        </property>
       </widget>
       <widget class="QLabel" name="l_AppleDelay">
@@ -3892,7 +3974,7 @@ or Factory Testing</string>
         <rect>
          <x>10</x>
          <y>30</y>
-         <width>91</width>
+         <width>61</width>
          <height>17</height>
         </rect>
        </property>
@@ -4027,6 +4109,156 @@ or Factory Testing</string>
        </property>
        <property name="text">
         <string>Enable Factory Linking</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="PathtoFfmbcGlobal">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>360</y>
+         <width>401</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>/usr/local/bin</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="PathtoFFmpegGlobal">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>330</y>
+         <width>401</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>/usr/bin [Linux] or c:\\ffmpeg [windows]</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_PathtoFfmbc">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>360</y>
+         <width>41</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>FFMBC</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_PathtoFfmpeg">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>330</y>
+         <width>41</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>FFMPEG</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_PathtoFactories">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>300</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Factories</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="PathtoFactories">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>300</y>
+         <width>401</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>/opt/FreeFactory/Factories</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_FolderLocations">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>280</y>
+         <width>101</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Folder Locations</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="DefaultFactoryGlobal">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>236</y>
+         <width>381</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>240</y>
+         <width>91</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Which Factory gets loaded on Program start.</string>
+       </property>
+       <property name="text">
+        <string>Default Factory</string>
        </property>
       </widget>
      </widget>
@@ -4502,59 +4734,13 @@ or Factory Testing</string>
        </property>
       </widget>
      </widget>
-     <widget class="QFrame" name="frame">
+     <widget class="QGroupBox" name="EmailSettingsBox">
       <property name="geometry">
        <rect>
-        <x>530</x>
-        <y>570</y>
-        <width>481</width>
-        <height>67</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="l_PathtoFfmpeg">
-         <property name="text">
-          <string>Path to FFMPEG</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="PathtoFFmpegGlobal">
-         <property name="placeholderText">
-          <string>/usr/bin [Linux] or c:\\ffmpeg [windows]</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="l_PathtoFfmbc">
-         <property name="text">
-          <string>Path to FFMBC</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="PathtoFfmbcGlobal">
-         <property name="placeholderText">
-          <string>/usr/local/bin</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_3">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>384</y>
-        <width>481</width>
-        <height>221</height>
+        <x>170</x>
+        <y>620</y>
+        <width>0</width>
+        <height>0</height>
        </rect>
       </property>
       <property name="font">
@@ -4851,38 +5037,6 @@ or Factory Testing</string>
         <string>me@myemail.com</string>
        </property>
       </widget>
-     </widget>
-     <widget class="QComboBox" name="DefaultFactoryGlobal">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>120</y>
-        <width>481</width>
-        <height>24</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>100</y>
-        <width>111</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string>Which Factory gets loaded on Program start.</string>
-      </property>
-      <property name="text">
-       <string>Default Factory</string>
-      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tabConversionQueue">
