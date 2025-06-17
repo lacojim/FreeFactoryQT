@@ -57,6 +57,44 @@ class LicenseDialog(QDialog):
 
         self.setLayout(layout)
 
+class AboutDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("About FreeFactory")
+        self.setMinimumSize(335, 200)
+
+        layout = QVBoxLayout()
+
+        # Load logo
+        logo_label = QLabel()
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        logo_path = os.path.abspath(os.path.join(script_dir, "..", "Pics", "FreeFactoryProgramLogo.png"))
+        if os.path.exists(logo_path):
+            pixmap = QPixmap(logo_path).scaled(128, 128, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+            logo_label.setPixmap(pixmap)
+            logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            layout.addWidget(logo_label)
+
+        # About text
+        about_text = """\
+<b>FreeFactory</b><br>
+Version 1.1<br>
+An open-source professional video conversion app.<br><br>
+© 2013–2025 Jim Hines and Karl Swisher<br>
+Licensed under <a href='https://www.gnu.org/licenses/gpl-3.0.html'>GPLv3</a><br>
+<a href='https://github.com/lacojim/FreeFactoryQT'>github.com/lacojim/FreeFactoryQT</a>
+"""
+        text_label = QLabel(about_text)
+        text_label.setOpenExternalLinks(True)
+        text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(text_label)
+
+        # Close button
+        close_btn = QPushButton("Close", self)
+        close_btn.clicked.connect(self.accept)
+        layout.addWidget(close_btn, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        self.setLayout(layout)
 
 # Main app class
 class FreeFactoryApp(QMainWindow):
@@ -326,14 +364,14 @@ class FreeFactoryApp(QMainWindow):
         if directory:
             self.OutputDirectory.setText(directory)
 
-
+# This breaks NEW FACTORY creation
 #=======Select the default factory in the list widget
-        default_factory = self.config.get("DefaultFactory")
-        for i in range(self.listFactoryFiles.count()):
-            if self.listFactoryFiles.item(i).text() == default_factory:
-                self.listFactoryFiles.setCurrentRow(i)
-                self.load_selected_factory(self.listFactoryFiles.item(i))
-                break
+#        default_factory = self.config.get("DefaultFactory")
+#        for i in range(self.listFactoryFiles.count()):
+#            if self.listFactoryFiles.item(i).text() == default_factory:
+#                self.listFactoryFiles.setCurrentRow(i)
+#                self.load_selected_factory(self.listFactoryFiles.item(i))
+#                break
 
 #===Populate Factory List
     def populate_factory_list(self):
@@ -346,18 +384,6 @@ class FreeFactoryApp(QMainWindow):
             item = QListWidgetItem(factory_path.name)
             self.listFactoryFiles.addItem(item)
             
-
-
-
-
-
-
-
-
-
-
-
-
 
     def load_selected_factory(self, item):
         filename = item.text()
@@ -586,13 +612,8 @@ class FreeFactoryApp(QMainWindow):
 
 # Show the About box
     def show_about(self):
-        about_text = """\
-FreeFactory
-Version 1.1
-An open-source professional video conversion factory
-Created by Jim Hines and Karl Swisher Copyright 2013, 2025 GPLv3
-https://github.com/lacojim/freefactory"""
-        QMessageBox.information(self, "About FreeFactory", about_text)
+        dlg = AboutDialog(self)
+        dlg.exec()
         
 # Queue Buttons Defs       
     def clear_conversion_queue(self):

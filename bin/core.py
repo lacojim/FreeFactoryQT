@@ -136,12 +136,23 @@ class FreeFactoryCore:
                 return self.parse_factory_file(lines)
         return None
 
+#===Fixes loading default factory whenever a directory selector is used for output directory.
+    def select_output_directory(self):
+        directory = QFileDialog.getExistingDirectory(self, "Select Output Directory")
+        if directory:
+            # Prevent unwanted list signal side-effects
+            self.listFactoryFiles.blockSignals(True)
+            self.OutputDirectory.setText(directory)
+            self.listFactoryFiles.blockSignals(False)
+
+
 
 # Added to support Drag and Drop Encoding directly from the UI.
+# This builds the ffmpeg command via cmd. 
 
     def build_ffmpeg_command(self, input_path, factory_data):
         output_dir = factory_data.get("OUTPUTDIRECTORY") or "."
-        suffix = factory_data.get("OUTPUTFILESUFFIX", "")   #No longer used by here for compatibility 
+        suffix = factory_data.get("OUTPUTFILESUFFIX", "")   #No longer used but here for compatibility 
         wrapper = factory_data.get("VIDEOWRAPPER") or factory_data.get("AUDIOFILEEXTENSION") or ".mp4"
         wrapper = wrapper.lstrip(".")
         video_codec = factory_data.get("VIDEOCODECS", "").strip()
@@ -151,9 +162,7 @@ class FreeFactoryCore:
         audio_bitrate = factory_data.get("AUDIOBITRATE", "").strip()
         sample_rate = factory_data.get("AUDIOSAMPLERATE", "").strip()
         audio_channels = factory_data.get("AUDIOCHANNELS", "").strip()
-        
         manual = factory_data.get("MANUALOPTIONS", "").strip()
-        
         video_stream_id = factory_data.get("VIDEOSTREAMID", "").strip()
         audio_stream_id = factory_data.get("AUDIOSTREAMID", "").strip()
 
@@ -178,14 +187,10 @@ class FreeFactoryCore:
             cmd += ["-ar", sample_rate]
         if audio_channels:
             cmd += ["-ac", audio_channels]
-
-
         if video_stream_id:
             cmd += ["-streamid", f"v:{video_stream_id}"]
         if audio_stream_id:
             cmd += ["-streamid", f"a:{audio_stream_id}"]
-
-
 
         # Extra manual options
         if manual:
