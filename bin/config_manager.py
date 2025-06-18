@@ -11,6 +11,7 @@ class ConfigManager:
         self.config = CaseConfigParser()
         self.defaults = {
             "CompanyNameGlobal": "ACME Broadcasting",
+            "FactoryLocation": "/opt/FreeFactory/Factories",
             "DefaultFactory": "",
             "AppleDelaySeconds": "30",
             "PathtoFFmpegGlobal": "/usr/bin/",

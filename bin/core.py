@@ -69,8 +69,9 @@ class FFmpegWorkerZone(QObject):
 
 
 class FreeFactoryCore:
-    def __init__(self):
-        self.factory_dir = Path("/opt/FreeFactory/Factories")
+    def __init__(self, config):
+        self.factory_dir = Path(config.get("FactoryLocation"))
+       #self.factory_dir = Path("/opt/FreeFactory/Factories") # Replaced by line above.
         self.factory_files = []
         self.active_factory = None
         self.output_directory = Path.home() / "FreeFactory-Output"

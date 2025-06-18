@@ -17,7 +17,9 @@ from config_manager import ConfigManager
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QPlainTextEdit
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
+from ffmpeghelp import FFmpegHelpDialog
 import os
+
 
 
 
@@ -100,6 +102,7 @@ Licensed under <a href='https://www.gnu.org/licenses/gpl-3.0.html'>GPLv3</a><br>
 class FreeFactoryApp(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.config = ConfigManager() # Order is important here.
         ui_path = Path(__file__).parent / "FreeFactory-tabs.ui"
         loadUi(ui_path, self)
         
@@ -114,7 +117,8 @@ class FreeFactoryApp(QMainWindow):
 
         # Rebind promoted widget to real subclass for dropped media files
         self.dropZone: DropTextEdit  # for IDE type hinting
-        self.core = FreeFactoryCore()
+        self.core = FreeFactoryCore(self.config)
+        #self.core = FreeFactoryCore()
 
         self.populate_factory_list()
         self.listFactoryFiles.itemClicked.connect(self.load_selected_factory)
@@ -143,7 +147,7 @@ class FreeFactoryApp(QMainWindow):
         self.removeFromQueueButton.clicked.connect(self.remove_selected_from_queue)
 
 # ConfigManager
-        self.config = ConfigManager()
+        #self.config = ConfigManager() # This needs moved to the top of this Method.
         #print("CompanyNameGlobal from config:", self.config.get("CompanyNameGlobal")) #debug
         self.CompanyNameGlobal.setText(self.config.get("CompanyNameGlobal"))
         self.AppleDelaySecondsGlobal.setText(self.config.get("AppleDelaySeconds"))
@@ -152,7 +156,10 @@ class FreeFactoryApp(QMainWindow):
 
 # Populate DefaultFactoryGlobal ComboBox
         factory_names = [f.stem for f in self.core.factory_files]
+        self.DefaultFactoryGlobal.clear()
         self.DefaultFactoryGlobal.addItems(factory_names)
+# Populate PathtoFactoriesGlobal ComboBox        
+        self.PathtoFactoriesGlobal.setText(self.config.get("FactoryLocation"))
 
 # Select the saved default (if it exists)
         default_name = self.config.get("DefaultFactory")
@@ -167,6 +174,44 @@ class FreeFactoryApp(QMainWindow):
                     self.load_selected_factory(item)
                     break
 
+#===Help Buttons Connectors
+        self.helpAllHelp.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog("Full FFmpeg Help", ["-h", "full"])
+        )
+
+        self.helpVCodecsAll.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog("Video Codecs", ["-codecs"])
+        )
+
+        self.helpACodecsAll.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog("Audio Codecs", ["-codecs"])
+        )
+
+        self.helpMuxers.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog("Muxers", ["-muxers"])
+        )
+
+        self.helpVFilters.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog("Video Filters", ["-filters"])
+        )
+
+        self.helpAFilters.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog("Audio Filters", ["-filters"])
+        )
+
+        self.helpVCodecsFiltered.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog(
+                f"Encoder Help: {self.helpVCodecsFilter.text()}",
+                ["-h", f"encoder={self.helpVCodecsFilter.text()}"]
+            )
+        )
+
+        self.helpACodecsFiltered.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog(
+                f"Encoder Help: {self.helpACodecsFilter.text()}",
+                ["-h", f"encoder={self.helpACodecsFilter.text()}"]
+            )
+        )
 
 
 
@@ -202,7 +247,11 @@ class FreeFactoryApp(QMainWindow):
             output_path = cmd[-1]  # Last argument is the output file
             self.add_file_to_queue(input_path, output_path)
 
-
+#====Help Buttons
+    def open_ffmpeg_help_dialog(self, title, args):
+        # Keep a reference so it doesn't get garbage collected
+        self._ffmpeg_help_dialog = FFmpegHelpDialog(title, args, self)
+        self._ffmpeg_help_dialog.show()
 
 
     def add_file_to_queue(self, input_path, output_path):
@@ -348,6 +397,7 @@ class FreeFactoryApp(QMainWindow):
     def save_global_config(self):
         self.config.set("CompanyNameGlobal", self.CompanyNameGlobal.text())
         self.config.set("AppleDelaySeconds", self.AppleDelaySecondsGlobal.text())
+        self.config.set("FactoryLocation", self.PathtoFactoriesGlobal.text().strip())
         self.config.set("DefaultFactory", self.DefaultFactoryGlobal.currentText())
         
         self.config.save()
@@ -364,14 +414,6 @@ class FreeFactoryApp(QMainWindow):
         if directory:
             self.OutputDirectory.setText(directory)
 
-# This breaks NEW FACTORY creation
-#=======Select the default factory in the list widget
-#        default_factory = self.config.get("DefaultFactory")
-#        for i in range(self.listFactoryFiles.count()):
-#            if self.listFactoryFiles.item(i).text() == default_factory:
-#                self.listFactoryFiles.setCurrentRow(i)
-#                self.load_selected_factory(self.listFactoryFiles.item(i))
-#                break
 
 #===Populate Factory List
     def populate_factory_list(self):
