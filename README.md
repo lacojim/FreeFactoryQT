@@ -2,7 +2,8 @@
 
 # FreeFactoryQT
 
-![image](https://github.com/user-attachments/assets/089fe6e0-7d18-4ae1-a1d6-f01d6d52dd00)
+![image](https://github.com/user-attachments/assets/bb583240-d3d9-4dc1-885b-aa1119428fde)
+
 
 FreeFactory is extremely useful for both casual users and professional broadcasters alike needing to convert media files. As a former Broadcast Engineer with 40 years of experience, I originally created this for inhouse use at the television station I worked for. It was written at first as a collection of BASH scripts, then converted to a TCL/TK app soon after by good friend Karl and it remained in that form for many years....
 
@@ -32,8 +33,13 @@ For now, start it using:
 python3 main.py
 ```
 
-![image](https://github.com/user-attachments/assets/fcf75090-092c-4d59-9910-d3edb7a01c2a)
+![image](https://github.com/user-attachments/assets/1d00dd88-7b60-48a7-9519-2e3ef100ddac)
+
 
 ![image](https://github.com/user-attachments/assets/56e8962a-9877-4658-94bc-874de6afdc4f)
+
+
+![image](https://github.com/user-attachments/assets/529ee922-abc4-4549-a521-3d1913625f9e)
+
 
       
