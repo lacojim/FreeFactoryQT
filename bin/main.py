@@ -187,17 +187,37 @@ class FreeFactoryApp(QMainWindow):
             lambda: self.open_ffmpeg_help_dialog("Audio Codecs", ["-codecs"])
         )
 
-        self.helpMuxers.clicked.connect(
+        self.helpMuxersAll.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog("Muxers", ["-muxers"])
         )
-
-        self.helpVFilters.clicked.connect(
+        self.helpMuxersFiltered.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog(
+                f"Encode Help: {self.helpMuxersFilter.text()}",
+                ["-h", f"muxer={self.helpMuxersFilter.text()}"]
+            )
+        )
+        self.helpVFiltersAll.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog("Video Filters", ["-filters"])
         )
 
-        self.helpAFilters.clicked.connect(
+        self.helpVFiltersFiltered.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog(
+                f"Encode Help: {self.helpVFiltersFilter.text()}",
+                ["-h", f"filter={self.helpVFiltersFilter.text()}"]
+            )
+        )
+
+        self.helpAFiltersAll.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog("Audio Filters", ["-filters"])
         )
+
+        self.helpAFiltersFiltered.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog(
+                f"Encode Help: {self.helpAFiltersFilter.text()}",
+                ["-h", f"filter={self.helpAFiltersFilter.text()}"]
+            )
+        )
+
 
         self.helpVCodecsFiltered.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog(
