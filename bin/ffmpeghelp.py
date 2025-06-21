@@ -50,7 +50,7 @@ class FFmpegHelpDialog(QDialog):
         try:
             result = subprocess.run(["ffmpeg", "-hide_banner"] + args, capture_output=True, text=True)
             output = result.stdout + "\n" + result.stderr
-            print("[DEBUG] Raw output starts:\n", output[:1000])  # Show first 1000 chars
+#            print("[DEBUG] Raw output starts:\n", output[:1000])  # Show first 1000 chars
         except Exception as e:
             output = f"Error running ffmpeg:\n{str(e)}"
 
