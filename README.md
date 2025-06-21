@@ -26,6 +26,8 @@ python3 main.py
 
 The modular design of FreeFactoryQT can easily allow integration of external programs such as demucs for audio stem separation and/or vocal removal for Karaoke fans. Also incorporating sox-dsd would allow for transcoding audio files to DSD, for audiophiles. 
 
+While extremely complicated encoding command lines can far exceed default UI options, the cool thing, you can enter those unique options in the "Manual Options" and save that as a factory, so you only need to set it once, and use it forever. 
+
 ![image](https://github.com/user-attachments/assets/1d00dd88-7b60-48a7-9519-2e3ef100ddac)
 
 
