@@ -15,16 +15,7 @@ FreeFactoryQT has been rewritten completely in Python3 (replacing TCL/TK) using 
 
 Now using Systemd, the background notification monitoring is a service instead of a simple script in rc.local. This is also now optional. The background daemon is still being rewritten at this time but the old tcl daemon still works with the new python fronend. The Freefactory-Notify.service requires inotifywait to be installed on your system.
 
-As a stand-alone conversion program, you only need some of the contents o the /bin folder:
-freefactory-notify.service
-droptextedit.py
-core.py
-config_manager.py
-LICENSE.txt
-main.py
-FreeFactory-tabs.ui
-
-Create a folder in /opt called FreeFactory and create a /bin folder inside that. Copy all these files into it. You also need the Pics folder in the root of /opt/FreeFactory.
+As thre is not an Installer yet, just create a folder in /opt called FreeFactory and copy all these files into it.
 
 You need to have ffmpeg installed in /usr/bin/
 
