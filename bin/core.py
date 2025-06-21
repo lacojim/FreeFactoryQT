@@ -170,10 +170,15 @@ class FreeFactoryCore:
         input_stem = Path(input_path).stem
         output_filename = f"{input_stem}{suffix}.{wrapper}"
         output_path = Path(output_dir) / output_filename
+        
+#======Added for Preview Command        
+        wrapper = factory_data.get("VIDEOWRAPPER", "").strip().lstrip(".")
+        audio_ext = factory_data.get("AUDIOFILEEXTENSION", "").strip().lstrip(".")
+        
 
         cmd = ["ffmpeg", "-hide_banner", "-y", "-i", input_path]
 
-        # Only add if explicitly defined
+#====== Only add if explicitly defined
         if video_codec:
             cmd += ["-c:v", video_codec]
         if size and video_codec:
@@ -192,6 +197,19 @@ class FreeFactoryCore:
             cmd += ["-streamid", f"v:{video_stream_id}"]
         if audio_stream_id:
             cmd += ["-streamid", f"a:{audio_stream_id}"]
+
+#======Added for Preview Command            
+        if wrapper:
+            ext = f".{wrapper}"
+        elif audio_ext:
+            ext = f".{audio_ext}"
+        else:
+            ext = ".out"  # fallback
+
+        # Final output filename — always use "output" as base name for preview
+        output_filename = f"output{ext}"
+        output_path = Path(output_dir) / output_filename
+#======
 
         # Extra manual options
         if manual:

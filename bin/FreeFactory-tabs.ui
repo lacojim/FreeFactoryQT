@@ -84,7 +84,7 @@
       <property name="title">
        <string>Factory Selection</string>
       </property>
-      <widget class="QPushButton" name="readonly">
+      <widget class="QPushButton" name="FactoryReadOnly">
        <property name="geometry">
         <rect>
          <x>68</x>
@@ -100,7 +100,7 @@
         </font>
        </property>
        <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Set Factory to Read only&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>Set Factory to Read Only. (chmod 0644)</string>
        </property>
        <property name="text">
         <string>Read Only</string>
@@ -268,8 +268,8 @@
         </font>
        </property>
        <property name="toolTip">
-        <string>Notify Directory. Not used for drag and drop conversions.
-This requires FreeFactory-service and is
+        <string>Notify Directory. Not used or required for local conversions.
+Only needed by the FreeFactory-service and is
 only used on Linux installations.</string>
        </property>
        <property name="placeholderText">
@@ -292,7 +292,9 @@ only used on Linux installations.</string>
         </font>
        </property>
        <property name="toolTip">
-        <string>Output Directory: Required</string>
+        <string>Output Directory: Required.
+This is used for both local encoding and
+background service encoding.</string>
        </property>
        <property name="placeholderText">
         <string>/video/output</string>
@@ -624,7 +626,7 @@ If you need a codec not listed, use Manual Options.</string>
         </item>
         <item>
          <property name="text">
-          <string>DNxHD</string>
+          <string>dnxhd</string>
          </property>
         </item>
         <item>
@@ -639,22 +641,17 @@ If you need a codec not listed, use Manual Options.</string>
         </item>
         <item>
          <property name="text">
+          <string>flv1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>h264</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>libx264</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
           <string>h264_nvenc</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>libx265</string>
          </property>
         </item>
         <item>
@@ -665,6 +662,26 @@ If you need a codec not listed, use Manual Options.</string>
         <item>
          <property name="text">
           <string>hevc_vaapi</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>jpeg2000</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>libx264</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>libx265</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>mjpeg</string>
          </property>
         </item>
         <item>
@@ -689,22 +706,7 @@ If you need a codec not listed, use Manual Options.</string>
         </item>
         <item>
          <property name="text">
-          <string>xdcam</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>flv1</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>jpeg2000</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>mjpeg</string>
+          <string>vp8</string>
          </property>
         </item>
         <item>
@@ -725,6 +727,11 @@ If you need a codec not listed, use Manual Options.</string>
         <item>
          <property name="text">
           <string>wmv3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>xdcam</string>
          </property>
         </item>
        </widget>
@@ -766,7 +773,8 @@ If you need a codec not listed, use Manual Options.</string>
          </font>
         </property>
         <property name="toolTip">
-         <string>Video Wrapper</string>
+         <string>Video Wrapper: This is mutually exclusive with
+Audio File Extension. You CANNOT use both.</string>
         </property>
         <property name="editable">
          <bool>true</bool>
@@ -2681,7 +2689,8 @@ If you need a codec not listed, use Manual Options.</string>
          </font>
         </property>
         <property name="toolTip">
-         <string>Audio File Extension</string>
+         <string>Audio File Extension: This is mutually exclusive with
+Video Wrapper. You CANNOT use both.</string>
         </property>
         <property name="editable">
          <bool>true</bool>
@@ -2976,7 +2985,7 @@ If you need a codec not listed, use Manual Options.</string>
        <rect>
         <x>240</x>
         <y>590</y>
-        <width>121</width>
+        <width>81</width>
         <height>17</height>
        </rect>
       </property>
@@ -2995,7 +3004,7 @@ If you need a codec not listed, use Manual Options.</string>
        <rect>
         <x>240</x>
         <y>620</y>
-        <width>121</width>
+        <width>81</width>
         <height>17</height>
        </rect>
       </property>
@@ -3027,7 +3036,7 @@ See the FFmpeg Help tab.</string>
        <string>-c:s copy -c:v copy -c:a copy</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="CommandLine">
+     <widget class="QLineEdit" name="PreviewCommandLine">
       <property name="geometry">
        <rect>
         <x>420</x>
@@ -3037,8 +3046,8 @@ See the FFmpeg Help tab.</string>
        </rect>
       </property>
       <property name="toolTip">
-       <string>Generates a preview of the ffmpeg commandline being built by this factory.
-The input and output filenames are generic!</string>
+       <string>Generates FFmpeg command based on current GUI settings.
+The input and output filenames are generic.</string>
       </property>
      </widget>
      <widget class="QPushButton" name="NewFactory">
@@ -3129,8 +3138,8 @@ The input and output filenames are generic!</string>
        </rect>
       </property>
       <property name="toolTip">
-       <string>Generates a preview of the ffmpeg commandline being built by this factory.
-The input and output filenames are generic!</string>
+       <string>Generates FFmpeg command based on current GUI settings.
+The input and output filenames are generic.</string>
       </property>
       <property name="text">
        <string>Preview</string>
@@ -4095,7 +4104,7 @@ or Factory Testing</string>
         <x>10</x>
         <y>50</y>
         <width>701</width>
-        <height>411</height>
+        <height>431</height>
        </rect>
       </property>
       <property name="font">
@@ -4430,7 +4439,7 @@ or Factory Testing</string>
          <x>10</x>
          <y>240</y>
          <width>661</width>
-         <height>151</height>
+         <height>181</height>
         </rect>
        </property>
        <property name="font">
@@ -4775,6 +4784,12 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
          <height>22</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
        <property name="placeholderText">
         <string>/usr/bin [Linux] or c:\\ffmpeg [windows]</string>
        </property>
@@ -4795,7 +4810,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         </font>
        </property>
        <property name="text">
-        <string>FFMPEG</string>
+        <string>FFmpeg</string>
        </property>
       </widget>
       <widget class="QLabel" name="l_PathtoFactories">
@@ -4825,6 +4840,12 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
          <width>401</width>
          <height>22</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="text">
         <string/>
@@ -5725,7 +5746,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="RunFromButtonGroup"/>
   <buttongroup name="ActionButtonGroup"/>
+  <buttongroup name="RunFromButtonGroup"/>
  </buttongroups>
 </ui>
