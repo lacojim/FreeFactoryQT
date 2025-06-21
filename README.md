@@ -33,6 +33,8 @@ For now, start it using:
 python3 main.py
 ```
 
+The modular design of FreeFactoryQT can easily allow integration of external programs such as demucs for audio stem separation and/or vocal removal for Karaoke fans. Also incorporating sox-dsd would allow for transcoding audio files to DSD, for audiophiles. 
+
 ![image](https://github.com/user-attachments/assets/1d00dd88-7b60-48a7-9519-2e3ef100ddac)
 
 
@@ -41,5 +43,5 @@ python3 main.py
 
 ![image](https://github.com/user-attachments/assets/529ee922-abc4-4549-a521-3d1913625f9e)
 
-
+ 
       
