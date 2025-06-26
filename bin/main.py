@@ -1,5 +1,4 @@
-# main.py
-
+# main.py (Phase 1 Refactor: Grouping + Cleanup)
 # Functional logic extracted and converted from ProgramFrontEnd.tcl
 #############################################################################
 #               This code is licensed under the GPLv3
@@ -25,10 +24,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #############################################################################
-# Entry point for the FreeFactory PyQt6 application
-
+# ============================
+#         Imports
+# ============================
 import sys
 import os
+import shlex
 import subprocess
 from pathlib import Path
 
@@ -37,7 +38,8 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QListWidgetItem, QMessageBox,
     QTableWidgetItem, QDialog, QVBoxLayout, QPlainTextEdit,
-    QPushButton, QFileDialog, QHeaderView, QLabel
+    QPushButton, QFileDialog, QHeaderView, QLabel, QComboBox,
+    QLineEdit, QMenu
 )
 from PyQt6.uic import loadUi
 
@@ -45,178 +47,213 @@ from config_manager import ConfigManager
 from core import FFmpegWorker, FreeFactoryCore, FFmpegWorkerZone
 from droptextedit import DropTextEdit
 from ffmpeghelp import FFmpegHelpDialog
+from ffstreaming import (
+    StreamWorker, build_streaming_command,
+    start_single_stream, stop_single_stream,
+    start_all_streams, stop_all_streams,
+    handle_stream_stopped
+)
+from ffnotifyservice import (
+    connect_notify_service_controls,
+    update_notify_service_mode_display,
+    show_notify_service_menu
+)
 
 
-
+# ============================
+#      Dialog Definitions
+# ============================
 class LicenseDialog(QDialog):
     def __init__(self, license_text, parent=None):
         super().__init__(parent)
         self.setWindowTitle("FreeFactory License")
         self.setMinimumSize(600, 400)
-
         layout = QVBoxLayout()
 
-#=======GPL logo path
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        logo_path = os.path.abspath(os.path.join(script_dir, "..", "Pics", "gplv3-88x31.png"))
-
         logo_label = QLabel()
-        if os.path.exists(logo_path):
-            pixmap = QPixmap(logo_path)
+        logo_path = Path(__file__).parent.parent / "Pics" / "gplv3-88x31.png"
+        if logo_path.exists():
+            pixmap = QPixmap(str(logo_path))
             logo_label.setPixmap(pixmap)
             logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             layout.addWidget(logo_label)
 
-#=======License text area
         text_edit = QPlainTextEdit()
         text_edit.setReadOnly(True)
         text_edit.setPlainText(license_text)
         layout.addWidget(text_edit)
 
-#=======Close button
         close_btn = QPushButton("Close", self)
         close_btn.clicked.connect(self.accept)
         layout.addWidget(close_btn)
 
         self.setLayout(layout)
 
+
 class AboutDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("About FreeFactory")
         self.setMinimumSize(335, 200)
-
         layout = QVBoxLayout()
 
-#=======Load FreeFactory About logo
         logo_label = QLabel()
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        logo_path = os.path.abspath(os.path.join(script_dir, "..", "Pics", "FreeFactoryProgramLogo.png"))
-        if os.path.exists(logo_path):
-            pixmap = QPixmap(logo_path).scaled(128, 128, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        logo_path = Path(__file__).parent.parent / "Pics" / "FreeFactoryProgramLogo.png"
+        if logo_path.exists():
+            pixmap = QPixmap(str(logo_path)).scaled(
+                128, 128,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            )
             logo_label.setPixmap(pixmap)
             logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             layout.addWidget(logo_label)
 
-#=======About text
-        about_text = """\
-<b>FreeFactory</b><br>
-Version 1.1<br>
-An open-source professional media conversion app.<br><br>
-© 2013–2025 Jim Hines and Karl Swisher<br>
-Licensed under <a href='https://www.gnu.org/licenses/gpl-3.0.html'>GPLv3</a><br>
-<a href='https://github.com/lacojim/FreeFactoryQT'>github.com/lacojim/FreeFactoryQT</a>
-"""
+        about_text = ("""
+        <b>FreeFactory</b><br>
+        Version 1.1<br>
+        An open-source professional media conversion app.<br><br>
+        © 2013–2025 Jim Hines and Karl Swisher<br>
+        Licensed under <a href='https://www.gnu.org/licenses/gpl-3.0.html'>GPLv3</a><br>
+        <a href='https://github.com/lacojim/FreeFactoryQT'>github.com/lacojim/FreeFactoryQT</a>
+        """)
         text_label = QLabel(about_text)
         text_label.setOpenExternalLinks(True)
         text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(text_label)
 
-        # Close button
         close_btn = QPushButton("Close", self)
         close_btn.clicked.connect(self.accept)
         layout.addWidget(close_btn, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.setLayout(layout)
 
-# Main app class
+
+# ============================
+#     Main Application Stub
+# ============================
 class FreeFactoryApp(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.config = ConfigManager() # Order is important here.
-        ui_path = Path(__file__).parent / "FreeFactory-tabs.ui"
-        loadUi(ui_path, self)
-        
-        self.factory_dirty = False  # This is for when changing factories without saving first
-
-#=======Populate the DefaultFactoryGlobal combo box with factory list
-        factory_names = sorted(Path("/opt/FreeFactory/Factories").glob("*"))
-        factory_names = [f.stem for f in factory_names if f.is_file()]
-        self.DefaultFactoryGlobal.addItems(factory_names)
+        self.config = ConfigManager()
+        self.core = FreeFactoryCore(self.config)
+        self.factory_dirty = False
         self.active_threads = []
         self.queue_paused = False
+        self.active_streams = {}
 
-#====== Rebind promoted widget to real subclass for dropped media files
-        self.dropZone: DropTextEdit  # for IDE type hinting
-        self.core = FreeFactoryCore(self.config)
-        #self.core = FreeFactoryCore()
+        ui_path = Path(__file__).parent / "FreeFactory-tabs.ui"
+        loadUi(ui_path, self)
 
+        self.setup_ui()
         self.populate_factory_list()
-        self.listFactoryFiles.itemClicked.connect(self.load_selected_factory)
+
+        # Populate DefaultFactoryGlobal combo box with available factories
+        factory_dir = self.config.get("FactoryLocation") or "/opt/FreeFactory/Factories"
+        factory_paths = sorted(Path(factory_dir).glob("*"))
+        factory_names = [f.stem for f in factory_paths if f.is_file()]
+        self.DefaultFactoryGlobal.clear()
+        self.DefaultFactoryGlobal.addItems(factory_names)
+        self.DefaultFactoryGlobal.setCurrentText(self.config.get("DefaultFactory", "default"))
+
+        # Set Global Settings tab with config values
+        self.CompanyNameGlobal.setText(self.config.get("CompanyNameGlobal"))
+        self.AppleDelaySecondsGlobal.setText(self.config.get("AppleDelaySeconds"))
+        self.PathtoFFmpegGlobal.setText(self.config.get("PathtoFFmpegGlobal"))
+        self.PathtoFactoriesGlobal.setText(self.config.get("FactoryLocation"))
+        self.DefaultFactoryGlobal.setCurrentText(self.config.get("DefaultFactory"))
+
+        # Auto-select and load the default factory
+        default_factory = self.config.get("DefaultFactory")
+        if default_factory:
+            matching_items = self.listFactoryFiles.findItems(default_factory, Qt.MatchFlag.MatchExactly)
+            if matching_items:
+                self.listFactoryFiles.setCurrentItem(matching_items[0])
+                self.load_selected_factory(matching_items[0]) 
+
+
+
+    # ============================
+    #       UI Setup Logic
+    # ============================
+    def setup_ui(self):
+        self.SaveFFConfigGlobal.clicked.connect(self.save_global_config)
+        self.ViewLicense.clicked.connect(self.show_license)
+        self.AboutFreeFactory.clicked.connect(self.show_about)
+        self.toolButton_notifyDir.clicked.connect(self.select_notify_directory)
+        self.toolButton_outputDir.clicked.connect(self.select_output_directory)
+        self.PreviewCommand.clicked.connect(self.on_generate_command)
+        # Factory Mgmt Buttons
         self.SaveFactory.clicked.connect(self.save_current_factory)
         self.DeleteFactory.clicked.connect(self.delete_current_factory)
         self.NewFactory.clicked.connect(self.new_factory)
-        self.PreviewCommand.clicked.connect(self.on_generate_command)
-        self.ViewLicense.clicked.connect(self.show_license)
-        self.AboutFreeFactory.clicked.connect(self.show_about)
-#====== Two drop zones. 
-        self.dropZone.filesDropped.connect(self.handle_dropped_files)
-        self.queueDropZone.filesDropped.connect(self.handle_dropped_files_to_queue)
-
-#====== Connect directory selection tool buttons
-        self.toolButton_notifyDir.clicked.connect(self.select_notify_directory)
-        self.toolButton_outputDir.clicked.connect(self.select_output_directory)
-        
-#=======Queue Buttons:
+        # Factory List
+        self.listFactoryFiles.itemClicked.connect(self.load_selected_factory)
+        # File Queue Buttons
         self.startQueueButton.clicked.connect(self.start_conversion_queue)
+        self.pauseQueueButton.clicked.connect(self.pause_or_resume_queue)
         self.clearQueueButton.clicked.connect(self.clear_conversion_queue)
+        self.removeFromQueueButton.clicked.connect(self.remove_selected_from_queue)
         self.conversionQueueTable.setColumnWidth(0, 300)  # Input file
         self.conversionQueueTable.setColumnWidth(1, 300)  # Output file
         self.conversionQueueTable.setColumnWidth(2, 120)  # Status column
         self.conversionQueueTable.horizontalHeader().setStretchLastSection(True)
-        self.pauseQueueButton.clicked.connect(self.pause_or_resume_queue)
-        self.removeFromQueueButton.clicked.connect(self.remove_selected_from_queue)
+        # Streaming Buttons
+        self.StartAllStreams.clicked.connect(self.start_all_streams)
+        self.StopAllStreams.clicked.connect(self.stop_all_streams)
+        self.StartStream.clicked.connect(self.start_all_streams)
+        self.StopStream.clicked.connect(self.stop_selected_stream)
+        self.AddNewStream.clicked.connect(self.add_stream_to_table)
+        self.RemoveStream.clicked.connect(self.remove_selected_stream)
+        # Populate Streaming Factory list
+        factory_dir = self.config.get("FactoryLocation") or "/opt/FreeFactory/Factories"
+        factory_files = sorted(Path(factory_dir).glob("*"))
+        
+        self.streamTable.setColumnWidth(0, 250)  # Input file
+        self.streamTable.setColumnWidth(1, 250)  # Output file
+        self.streamTable.setColumnWidth(2, 200)  # Status column
+        self.streamTable.setColumnWidth(3, 100)
+        self.streamTable.setColumnWidth(4, 100)
+        self.streamTable.horizontalHeader().setStretchLastSection(True)
 
-#=======ConfigManager
-        #self.config = ConfigManager() # This needs moved to the top of this Method.
-        #print("CompanyNameGlobal from config:", self.config.get("CompanyNameGlobal")) #debug
-        self.CompanyNameGlobal.setText(self.config.get("CompanyNameGlobal"))
-        self.AppleDelaySecondsGlobal.setText(self.config.get("AppleDelaySeconds"))
-        self.PathtoFFmpegGlobal.setText(self.config.get("PathtoFFmpegGlobal"))
-        self.SaveFFConfigGlobal.clicked.connect(self.save_global_config)
-
-#=======Populate DefaultFactoryGlobal ComboBox
-        factory_names = [f.stem for f in self.core.factory_files]
-        self.DefaultFactoryGlobal.clear()
-        self.DefaultFactoryGlobal.addItems(factory_names)
-#=======Populate PathtoFactoriesGlobal ComboBox        
-        self.PathtoFactoriesGlobal.setText(self.config.get("FactoryLocation"))
-
-#=======Select the saved default (if it exists)
-        default_name = self.config.get("DefaultFactory")
-        if default_name in factory_names:
-            self.DefaultFactoryGlobal.setCurrentText(default_name)
-
-            # Also select it in the list widget
-            for i in range(self.listFactoryFiles.count()):
-                item = self.listFactoryFiles.item(i)
-                if item.text() == default_name:
-                    self.listFactoryFiles.setCurrentRow(i)
-                    self.load_selected_factory(item)
-                    break
-
-#===Help Buttons Connectors
-        self.helpAllHelp.clicked.connect(
-            lambda: self.open_ffmpeg_help_dialog("Full FFmpeg Help", ["-h", "full"])
-        )
-
+        factory_names = [f.stem for f in factory_files if f.is_file()]
+        self.streamFactorySelect.clear()
+        self.streamFactorySelect.addItems(factory_names)
+        
+        # Help Buttons 
         self.helpVCodecsAll.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog("Video Codecs", ["-codecs"])
+        )
+        
+        self.helpVCodecsFiltered.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog(
+                f"Encoder Help: {self.helpVCodecsFilter.text()}",
+                ["-h", f"encoder={self.helpVCodecsFilter.text()}"]
+            )
         )
 
         self.helpACodecsAll.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog("Audio Codecs", ["-codecs"])
         )
+        
+        self.helpACodecsFiltered.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog(
+                f"Encoder Help: {self.helpACodecsFilter.text()}",
+                ["-h", f"encoder={self.helpACodecsFilter.text()}"]
+            )
+        )
 
         self.helpMuxersAll.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog("Muxers", ["-muxers"])
         )
+        
         self.helpMuxersFiltered.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog(
                 f"Encode Help: {self.helpMuxersFilter.text()}",
                 ["-h", f"muxer={self.helpMuxersFilter.text()}"]
             )
         )
+
         self.helpVFiltersAll.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog("Video Filters", ["-filters"])
         )
@@ -239,83 +276,55 @@ class FreeFactoryApp(QMainWindow):
             )
         )
 
-
-        self.helpVCodecsFiltered.clicked.connect(
-            lambda: self.open_ffmpeg_help_dialog(
-                f"Encoder Help: {self.helpVCodecsFilter.text()}",
-                ["-h", f"encoder={self.helpVCodecsFilter.text()}"]
-            )
+        self.helpPixFormatsAll.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog("Pixel Formats", ["-pix_fmts"])
         )
 
-        self.helpACodecsFiltered.clicked.connect(
-            lambda: self.open_ffmpeg_help_dialog(
-                f"Encoder Help: {self.helpACodecsFilter.text()}",
-                ["-h", f"encoder={self.helpACodecsFilter.text()}"]
-            )
+        self.helpAllHelp.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog("Full FFmpeg Help", ["-h", "full"])
         )
+        
+
+        self.dropZone.filesDropped.connect(self.handle_dropped_files)
+        self.queueDropZone.filesDropped.connect(self.handle_dropped_files_to_queue)
+        
+        # FreeFactory Service Buttons
+        update_notify_service_mode_display(self)
+        connect_notify_service_controls(self)
+
+        #self.labelNotifyServiceMode.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.clearNotifyStatusButton.clicked.connect(lambda: self.listNotifyServiceStatus.clear())
 
 
+        
 
-#===File QUEUE FFmpegWorker
-    def remove_selected_from_queue(self): #Remove From Queue Button Method.
-        selected_rows = set()
-
-        for item in self.conversionQueueTable.selectedItems():
-            selected_rows.add(item.row())
-
-        for row in sorted(selected_rows, reverse=True):
-            self.conversionQueueTable.removeRow(row)
-
-    def handle_dropped_files_to_queue(self, files):
-        if not self.listFactoryFiles.currentItem():
-            QMessageBox.warning(self, "No Factory Selected", "Please select a factory before dropping files.")
-            return
-
-        factory_name = self.FactoryFilename.text().strip()
-        available_factories = [Path(f).stem for f in self.core.factory_files]
-
-        if not factory_name or factory_name not in available_factories:
-            QMessageBox.warning(self, "Invalid Factory", "Selected factory configuration is invalid.")
-            return
-
-        factory_data = self.core.load_factory(factory_name)
-
-        for input_path in files:
-            cmd = self.core.build_ffmpeg_command(input_path, factory_data)
-            output_path = cmd[-1]  # Last argument is the output file
-            self.add_file_to_queue(input_path, output_path)
-
-#====Help Buttons
-    def open_ffmpeg_help_dialog(self, title, args):
-        # Keep a reference so it doesn't get garbage collected
-        self._ffmpeg_help_dialog = FFmpegHelpDialog(title, args, self)
-        self._ffmpeg_help_dialog.show()
-
-
-    def add_file_to_queue(self, input_path, output_path):
-        row_position = self.conversionQueueTable.rowCount()
-        self.conversionQueueTable.insertRow(row_position)
-        self.conversionQueueTable.setItem(row_position, 0, QTableWidgetItem(str(input_path)))
-        self.conversionQueueTable.setItem(row_position, 1, QTableWidgetItem(str(output_path)))
-        self.conversionQueueTable.setItem(row_position, 2, QTableWidgetItem("Queued"))
-
+    # ============================
+    #     File Queue Handlers
+    # ============================
     def start_conversion_queue(self):
         self.current_queue_index = 0
         self.run_next_in_queue()
 
+    def pause_or_resume_queue(self):
+        self.queue_paused = not self.queue_paused
+        if self.queue_paused:
+            self.pauseQueueButton.setText("Resume Queue")
+        else:
+            self.pauseQueueButton.setText("Pause Queue")
+            self.run_next_in_queue()
+
     def run_next_in_queue(self):
         if self.queue_paused:
-            return  # Don’t process if paused
-
+            return
         if self.current_queue_index >= self.conversionQueueTable.rowCount():
             self.conversionProgressBar.setValue(100)
             return
 
         input_path = self.conversionQueueTable.item(self.current_queue_index, 0).text()
         output_path = self.conversionQueueTable.item(self.current_queue_index, 1).text()
-
         factory_name = self.FactoryFilename.text().strip()
-        factory_data = self.core.load_factory(factory_name)
+        factory_path = Path(self.config.get("FactoryLocation")) / factory_name
+        factory_data = self.core.load_factory(factory_path)
         cmd = self.core.build_ffmpeg_command(input_path, factory_data)
 
         self.conversionQueueTable.setItem(self.current_queue_index, 2, QTableWidgetItem("Processing..."))
@@ -333,61 +342,60 @@ class FreeFactoryApp(QMainWindow):
             self.dropZone.appendPlainText(f"⚠️ Exception preparing command: {e}")
             self.worker = None
 
-
     def handle_worker_result(self, returncode, stdout, stderr):
         status = "✅ Done" if returncode == 0 else f"❌ Failed"
- 
- 
         if returncode != 0:
             print(f"[FFmpeg stderr]: {stderr}")
 
-
         self.conversionQueueTable.setItem(self.current_queue_index, 2, QTableWidgetItem(status))
-
         progress = int((self.current_queue_index + 1) / self.conversionQueueTable.rowCount() * 100)
         self.conversionProgressBar.setValue(progress)
-
         self.current_queue_index += 1
         QTimer.singleShot(200, self.run_next_in_queue)
-#=============End File Queue
 
-#===Drag and Drop Support for dropZone FFmpegWorkerZone
-    import subprocess
-    
+    def clear_conversion_queue(self):
+        self.conversionQueueTable.setRowCount(0)
+        self.conversionProgressBar.setValue(0)
+
+    def remove_selected_from_queue(self):
+        selected_rows = set()
+        for item in self.conversionQueueTable.selectedItems():
+            selected_rows.add(item.row())
+        for row in sorted(selected_rows, reverse=True):
+            self.conversionQueueTable.removeRow(row)
+
+
+    # ============================
+    #     Drag and Drop Logic
+    # ============================
     def handle_dropped_files(self, files):
         if not self.listFactoryFiles.currentItem():
             QMessageBox.warning(self, "No Factory Selected", "Please select a factory before dropping files.")
             return
 
         factory_name = self.FactoryFilename.text().strip()
-        print(f"Selected factory: '{factory_name}'")
-
         available_factories = [Path(f).stem for f in self.core.factory_files]
-        print(f"Available factories: {available_factories}")
 
         if not factory_name or factory_name not in available_factories:
             QMessageBox.warning(self, "Invalid Factory", "Selected factory configuration is invalid.")
             return
 
-        factory_data = self.core.load_factory(factory_name)
-        print(f"Loaded factory data: {factory_data}")
+        factory_path = Path(self.config.get("FactoryLocation")) / factory_name
+        factory_data = self.core.load_factory(factory_path)
 
         for file_path in files:
             self.dropZone.appendPlainText(f"🔄 Processing: {file_path}")
-
             try:
                 cmd = self.core.build_ffmpeg_command(file_path, factory_data)
-                self.dropZone.appendPlainText(f"⚙️ Running command:\n{' '.join(cmd)}")
+                self.dropZone.appendPlainText(f"⚙️ Running command:{' '.join(cmd)}")
 
                 thread = QThread()
                 worker = FFmpegWorkerZone(cmd)
                 worker.moveToThread(thread)
 
-                # Define what happens on success or failure
-                worker.finished.connect(lambda msg, fp=file_path: self.dropZone.appendPlainText(f"{msg}\n✔️ File: {fp}"))
-                worker.error.connect(lambda msg, fp=file_path: self.dropZone.appendPlainText(f"{msg}\n❌ File: {fp}"))
+                worker.finished.connect(lambda msg, fp=file_path: self.dropZone.appendPlainText(f"{msg}✔️ File: {fp}"))
+                worker.error.connect(lambda msg, fp=file_path: self.dropZone.appendPlainText(f"{msg}❌ File: {fp}"))
 
-                # Cleanup
                 thread.started.connect(worker.run)
                 worker.finished.connect(thread.quit)
                 worker.error.connect(thread.quit)
@@ -395,164 +403,173 @@ class FreeFactoryApp(QMainWindow):
                 worker.error.connect(worker.deleteLater)
                 thread.finished.connect(thread.deleteLater)
 
-                # Start the thread
                 thread.start()
-                # Keep a reference so it doesn't get destroyed early
                 self.active_threads.append((thread, worker))
 
-                # Clean up after the thread finishes
                 def cleanup():
-                    print(f"Cleaning up thread for: {file_path}")
-                    self.active_threads = [
-                        (t, w) for (t, w) in self.active_threads if t != thread
-                    ]
+                    self.active_threads = [(t, w) for (t, w) in self.active_threads if t != thread]
 
                 thread.finished.connect(cleanup)
 
             except Exception as e:
-                self.dropZone.appendPlainText(f"⚠️ Exception preparing command: {str(e)}\n")
+                self.dropZone.appendPlainText(f"⚠️ Exception preparing command: {str(e)}")
 
-
-# ==Pause / Resume Queue Control
-    def pause_or_resume_queue(self):
-        self.queue_paused = not self.queue_paused
-
-        if self.queue_paused:
-            self.pauseQueueButton.setText("Resume Queue")
-        else:
-            self.pauseQueueButton.setText("Pause Queue")
-            self.run_next_in_queue()  # Resume immediately if unpaused
-            
-#===ConfigManager Save Method
-    def save_global_config(self):
-        self.config.set("CompanyNameGlobal", self.CompanyNameGlobal.text())
-        self.config.set("AppleDelaySeconds", self.AppleDelaySecondsGlobal.text())
-        self.config.set("FactoryLocation", self.PathtoFactoriesGlobal.text().strip())
-        self.config.set("DefaultFactory", self.DefaultFactoryGlobal.currentText())
-        
-        self.config.save()
-        QMessageBox.information(self, "Saved", "Global settings saved to ~/.freefactoryrc")
-
-
-    def select_notify_directory(self):
-        directory = QFileDialog.getExistingDirectory(self, "Select Notify Directory")
-        if directory:
-            self.NotifyDirectory.setText(directory)
-
-    def select_output_directory(self):
-        directory = QFileDialog.getExistingDirectory(self, "Select Output Directory")
-        if directory:
-            self.OutputDirectory.setText(directory)
-
-
-#===Populate Factory List
-    def populate_factory_list(self):
-        self.core.factory_files = sorted([
-            f for f in self.core.factory_dir.glob("*")
-            if f.is_file() and f.name != ".directory"
-        ], key=lambda f: f.name.lower())
-        self.listFactoryFiles.clear()
-        for factory_path in self.core.factory_files:
-            item = QListWidgetItem(factory_path.name)
-            self.listFactoryFiles.addItem(item)
-            
-
-    def load_selected_factory(self, item):
-        filename = item.text()
-        path = self.core.factory_dir / filename
-        if not path.exists():
+    def handle_dropped_files_to_queue(self, files):
+        if not self.listFactoryFiles.currentItem():
+            QMessageBox.warning(self, "No Factory Selected", "Please select a factory before dropping files.")
             return
 
-        self.FactoryFilename.setText(filename)
+        factory_name = self.FactoryFilename.text().strip()
+        available_factories = [Path(f).stem for f in self.core.factory_files]
 
-        with open(path, 'r') as f:
-            lines = f.readlines()
+        if not factory_name or factory_name not in available_factories:
+            QMessageBox.warning(self, "Invalid Factory", "Selected factory configuration is invalid.")
+            return
 
-        factory_data = {}
-        for line in lines:
-            if '=' in line:
-                key, value = line.strip().split('=', 1)
-                factory_data[key.strip()] = value.strip()
+        factory_path = Path(self.config.get("FactoryLocation")) / factory_name
+        factory_data = self.core.load_factory(factory_path)
 
-#=======Populate QLineEdits (excluding FactoryFilename)
-        for key in [
-            "FactoryDescription", "NotifyDirectory", "OutputDirectory",
-            "OutputFileSuffix", "FTPUrl", "FTPUsername", "FTPPassword", "FTPRemotePath",
-            "EmailName", "EmailAddress", "ManualOptions", "PreviewCommandLine", 
-            "VideoStreamID", "AudioStreamID"
-        ]:
-            widget = getattr(self, key, None)
-            if widget:
-                widget.setText(factory_data.get(key.upper(), ""))
+        for input_path in files:
+            cmd = self.core.build_ffmpeg_command(input_path, factory_data)
+            output_path = cmd[-1]
+            self.add_file_to_queue(input_path, output_path)
 
-#=======Custom key-to-field mapping for mismatched keys
-        lineedit_key_map = {
-            "VideoBFrames": "BFRAMES",
-            "VideoGroupPicSize": "GROUPPICSIZE",
-            "VideoStartTimeOffset": "STARTTIMEOFFSET",
-            "VideoForceFormat": "FORCEFORMAT",
-            "FrameStrategy": "FRAMESTRATEGY"
+
+    def add_file_to_queue(self, input_path, output_path):
+        row_position = self.conversionQueueTable.rowCount()
+        self.conversionQueueTable.insertRow(row_position)
+        self.conversionQueueTable.setItem(row_position, 0, QTableWidgetItem(str(input_path)))
+        self.conversionQueueTable.setItem(row_position, 1, QTableWidgetItem(str(output_path)))
+        self.conversionQueueTable.setItem(row_position, 2, QTableWidgetItem("Queued"))
+
+
+    # ============================
+    #     Help Dialog
+    # ============================
+
+    def open_ffmpeg_help_dialog(self, title, args):
+        # Keep a reference so it doesn't get garbage collected
+        self._ffmpeg_help_dialog = FFmpegHelpDialog(title, args, self)
+        self._ffmpeg_help_dialog.show()
+
+    # ============================
+    #     Streaming Controls
+    # ============================
+    def start_all_streams(self):
+        for row in range(self.streamTable.rowCount()):
+            item = self.streamTable.item(row, 0)
+            if not item:
+                continue
+
+            stream_data = item.data(Qt.ItemDataRole.UserRole)
+            if not stream_data:
+                continue
+
+            start_single_stream(self, stream_data=stream_data)
+
+    def stop_all_streams(self):
+        stop_all_streams(self)
+
+    def stop_selected_stream(self):
+        selected_row = self.streamTable.currentRow()
+        if selected_row < 0:
+            QMessageBox.warning(self, "No Selection", "Please select a stream to stop.")
+            return
+
+        item = self.streamTable.item(selected_row, 0)
+        if not item:
+            return
+
+        stream_data = item.data(Qt.ItemDataRole.UserRole)
+        if not stream_data:
+            return
+
+        stop_single_stream(self, stream_data=stream_data)
+ 
+    def remove_selected_stream(self):
+        selected_row = self.streamTable.currentRow()
+        if selected_row < 0:
+            QMessageBox.warning(self, "No Selection", "Please select a stream to remove.")
+            return
+
+        item = self.streamTable.item(selected_row, 0)
+        if not item:
+            return
+
+        stream_data = item.data(Qt.ItemDataRole.UserRole)
+        if stream_data:
+            rtmp_url = stream_data.get("rtmp_url")
+            if rtmp_url and rtmp_url in self.active_streams:
+                self.active_streams[rtmp_url].stop()
+                del self.active_streams[rtmp_url]
+                self.streamLogOutput.appendPlainText(f"🔴 Stopped and removed: {rtmp_url}")
+
+        self.streamTable.removeRow(selected_row)
+
+    def add_stream_to_table(self):
+        row_position = self.streamTable.rowCount()
+        self.streamTable.insertRow(row_position)
+
+        factory_name = self.streamFactorySelect.currentText()
+        rtmp_url = self.streamRTMPUrl.text().strip()
+        stream_key = self.streamKey.text().strip()
+        input_video = self.streamInputVideo.text().strip()
+        input_audio = self.streamInputAudio.text().strip()
+        format_video = self.ForceFormatInputVideo.currentText().strip()
+        format_audio = self.ForceFormatInputAudio.currentText().strip()
+
+        full_rtmp = f"{rtmp_url.rstrip('/')}/{stream_key}" if rtmp_url and stream_key else rtmp_url
+
+        stream_data = {
+            "factory_name": factory_name,
+            "rtmp_url": rtmp_url,
+            "stream_key": stream_key,
+            "input_video": input_video,
+            "input_audio": input_audio,
+            "format_video": format_video,
+            "format_audio": format_audio
         }
-        for widget_key, factory_key in lineedit_key_map.items():
-            widget = getattr(self, widget_key, None)
-            if widget:
-                widget.setText(factory_data.get(factory_key, ""))
 
-#=======Field-to-widget key remapping for mismatches
-        combo_key_map = {
-            "FFMxProgram": "FFMXPROGRAM",
-            "VideoCodec": "VIDEOCODECS",
-            "VideoWrapper": "VIDEOWRAPPER",
-            "VideoFrameRate": "VIDEOFRAMERATE",
-            "VideoSize": "VIDEOSIZE",
-            "VideoBitrate": "VIDEOBITRATE",
-            "VideoAspect": "ASPECT",
-            "VideoTarget": "VIDEOTARGET",
-            "VideoTags": "VIDEOTAGS",
-            "SubtitleCodecs": "SUBTITLECODECS",
-            "AudioCodec": "AUDIOCODECS",
-            "AudioBitrate": "AUDIOBITRATE",
-            "AudioSampleRate": "AUDIOSAMPLERATE",
-            "AudioExtention": "AUDIOFILEEXTENSION",
-            "AudioChannels": "AUDIOCHANNELS",
-            "FTPProgram": "FTPPROGRAM",
-            "Threads": "THREADS",
-            "VideoPreset": "VIDEOPRESET"
-        }
+        # Column 0: Factory Name
+        item = QTableWidgetItem(factory_name)
+        item.setData(Qt.ItemDataRole.UserRole, stream_data)
+        self.streamTable.setItem(row_position, 0, item)
 
-#=======Populate QComboBoxes
-        for widget_key, factory_key in combo_key_map.items():
-            widget = getattr(self, widget_key, None)
-            if widget:
-                widget.setCurrentText(factory_data.get(factory_key, ""))
+        # Column 1: Input Video
+        self.streamTable.setItem(row_position, 1, QTableWidgetItem(input_video))
 
-#=======Populate QCheckBoxes
-        for key in [
-            "EnableFactory", "DeleteSource", "DeleteConversionLogs", "EnableEmail",
-            "EnableFactoryLinking", "EnableFactoryGlobal", "RemoveSourceGlobal",
-            "RemoveLogsGlobal", "FtpRemoveOutputGlobal", "EnableEmailGlobal",
-            "FactoryLinkingGlobal"
-        ]:
-            widget = getattr(self, key, None)
-            if widget:
-                widget.setChecked(factory_data.get(key.upper(), "No") == "Yes")
+        # Column 2: Input Audio
+        self.streamTable.setItem(row_position, 2, QTableWidgetItem(input_audio))
 
-#=======Populate QRadioButtons
-        radio_map = {
-            "RUNFROM": {"usr": "RunFromUsr", "opt": "RunFromOpt"},
-            "FREEFRACTORYACTION": {"Copy": "ActionCopy", "Encode": "ActionEncode"}
-        }
-        for key, value_map in radio_map.items():
-            selected = factory_data.get(key, "")
-            widget_name = value_map.get(selected)
-            if widget_name:
-                button = getattr(self, widget_name, None)
-                if button:
-                    button.setChecked(True)
+        # Column 3: RTMP URL
+        self.streamTable.setItem(row_position, 3, QTableWidgetItem(full_rtmp))
 
-#========other methods remain unchanged ...
+        # Column 4: Format Summary
+        format_summary = f"{format_video or 'default'} / {format_audio or 'default'}"
+        self.streamTable.setItem(row_position, 4, QTableWidgetItem(format_summary))
+
+        self.streamLogOutput.appendPlainText(f"➕ Added stream: {factory_name}")
+
+
+
+
+    def handle_stream_stopped(self, message):
+        self.streamLogOutput.appendPlainText(f"🔴 Stream ended: {message}")
+
+
+    # ============================
+    #     Factory Management
+    # ============================
     def save_current_factory(self):
         filename = self.FactoryFilename.text().strip()
+        notify_dir = self.NotifyDirectory.text().strip()
+        output_dir = self.OutputDirectory.text().strip()
+        # Ensure trailing slash
+        if notify_dir and not notify_dir.endswith("/"):
+            notify_dir += "/"
+        if output_dir and not output_dir.endswith("/"):
+            output_dir += "/"
+            
         if not filename:
             QMessageBox.warning(self, "Missing Filename", "Please provide a factory filename.")
             return
@@ -561,24 +578,35 @@ class FreeFactoryApp(QMainWindow):
 
         lines = [
             f"FACTORYDESCRIPTION={self.FactoryDescription.text().strip()}",
-            f"NOTIFYDIRECTORY={self.NotifyDirectory.text().strip()}",
-            f"OUTPUTDIRECTORY={self.OutputDirectory.text().strip()}",
+            f"NOTIFYDIRECTORY={notify_dir}",
+            f"OUTPUTDIRECTORY={output_dir}",
             "OUTPUTFILESUFFIX=",  # <— hardcoded empty line since this was removed from UI
+            # Depreciated for Removal
             f"FFMXPROGRAM={self.FFMxProgram.currentText().strip()}",
+            # Depreciated for Removal
             f"RUNFROM={'usr' if self.RunFromUsr.isChecked() else 'opt'}",
+            # Depreciated for Removal
             f"FTPPROGRAM={self.FTPProgram.currentText().strip()}",
+            # Depreciated for Removal
             f"FTPURL={self.FTPUrl.text().strip()}",
+            # Depreciated for Removal
             f"FTPUSERNAME={self.FTPUsername.text().strip()}",
+            # Depreciated for Removal
             f"FTPPASSWORD={self.FTPPassword.text().strip()}",
+            # Depreciated for Removal
             f"FTPREMOTEPATH={self.FTPRemotePath.text().strip()}",
+            # Depreciated for Removal
             f"FTPTRANSFERTYPE=asc",
+            # Depreciated for Removal
             f"FTPDELETEAFTER=Yes",
+            # Depreciated for Removal
             f"VIDEOCODECS={self.VideoCodec.currentText().strip()}",
             f"VIDEOWRAPPER={self.VideoWrapper.currentText().strip()}",
             f"VIDEOFRAMERATE={self.VideoFrameRate.currentText().strip()}",
             f"VIDEOSIZE={self.VideoSize.currentText().strip()}",
             f"VIDEOTARGET={self.VideoTarget.currentText().strip()}",
             f"VIDEOTAGS={self.VideoTags.currentText().strip()}",
+            f"VIDEOPIXFORMAT={self.VideoPixFormat.currentText().strip()}",
             f"THREADS={self.Threads.currentText().strip()}",
             f"ASPECT={self.VideoAspect.currentText().strip()}",
             f"VIDEOBITRATE={self.VideoBitrate.currentText().strip()}",
@@ -587,7 +615,8 @@ class FreeFactoryApp(QMainWindow):
             f"GROUPPICSIZE={self.VideoGroupPicSize.text().strip()}",
             f"BFRAMES={self.VideoBFrames.text().strip()}",
             f"FRAMESTRATEGY={self.FrameStrategy.text().strip()}",
-            f"FORCEFORMAT={self.VideoForceFormat.text().strip()}",
+            f"FORCEFORMAT={self.ForceFormat.currentText().strip()}",
+            f"ENCODELENGTH={self.EncodeLength.text().strip()}",
             f"STARTTIMEOFFSET={self.VideoStartTimeOffset.text().strip()}",
             f"SUBTITLECODECS={self.SubtitleCodecs.currentText().strip()}",
             f"AUDIOCODECS={self.AudioCodec.currentText().strip()}",
@@ -602,145 +631,195 @@ class FreeFactoryApp(QMainWindow):
             f"DELETECONVERSIONLOGS={'Yes' if self.DeleteConversionLogs.isChecked() else 'No'}",
             f"ENABLEFACTORY={'Yes' if self.EnableFactory.isChecked() else 'No'}",
             f"FREEFRACTORYACTION={'Encode' if self.ActionEncode.isChecked() else 'Copy'}",
+            # Depreciated for Removal
             f"ENABLEFACTORYLINKING={'Yes' if self.EnableFactoryLinking.isChecked() else 'No'}",
+            # Depreciated for Removal
             f"FACTORYLINKS=",
+            # Depreciated for Removal
             f"FACTORYENABLEEMAIL={'Yes' if self.EnableEmail.isChecked() else 'No'}",
+            # Depreciated for Removal
             f"FACTORYEMAILNAME={self.EmailName.text().strip()}",
+            # Depreciated for Removal
             f"FACTORYEMAILADDRESS={self.EmailAddress.text().strip()}",
+            # Depreciated for Removal
             f"FACTORYEMAILMESSAGESTART=",
-            f"FACTORYEMAILMESSAGEEND="
+            # Depreciated for Removal
+            f"FACTORYEMAILMESSAGEEND=",
+            
+#===========streaming widgets             
+            f"FORCEFORMATINPUTVIDEO={self.ForceFormatInputVideo.currentText().strip()}",
+            f"FORCEFORMATINPUTAUDIO={self.ForceFormatInputAudio.currentText().strip()}",
+            f"STREAMINPUTVIDEO={self.streamInputVideo.text().strip()}",
+            f"STREAMINPUTAUDIO={self.streamInputAudio.text().strip()}",
+            f"STREAMRTMPURL={self.streamRTMPUrl.text().strip()}",
+            f"STREAMKEY={self.streamKey.text().strip()}"
         ]
 
         filepath.write_text("\n".join(lines) + "\n")
         self.populate_factory_list()
         QMessageBox.information(self, "Factory Saved", f"Factory saved: {filename}")
 
-
-#===Delete factory button with confirmation
     def delete_current_factory(self):
-        filename = self.FactoryFilename.text().strip()
-        if not filename:
-            QMessageBox.warning(self, "Missing Filename", "No factory selected to delete.")
-            return
-
-        reply = QMessageBox.question(
-            self,
-            "Confirm Delete",
-            f"Are you sure you want to delete '{filename}'?",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-        )
-        if reply != QMessageBox.StandardButton.Yes:
-            return
-
-        filepath = self.core.factory_dir / filename
-        if filepath.exists():
-            filepath.unlink()
-            QMessageBox.information(self, "Deleted", f"Factory deleted: {filename}")
+        factory_name = self.FactoryFilename.text().strip()
+        if factory_name:
+            self.core.delete_factory_file(factory_name)
             self.populate_factory_list()
             self.FactoryFilename.clear()
+            QMessageBox.information(self, "Deleted", f"Factory '{factory_name}' has been deleted.")
 
-#===Add a new Factory (Clears all widgets except factorylist and globals)
     def new_factory(self):
-        for key in [
-            "FactoryFilename", "FactoryDescription", "NotifyDirectory", "OutputDirectory",
-            "OutputFileSuffix", "FTPUrl", "FTPUsername", "FTPPassword", "FTPRemotePath",
-            "EmailName", "EmailAddress", "ManualOptions", "PreviewCommandLine"
-        ]:
-            widget = getattr(self, key, None)
-            if widget:
-                widget.clear()
-
-        for key in [
-            "EnableFactory", "RemoveSource", "RemoveLogs", "EnableEmail",
-            "EnableFactoryLinking", "EnableFactoryGlobal", "RemoveSourceGlobal",
-            "RemoveLogsGlobal", "FtpRemoveOutputGlobal", "EnableEmailGlobal",
-            "FactoryLinkingGlobal"
-        ]:
-            widget = getattr(self, key, None)
-            if widget:
-                widget.setChecked(False)
-
-        for key in [
-            "FFMxProgram", "VideoCodec", "VideoWrapper", "VideoFrameRate", "VideoSize",
-            "VideoBitrate", "VideoAspect", "VideoTarget", "VideoTags", "AudioCodec",
-            "AudioBitrate", "AudioSampleRate", "AudioExtention", "AudioChannels",
-            "FTPProgram", "Threads", "VideoPreset"
-        ]:
-            widget = getattr(self, key, None)
-            if widget:
-                widget.setCurrentIndex(-1)
-
         self.FactoryFilename.clear()
-        self.populate_factory_list()
+        for field in self.findChildren(QLineEdit):
+            field.clear()
+        self.factory_dirty = True
 
-#===Show GPL license text
-    def show_license(self):
-        license_path = Path(__file__).parent / "license.txt"
-        text = license_path.read_text() if license_path.exists() else "License file not found."
-        dlg = LicenseDialog(text, self)
-        dlg.exec()
+    def load_selected_factory(self, item):
+        factory_name = item.text()
+        factory_path = Path(self.config.get("FactoryLocation")) / factory_name
+        factory_data = self.core.load_factory(factory_path)
 
-#===Show the About box
-    def show_about(self):
-        dlg = AboutDialog(self)
-        dlg.exec()
-        
-#===Queue Buttons Defs       
-    def clear_conversion_queue(self):
-        self.conversionQueueTable.setRowCount(0)
-        self.conversionProgressBar.setValue(0)    
+        if not factory_data:
+            QMessageBox.warning(self, "Error", f"Failed to load factory: {factory_name}")
+            return
 
-# End Queue Buttons Defs        
-        
-#===Genereate ffmpeg PREVIEW command. Now uses the proper outputfile extensions
-    def on_generate_command(self):
-        input_file = Path("input.filename")
-
-        # Determine output extension from current combo boxes
-        wrapper = self.VideoWrapper.currentText().strip().lstrip(".")
-        audio_ext = self.AudioExtention.currentText().strip().lstrip(".")
-
-        ext = f".{wrapper}" if wrapper else f".{audio_ext}" if audio_ext else ".out"
-        output_file = Path(f"output{ext}")
-
-#=======Simulate a "factory" dictionary from current form values
-        factory = {
-            "VIDEOCODECS": self.VideoCodec.currentText().strip(),
-            "VIDEOWRAPPER": self.VideoWrapper.currentText().strip(),
-            "VIDEOBITRATE": self.VideoBitrate.currentText().strip(),
-            "VIDEOFRAMERATE": self.VideoFrameRate.currentText().strip(),
-            "VIDEOSIZE": self.VideoSize.currentText().strip(),
-            "ASPECT": self.VideoAspect.currentText().strip(),
-            "SUBTITLECODECS": self.SubtitleCodecs.currentText().strip(),
-            "AUDIOCODECS": self.AudioCodec.currentText().strip(),
-            "AUDIOBITRATE": self.AudioBitrate.currentText().strip(),
-            "AUDIOSAMPLERATE": self.AudioSampleRate.currentText().strip(),
-            "AUDIOCHANNELS": self.AudioChannels.currentText().strip(),
-            "AUDIOFILEEXTENSION": self.AudioExtention.currentText().strip(),
-            "VIDEOSTREAMID": self.VideoStreamID.text().strip(),
-            "GROUPPICSIZE": self.VideoGroupPicSize.text().strip(),
-            "BFRAMES": self.VideoBFrames.text().strip(),
-            "FRAMESTRATEGY": self.FrameStrategy.text().strip(),
-            "STARTTIMEOFFSET": self.VideoStartTimeOffset.text().strip(),
-            "AUDIOSTREAMID": self.AudioStreamID.text().strip(),
-            "FORCEFORMAT": self.VideoForceFormat.text().strip(),
-            "MANUALOPTIONS": self.ManualOptions.text().strip(),
+        self.FactoryFilename.setText(factory_name)
+        for field in self.findChildren(QLineEdit):
+            key = field.objectName().upper()
+            if key in factory_data:
+                field.setText(factory_data[key])
+        self.factory_dirty = False
+ 
+        combo_key_map = {
+            "FFMxProgram": "FFMXPROGRAM",
+            "VideoCodec": "VIDEOCODECS",
+            "VideoWrapper": "VIDEOWRAPPER",
+            "VideoFrameRate": "VIDEOFRAMERATE",
+            "VideoSize": "VIDEOSIZE",
+            "VideoBitrate": "VIDEOBITRATE",
+            "VideoAspect": "ASPECT",
+            "VideoTarget": "VIDEOTARGET",
+            "VideoTags": "VIDEOTAGS",
+            "VideoPixFormat": "VIDEOPIXFORMAT",
+            "SubtitleCodecs": "SUBTITLECODECS",
+            "AudioCodec": "AUDIOCODECS",
+            "AudioBitrate": "AUDIOBITRATE",
+            "AudioSampleRate": "AUDIOSAMPLERATE",
+            "AudioExtention": "AUDIOFILEEXTENSION",
+            "AudioChannels": "AUDIOCHANNELS",
+            "FTPProgram": "FTPPROGRAM",
+            "Threads": "THREADS",
+            "VideoPreset": "VIDEOPRESET",
+            "ForceFormatInputVideo": "FORCEFORMATINPUTVIDEO",
+            "ForceFormatInputAudio": "FORCEFORMATINPUTAUDIO",
+            "GOPSize": "GROUPPICSIZE",
+            "Offset": "STARTTIMEOFFSET",
+            "AudioTags": "AUDIOTAG",
+            "VideoBFrames": "BFRAMES"  # 👈 NEW
         }
 
-#=======Generate command using current GUI settings
-        cmd_list = self.core.build_ffmpeg_command(input_file, factory)
-        cmd_str = " ".join(str(arg) for arg in cmd_list)
+        for widget in self.findChildren((QLineEdit, QComboBox)):
+            obj_name = widget.objectName()
+            key = combo_key_map.get(obj_name, obj_name.upper())
+            if key in factory_data:
+                value = factory_data[key]
+                #print(f"[DEBUG] Setting widget {obj_name} ({key}) to {value}")
+                if isinstance(widget, QLineEdit):
+                    widget.setText(value)
+                elif isinstance(widget, QComboBox):
+                    index = widget.findText(value)
+                    if index >= 0:
+                        widget.setCurrentIndex(index)
+                    else:
+                        widget.setEditText(value)
+            else:
+                print(f"[DEBUG] Skipping widget {obj_name} — key '{key}' not in factory data.")                      
 
-        self.PreviewCommandLine.setText(cmd_str)
+    def populate_factory_list(self):
+        self.listFactoryFiles.clear()
+        for path in sorted(self.core.factory_files, key=lambda p: p.name.lower()):
+            self.listFactoryFiles.addItem(path.name)
+
+    # ============================
+    #     Global Config Logic
+    # ============================
+    def save_global_config(self):
+        self.config.set("CompanyNameGlobal", self.CompanyNameGlobal.text())
+        self.config.set("AppleDelaySeconds", self.AppleDelaySecondsGlobal.text())
+        self.config.set("FactoryLocation", self.PathtoFactoriesGlobal.text().strip())
+        self.config.set("DefaultFactory", self.DefaultFactoryGlobal.currentText())
+        
+        self.config.save()
+        QMessageBox.information(self, "Saved", "Global settings saved to ~/.freefactoryrc")
+
+    def select_notify_directory(self):
+        directory = QFileDialog.getExistingDirectory(self, "Select Notify Directory")
+        if directory:
+            self.NotifyDirectory.setText(directory)
+
+    def select_output_directory(self):
+        directory = QFileDialog.getExistingDirectory(self, "Select Output Directory")
+        if directory:
+            self.OutputDirectory.setText(directory)
+
+    # ============================
+    #     Dialog Actions
+    # ============================
+    def show_license(self):
+        license_path = Path(__file__).parent.parent / "license.txt"
+        if license_path.exists():
+            with open(license_path, "r") as f:
+                license_text = f.read()
+        else:
+            license_text = "License file not found."
+
+        dialog = LicenseDialog(license_text, self)
+        dialog.exec()
+
+    def show_about(self):
+        dialog = AboutDialog(self)
+        dialog.exec()
+
+
+    # ============================
+    #     Preview Command Logic
+    # ============================
+    def on_generate_command(self):
+        input_path = Path("input.filename")
+        factory_name = self.FactoryFilename.text().strip()
+        if not factory_name:
+            QMessageBox.warning(self, "No Factory Selected", "Please select or enter a factory first.")
+            return
+
+        factory_path = Path(self.config.get("FactoryLocation")) / factory_name
+        factory_data = self.core.load_factory(factory_path)
+        if not factory_data:
+            QMessageBox.warning(self, "Error", f"Could not load factory: {factory_path}")
+            return
+
+        cmd = self.core.build_ffmpeg_command(input_path, factory_data, preview=True)
+        self.PreviewCommandLine.setText(" ".join(cmd))
+
+
+    # ============================
+    #     End __init__ Stub
+    # ============================
+
+
+# ============================
+#     End Main Application Stub
+# ============================
 
 
 
+# ============================
+#         Entry Point
+# ============================
 if __name__ == "__main__":
     import signal
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     app = QApplication(sys.argv)
-    app.setStyle('Fusion')  #Added for Karl Compatibility
+    app.setStyle('Fusion')
     window = FreeFactoryApp()
     window.show()
     sys.exit(app.exec())
