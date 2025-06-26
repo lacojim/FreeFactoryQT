@@ -4,6 +4,8 @@
 
 ![image](https://github.com/user-attachments/assets/bb583240-d3d9-4dc1-885b-aa1119428fde)
 
+### New - 2025-06-26 -- Added support for live Streaming via the Stream Manager tab and freefactory-notify.service control.
+
 
 FreeFactory is extremely useful for both casual users and professional broadcasters alike needing to convert media files. As a former Broadcast Engineer with 40 years of experience, I originally created this for inhouse use at the television station I worked for. It was written at first as a collection of BASH scripts, then converted to a TCL/TK app soon after by good friend Karl and it remained in that form for many years....
 
