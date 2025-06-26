@@ -32,6 +32,8 @@ from pathlib import Path
 from PyQt6.QtCore import QObject, pyqtSignal, QThread
 
 
+
+
 #=======For Drop Queue
 class FFmpegWorker(QThread):
     result = pyqtSignal(int, str, str)  # returncode, stdout, stderr
@@ -65,6 +67,47 @@ class FFmpegWorkerZone(QObject):
                 self.error.emit(f"❌ Error:\n{process.stderr}")
         except Exception as e:
             self.error.emit(f"⚠️ Exception: {str(e)}")
+            
+#========StreamWorker for Streaming Tab
+class StreamWorker(QThread):
+    output = pyqtSignal(str)
+    finished = pyqtSignal()
+    error = pyqtSignal(str)
+
+    def __init__(self, cmd):
+        super().__init__()
+        self.cmd = cmd
+        self.process = None
+        self._stop_requested = False
+
+    def run(self):
+        try:
+            self.process = subprocess.Popen(
+                self.cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1
+            )
+
+            for line in self.process.stdout:
+                if self._stop_requested:
+                    break
+                self.output.emit(line.strip())
+
+            self.process.wait()
+            self.finished.emit()
+        except Exception as e:
+            self.error.emit(str(e))
+
+    def stop(self):
+        self._stop_requested = True
+        if self.process:
+            self.process.terminate()
+
+
+
+
 
 
 
@@ -129,13 +172,54 @@ class FreeFactoryCore:
         
         pass
 
-    def load_factory(self, name):
-        for file_path in self.factory_files:
-            if Path(file_path).stem == name:
-                with open(file_path, "r") as f:
-                    lines = f.readlines()
-                return self.parse_factory_file(lines)
-        return None
+    # def load_factory(self, name):
+    #     for file_path in self.factory_files:
+    #         if Path(file_path).stem == name:
+    #             with open(file_path, "r") as f:
+    #                 lines = f.readlines()
+    #             return self.parse_factory_file(lines)
+    #     return None
+    
+    
+    def load_factory(self, factory_path):
+        print(f"[DEBUG] Attempting to load factory: {factory_path}")
+        if not factory_path.exists():
+            print("[DEBUG] Factory file does not exist.")
+            return None
+
+        try:
+            with open(factory_path, "r") as f:
+                lines = f.readlines()
+
+            factory_data = {}
+            for line in lines:
+                if "=" in line:
+                    key, value = line.strip().split("=", 1)
+                    factory_data[key.strip()] = value.strip()
+                else:
+                    print(f"[DEBUG] Skipping invalid line (no '='): {line.strip()}")
+
+            print(f"[DEBUG] Loaded factory: {factory_data}")
+            return factory_data
+        except Exception as e:
+            print(f"[DEBUG] Exception occurred while reading factory: {e}")
+            return None
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 #===Fixes loading default factory whenever a directory selector is used for output directory.
     def select_output_directory(self):
@@ -150,12 +234,24 @@ class FreeFactoryCore:
 
 # Added to support Drag and Drop Encoding directly from the UI.
 # This builds the ffmpeg command via cmd. 
+    def build_ffmpeg_command(self, input_path, factory_data, preview=False):
+        import shlex
+        from pathlib import Path
 
-    def build_ffmpeg_command(self, input_path, factory_data):
         output_dir = factory_data.get("OUTPUTDIRECTORY") or "."
-        suffix = factory_data.get("OUTPUTFILESUFFIX", "")   #No longer used but here for compatibility 
-        wrapper = factory_data.get("VIDEOWRAPPER") or factory_data.get("AUDIOFILEEXTENSION") or ".mp4"
-        wrapper = wrapper.lstrip(".")
+        wrapper = factory_data.get("VIDEOWRAPPER", "").strip().lstrip(".")
+        audio_ext = factory_data.get("AUDIOFILEEXTENSION", "").strip().lstrip(".")
+        ext = wrapper or audio_ext or "out"
+
+        input_stem = Path(input_path).stem
+        if preview:
+            output_filename = f"output.{ext}"
+        else:
+            output_filename = f"{input_stem}.{ext}"
+
+        output_path = Path(output_dir) / output_filename
+
+        encode_length = factory_data.get("ENCODELENGTH", "").strip()
         video_codec = factory_data.get("VIDEOCODECS", "").strip()
         size = factory_data.get("VIDEOSIZE", "").strip()
         subtitle = factory_data.get("SUBTITLECODECS", "").strip()
@@ -164,27 +260,38 @@ class FreeFactoryCore:
         sample_rate = factory_data.get("AUDIOSAMPLERATE", "").strip()
         audio_channels = factory_data.get("AUDIOCHANNELS", "").strip()
         manual = factory_data.get("MANUALOPTIONS", "").strip()
+        bframes = factory_data.get("BFRAMES", "").strip()
+        frame_strategy = factory_data.get("FRAMESTRATEGY", "").strip()
+        gop_size = factory_data.get("GROUPPICSIZE", "").strip()
+        pix_format = factory_data.get("VIDEOPIXFORMAT", "").strip()
+        start_offset = factory_data.get("STARTTIMEOFFSET", "").strip()
+        force_format = factory_data.get("FORCEFORMAT", "").strip()
+
         video_stream_id = factory_data.get("VIDEOSTREAMID", "").strip()
         audio_stream_id = factory_data.get("AUDIOSTREAMID", "").strip()
-
-        input_stem = Path(input_path).stem
-        output_filename = f"{input_stem}{suffix}.{wrapper}"
-        output_path = Path(output_dir) / output_filename
-        
-#======Added for Preview Command        
-        wrapper = factory_data.get("VIDEOWRAPPER", "").strip().lstrip(".")
-        audio_ext = factory_data.get("AUDIOFILEEXTENSION", "").strip().lstrip(".")
         
 
-        cmd = ["ffmpeg", "-hide_banner", "-y", "-i", input_path]
+        cmd = ["ffmpeg", "-hide_banner", "-y", "-i", str(input_path)]
 
-#====== Only add if explicitly defined
+#=======Video encoding
         if video_codec:
             cmd += ["-c:v", video_codec]
+        if gop_size:
+            cmd += ["-g", gop_size]
+        if bframes:
+            cmd += ["-bf", bframes]
+        if frame_strategy:
+            cmd += ["-flags", frame_strategy]
+        if pix_format:
+            cmd += ["-pix_fmt", pix_format]
         if size and video_codec:
             cmd += ["-s", size]
+
+#=======Subtitles
         if subtitle:
             cmd += ["-c:s", subtitle]
+
+#=======Audio encoding
         if audio_codec:
             cmd += ["-c:a", audio_codec]
         if audio_bitrate:
@@ -193,25 +300,23 @@ class FreeFactoryCore:
             cmd += ["-ar", sample_rate]
         if audio_channels:
             cmd += ["-ac", audio_channels]
+
+#=======Stream mapping
         if video_stream_id:
             cmd += ["-streamid", f"v:{video_stream_id}"]
         if audio_stream_id:
             cmd += ["-streamid", f"a:{audio_stream_id}"]
 
-#======Added for Preview Command            
-        if wrapper:
-            ext = f".{wrapper}"
-        elif audio_ext:
-            ext = f".{audio_ext}"
-        else:
-            ext = ".out"  # fallback
+#=======Output seeking and format
+        if encode_length:
+            cmd += ["-t", encode_length]
+        if start_offset:
+            cmd += ["-ss", start_offset]
+            print("DEBUG force_format raw value:", repr(force_format))
+        if force_format:
+            cmd += ["-f", force_format]
 
-        # Final output filename — always use "output" as base name for preview
-        output_filename = f"output{ext}"
-        output_path = Path(output_dir) / output_filename
-#======
-
-        # Extra manual options
+#=======Manual options (always last before output)
         if manual:
             cmd += shlex.split(manual)
 
@@ -219,3 +324,35 @@ class FreeFactoryCore:
 
         print("DEBUG final cmd:", cmd)
         return cmd
+#======
+
+#===Build streaming flags
+    def build_streaming_flags(self, factory_data):
+        flags = []
+
+        video_codec = factory_data.get("VIDEOCODECS", "").strip()
+        audio_codec = factory_data.get("AUDIOCODECS", "").strip()
+        video_bitrate = factory_data.get("VIDEOBITRATE", "").strip()
+        audio_bitrate = factory_data.get("AUDIOBITRATE", "").strip()
+        preset = factory_data.get("VIDEOPRESET", "").strip()
+
+        if video_codec:
+            flags += ["-c:v", video_codec]
+        if video_bitrate:
+            flags += ["-b:v", video_bitrate]
+        if preset:
+            flags += ["-preset", preset]
+        if audio_codec:
+            flags += ["-c:a", audio_codec]
+        if audio_bitrate:
+            flags += ["-b:a", audio_bitrate]
+
+        # Optional: add more streaming-friendly flags like -tune zerolatency
+        return flags
+
+
+
+
+
+
+
