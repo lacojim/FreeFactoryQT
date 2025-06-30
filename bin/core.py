@@ -138,6 +138,9 @@ class FreeFactoryCore:
         self.factory_dir.mkdir(parents=True, exist_ok=True)
         self.output_directory.mkdir(exist_ok=True)
         self.factory_files = list(self.factory_dir.glob("*"))
+       
+    def reload_factory_files(self):
+            self.factory_files = list(self.factory_dir.glob("*"))        
 
     def save_factory_file(self, filename, content):
         path = self.factory_dir / filename
@@ -182,7 +185,7 @@ class FreeFactoryCore:
     
     
     def load_factory(self, factory_path):
-        print(f"[DEBUG] Attempting to load factory: {factory_path}")
+        #print(f"[DEBUG] Attempting to load factory: {factory_path}")
         if not factory_path.exists():
             print("[DEBUG] Factory file does not exist.")
             return None
@@ -196,29 +199,16 @@ class FreeFactoryCore:
                 if "=" in line:
                     key, value = line.strip().split("=", 1)
                     factory_data[key.strip()] = value.strip()
-                else:
-                    print(f"[DEBUG] Skipping invalid line (no '='): {line.strip()}")
+                #else:
+                #    print(f"[DEBUG] Skipping invalid line (no '='): {line.strip()}")
 
-            print(f"[DEBUG] Loaded factory: {factory_data}")
+            #print(f"[DEBUG] Loaded factory: {factory_data}")
             return factory_data
         except Exception as e:
             print(f"[DEBUG] Exception occurred while reading factory: {e}")
             return None
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+ 
     
 
 #===Fixes loading default factory whenever a directory selector is used for output directory.
@@ -286,7 +276,9 @@ class FreeFactoryCore:
             cmd += ["-pix_fmt", pix_format]
         if size and video_codec:
             cmd += ["-s", size]
-
+        #if video_tags:
+        #    cmd += ["-tag:v", video_tags]
+            
 #=======Subtitles
         if subtitle:
             cmd += ["-c:s", subtitle]
@@ -300,7 +292,8 @@ class FreeFactoryCore:
             cmd += ["-ar", sample_rate]
         if audio_channels:
             cmd += ["-ac", audio_channels]
-
+        #if audio_tags:
+        #    cmd += ["-tags:a", audio_tags]
 #=======Stream mapping
         if video_stream_id:
             cmd += ["-streamid", f"v:{video_stream_id}"]
