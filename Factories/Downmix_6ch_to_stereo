@@ -1,4 +1,4 @@
-FACTORYDESCRIPTION=Downmix_6ch_to_stereo (most options are in Manual Options)
+FACTORYDESCRIPTION=Downmix_6ch_to_stereo - Set the Video Codec to copy to keep video as is.
 NOTIFYDIRECTORY=
 OUTPUTDIRECTORY=/video/
 OUTPUTFILESUFFIX=
