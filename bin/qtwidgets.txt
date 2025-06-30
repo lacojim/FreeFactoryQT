@@ -1,0 +1,95 @@
+Widgets List
+
+QLineEdit names:
+FactoryFilename
+FactoryDescription
+NotifyDirectory
+OutputDirectory
+OutputFileSuffix
+FTPUrl
+FTPUsername
+FTPPassword
+FTPRemotePath
+EmailName
+EmailAddress
+ManualOptions
+CommandLine
+CompanyNameGlobal
+AppleDelaySeconds
+--
+VideoStreamID = VIDEOSTREAMID=
+VideoBFrames = BFRAMES=
+FrameStrategy = FRAMESTRATEGY=
+VideoGroupPicSize = GROUPPICSIZE=
+VideoStartTimeOffset = STARTTIMEOFFSET=
+AudioStreamID = AUDIOSTREAMID=
+VideoForceFormat = FORCEFORMAT=
+
+RemoveSource changed to DeleteSource = DELETESOURCE=
+RemoveLogs changed to DeleteConversionLogs = DELETECONVERSIONLOGS=
+
+QComboBox names:
+FFMxProgram
+VideoCodec
+VideoWrapper
+VideoFrameRate
+VideoSize
+VideoBitrate
+VideoAspect
+VideoTarget
+VideoTags
+AudioCodec
+AudioBitrate
+AudioSampleRate
+AudioExtention
+AudioChannels
+FTPProgram
+--
+VideoTags = VIDEOTAGS=
+Threads = THREADS=
+VideoPreset = VIDEOPRESET=
+
+
+QCheckBox names:
+EnableFactory
+RemoveSource
+RemoveLogs      
+EnableEmail
+EnableFactoryLinking
+EnableFactoryGlobal
+RemoveSourceGlobal
+RemoveLogsGlobal
+FtpRemoveOutputGlobal
+EnableEmailGlobal
+FactoryLinkingGlobal
+
+QRadioButton names:
+RunFromUsr
+RunFromOpt
+ActionCopy
+ActionEncode
+PgmFFMbcGlobal
+PgmFFMpegGlobal
+FFPgmPathUsrBin
+FFPgmPathOptFF
+
+QPushButton names:
+readonly
+NewEmail
+AddEmail
+UpdateEmail
+DeleteEmail
+AddEmailMessage
+AddLink
+RemoveLink
+NewFactory
+SaveFactory
+DeleteFactory
+
+buttongroups names:
+ActionButtonGroup
+FFPgmPathButtonGroup
+FFPgmButtonGroup
+RunFromButtonGroup
+
+

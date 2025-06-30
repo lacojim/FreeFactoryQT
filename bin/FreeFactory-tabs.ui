@@ -5706,7 +5706,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
     </widget>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>Page</string>
+      <string>DepPage</string>
      </attribute>
      <widget class="QGroupBox" name="FactoryEmail">
       <property name="geometry">

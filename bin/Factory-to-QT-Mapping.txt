@@ -1,0 +1,90 @@
+These fields are correctly handled by the PyQt6 app (UI → Save → Load):
+
+    FACTORYDESCRIPTION → FactoryDescription
+
+    NOTIFYDIRECTORY → NotifyDirectory
+
+    OUTPUTDIRECTORY → OutputDirectory
+
+    OUTPUTFILESUFFIX → OutputFileSuffix
+
+    FFMXPROGRAM → FFMxProgram
+
+    RUNFROM → RunFromUsr / RunFromOpt
+
+    VIDEOCODECS → VideoCodec
+
+    VIDEOWRAPPER → VideoWrapper
+
+    VIDEOFRAMERATE → VideoFrameRate
+
+    VIDEOSIZE → VideoSize
+
+    VIDEOTARGET → VideoTarget
+
+    VIDEOTAGS → VideoTags
+
+    THREADS → Threads
+
+    ASPECT → VideoAspect
+
+    VIDEOBITRATE → VideoBitrate
+
+    VIDEOPRESET → VideoPreset
+
+    VIDEOSTREAMID → VideoStreamID
+
+    GROUPPICSIZE → VideoGroupPicSize
+
+    BFRAMES → VideoBFrames
+
+    FRAMESTRATEGY → FrameStrategy
+
+    FORCEFORMAT → VideoForceFormat
+
+    STARTTIMEOFFSET → VideoStartTimeOffset
+
+    AUDIOCODECS → AudioCodec
+
+    AUDIOBITRATE → AudioBitrate
+
+    AUDIOSAMPLERATE → AudioSampleRate
+
+    AUDIOFILEEXTENSION → AudioExtension
+
+    AUDIOCHANNELS → AudioChannels
+
+    AUDIOSTREAMID → AudioStreamID
+
+    MANUALOPTIONS → ManualOptions
+
+    DELETESOURCE → DeleteSource
+
+    DELETECONVERSIONLOGS → DeleteConversionLogs
+
+    ENABLEFACTORY → EnableFactory
+
+    FREEFACTORYACTION → ActionCopy / ActionEncode
+    
+    
+Present in File but Not Yet Handled in GUI
+
+These exist in the factory file but are not currently surfaced in the UI or code:
+Factory Key	        Purpose         	      Status
+
+FTPPROGRAM	         FTP client binary	      Partially handled in UI but not functional
+FTPURL	                 FTP server	              UI present
+FTPUSERNAME	         FTP login	              UI present
+FTPPASSWORD	         FTP password	              UI present
+FTPREMOTEPATH	         FTP upload path	      UI present
+FTPTRANSFERTYPE	         asc or bin	              ⚠️ No widget mapped
+FTPDELETEAFTER	         delete after FTP	      ⚠️ No widget mapped
+FACTORYLINKS	         links to other factories     Placeholder UI exists
+ENABLEFACTORYLINKING	 use linked factories	      Present in UI, not yet implemented logic
+FACTORYENABLEEMAIL	 enable email alerts	      UI present as EnableEmail
+FACTORYEMAILNAME	 email subject name?	      UI present
+FACTORYEMAILADDRESS	 recipient	              UI present
+FACTORYEMAILMESSAGESTART message body	              ⚠️ UI not yet wired
+FACTORYEMAILMESSAGEEND	 message end	              ⚠️ UI not yet wired
+
+
