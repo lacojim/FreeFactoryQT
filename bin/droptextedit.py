@@ -1,4 +1,6 @@
 # droptextedit.py
+# This keeps track of dropped files and paths for dropZone only. Not the file queue
+
 from PyQt6.QtWidgets import QPlainTextEdit
 from PyQt6.QtCore import pyqtSignal, QUrl, Qt
 

@@ -50,7 +50,7 @@ These fields are correctly handled by the PyQt6 app (UI → Save → Load):
 
     AUDIOSAMPLERATE → AudioSampleRate
 
-    AUDIOFILEEXTENSION → AudioExtention
+    AUDIOFILEEXTENSION → AudioExtension
 
     AUDIOCHANNELS → AudioChannels
 
@@ -64,7 +64,7 @@ These fields are correctly handled by the PyQt6 app (UI → Save → Load):
 
     ENABLEFACTORY → EnableFactory
 
-    FREEFRACTORYACTION → ActionCopy / ActionEncode
+    FREEFACTORYACTION → ActionCopy / ActionEncode
     
     
 Present in File but Not Yet Handled in GUI

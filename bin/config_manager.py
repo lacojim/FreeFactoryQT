@@ -11,6 +11,7 @@ class ConfigManager:
         self.config = CaseConfigParser()
         self.defaults = {
             "CompanyNameGlobal": "ACME Broadcasting",
+            "FactoryLocation": "/opt/FreeFactory/Factories",
             "DefaultFactory": "",
             "AppleDelaySeconds": "30",
             "PathtoFFmpegGlobal": "/usr/bin/",
@@ -36,8 +37,10 @@ class ConfigManager:
         with self.config_path.open("w") as f:
             self.config.write(f)
 
-    def get(self, key):
-        return self.config['global'].get(key, self.defaults.get(key, ""))
+    # def get(self, key):
+    #     return self.config['global'].get(key, self.defaults.get(key, ""))
+    def get(self, key, default=""):
+        return self.config.get("global", key, fallback=default)
 
     def set(self, key, value):
         self.config['global'][key] = str(value).strip()

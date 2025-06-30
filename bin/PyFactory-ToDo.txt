@@ -10,3 +10,12 @@ X 8. Confirm when deleting factories.
         add_flag("-ac", self.AudioChannels.currentText())
 10. Add metadata to file "Created by FreeFactory by Jim Hines and Karl Swisher"
 
+- Selecting File in streaming uses File as the filename instead of the actual filename
+DEBUG Streaming CMD: ['ffmpeg', '-hide_banner', '-y', '-f', 'File', '-thread_queue_size', '512', '-i', '/home/hines_j/Desktop/Movies/Resident.Alien.S04E02.1080p.x265-ELiTE/Resident.Alien.S04E02.1080p.x265-ELiTE.mkv', '-c:v', 'h264_nvenc', '-b:v', '1.5M', '-preset', 'fast', '-c:a', 'aac', '-b:a', '192k', '-preset', 'fast', '-pix_fmt', 'yuv420p', '-f', 'flv', 'rtmp://192.168.254.15/live/test']
+
+
+- Factories are only updated in Streaming tab at program startup
+
+- AudioTag not being written
+
+- Streaming tab. Multiple streams still now working correctly. It's all or none.

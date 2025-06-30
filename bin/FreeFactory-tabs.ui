@@ -7,14 +7,17 @@
     <x>0</x>
     <y>0</y>
     <width>1094</width>
-    <height>706</height>
+    <height>704</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>FreeFactory Editor by Jim Hines and Karl Swisher</string>
+   <string>FreeFactory by Jim Hines and Karl Swisher v1.1</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -81,7 +84,7 @@
       <property name="title">
        <string>Factory Selection</string>
       </property>
-      <widget class="QPushButton" name="readonly">
+      <widget class="QPushButton" name="FactoryReadOnly">
        <property name="geometry">
         <rect>
          <x>68</x>
@@ -97,7 +100,7 @@
         </font>
        </property>
        <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Set Factory to Read only&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>Set Factory to Read Only. (chmod 0644)</string>
        </property>
        <property name="text">
         <string>Read Only</string>
@@ -155,7 +158,7 @@
         <x>240</x>
         <y>50</y>
         <width>811</width>
-        <height>521</height>
+        <height>481</height>
        </rect>
       </property>
       <property name="font">
@@ -174,8 +177,8 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>34</y>
-         <width>151</width>
+         <y>26</y>
+         <width>91</width>
          <height>17</height>
         </rect>
        </property>
@@ -193,7 +196,7 @@
        <property name="geometry">
         <rect>
          <x>110</x>
-         <y>30</y>
+         <y>22</y>
          <width>681</width>
          <height>25</height>
         </rect>
@@ -215,8 +218,8 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>64</y>
-         <width>151</width>
+         <y>56</y>
+         <width>91</width>
          <height>17</height>
         </rect>
        </property>
@@ -234,8 +237,8 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>94</y>
-         <width>151</width>
+         <y>86</y>
+         <width>91</width>
          <height>17</height>
         </rect>
        </property>
@@ -253,7 +256,7 @@
        <property name="geometry">
         <rect>
          <x>110</x>
-         <y>60</y>
+         <y>52</y>
          <width>641</width>
          <height>25</height>
         </rect>
@@ -265,7 +268,9 @@
         </font>
        </property>
        <property name="toolTip">
-        <string>Notify Directory</string>
+        <string>Notify Directory. Not used or required for local conversions.
+Only needed by the FreeFactory-service and is
+only used on Linux installations.</string>
        </property>
        <property name="placeholderText">
         <string>/video/dropbox</string>
@@ -275,7 +280,7 @@
        <property name="geometry">
         <rect>
          <x>110</x>
-         <y>90</y>
+         <y>82</y>
          <width>641</width>
          <height>25</height>
         </rect>
@@ -287,285 +292,19 @@
         </font>
        </property>
        <property name="toolTip">
-        <string>Output Directory</string>
+        <string>Output Directory: Required.
+This is used for both local encoding and
+background service encoding.</string>
        </property>
        <property name="placeholderText">
         <string>/video/output</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="FFMxProgram">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>140</y>
-         <width>85</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>ffmpeg or ffmbc. What do you need here?</string>
-       </property>
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <property name="placeholderText">
-        <string/>
-       </property>
-       <item>
-        <property name="text">
-         <string>ffmpeg</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>ffmbc</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QLabel" name="l_Ffmxprogram">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>143</y>
-         <width>111</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>FFMx Program</string>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="RunFromUsr">
-       <property name="geometry">
-        <rect>
-         <x>270</x>
-         <y>139</y>
-         <width>51</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>usr</string>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">RunFromButtonGroup</string>
-       </attribute>
-      </widget>
-      <widget class="QRadioButton" name="RunFromOpt">
-       <property name="geometry">
-        <rect>
-         <x>320</x>
-         <y>139</y>
-         <width>51</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>opt</string>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">RunFromButtonGroup</string>
-       </attribute>
-      </widget>
-      <widget class="QLabel" name="l_RunFrom">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>142</y>
-         <width>71</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-         <underline>false</underline>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>usr is the system install version, opt is a custom compiled version</string>
-       </property>
-       <property name="text">
-        <string>Run From</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="l_Action">
-       <property name="geometry">
-        <rect>
-         <x>440</x>
-         <y>173</y>
-         <width>41</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Action</string>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="ActionCopy">
-       <property name="geometry">
-        <rect>
-         <x>560</x>
-         <y>170</y>
-         <width>61</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Action=Copy</string>
-       </property>
-       <property name="text">
-        <string>Copy</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">ActionButtonGroup</string>
-       </attribute>
-      </widget>
-      <widget class="QRadioButton" name="ActionEncode">
-       <property name="geometry">
-        <rect>
-         <x>490</x>
-         <y>170</y>
-         <width>71</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Action=Encode</string>
-       </property>
-       <property name="text">
-        <string>Encode</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">ActionButtonGroup</string>
-       </attribute>
-      </widget>
-      <widget class="QCheckBox" name="EnableFactory">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>170</y>
-         <width>131</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Enable Factory</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="DeleteSource">
-       <property name="geometry">
-        <rect>
-         <x>277</x>
-         <y>170</y>
-         <width>141</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Remove Source</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="DeleteConversionLogs">
-       <property name="geometry">
-        <rect>
-         <x>150</x>
-         <y>170</y>
-         <width>131</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Remove Logs</string>
        </property>
       </widget>
       <widget class="QGroupBox" name="videoencodeopt">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>200</y>
+         <y>120</y>
          <width>791</width>
          <height>191</height>
         </rect>
@@ -596,7 +335,10 @@
         </property>
         <property name="toolTip">
          <string>Video Codec: Adds the flag -c:v to the command line.
-If you need a codec not listed, use Manual Options.</string>
+If you need a codec not listed, simply type it in.</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -616,7 +358,7 @@ If you need a codec not listed, use Manual Options.</string>
         </item>
         <item>
          <property name="text">
-          <string>DNxHD</string>
+          <string>dnxhd</string>
          </property>
         </item>
         <item>
@@ -631,22 +373,17 @@ If you need a codec not listed, use Manual Options.</string>
         </item>
         <item>
          <property name="text">
+          <string>flv1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>h264</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>libx264</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
           <string>h264_nvenc</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>libx265</string>
          </property>
         </item>
         <item>
@@ -657,6 +394,26 @@ If you need a codec not listed, use Manual Options.</string>
         <item>
          <property name="text">
           <string>hevc_vaapi</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>jpeg2000</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>libx264</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>libx265</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>mjpeg</string>
          </property>
         </item>
         <item>
@@ -681,22 +438,7 @@ If you need a codec not listed, use Manual Options.</string>
         </item>
         <item>
          <property name="text">
-          <string>xdcam</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>flv1</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>jpeg2000</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>mjpeg</string>
+          <string>vp8</string>
          </property>
         </item>
         <item>
@@ -717,6 +459,11 @@ If you need a codec not listed, use Manual Options.</string>
         <item>
          <property name="text">
           <string>wmv3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>xdcam</string>
          </property>
         </item>
        </widget>
@@ -758,7 +505,11 @@ If you need a codec not listed, use Manual Options.</string>
          </font>
         </property>
         <property name="toolTip">
-         <string>Video Wrapper</string>
+         <string>Video Wrapper: This is mutually exclusive with
+Audio File Extension. You CANNOT use both.</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -841,6 +592,31 @@ If you need a codec not listed, use Manual Options.</string>
           <string>.vob</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>PHOTO FORMATS</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>.png</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>.jpg</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>.jpeg</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>.gif</string>
+         </property>
+        </item>
        </widget>
        <widget class="QLabel" name="l_Vwrapper">
         <property name="geometry">
@@ -881,6 +657,9 @@ If you need a codec not listed, use Manual Options.</string>
         </property>
         <property name="toolTip">
          <string>Video Framerate: Adds the flag -r to the command line</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -988,6 +767,9 @@ If you need a codec not listed, use Manual Options.</string>
         </property>
         <property name="toolTip">
          <string>Video Frame Size: Adds the flag -s to the command line</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -1127,6 +909,11 @@ If you need a codec not listed, use Manual Options.</string>
         </item>
         <item>
          <property name="text">
+          <string>3840x2160</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>3840x2400</string>
          </property>
         </item>
@@ -1185,6 +972,9 @@ If you need a codec not listed, use Manual Options.</string>
         </property>
         <property name="toolTip">
          <string>Video Bitrate: Adds the flag -b:v to the command line</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -1293,6 +1083,9 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="toolTip">
          <string>Aspect Ratio: Adds the flag -aspect to the command line</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -1364,6 +1157,9 @@ If you need a codec not listed, use Manual Options.</string>
         </property>
         <property name="toolTip">
          <string>Video Target</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -1441,73 +1237,6 @@ If you need a codec not listed, use Manual Options.</string>
          <string>Target</string>
         </property>
        </widget>
-       <widget class="QComboBox" name="VideoTags">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>250</x>
-          <y>87</y>
-          <width>111</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="toolTip">
-         <string>Video Tags</string>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <property name="placeholderText">
-         <string/>
-        </property>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>dvc</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>mp4v</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>xd5b</string>
-         </property>
-        </item>
-       </widget>
-       <widget class="QLabel" name="l_Vtags">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>90</y>
-          <width>62</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Tags</string>
-        </property>
-       </widget>
        <widget class="QLabel" name="l_Threads">
         <property name="geometry">
          <rect>
@@ -1547,6 +1276,9 @@ If you need a codec not listed, use Manual Options.</string>
         </property>
         <property name="toolTip">
          <string>ffmpeg threads</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -1626,6 +1358,9 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="toolTip">
          <string>Video Presets for libx264</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -1635,6 +1370,16 @@ If you need a codec not listed, use Manual Options.</string>
         <item>
          <property name="text">
           <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>veryfast</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>ultrafast</string>
          </property>
         </item>
         <item>
@@ -1830,9 +1575,9 @@ If you need a codec not listed, use Manual Options.</string>
        <widget class="QGroupBox" name="groupBox_6">
         <property name="geometry">
          <rect>
-          <x>90</x>
+          <x>10</x>
           <y>124</y>
-          <width>611</width>
+          <width>761</width>
           <height>61</height>
          </rect>
         </property>
@@ -1842,30 +1587,10 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="title">
          <string>Advanced Video Options</string>
         </property>
-        <widget class="QLineEdit" name="VideoForceFormat">
-         <property name="geometry">
-          <rect>
-           <x>575</x>
-           <y>30</y>
-           <width>31</width>
-           <height>23</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>8</pointsize>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string>Force Format: Usually only needed for VOB
-Adds the flag -f to the command line</string>
-         </property>
-        </widget>
         <widget class="QLineEdit" name="VideoStartTimeOffset">
          <property name="geometry">
           <rect>
-           <x>475</x>
+           <x>400</x>
            <y>30</y>
            <width>31</width>
            <height>23</height>
@@ -1893,7 +1618,7 @@ Adds the flag -f to the command line</string>
         <widget class="QLineEdit" name="FrameStrategy">
          <property name="geometry">
           <rect>
-           <x>285</x>
+           <x>243</x>
            <y>30</y>
            <width>31</width>
            <height>23</height>
@@ -1912,7 +1637,7 @@ Adds the flag -f to the command line</string>
         <widget class="QLabel" name="l_VideoStartTimeOffset">
          <property name="geometry">
           <rect>
-           <x>435</x>
+           <x>368</x>
            <y>33</y>
            <width>41</width>
            <height>17</height>
@@ -1931,7 +1656,7 @@ Adds the flag -f to the command line</string>
         <widget class="QLabel" name="l_VideoBFrames">
          <property name="geometry">
           <rect>
-           <x>115</x>
+           <x>100</x>
            <y>32</y>
            <width>62</width>
            <height>17</height>
@@ -1950,7 +1675,7 @@ Adds the flag -f to the command line</string>
         <widget class="QLabel" name="l_FrameStrategy">
          <property name="geometry">
           <rect>
-           <x>225</x>
+           <x>190</x>
            <y>32</y>
            <width>62</width>
            <height>17</height>
@@ -1969,7 +1694,7 @@ Adds the flag -f to the command line</string>
         <widget class="QLineEdit" name="VideoGroupPicSize">
          <property name="geometry">
           <rect>
-           <x>391</x>
+           <x>330</x>
            <y>30</y>
            <width>31</width>
            <height>23</height>
@@ -1988,7 +1713,7 @@ Adds the flag -f to the command line</string>
         <widget class="QLabel" name="l_VideoGroupPicSize">
          <property name="geometry">
           <rect>
-           <x>335</x>
+           <x>282</x>
            <y>33</y>
            <width>62</width>
            <height>17</height>
@@ -2007,7 +1732,7 @@ Adds the flag -f to the command line</string>
         <widget class="QLineEdit" name="VideoBFrames">
          <property name="geometry">
           <rect>
-           <x>175</x>
+           <x>148</x>
            <y>30</y>
            <width>31</width>
            <height>23</height>
@@ -2026,7 +1751,7 @@ Adds the flag -f to the command line</string>
         <widget class="QLineEdit" name="VideoStreamID">
          <property name="geometry">
           <rect>
-           <x>65</x>
+           <x>55</x>
            <y>30</y>
            <width>31</width>
            <height>23</height>
@@ -2045,8 +1770,8 @@ Adds the flag -f to the command line</string>
         <widget class="QLabel" name="l_VideoForceFormat">
          <property name="geometry">
           <rect>
-           <x>515</x>
-           <y>30</y>
+           <x>438</x>
+           <y>32</y>
            <width>61</width>
            <height>20</height>
           </rect>
@@ -2078,6 +1803,210 @@ Adds the flag -f to the command line</string>
          </property>
          <property name="text">
           <string>StreamID</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="ForceFormat">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>490</x>
+           <y>29</y>
+           <width>101</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Force Format: Adds the flag -f to the command line.
+This can be used for either audio and video.
+This appends to the output.</string>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>aac</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mp4</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>matroska</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mpeg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>avi</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>flv</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>webm</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ogg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>nut</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>asf</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>wav</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>m4a</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>hls</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>dash</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QComboBox" name="VideoPixFormat">
+         <property name="geometry">
+          <rect>
+           <x>644</x>
+           <y>31</y>
+           <width>111</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>pix_fmt: Refer to FFmpeg Help tab for more options.</string>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>yuv420p</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>yuv422p</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>yuv444p</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>nv12</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>yuvj420p</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>gray</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>rgb24</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>rgba</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>bgr24</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>uyvy422</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QLabel" name="label_6">
+         <property name="geometry">
+          <rect>
+           <x>600</x>
+           <y>35</y>
+           <width>57</width>
+           <height>14</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Pix_Fmt</string>
          </property>
         </widget>
        </widget>
@@ -2122,6 +2051,9 @@ Adds the flag -f to the command line</string>
          <string>Video Subtitle Codecs. Use with caution.
  Some codecs are not compatible with all video formats.
 Adds the flag -c:s to the command line</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -2195,9 +2127,7 @@ Adds the flag -c:s to the command line</string>
          </font>
         </property>
         <property name="toolTip">
-         <string>Total Length to Encode.
-Formats 00:00:00 or Seconds are acceptable.
-This setting will also work on audio only files.</string>
+         <string>Encoding duration (e.g., 30, 00:01:00, 00:00:30.500)</string>
         </property>
         <property name="placeholderText">
          <string>hh:mm:ss[.xxx]</string>
@@ -2208,7 +2138,7 @@ This setting will also work on audio only files.</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>410</y>
+         <y>320</y>
          <width>791</width>
          <height>101</height>
         </rect>
@@ -2240,6 +2170,9 @@ This setting will also work on audio only files.</string>
         <property name="toolTip">
          <string>Audio Codec: Adds the flag -c:a to the command line.
 If you need a codec not listed, use Manual Options.</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -2274,7 +2207,17 @@ If you need a codec not listed, use Manual Options.</string>
         </item>
         <item>
          <property name="text">
+          <string>ape</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>dts</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>flac</string>
          </property>
         </item>
         <item>
@@ -2300,16 +2243,6 @@ If you need a codec not listed, use Manual Options.</string>
         <item>
          <property name="text">
           <string>pcm_s32le</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>flac</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>ape</string>
          </property>
         </item>
         <item>
@@ -2376,6 +2309,9 @@ If you need a codec not listed, use Manual Options.</string>
         </property>
         <property name="toolTip">
          <string>Audio Bitrate:Adds the flag -b:a to the command line</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -2504,6 +2440,9 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="toolTip">
          <string>Audio Samplerate:Adds the flag -ar to the command line</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -2590,7 +2529,7 @@ If you need a codec not listed, use Manual Options.</string>
          <string>File Ext</string>
         </property>
        </widget>
-       <widget class="QComboBox" name="AudioExtention">
+       <widget class="QComboBox" name="AudioExtension">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -2609,7 +2548,11 @@ If you need a codec not listed, use Manual Options.</string>
          </font>
         </property>
         <property name="toolTip">
-         <string>Audio File Extension</string>
+         <string>Audio File Extension: This is mutually exclusive with
+Video Wrapper. You CANNOT use both.</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -2694,6 +2637,9 @@ If you need a codec not listed, use Manual Options.</string>
         <property name="toolTip">
          <string>Audio Channels:Adds the flag -ac to the command line</string>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -2755,63 +2701,6 @@ If you need a codec not listed, use Manual Options.</string>
          <string>Channels</string>
         </property>
        </widget>
-       <widget class="QComboBox" name="AudioTags">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>260</x>
-          <y>60</y>
-          <width>111</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="toolTip">
-         <string>Audio Tags</string>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <property name="placeholderText">
-         <string/>
-        </property>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>sowt</string>
-         </property>
-        </item>
-       </widget>
-       <widget class="QLabel" name="l_ATags">
-        <property name="geometry">
-         <rect>
-          <x>210</x>
-          <y>61</y>
-          <width>71</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Tags</string>
-        </property>
-       </widget>
        <widget class="QLineEdit" name="AudioStreamID">
         <property name="geometry">
          <rect>
@@ -2855,7 +2744,7 @@ If you need a codec not listed, use Manual Options.</string>
        <property name="geometry">
         <rect>
          <x>760</x>
-         <y>61</y>
+         <y>53</y>
          <width>29</width>
          <height>23</height>
         </rect>
@@ -2874,7 +2763,7 @@ If you need a codec not listed, use Manual Options.</string>
        <property name="geometry">
         <rect>
          <x>760</x>
-         <y>91</y>
+         <y>83</y>
          <width>29</width>
          <height>23</height>
         </rect>
@@ -2889,13 +2778,164 @@ If you need a codec not listed, use Manual Options.</string>
         <enum>Qt::ArrowType::UpArrow</enum>
        </property>
       </widget>
+      <widget class="QGroupBox" name="groupBox_8">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>430</y>
+         <width>731</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>FreeFactory Service Options (These ignored when direct encoding)</string>
+       </property>
+       <widget class="QRadioButton" name="ActionCopy">
+        <property name="geometry">
+         <rect>
+          <x>560</x>
+          <y>20</y>
+          <width>61</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Action=Copy</string>
+        </property>
+        <property name="text">
+         <string>Copy</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">ActionButtonGroup</string>
+        </attribute>
+       </widget>
+       <widget class="QLabel" name="l_Action">
+        <property name="geometry">
+         <rect>
+          <x>440</x>
+          <y>23</y>
+          <width>41</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Action</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="ActionEncode">
+        <property name="geometry">
+         <rect>
+          <x>490</x>
+          <y>20</y>
+          <width>71</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Action=Encode</string>
+        </property>
+        <property name="text">
+         <string>Encode</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">ActionButtonGroup</string>
+        </attribute>
+       </widget>
+       <widget class="QCheckBox" name="DeleteSource">
+        <property name="geometry">
+         <rect>
+          <x>277</x>
+          <y>20</y>
+          <width>141</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Remove Source</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="DeleteConversionLogs">
+        <property name="geometry">
+         <rect>
+          <x>150</x>
+          <y>20</y>
+          <width>131</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Remove Logs</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="EnableFactory">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>131</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Enable Factory</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </widget>
      </widget>
      <widget class="QLabel" name="l_ManualOptions">
       <property name="geometry">
        <rect>
         <x>240</x>
         <y>590</y>
-        <width>121</width>
+        <width>81</width>
         <height>17</height>
        </rect>
       </property>
@@ -2914,7 +2954,7 @@ If you need a codec not listed, use Manual Options.</string>
        <rect>
         <x>240</x>
         <y>620</y>
-        <width>121</width>
+        <width>81</width>
         <height>17</height>
        </rect>
       </property>
@@ -2939,13 +2979,14 @@ If you need a codec not listed, use Manual Options.</string>
       </property>
       <property name="toolTip">
        <string>Insert any additional ffmpeg options
-here that are not available via this GUI.</string>
+here that are not available via this GUI.
+See the FFmpeg Help tab.</string>
       </property>
       <property name="placeholderText">
        <string>-c:s copy -c:v copy -c:a copy</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="CommandLine">
+     <widget class="QLineEdit" name="PreviewCommandLine">
       <property name="geometry">
        <rect>
         <x>420</x>
@@ -2955,13 +2996,14 @@ here that are not available via this GUI.</string>
        </rect>
       </property>
       <property name="toolTip">
-       <string>Generates a preview of the ffmpeg commandline being built by this factory.</string>
+       <string>Generates FFmpeg command based on current GUI settings.
+The input and output filenames are generic.</string>
       </property>
      </widget>
      <widget class="QPushButton" name="NewFactory">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>233</x>
         <y>10</y>
         <width>31</width>
         <height>31</height>
@@ -2987,7 +3029,7 @@ here that are not available via this GUI.</string>
      <widget class="QPushButton" name="SaveFactory">
       <property name="geometry">
        <rect>
-        <x>50</x>
+        <x>273</x>
         <y>10</y>
         <width>31</width>
         <height>31</height>
@@ -3013,7 +3055,7 @@ here that are not available via this GUI.</string>
      <widget class="QPushButton" name="DeleteFactory">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>313</x>
         <y>10</y>
         <width>31</width>
         <height>31</height>
@@ -3046,7 +3088,8 @@ here that are not available via this GUI.</string>
        </rect>
       </property>
       <property name="toolTip">
-       <string>Generates a preview of the ffmpeg commandline being built by this factory.</string>
+       <string>Generates FFmpeg command based on current GUI settings.
+The input and output filenames are generic.</string>
       </property>
       <property name="text">
        <string>Preview</string>
@@ -3062,7 +3105,8 @@ here that are not available via this GUI.</string>
        </rect>
       </property>
       <property name="toolTip">
-       <string>Click to View Logs</string>
+       <string>Click to View Logs: Only available when
+FreeFactory-service is running.</string>
       </property>
       <property name="text">
        <string/>
@@ -3121,7 +3165,7 @@ here that are not available via this GUI.</string>
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>../Pics/factory.ico</normaloff>../Pics/factory.ico</iconset>
+        <normaloff>../Pics/FreeFactoryQT.ico</normaloff>../Pics/FreeFactoryQT.ico</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -3164,555 +3208,148 @@ or Factory Testing</string>
        <string>Drop Media Files Here</string>
       </property>
      </widget>
-    </widget>
-    <widget class="QWidget" name="tab">
-     <attribute name="title">
-      <string>Email and FTP Settings</string>
-     </attribute>
-     <widget class="QGroupBox" name="ftpoptions">
+     <widget class="QLabel" name="label_2">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>330</y>
-        <width>601</width>
-        <height>161</height>
+        <y>4</y>
+        <width>141</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>../Pics/FreeFactoryProgramLogo.png</pixmap>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_11">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>570</y>
+        <width>551</width>
+        <height>16</height>
        </rect>
       </property>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>true</italic>
         <bold>true</bold>
        </font>
       </property>
-      <property name="title">
-       <string>FTP Options</string>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff5454;&quot;&gt;If you define -i and/or -f flag here, FreeFactory will ignore ALL automatic input generation.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
-      <property name="flat">
-       <bool>false</bool>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabConversionQueue">
+     <attribute name="title">
+      <string>Local Batch File Processing</string>
+     </attribute>
+     <widget class="QFrame" name="frame_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>1021</width>
+        <height>421</height>
+       </rect>
       </property>
-      <widget class="QLineEdit" name="FTPUrl">
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <widget class="QTableWidget" name="conversionQueueTable">
        <property name="geometry">
         <rect>
-         <x>90</x>
+         <x>120</x>
          <y>30</y>
-         <width>113</width>
-         <height>25</height>
+         <width>891</width>
+         <height>341</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
+       <property name="columnCount">
+        <number>3</number>
        </property>
-       <property name="placeholderText">
-        <string>ftp.ftpserver.org</string>
+       <column/>
+       <column/>
+       <column/>
+      </widget>
+      <widget class="QProgressBar" name="conversionProgressBar">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>380</y>
+         <width>891</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="value">
+        <number>0</number>
        </property>
       </widget>
-      <widget class="QLabel" name="l_FtpUrl">
+      <widget class="QPushButton" name="startQueueButton">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>33</y>
-         <width>62</width>
-         <height>17</height>
+         <y>30</y>
+         <width>101</width>
+         <height>23</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
        <property name="text">
-        <string>URL</string>
+        <string>Start Queue</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="FTPUsername">
+      <widget class="QPushButton" name="pauseQueueButton">
        <property name="geometry">
         <rect>
-         <x>90</x>
+         <x>10</x>
          <y>60</y>
-         <width>113</width>
-         <height>25</height>
+         <width>101</width>
+         <height>23</height>
         </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="placeholderText">
-        <string>Username</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="l_FtpUser">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>63</y>
-         <width>81</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
        </property>
        <property name="text">
-        <string>Username</string>
+        <string>Pause Queue</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="FTPPassword">
-       <property name="geometry">
-        <rect>
-         <x>90</x>
-         <y>87</y>
-         <width>113</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="placeholderText">
-        <string>Password</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="l_FtpPass">
+      <widget class="QPushButton" name="removeFromQueueButton">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>90</y>
-         <width>81</width>
-         <height>17</height>
+         <width>101</width>
+         <height>23</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
        <property name="text">
-        <string>Password</string>
+        <string>Remove Selected</string>
        </property>
       </widget>
-      <widget class="QLabel" name="l_FtpProgram">
+      <widget class="QPushButton" name="clearQueueButton">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>120</y>
          <width>101</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>FTP Program</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="l_FtpRemotePath">
-       <property name="geometry">
-        <rect>
-         <x>208</x>
-         <y>120</y>
-         <width>131</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>FTP Remote Path</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="FTPRemotePath">
-       <property name="geometry">
-        <rect>
-         <x>322</x>
-         <y>117</y>
-         <width>261</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="FTPProgram">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>90</x>
-         <y>116</y>
-         <width>85</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <property name="placeholderText">
-        <string/>
-       </property>
-       <item>
-        <property name="text">
-         <string>ftp</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>ncftp</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>lftp</string>
-        </property>
-       </item>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="FactoryEmail">
-      <property name="geometry">
-       <rect>
-        <x>340</x>
-        <y>20</y>
-        <width>271</width>
-        <height>301</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="title">
-       <string>Factory Email</string>
-      </property>
-      <widget class="QCheckBox" name="EnableEmail">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>24</y>
-         <width>121</width>
          <height>23</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
        <property name="text">
-        <string>Enable Email</string>
+        <string>Clear Queue</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="EmailName">
+      <widget class="QLabel" name="l_queueProgressBar">
        <property name="geometry">
         <rect>
-         <x>80</x>
-         <y>61</y>
-         <width>181</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="EmailAddress">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>91</y>
-         <width>181</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-      </widget>
-      <widget class="QListWidget" name="ListFactoryEmails">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>121</y>
-         <width>256</width>
-         <height>121</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-      </widget>
-      <widget class="QLabel" name="l_EmailName">
-       <property name="geometry">
-        <rect>
-         <x>29</x>
-         <y>64</y>
-         <width>41</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Name</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="l_EmailName_2">
-       <property name="geometry">
-        <rect>
-         <x>17</x>
-         <y>93</y>
-         <width>61</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Address</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="NewEmail">
-       <property name="geometry">
-        <rect>
-         <x>27</x>
-         <y>244</y>
-         <width>71</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Creates a new email</string>
-       </property>
-       <property name="text">
-        <string>New Email</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="AddEmail">
-       <property name="geometry">
-        <rect>
-         <x>99</x>
-         <y>244</y>
-         <width>71</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>The Factory must be saved to save any additions</string>
-       </property>
-       <property name="text">
-        <string>Add Email</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="UpdateEmail">
-       <property name="geometry">
-        <rect>
-         <x>174</x>
-         <y>244</y>
-         <width>81</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>The Factory must be saved to save any changes</string>
-       </property>
-       <property name="text">
-        <string>Update Email</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="DeleteEmail">
-       <property name="geometry">
-        <rect>
-         <x>94</x>
-         <y>270</y>
-         <width>81</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>The Factory must be saved to record any removals</string>
-       </property>
-       <property name="text">
-        <string>Delete Email</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="AddEmailMessage">
-       <property name="geometry">
-        <rect>
-         <x>170</x>
-         <y>23</y>
-         <width>81</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Add Message</string>
-       </property>
-       <property name="text">
-        <string>Add Message</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_2">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>271</width>
-        <height>301</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="title">
-       <string>Factory Linking</string>
-      </property>
-      <widget class="QCheckBox" name="EnableFactoryLinking">
-       <property name="geometry">
-        <rect>
-         <x>14</x>
-         <y>20</y>
-         <width>191</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Enable Factory Linking</string>
-       </property>
-      </widget>
-      <widget class="QListWidget" name="listLinkedFactories">
-       <property name="geometry">
-        <rect>
-         <x>8</x>
-         <y>100</y>
-         <width>256</width>
-         <height>171</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="comboLinkedFactories">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>9</x>
-         <y>50</y>
-         <width>231</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="currentIndex">
-        <number>-1</number>
-       </property>
-       <property name="placeholderText">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QLabel" name="l_LinkedToo">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>80</y>
+         <x>50</x>
+         <y>384</y>
          <width>62</width>
          <height>16</height>
         </rect>
@@ -3720,42 +3357,115 @@ or Factory Testing</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
-         <bold>false</bold>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
-        <string>Linked To:</string>
+        <string>Progress</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="AddLink">
+     </widget>
+     <widget class="DropTextEdit" name="queueDropZone">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>500</y>
+        <width>1021</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Drop Media Files Here for Direct Conversion
+or Factory Testing</string>
+      </property>
+      <property name="plainText">
+       <string/>
+      </property>
+      <property name="placeholderText">
+       <string>Drop Media Files Here</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>4</y>
+        <width>141</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>../Pics/FreeFactoryProgramLogo.png</pixmap>
+      </property>
+     </widget>
+     <widget class="QLabel" name="queueSummaryLabel">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>891</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>FreeFactory File Queue</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Live Stream Manager</string>
+     </attribute>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>4</y>
+        <width>141</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>../Pics/FreeFactoryProgramLogo.png</pixmap>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_9">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>1051</width>
+        <height>591</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="title">
+       <string> Live Streaming Controls</string>
+      </property>
+      <widget class="QLabel" name="l_StreamKey">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>274</y>
-         <width>91</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Add Link: The Factory must already be saved to add any additions</string>
-       </property>
-       <property name="text">
-        <string>Add Link</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="RemoveLink">
-       <property name="geometry">
-        <rect>
-         <x>170</x>
-         <y>274</y>
+         <x>330</x>
+         <y>117</y>
          <width>81</width>
-         <height>23</height>
+         <height>16</height>
         </rect>
        </property>
        <property name="font">
@@ -3764,11 +3474,506 @@ or Factory Testing</string>
          <bold>false</bold>
         </font>
        </property>
-       <property name="toolTip">
-        <string>Remove Link: The Factory must already be saved to record any removals</string>
+       <property name="text">
+        <string>Stream Key</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_StreamingFactory">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>141</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="text">
-        <string>Remove Link</string>
+        <string>Select Streaming Factory</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="streamFactorySelect">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>26</y>
+         <width>161</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+       <item>
+        <property name="text">
+         <string/>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string/>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string/>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string/>
+        </property>
+       </item>
+      </widget>
+      <widget class="QLabel" name="l_StreamURL">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>117</y>
+         <width>81</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>RTMP URL</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="streamRTMPUrl">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>114</y>
+         <width>241</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="streamKey">
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>114</y>
+         <width>161</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QPlainTextEdit" name="streamLogOutput">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>470</y>
+         <width>1011</width>
+         <height>111</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="RemoveStream">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>150</y>
+         <width>101</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Remove Stream</string>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="streamTable">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>210</y>
+         <width>1011</width>
+         <height>192</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="rowCount">
+        <number>0</number>
+       </property>
+       <property name="columnCount">
+        <number>5</number>
+       </property>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+      </widget>
+      <widget class="QPushButton" name="AddNewStream">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>150</y>
+         <width>101</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Add Stream</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="StopStream">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>410</y>
+         <width>80</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Stop Stream</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="StartStream">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>410</y>
+         <width>80</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Start Stream</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_StreamKey_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>450</y>
+         <width>151</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>FFmpeg Stream Logging</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_StreamKey_3">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>190</y>
+         <width>91</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Stream Presets</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_StreamingFactory_2">
+       <property name="geometry">
+        <rect>
+         <x>11</x>
+         <y>57</y>
+         <width>141</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Force Format Input Video</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_StreamingFactory_3">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>87</y>
+         <width>141</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Force Format Input Audio</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="ForceFormatInputVideo">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>54</y>
+         <width>161</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <item>
+        <property name="text">
+         <string/>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>File</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>x11grab</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>xcbgrab</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>v4l2</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QComboBox" name="ForceFormatInputAudio">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>83</y>
+         <width>161</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <item>
+        <property name="text">
+         <string/>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>pulse</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>alsa</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>dshow</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QLabel" name="l_StreamingFactory_4">
+       <property name="geometry">
+        <rect>
+         <x>330</x>
+         <y>58</y>
+         <width>101</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Input Source Video</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="streamInputVideo">
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>54</y>
+         <width>161</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="placeholderText">
+        <string>:0.0, /dev/video0, file.mp4</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="streamInputAudio">
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>83</y>
+         <width>161</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="placeholderText">
+        <string>default, hw:0,0, pulse, alsa</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_StreamingFactory_5">
+       <property name="geometry">
+        <rect>
+         <x>330</x>
+         <y>87</y>
+         <width>101</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Input Source Audio</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="StartAllStreams">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>410</y>
+         <width>101</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Start All Streams</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="StopAllStreams">
+       <property name="geometry">
+        <rect>
+         <x>300</x>
+         <y>410</y>
+         <width>101</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Stop All Streams</string>
        </property>
       </widget>
      </widget>
@@ -3780,8 +3985,8 @@ or Factory Testing</string>
      <widget class="QGroupBox" name="groupBox">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>20</y>
+        <x>10</x>
+        <y>50</y>
         <width>481</width>
         <height>71</height>
        </rect>
@@ -3798,9 +4003,9 @@ or Factory Testing</string>
       <widget class="QLineEdit" name="CompanyNameGlobal">
        <property name="geometry">
         <rect>
-         <x>140</x>
+         <x>100</x>
          <y>30</y>
-         <width>181</width>
+         <width>371</width>
          <height>25</height>
         </rect>
        </property>
@@ -3811,15 +4016,15 @@ or Factory Testing</string>
         </font>
        </property>
        <property name="placeholderText">
-        <string>Your Company Name</string>
+        <string>Your Company Name (Optional)</string>
        </property>
       </widget>
       <widget class="QLabel" name="l_CompanyName">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>30</y>
-         <width>121</width>
+         <x>10</x>
+         <y>34</y>
+         <width>81</width>
          <height>17</height>
         </rect>
        </property>
@@ -3835,12 +4040,15 @@ or Factory Testing</string>
       </widget>
      </widget>
      <widget class="QGroupBox" name="ffmxprogramglob">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>170</y>
+        <x>10</x>
+        <y>130</y>
         <width>481</width>
-        <height>211</height>
+        <height>441</height>
        </rect>
       </property>
       <property name="font">
@@ -3855,8 +4063,8 @@ or Factory Testing</string>
       <widget class="QLineEdit" name="AppleDelaySecondsGlobal">
        <property name="geometry">
         <rect>
-         <x>105</x>
-         <y>28</y>
+         <x>77</x>
+         <y>27</y>
          <width>41</width>
          <height>25</height>
         </rect>
@@ -3868,7 +4076,7 @@ or Factory Testing</string>
         </font>
        </property>
        <property name="text">
-        <string>30</string>
+        <string/>
        </property>
       </widget>
       <widget class="QLabel" name="l_AppleDelay">
@@ -3876,7 +4084,7 @@ or Factory Testing</string>
         <rect>
          <x>10</x>
          <y>30</y>
-         <width>91</width>
+         <width>61</width>
          <height>17</height>
         </rect>
        </property>
@@ -4013,6 +4221,263 @@ or Factory Testing</string>
         <string>Enable Factory Linking</string>
        </property>
       </widget>
+      <widget class="QLineEdit" name="PathtoFFmpegGlobal">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>330</y>
+         <width>381</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="placeholderText">
+        <string>/usr/bin [Linux] or c:\\ffmpeg [windows]</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_PathtoFfmpeg">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>330</y>
+         <width>71</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>FFmpeg Path</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_PathtoFactories">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>300</y>
+         <width>71</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Factories Path</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="PathtoFactoriesGlobal">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>300</y>
+         <width>381</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>/opt/FreeFactory/Factories</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_FolderLocations">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>280</y>
+         <width>101</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Folder Locations</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="DefaultFactoryGlobal">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>236</y>
+         <width>381</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Sets the Factory which gets loaded on Program start.</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>240</y>
+         <width>91</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Sets the Factory which gets loaded on Program start.</string>
+       </property>
+       <property name="text">
+        <string>Default Factory</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_RunFrom">
+       <property name="geometry">
+        <rect>
+         <x>260</x>
+         <y>373</y>
+         <width>71</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+         <underline>false</underline>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>usr is the system install version, opt is a custom compiled version</string>
+       </property>
+       <property name="text">
+        <string>Run From</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_Ffmxprogram">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>374</y>
+         <width>81</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>FFMx Program</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="RunFromUsr">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>370</y>
+         <width>51</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>usr</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="RunFromOpt">
+       <property name="geometry">
+        <rect>
+         <x>370</x>
+         <y>370</y>
+         <width>51</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>opt</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="FFMxProgram">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>371</y>
+         <width>85</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>ffmpeg or ffmpeg.exe</string>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <property name="placeholderText">
+        <string/>
+       </property>
+       <item>
+        <property name="text">
+         <string>ffmpeg</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ffmpeg.exe (supported soon)</string>
+        </property>
+       </item>
+      </widget>
      </widget>
      <widget class="QPushButton" name="SaveFFConfigGlobal">
       <property name="geometry">
@@ -4035,7 +4500,7 @@ or Factory Testing</string>
        <rect>
         <x>530</x>
         <y>20</y>
-        <width>481</width>
+        <width>541</width>
         <height>191</height>
        </rect>
       </property>
@@ -4053,7 +4518,7 @@ or Factory Testing</string>
         <rect>
          <x>10</x>
          <y>24</y>
-         <width>461</width>
+         <width>521</width>
          <height>121</height>
         </rect>
        </property>
@@ -4063,6 +4528,11 @@ or Factory Testing</string>
          <bold>false</bold>
         </font>
        </property>
+       <item>
+        <property name="text">
+         <string>/video/dropbox</string>
+        </property>
+       </item>
       </widget>
       <widget class="QLineEdit" name="NotifyFolderPathGlobal">
        <property name="geometry">
@@ -4102,30 +4572,23 @@ or Factory Testing</string>
         <string>Folder Path</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushNotifyFolderPath">
+      <widget class="QToolButton" name="NotifyFoldersPathsGlobal">
        <property name="geometry">
         <rect>
-         <x>415</x>
-         <y>150</y>
-         <width>41</width>
-         <height>31</height>
+         <x>418</x>
+         <y>153</y>
+         <width>29</width>
+         <height>23</height>
         </rect>
        </property>
-       <property name="toolTip">
-        <string>Browse</string>
-       </property>
        <property name="text">
-        <string/>
+        <string>...</string>
        </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>../Pics/Folder-Open1-32x32.gif</normaloff>../Pics/Folder-Open1-32x32.gif</iconset>
+       <property name="autoRaise">
+        <bool>false</bool>
        </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>34</height>
-        </size>
+       <property name="arrowType">
+        <enum>Qt::ArrowType::UpArrow</enum>
        </property>
       </widget>
      </widget>
@@ -4134,8 +4597,8 @@ or Factory Testing</string>
        <rect>
         <x>530</x>
         <y>220</y>
-        <width>481</width>
-        <height>191</height>
+        <width>541</width>
+        <height>341</height>
        </rect>
       </property>
       <property name="font">
@@ -4145,15 +4608,15 @@ or Factory Testing</string>
        </font>
       </property>
       <property name="title">
-       <string>Free Factory Running Processes</string>
+       <string>Free Factory Service Status</string>
       </property>
-      <widget class="QPushButton" name="NewProcess">
+      <widget class="QListWidget" name="listNotifyServiceStatus">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>23</y>
-         <width>82</width>
-         <height>23</height>
+         <y>20</y>
+         <width>521</width>
+         <height>231</height>
         </rect>
        </property>
        <property name="font">
@@ -4162,82 +4625,12 @@ or Factory Testing</string>
          <bold>false</bold>
         </font>
        </property>
-       <property name="text">
-        <string>New</string>
-       </property>
       </widget>
-      <widget class="QPushButton" name="SaveProcess">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>23</y>
-         <width>82</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Save</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="UpdateProcess">
-       <property name="geometry">
-        <rect>
-         <x>298</x>
-         <y>23</y>
-         <width>82</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Update</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="DeleteProcess">
-       <property name="geometry">
-        <rect>
-         <x>388</x>
-         <y>23</y>
-         <width>82</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Delete</string>
-       </property>
-      </widget>
-      <widget class="QListWidget" name="listRunningProcesses">
+      <widget class="QPushButton" name="startNotifyServiceButton">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>50</y>
-         <width>461</width>
-         <height>91</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="StartFFServiceGlobal">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>158</y>
+         <y>257</y>
          <width>82</width>
          <height>23</height>
         </rect>
@@ -4247,16 +4640,19 @@ or Factory Testing</string>
          <pointsize>8</pointsize>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="toolTip">
+        <string>Starts the Service</string>
        </property>
        <property name="text">
         <string>Start</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="RestartFFServiceGlobal">
+      <widget class="QPushButton" name="restartNotifyServiceButton">
        <property name="geometry">
         <rect>
-         <x>100</x>
-         <y>159</y>
+         <x>110</x>
+         <y>257</y>
          <width>82</width>
          <height>23</height>
         </rect>
@@ -4266,16 +4662,19 @@ or Factory Testing</string>
          <pointsize>8</pointsize>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="toolTip">
+        <string>Restart Service</string>
        </property>
        <property name="text">
         <string>Restart</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="StopFFServiceGlobal">
+      <widget class="QPushButton" name="stopNotifyServiceButton">
        <property name="geometry">
         <rect>
-         <x>300</x>
-         <y>160</y>
+         <x>310</x>
+         <y>257</y>
          <width>82</width>
          <height>23</height>
         </rect>
@@ -4285,16 +4684,19 @@ or Factory Testing</string>
          <pointsize>8</pointsize>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="toolTip">
+        <string>Stop Service</string>
        </property>
        <property name="text">
         <string>Stop</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="KillFFServiceGlobal">
+      <widget class="QPushButton" name="killNotifyServiceButton">
        <property name="geometry">
         <rect>
-         <x>390</x>
-         <y>160</y>
+         <x>410</x>
+         <y>257</y>
          <width>82</width>
          <height>23</height>
         </rect>
@@ -4305,8 +4707,81 @@ or Factory Testing</string>
          <bold>false</bold>
         </font>
        </property>
+       <property name="toolTip">
+        <string>Kill Service</string>
+       </property>
        <property name="text">
         <string>Kill</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="statusNotifyServiceButton">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>257</y>
+         <width>82</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Update Service Status</string>
+       </property>
+       <property name="text">
+        <string>Update Status</string>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="clearNotifyStatusButton">
+       <property name="geometry">
+        <rect>
+         <x>503</x>
+         <y>257</y>
+         <width>28</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>Clear the Status</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelNotifyServiceMode">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>290</y>
+         <width>191</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <italic>true</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>This shows the status of the FreeFactory-notify service.
+If &quot;User, service is installed for user-level control.
+If &quot;root&quot;, service is installed system-wide and requires sudo.
+If &quot;Not Installed&quot;, you will need to run the setup-notifyservice.sh
+script and follow the prompts.
+Right-click to refresh service mode.</string>
+       </property>
+       <property name="text">
+        <string>Unknown</string>
        </property>
       </widget>
      </widget>
@@ -4314,9 +4789,9 @@ or Factory Testing</string>
       <property name="geometry">
        <rect>
         <x>530</x>
-        <y>420</y>
+        <y>570</y>
         <width>481</width>
-        <height>141</height>
+        <height>71</height>
        </rect>
       </property>
       <property name="font">
@@ -4326,106 +4801,14 @@ or Factory Testing</string>
        </font>
       </property>
       <property name="title">
-       <string>Advanced Factory Options</string>
+       <string>OS Notifications</string>
       </property>
-      <widget class="QLabel" name="l_FactoryType">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>34</y>
-         <width>91</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Factory Type</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="l_MetaData">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>70</y>
-         <width>71</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Meta Data</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="FactorTypeGlobal">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>30</y>
-         <width>85</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Factory Type: Change from ASCII factories or SQLite factores.</string>
-       </property>
-       <item>
-        <property name="text">
-         <string>ASCII</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>SQLite</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QLineEdit" name="MetaData">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>66</y>
-         <width>361</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>This is a comment field that will be added to encoded files.</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="placeholderText">
-        <string>Created by FreeFactory</string>
-       </property>
-      </widget>
       <widget class="QCheckBox" name="OSNoticicationsGlobal">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>100</y>
-         <width>231</width>
+         <y>30</y>
+         <width>211</width>
          <height>22</height>
         </rect>
        </property>
@@ -4452,7 +4835,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>370</x>
-         <y>100</y>
+         <y>30</y>
          <width>91</width>
          <height>23</height>
         </rect>
@@ -4466,7 +4849,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>280</x>
-         <y>103</y>
+         <y>33</y>
          <width>91</width>
          <height>16</height>
         </rect>
@@ -4486,59 +4869,13 @@ or Factory Testing</string>
        </property>
       </widget>
      </widget>
-     <widget class="QFrame" name="frame">
+     <widget class="QGroupBox" name="EmailSettingsBox">
       <property name="geometry">
        <rect>
-        <x>530</x>
-        <y>570</y>
-        <width>481</width>
-        <height>67</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="l_PathtoFfmpeg">
-         <property name="text">
-          <string>Path to FFMPEG</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="PathtoFFmpegGlobal">
-         <property name="placeholderText">
-          <string>/usr/bin [Linux] or c:\\ffmpeg [windows]</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="l_PathtoFfmbc">
-         <property name="text">
-          <string>Path to FFMBC</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="PathtoFfmbcGlobal">
-         <property name="placeholderText">
-          <string>/usr/local/bin</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_3">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>384</y>
-        <width>481</width>
-        <height>221</height>
+        <x>170</x>
+        <y>620</y>
+        <width>0</width>
+        <height>0</height>
        </rect>
       </property>
       <property name="font">
@@ -4836,23 +5173,34 @@ or Factory Testing</string>
        </property>
       </widget>
      </widget>
-     <widget class="QComboBox" name="DefaultFactoryGlobal">
+     <widget class="QLabel" name="label_5">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>120</y>
-        <width>481</width>
-        <height>24</height>
+        <x>10</x>
+        <y>4</y>
+        <width>141</width>
+        <height>41</height>
        </rect>
       </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>../Pics/FreeFactoryProgramLogo.png</pixmap>
+      </property>
      </widget>
-     <widget class="QLabel" name="label">
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>FFmpeg Help</string>
+     </attribute>
+     <widget class="QGroupBox" name="groupBox_3">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>100</y>
-        <width>111</width>
-        <height>16</height>
+        <x>10</x>
+        <y>50</y>
+        <width>701</width>
+        <height>601</height>
        </rect>
       </property>
       <property name="font">
@@ -4861,132 +5209,1049 @@ or Factory Testing</string>
         <bold>true</bold>
        </font>
       </property>
-      <property name="toolTip">
-       <string>Which Factory gets loaded on Program start.</string>
+      <property name="title">
+       <string>FFMpeg Help Dialogs</string>
       </property>
-      <property name="text">
-       <string>Default Factory</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tabConversionQueue">
-     <attribute name="title">
-      <string>Local Batch File Processing</string>
-     </attribute>
-     <widget class="QFrame" name="frame_2">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>1021</width>
-        <height>271</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
-      </property>
-      <widget class="QTableWidget" name="conversionQueueTable">
+      <widget class="QPushButton" name="helpVCodecsAll">
        <property name="geometry">
         <rect>
-         <x>120</x>
-         <y>30</y>
-         <width>891</width>
-         <height>192</height>
+         <x>10</x>
+         <y>50</y>
+         <width>121</width>
+         <height>21</height>
         </rect>
        </property>
-       <property name="columnCount">
-        <number>3</number>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
        </property>
-       <column/>
-       <column/>
-       <column/>
+       <property name="text">
+        <string>Video Codecs All</string>
+       </property>
       </widget>
-      <widget class="QLabel" name="queueSummaryLabel">
+      <widget class="QPushButton" name="helpACodecsAll">
        <property name="geometry">
         <rect>
-         <x>120</x>
-         <y>10</y>
-         <width>891</width>
-         <height>16</height>
+         <x>10</x>
+         <y>80</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Audio Codecs All</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="helpMuxersFiltered">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>200</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Muxers Info</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="helpAFiltersFiltered">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>140</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Audio Filter Info</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="helpAllHelp">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>230</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Show All Help</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="helpVFiltersFiltered">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>110</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Video Filter Info</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_9">
+       <property name="geometry">
+        <rect>
+         <x>350</x>
+         <y>30</y>
+         <width>57</width>
+         <height>14</height>
         </rect>
        </property>
        <property name="text">
-        <string>Summery</string>
+        <string>Filters</string>
        </property>
       </widget>
-      <widget class="QProgressBar" name="conversionProgressBar">
+      <widget class="QPushButton" name="helpACodecsFiltered">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>80</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Audio Codec Info</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="helpVCodecsFiltered">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>50</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Video Codec Info</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="helpACodecsFilter">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>80</y>
+         <width>113</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="placeholderText">
+        <string>Required: ie. flac</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="helpVCodecsFilter">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>50</y>
+         <width>111</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="placeholderText">
+        <string>Required: ie. h264</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="helpVFiltersFilter">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>110</y>
+         <width>111</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="placeholderText">
+        <string>Required: ie. scale</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="helpAFiltersFilter">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>140</y>
+         <width>111</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="placeholderText">
+        <string>Required: ie. amix</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="helpMuxersFilter">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>200</y>
+         <width>111</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="placeholderText">
+        <string>Required: ie. mxf</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="helpAFiltersAll">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>140</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Audio Filters All</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="helpVFiltersAll">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>110</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Video Filters All</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="helpMuxersAll">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>200</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Muxers All</string>
+       </property>
+      </widget>
+      <widget class="QPlainTextEdit" name="plainTextEdit">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>310</y>
+         <width>661</width>
+         <height>181</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Shape::NoFrame</enum>
+       </property>
+       <property name="documentTitle">
+        <string/>
+       </property>
+       <property name="undoRedoEnabled">
+        <bool>false</bool>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="plainText">
+        <string>Note: These help dialogs are read on the fly from your existing ffmpeg installation. They are not internal to FreeFactory.
+
+Why is this here, you may ask. Well it's here to make it easier to find options that are not included within the GUI. As FFmpeg has hundreds of options, it's simply not possible to include each and every one. So this is here to allow you to easily find advanced options that you may use within the Manual Options dialog on the Factory Builder tab. This is mostly used as a built-in reference.
+
+The Filter boxes allow you to filter the help for specific codecs, muxers, filters etc. It shows you the options available for the specific item you want to use.
+
+To use this tab efficiently, use one of the All buttons to find the codec, filter or muxer you need. Then to get more options on such item, type that into the appropriate Filter box then click the Info button to get help on that one specific item.</string>
+       </property>
+       <property name="backgroundVisible">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBox">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>260</y>
+         <width>61</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="minimum">
+        <number>10</number>
+       </property>
+       <property name="maximum">
+        <number>18</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_7">
+       <property name="geometry">
+        <rect>
+         <x>13</x>
+         <y>263</y>
+         <width>121</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Help Window Font Size</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="helpPixFormatsAll">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>230</y>
-         <width>1001</width>
-         <height>23</height>
+         <width>121</width>
+         <height>21</height>
         </rect>
        </property>
-       <property name="value">
-        <number>0</number>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Pixel Formats All</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="startQueueButton">
+      <widget class="QPushButton" name="helpBSFFiltered">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>170</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Bitstream Info</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="helpBSFAll">
        <property name="geometry">
         <rect>
          <x>10</x>
+         <y>170</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Bitstream Filters All</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="helpBSFFilter">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>170</y>
+         <width>111</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="placeholderText">
+        <string>Required: ie. noise</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>4</y>
+        <width>141</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>../Pics/FreeFactoryProgramLogo.png</pixmap>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>DepPage</string>
+     </attribute>
+     <widget class="QGroupBox" name="FactoryEmail">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>40</y>
+        <width>271</width>
+        <height>301</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="title">
+       <string>Factory Email</string>
+      </property>
+      <widget class="QCheckBox" name="EnableEmail">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>24</y>
+         <width>121</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Enable Email</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="EmailName">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>61</y>
+         <width>181</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="EmailAddress">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>91</y>
+         <width>181</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+      </widget>
+      <widget class="QListWidget" name="ListFactoryEmails">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>121</y>
+         <width>256</width>
+         <height>121</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_EmailName">
+       <property name="geometry">
+        <rect>
+         <x>29</x>
+         <y>64</y>
+         <width>41</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_EmailName_2">
+       <property name="geometry">
+        <rect>
+         <x>17</x>
+         <y>93</y>
+         <width>61</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Address</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="NewEmail">
+       <property name="geometry">
+        <rect>
+         <x>27</x>
+         <y>244</y>
+         <width>71</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Creates a new email</string>
+       </property>
+       <property name="text">
+        <string>New Email</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="AddEmail">
+       <property name="geometry">
+        <rect>
+         <x>99</x>
+         <y>244</y>
+         <width>71</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>The Factory must be saved to save any additions</string>
+       </property>
+       <property name="text">
+        <string>Add Email</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="UpdateEmail">
+       <property name="geometry">
+        <rect>
+         <x>174</x>
+         <y>244</y>
+         <width>81</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>The Factory must be saved to save any changes</string>
+       </property>
+       <property name="text">
+        <string>Update Email</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="DeleteEmail">
+       <property name="geometry">
+        <rect>
+         <x>94</x>
+         <y>270</y>
+         <width>81</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>The Factory must be saved to record any removals</string>
+       </property>
+       <property name="text">
+        <string>Delete Email</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="AddEmailMessage">
+       <property name="geometry">
+        <rect>
+         <x>170</x>
+         <y>23</y>
+         <width>81</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Add Message</string>
+       </property>
+       <property name="text">
+        <string>Add Message</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="ftpoptions">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>370</y>
+        <width>601</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="title">
+       <string>FTP Options</string>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+      <widget class="QLineEdit" name="FTPUrl">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
          <y>30</y>
-         <width>101</width>
-         <height>23</height>
+         <width>113</width>
+         <height>25</height>
         </rect>
        </property>
-       <property name="text">
-        <string>Start Queue</string>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="placeholderText">
+        <string>ftp.ftpserver.org</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pauseQueueButton">
+      <widget class="QLabel" name="l_FtpUrl">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>60</y>
-         <width>101</width>
-         <height>23</height>
+         <y>33</y>
+         <width>62</width>
+         <height>17</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
        <property name="text">
-        <string>Pause Queue</string>
+        <string>URL</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="removeFromQueueButton">
+      <widget class="QLineEdit" name="FTPUsername">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>60</y>
+         <width>113</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="placeholderText">
+        <string>Username</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_FtpUser">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>63</y>
+         <width>81</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Username</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="FTPPassword">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>87</y>
+         <width>113</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="placeholderText">
+        <string>Password</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_FtpPass">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>90</y>
-         <width>101</width>
-         <height>23</height>
+         <width>81</width>
+         <height>17</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
        <property name="text">
-        <string>Remove Selected</string>
+        <string>Password</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="clearQueueButton">
+      <widget class="QLabel" name="l_FtpProgram">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>120</y>
          <width>101</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>FTP Program</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_FtpRemotePath">
+       <property name="geometry">
+        <rect>
+         <x>208</x>
+         <y>120</y>
+         <width>131</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>FTP Remote Path</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="FTPRemotePath">
+       <property name="geometry">
+        <rect>
+         <x>322</x>
+         <y>117</y>
+         <width>261</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="FTPProgram">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>116</y>
+         <width>85</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <property name="placeholderText">
+        <string/>
+       </property>
+       <item>
+        <property name="text">
+         <string>ftp</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ncftp</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>lftp</string>
+        </property>
+       </item>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>40</y>
+        <width>271</width>
+        <height>301</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="title">
+       <string>Factory Linking</string>
+      </property>
+      <widget class="QCheckBox" name="EnableFactoryLinking">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>20</y>
+         <width>191</width>
          <height>23</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
        <property name="text">
-        <string>Clear Queue</string>
+        <string>Enable Factory Linking</string>
        </property>
       </widget>
-      <widget class="QLabel" name="l_queueProgressBar">
+      <widget class="QListWidget" name="listLinkedFactories">
+       <property name="geometry">
+        <rect>
+         <x>8</x>
+         <y>100</y>
+         <width>256</width>
+         <height>171</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboLinkedFactories">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>50</y>
+         <width>231</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+       <property name="placeholderText">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_LinkedToo">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>210</y>
+         <y>80</y>
          <width>62</width>
          <height>16</height>
         </rect>
@@ -4994,33 +6259,187 @@ or Factory Testing</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
-         <bold>true</bold>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>Progress</string>
+        <string>Linked To:</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="AddLink">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>274</y>
+         <width>91</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Add Link: The Factory must already be saved to add any additions</string>
+       </property>
+       <property name="text">
+        <string>Add Link</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="RemoveLink">
+       <property name="geometry">
+        <rect>
+         <x>170</x>
+         <y>274</y>
+         <width>81</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Remove Link: The Factory must already be saved to record any removals</string>
+       </property>
+       <property name="text">
+        <string>Remove Link</string>
        </property>
       </widget>
      </widget>
-     <widget class="DropTextEdit" name="queueDropZone">
+     <widget class="QLabel" name="l_ATags">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>290</y>
-        <width>1021</width>
-        <height>291</height>
+        <x>700</x>
+        <y>61</y>
+        <width>71</width>
+        <height>20</height>
        </rect>
       </property>
-      <property name="toolTip">
-       <string>Drop Media Files Here for Direct Conversion
-or Factory Testing</string>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
       </property>
-      <property name="plainText">
-       <string/>
+      <property name="text">
+       <string>A.Tags</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="l_Vtags">
+      <property name="geometry">
+       <rect>
+        <x>700</x>
+        <y>90</y>
+        <width>41</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>V.Tags</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="VideoTags">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>87</y>
+        <width>111</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Video Tags</string>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
       </property>
       <property name="placeholderText">
-       <string>Drop Media Files Here</string>
+       <string/>
       </property>
+      <item>
+       <property name="text">
+        <string/>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>dvc</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>mp4v</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>xd5b</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QComboBox" name="AudioTags">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>750</x>
+        <y>60</y>
+        <width>111</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Audio Tags</string>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="placeholderText">
+       <string/>
+      </property>
+      <item>
+       <property name="text">
+        <string/>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>sowt</string>
+       </property>
+      </item>
      </widget>
     </widget>
    </widget>
@@ -5078,6 +6497,5 @@ or Factory Testing</string>
  <connections/>
  <buttongroups>
   <buttongroup name="ActionButtonGroup"/>
-  <buttongroup name="RunFromButtonGroup"/>
  </buttongroups>
 </ui>
