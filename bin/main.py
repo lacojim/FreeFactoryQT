@@ -220,7 +220,9 @@ class FreeFactoryApp(QMainWindow):
         self.streamFactorySelect.clear()
         self.streamFactorySelect.addItems(factory_names)
         
-        # Help Buttons 
+    # ============================
+    #     Help Buttons
+    # ============================
         self.helpVCodecsAll.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog("Video Codecs", ["-codecs"])
         )
@@ -249,7 +251,7 @@ class FreeFactoryApp(QMainWindow):
         
         self.helpMuxersFiltered.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog(
-                f"Encode Help: {self.helpMuxersFilter.text()}",
+                f"Muxer Help: {self.helpMuxersFilter.text()}",
                 ["-h", f"muxer={self.helpMuxersFilter.text()}"]
             )
         )
@@ -260,7 +262,7 @@ class FreeFactoryApp(QMainWindow):
 
         self.helpVFiltersFiltered.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog(
-                f"Encode Help: {self.helpVFiltersFilter.text()}",
+                f"Video Filter Help: {self.helpVFiltersFilter.text()}",
                 ["-h", f"filter={self.helpVFiltersFilter.text()}"]
             )
         )
@@ -271,10 +273,21 @@ class FreeFactoryApp(QMainWindow):
 
         self.helpAFiltersFiltered.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog(
-                f"Encode Help: {self.helpAFiltersFilter.text()}",
+                f"Audio Filter Help: {self.helpAFiltersFilter.text()}",
                 ["-h", f"filter={self.helpAFiltersFilter.text()}"]
             )
         )
+            
+        self.helpBSFAll.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog("Bitstream Filters", ["-bsfs"])
+        )
+
+        self.helpBSFFiltered.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog(
+                f"Bitstream Filter Help: {self.helpBSFFilter.text()}",
+                ["-h", f"bsf={self.helpBSFFilter.text()}"]
+            )
+        )            
 
         self.helpPixFormatsAll.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog("Pixel Formats", ["-pix_fmts"])
@@ -581,25 +594,15 @@ class FreeFactoryApp(QMainWindow):
             f"NOTIFYDIRECTORY={notify_dir}",
             f"OUTPUTDIRECTORY={output_dir}",
             "OUTPUTFILESUFFIX=",  # <— hardcoded empty line since this was removed from UI
-            # Depreciated for Removal
-            f"FFMXPROGRAM={self.FFMxProgram.currentText().strip()}",
-            # Depreciated for Removal
-            f"RUNFROM={'usr' if self.RunFromUsr.isChecked() else 'opt'}",
-            # Depreciated for Removal
-            f"FTPPROGRAM={self.FTPProgram.currentText().strip()}",
-            # Depreciated for Removal
-            f"FTPURL={self.FTPUrl.text().strip()}",
-            # Depreciated for Removal
-            f"FTPUSERNAME={self.FTPUsername.text().strip()}",
-            # Depreciated for Removal
-            f"FTPPASSWORD={self.FTPPassword.text().strip()}",
-            # Depreciated for Removal
-            f"FTPREMOTEPATH={self.FTPRemotePath.text().strip()}",
-            # Depreciated for Removal
-            f"FTPTRANSFERTYPE=asc",
-            # Depreciated for Removal
-            f"FTPDELETEAFTER=Yes",
-            # Depreciated for Removal
+            f"FFMXPROGRAM=ffmpeg", # Depreciated for Removal
+            f"RUNFROM=usr", # Depreciated for Removal
+            f"FTPPROGRAM=", # Depreciated for Removal
+            f"FTPURL=", # Depreciated for Removal
+            f"FTPUSERNAME=", # Depreciated for Removal
+            f"FTPPASSWORD=", # Depreciated for Removal
+            f"FTPREMOTEPATH=", # Depreciated for Removal
+            f"FTPTRANSFERTYPE=bin", # Depreciated for Removal
+            f"FTPDELETEAFTER=Yes", # Depreciated for Removal
             f"VIDEOCODECS={self.VideoCodec.currentText().strip()}",
             f"VIDEOWRAPPER={self.VideoWrapper.currentText().strip()}",
             f"VIDEOFRAMERATE={self.VideoFrameRate.currentText().strip()}",
@@ -622,7 +625,7 @@ class FreeFactoryApp(QMainWindow):
             f"AUDIOCODECS={self.AudioCodec.currentText().strip()}",
             f"AUDIOBITRATE={self.AudioBitrate.currentText().strip()}",
             f"AUDIOSAMPLERATE={self.AudioSampleRate.currentText().strip()}",
-            f"AUDIOFILEEXTENSION={self.AudioExtention.currentText().strip()}",
+            f"AUDIOFILEEXTENSION={self.AudioExtension.currentText().strip()}",
             f"AUDIOTAG={self.AudioTag.text().strip() if hasattr(self, 'AudioTag') else ''}",
             f"AUDIOCHANNELS={self.AudioChannels.currentText().strip()}",
             f"AUDIOSTREAMID={self.AudioStreamID.text().strip()}",
@@ -630,20 +633,15 @@ class FreeFactoryApp(QMainWindow):
             f"DELETESOURCE={'Yes' if self.DeleteSource.isChecked() else 'No'}",
             f"DELETECONVERSIONLOGS={'Yes' if self.DeleteConversionLogs.isChecked() else 'No'}",
             f"ENABLEFACTORY={'Yes' if self.EnableFactory.isChecked() else 'No'}",
-            f"FREEFRACTORYACTION={'Encode' if self.ActionEncode.isChecked() else 'Copy'}",
+            f"FREEFACTORYACTION={'Encode' if self.ActionEncode.isChecked() else 'Copy'}",
             # Depreciated for Removal
             f"ENABLEFACTORYLINKING={'Yes' if self.EnableFactoryLinking.isChecked() else 'No'}",
             # Depreciated for Removal
-            f"FACTORYLINKS=",
-            # Depreciated for Removal
-            f"FACTORYENABLEEMAIL={'Yes' if self.EnableEmail.isChecked() else 'No'}",
-            # Depreciated for Removal
-            f"FACTORYEMAILNAME={self.EmailName.text().strip()}",
-            # Depreciated for Removal
-            f"FACTORYEMAILADDRESS={self.EmailAddress.text().strip()}",
-            # Depreciated for Removal
-            f"FACTORYEMAILMESSAGESTART=",
-            # Depreciated for Removal
+            f"FACTORYLINKS=", # Depreciated for Removal
+            f"FACTORYENABLEEMAIL=Yes", # Depreciated for Removal
+            f"FACTORYEMAILNAME=", # Depreciated for Removal
+            f"FACTORYEMAILADDRESS=", # Depreciated for Removal
+            f"FACTORYEMAILMESSAGESTART=", # Depreciated for Removal
             f"FACTORYEMAILMESSAGEEND=",
             
 #===========streaming widgets             
@@ -656,8 +654,21 @@ class FreeFactoryApp(QMainWindow):
         ]
 
         filepath.write_text("\n".join(lines) + "\n")
+        
+        
+        
+        #print(f"Saved to: {filepath}")
+        #print("Calling populate_factory_list()...")
+        #print("populate_factory_list() called")
+        #print("Files found:", list(self.core.factory_dir.glob("*")))
+        self.listFactoryFiles.clear()
         self.populate_factory_list()
         QMessageBox.information(self, "Factory Saved", f"Factory saved: {filename}")
+        matching_items = self.listFactoryFiles.findItems(filename, Qt.MatchFlag.MatchExactly)
+        # Select factory after saving it
+        if matching_items:
+            self.listFactoryFiles.setCurrentItem(matching_items[0])
+
 
     def delete_current_factory(self):
         factory_name = self.FactoryFilename.text().strip()
@@ -711,10 +722,10 @@ class FreeFactoryApp(QMainWindow):
             "VideoPreset": "VIDEOPRESET",
             "ForceFormatInputVideo": "FORCEFORMATINPUTVIDEO",
             "ForceFormatInputAudio": "FORCEFORMATINPUTAUDIO",
-            "GOPSize": "GROUPPICSIZE",
-            "Offset": "STARTTIMEOFFSET",
+            "VideoGroupPicSize": "GROUPPICSIZE",
+            "VideoStartTimeOffset": "STARTTIMEOFFSET",
             "AudioTags": "AUDIOTAG",
-            "VideoBFrames": "BFRAMES"  # 👈 NEW
+            "VideoBFrames": "BFRAMES"
         }
 
         for widget in self.findChildren((QLineEdit, QComboBox)):
@@ -731,13 +742,14 @@ class FreeFactoryApp(QMainWindow):
                         widget.setCurrentIndex(index)
                     else:
                         widget.setEditText(value)
-            else:
-                print(f"[DEBUG] Skipping widget {obj_name} — key '{key}' not in factory data.")                      
+            #else:
+            #    print(f"[DEBUG] Skipping widget {obj_name} — key '{key}' not in factory data.")                      
 
     def populate_factory_list(self):
+        self.core.reload_factory_files()  # 👈 Now cleaner and centralized
         self.listFactoryFiles.clear()
         for path in sorted(self.core.factory_files, key=lambda p: p.name.lower()):
-            self.listFactoryFiles.addItem(path.name)
+            self.listFactoryFiles.addItem(path.name)    
 
     # ============================
     #     Global Config Logic
