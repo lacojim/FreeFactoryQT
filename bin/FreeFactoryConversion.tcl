@@ -146,6 +146,7 @@ proc ::main {argc argv} {
 						"BFRAMES" {set FactoryArray($FactoryCounter,BFrames) $FactoryValue}
 						"FRAMESTRATEGY" {set FactoryArray($FactoryCounter,FrameStrategy) $FactoryValue}
 						"FORCEFORMAT" {set FactoryArray($FactoryCounter,ForceFormat) $FactoryValue}
+						"ENCODELENGTH" {set FactoryArray($FactoryCounter,EncodeLength) $FactoryValue}
 						"STARTTIMEOFFSET" {set FactoryArray($FactoryCounter,StartTimeOffset) $FactoryValue}
 						"AUDIOCODECS" {set FactoryArray($FactoryCounter,AudioCodecs) $FactoryValue}
 						"AUDIOBITRATE" {set FactoryArray($FactoryCounter,AudioBitRate) $FactoryValue}
@@ -158,7 +159,7 @@ proc ::main {argc argv} {
 						"DELETESOURCE" {set FactoryArray($FactoryCounter,DeleteSource) $FactoryValue}
 						"DELETECONVERSIONLOGS" {set FactoryArray($FactoryCounter,DeleteConversionLogs) $FactoryValue}
 						"ENABLEFACTORY" {set FactoryArray($FactoryCounter,EnableFactory) $FactoryValue}
-						"FREEFRACTORYACTION" {set FactoryArray($FactoryCounter,FreeFactoryAction) $FactoryValue}
+						"FREEFACTORYACTION" {set FactoryArray($FactoryCounter,FreeFactoryAction) $FactoryValue}
 						"ENABLEFACTORYLINKING" {set FactoryArray($FactoryCounter,EnableFactoryLinking) $FactoryValue}
 						"FACTORYLINKS" {set FactoryArray($FactoryCounter,FactoryLinks) $FactoryValue}
 						"FACTORYENABLEEMAIL" {set FactoryArray($FactoryCounter,FactoryEnableEMail) $FactoryValue}
@@ -612,6 +613,10 @@ proc FFMXOptionsFFMxConversionFTP {} {
 		append FFMx_AVOptions "-f "
 		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,ForceFormat) "
 	}
+	if {[string trim $FactoryArray($FactoryCounterUsed,EncodeLength)] != ""} {
+		append FFMx_AVOptions "-t "
+		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,EncodeLength) "
+	}
 	if {[string trim $FactoryArray($FactoryCounterUsed,StartTimeOffset)] != ""} {
 		append FFMx_AVOptions "-ss "
 		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,StartTimeOffset) "
@@ -859,7 +864,7 @@ proc FFMxProgramVariableErrorCheck {} {
 ########################################################################################
 #  Report error to the screen and log then exit when conversion program is not set unless action is set to copy instead of convert.
 	if {$FactoryArray($FactoryCounterUsed,FFMxProgram) == "" || ($FactoryArray($FactoryCounterUsed,FFMxProgram) !="ffmpeg" \
-	&& $FactoryArray($FactoryCounterUsed,FFMxProgram) !="ffmbc" && $FactoryArray($FactoryCounterUsed,FreeFractoryAction) == "Encode")} {
+	&& $FactoryArray($FactoryCounterUsed,FFMxProgram) !="ffmbc" && $FactoryArray($FactoryCounterUsed,FreeFactoryAction) == "Encode")} {
 		puts "*****************************************************************************************"
 		puts "****************************** ERROR Report From ****************************************"
 		puts "*************************** Conversion.tcl ***********************************"
