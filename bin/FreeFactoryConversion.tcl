@@ -52,7 +52,7 @@ proc ::main {argc argv} {
 	puts "*****************************************************************************************"
 	puts "********************************* Report From *******************************************"
 	puts "*************************** FreeFactoryConversion.tcl ***********************************"
-# Parse out fields. Done in a manner that perserves directories or file names with spaces.
+# Parse out fields. Done in a manner that preserves directories or file names with spaces.
 	puts "Checking for last / to parse out source directory path"
 	set LastSlash [string last "/" $PassedVariables]
 # Parse out Directory path, the first variable
@@ -72,7 +72,7 @@ proc ::main {argc argv} {
 	puts "============ Checking to see if source file name actually exists"
 	if {[file exists "$SourcePath$SourceFileName"]} {
 		puts "============ Yes source file name $SourcePath$SourceFileName actually exists"
-# Strip file extention from file name
+# Strip file extension from file name
 		puts "============ Stripping file extension from source file name"
 		set ExtensionDelimiter [string last "." $SourceFileName]
 		set SourceFileNameRoot [string range $SourceFileName 0 [expr $ExtensionDelimiter - 1]]
@@ -203,9 +203,9 @@ proc ::main {argc argv} {
 # Start notify directory match made
 # Only check for match if factory is enabled.
 			if {$FactoryArray($FactoryCounter,EnableFactory) == "Yes"} {
-# If match occures then assemble the AV options from the factory.
+# If match occurs then assemble the AV options from the factory.
 				if {$SourcePath == $FactoryArray($FactoryCounter,NotifyDirectory)} {
-# A match of the notify directory has occured
+# A match of the notify directory has occurred
 # Check if the action is to be conversion or copy.
 ########################################################################################
 # Make sure the copy of source file is complete.
@@ -230,7 +230,7 @@ proc ::main {argc argv} {
 # Start Parse traffic variables
 # Example cm18000_3000_Jacks-Friendly-Vacation-Sale.mpg
 # Spot Code
-# cm commerical code
+# cm commercial code
 # id Ids
 # pr Promos
 # ps PSA
@@ -285,7 +285,7 @@ proc ::main {argc argv} {
 ########################################################################################
 # Set counter to the current one used here
 						set FactoryCounterUsed $FactoryCounter
-# Make sure the propper FFMx program is used
+# Make sure the proper FFMx program is used
 						FFMxProgramVariableErrorCheck
 # Run the sub procedure to fill in A/V options, do the conversion and any FTP.
 						FFMXOptionsFFMxConversionFTP
@@ -370,7 +370,7 @@ proc ::main {argc argv} {
 # Check to see if email is enabled and both list variables have list
 # variable data in them
 					if {$FactoryArray($FactoryCounter,FactoryEnableEMail) == "Yes" && $FactoryArray($FactoryCounter,FactoryEMailsName) != "" && $FactoryArray($FactoryCounter,FactoryEMailsAddress) != ""} {
-# Load in emal conection data from Free Factory config file
+# Load in emal connection data from Free Factory config file
 						set PrefFileHandle [open /opt/FreeFactory/FreeFactory.config r]
 						while {![eof $PrefFileHandle]} {
 							gets $PrefFileHandle PrefVar
@@ -545,7 +545,7 @@ proc FFMXOptionsFFMxConversionFTP {} {
 # other way is to create a variable for each parameter and it's value.
 #
 ########################################################################################
-# If variable is not null then add to options. Extra checking is done by triming the string during
+# If variable is not null then add to options. Extra checking is done by trimming the string during
 # condition checking to compare against single or  multiple spaces only instead of a null variable
 	puts "============ Assembling A/V Options"
 	exec echo "============ Assembling A/V Options" >> $ConversionLog
@@ -676,7 +676,7 @@ proc FFMXOptionsFFMxConversionFTP {} {
 #
 # Set FFMxScript file
 	set FFMxScript /opt/FreeFactory/bin/FFMxScript-$SourceFileName.sh
-# Determin where to run the FFMx program from.  Either /usr/bin or /opt/FreeFactory/bin.
+# Determine where to run the FFMx program from.  Either /usr/bin or /opt/FreeFactory/bin.
 	if {$FactoryArray($FactoryCounterUsed,RunFrom) == "usr"} {
 		set FFMxString "$FactoryArray($FactoryCounterUsed,FFMxProgram) -y -i \"$SourcePath$SourceFileName\" $FFMx_AVOptions \"$FactoryArray($FactoryCounterUsed,OutputDirectory)$OutputFileName\" 2>> \"$ConversionLog\""
 	} else {
@@ -928,13 +928,13 @@ proc FactoryLinking {} {
 				exec echo "******************************** Factory Linking ****************************************" >> $ConversionLog
 				exec echo "============ Linking from $FactoryArray($FactoryCounter,FactoryDescription)" >> $ConversionLog
 				exec echo "============ Start time:$SystemTime $FactoryArray($FactoryCounter2,FactoryDescription)" >> $ConversionLog
-# Checkto see if we convert or copy
+# Check to see if we convert or copy
 				if {$FactoryArray($FactoryCounter2,FreeFactoryAction) == "Encode"} {
 # Yes we convert
 ########################################################################################
 # Set counter to the current one used here
 					set FactoryCounterUsed $FactoryCounter2
-# Make sure the propper FFMx program is used
+# Make sure the proper FFMx program is used
 					FFMxProgramVariableErrorCheck
 # Run the sub procedure to fill in A/V options, do the conversion and any FTP.
 					FFMXOptionsFFMxConversionFTP
