@@ -1,0 +1,18 @@
+[Desktop Entry]
+Comment=
+Comment[en_US]=
+Exec[$e]='/opt/FreeFactory/bin/FreeFactory.tcl'
+GenericName=
+GenericName[en_US]=
+Icon=/opt/FreeFactory/Pics/FreeFactoryQT.ico
+MimeType=
+Name=Free Factory
+Name[en_US]=Free Factory
+Path[$e]=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DCOP-ServiceType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=
