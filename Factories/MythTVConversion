@@ -1,4 +1,4 @@
-FACTORYDESCRIPTION=MythTV Conversion Factory - Convers any recorded video to 720P
+FACTORYDESCRIPTION=MythTV Conversion Factory - Converts any recorded video to 720P
 NOTIFYDIRECTORY=/video/dropbox/MythTV/
 OUTPUTDIRECTORY=/video/
 OUTPUTFILESUFFIX=

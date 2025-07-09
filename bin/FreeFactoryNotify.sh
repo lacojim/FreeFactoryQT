@@ -40,7 +40,7 @@ FILENAME=
 #FILESIZE=0
 #LASTFILESIZE=0
 ####################################################################################
-# Set up continous loop.
+# Set up continuous loop.
 for (( ; ; ))
 do
 ####################################################################################
@@ -84,7 +84,7 @@ do
 	NOTIFY_EVENT=
 	FILENAME=
 # ===== END ==========
-# End continous loop
+# End continuous loop
 done
 # Exit script.
 exit
