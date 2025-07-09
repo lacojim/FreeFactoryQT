@@ -41,8 +41,8 @@ These Manual Options would most likely never be used for home or general use, bu
 ![image](https://github.com/user-attachments/assets/67483fc7-79f5-4d83-a304-c558422ec186)
 
 
+![image](https://github.com/user-attachments/assets/890e97ae-b5d3-4050-93a2-8c4c16d7d3dd)
 
-![image](https://github.com/user-attachments/assets/56e8962a-9877-4658-94bc-874de6afdc4f)
 
 
 ![image](https://github.com/user-attachments/assets/f0b33da3-b1b8-42eb-857f-4ee838b8ae18)
