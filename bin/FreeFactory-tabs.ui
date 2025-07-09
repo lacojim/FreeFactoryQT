@@ -321,9 +321,9 @@ background service encoding.</string>
         </property>
         <property name="geometry">
          <rect>
-          <x>50</x>
+          <x>60</x>
           <y>27</y>
-          <width>131</width>
+          <width>121</width>
           <height>25</height>
          </rect>
         </property>
@@ -594,7 +594,7 @@ Audio File Extension. You CANNOT use both.</string>
         </item>
         <item>
          <property name="text">
-          <string>PHOTO FORMATS</string>
+          <string>IMAGE FORMATS</string>
          </property>
         </item>
         <item>
@@ -689,6 +689,11 @@ Audio File Extension. You CANNOT use both.</string>
         </item>
         <item>
          <property name="text">
+          <string>24000/1001</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>25.000</string>
          </property>
         </item>
@@ -753,9 +758,9 @@ Audio File Extension. You CANNOT use both.</string>
         </property>
         <property name="geometry">
          <rect>
-          <x>50</x>
+          <x>60</x>
           <y>57</y>
-          <width>131</width>
+          <width>121</width>
           <height>25</height>
          </rect>
         </property>
@@ -1014,6 +1019,11 @@ Audio File Extension. You CANNOT use both.</string>
         </item>
         <item>
          <property name="text">
+          <string>10M</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>17M</string>
          </property>
         </item>
@@ -1040,6 +1050,11 @@ Audio File Extension. You CANNOT use both.</string>
         <item>
          <property name="text">
           <string>60M</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>100M</string>
          </property>
         </item>
        </widget>
@@ -1137,206 +1152,6 @@ Audio File Extension. You CANNOT use both.</string>
          <string>Aspect</string>
         </property>
        </widget>
-       <widget class="QComboBox" name="VideoTarget">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>87</y>
-          <width>131</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="toolTip">
-         <string>Video Target</string>
-        </property>
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <property name="placeholderText">
-         <string/>
-        </property>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>dvcprohd</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>xdcamhd422</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>ntsc-dvd</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>pal-dvd</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>film-dvd</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>vcd</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>svcd</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>imx30</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>imx50</string>
-         </property>
-        </item>
-       </widget>
-       <widget class="QLabel" name="l_Vtarget">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>90</y>
-          <width>62</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Target</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="l_Threads">
-        <property name="geometry">
-         <rect>
-          <x>380</x>
-          <y>90</y>
-          <width>62</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Threads</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="Threads">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>450</x>
-          <y>87</y>
-          <width>101</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="toolTip">
-         <string>ffmpeg threads</string>
-        </property>
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <property name="placeholderText">
-         <string/>
-        </property>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>1</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>2</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>4</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>8</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>16</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>20</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>24</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>28</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>32</string>
-         </property>
-        </item>
-       </widget>
        <widget class="QComboBox" name="VideoPreset">
         <property name="enabled">
          <bool>true</bool>
@@ -1370,6 +1185,11 @@ Audio File Extension. You CANNOT use both.</string>
         <item>
          <property name="text">
           <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>fast</string>
          </property>
         </item>
         <item>
@@ -1590,10 +1410,10 @@ Audio File Extension. You CANNOT use both.</string>
         <widget class="QLineEdit" name="VideoStartTimeOffset">
          <property name="geometry">
           <rect>
-           <x>400</x>
-           <y>30</y>
+           <x>308</x>
+           <y>29</y>
            <width>31</width>
-           <height>23</height>
+           <height>25</height>
           </rect>
          </property>
          <property name="font">
@@ -1618,10 +1438,10 @@ Audio File Extension. You CANNOT use both.</string>
         <widget class="QLineEdit" name="FrameStrategy">
          <property name="geometry">
           <rect>
-           <x>243</x>
-           <y>30</y>
-           <width>31</width>
-           <height>23</height>
+           <x>600</x>
+           <y>29</y>
+           <width>151</width>
+           <height>25</height>
           </rect>
          </property>
          <property name="font">
@@ -1637,7 +1457,7 @@ Audio File Extension. You CANNOT use both.</string>
         <widget class="QLabel" name="l_VideoStartTimeOffset">
          <property name="geometry">
           <rect>
-           <x>368</x>
+           <x>276</x>
            <y>33</y>
            <width>41</width>
            <height>17</height>
@@ -1675,7 +1495,7 @@ Audio File Extension. You CANNOT use both.</string>
         <widget class="QLabel" name="l_FrameStrategy">
          <property name="geometry">
           <rect>
-           <x>190</x>
+           <x>540</x>
            <y>32</y>
            <width>62</width>
            <height>17</height>
@@ -1694,10 +1514,10 @@ Audio File Extension. You CANNOT use both.</string>
         <widget class="QLineEdit" name="VideoGroupPicSize">
          <property name="geometry">
           <rect>
-           <x>330</x>
-           <y>30</y>
+           <x>238</x>
+           <y>29</y>
            <width>31</width>
-           <height>23</height>
+           <height>25</height>
           </rect>
          </property>
          <property name="font">
@@ -1713,9 +1533,9 @@ Audio File Extension. You CANNOT use both.</string>
         <widget class="QLabel" name="l_VideoGroupPicSize">
          <property name="geometry">
           <rect>
-           <x>282</x>
+           <x>190</x>
            <y>33</y>
-           <width>62</width>
+           <width>51</width>
            <height>17</height>
           </rect>
          </property>
@@ -1732,10 +1552,10 @@ Audio File Extension. You CANNOT use both.</string>
         <widget class="QLineEdit" name="VideoBFrames">
          <property name="geometry">
           <rect>
-           <x>148</x>
-           <y>30</y>
+           <x>149</x>
+           <y>29</y>
            <width>31</width>
-           <height>23</height>
+           <height>25</height>
           </rect>
          </property>
          <property name="font">
@@ -1751,10 +1571,10 @@ Audio File Extension. You CANNOT use both.</string>
         <widget class="QLineEdit" name="VideoStreamID">
          <property name="geometry">
           <rect>
-           <x>55</x>
-           <y>30</y>
+           <x>60</x>
+           <y>29</y>
            <width>31</width>
-           <height>23</height>
+           <height>25</height>
           </rect>
          </property>
          <property name="font">
@@ -1770,9 +1590,9 @@ Audio File Extension. You CANNOT use both.</string>
         <widget class="QLabel" name="l_VideoForceFormat">
          <property name="geometry">
           <rect>
-           <x>438</x>
+           <x>351</x>
            <y>32</y>
-           <width>61</width>
+           <width>71</width>
            <height>20</height>
           </rect>
          </property>
@@ -1783,7 +1603,7 @@ Audio File Extension. You CANNOT use both.</string>
           </font>
          </property>
          <property name="text">
-          <string>Force Fmt</string>
+          <string>Force Format</string>
          </property>
         </widget>
         <widget class="QLabel" name="l_VideoStreamID">
@@ -1811,7 +1631,7 @@ Audio File Extension. You CANNOT use both.</string>
          </property>
          <property name="geometry">
           <rect>
-           <x>490</x>
+           <x>421</x>
            <y>29</y>
            <width>101</width>
            <height>25</height>
@@ -1825,7 +1645,7 @@ Audio File Extension. You CANNOT use both.</string>
          </property>
          <property name="toolTip">
           <string>Force Format: Adds the flag -f to the command line.
-This can be used for either audio and video.
+This can be used for either audio or video.
 This appends to the output.</string>
          </property>
          <property name="editable">
@@ -1849,17 +1669,7 @@ This appends to the output.</string>
          </item>
          <item>
           <property name="text">
-           <string>mp4</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>matroska</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>mpeg</string>
+           <string>asf</string>
           </property>
          </item>
          <item>
@@ -1869,37 +1679,12 @@ This appends to the output.</string>
          </item>
          <item>
           <property name="text">
+           <string>dash</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>flv</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>webm</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>ogg</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>nut</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>asf</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>wav</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>m4a</string>
           </property>
          </item>
          <item>
@@ -1909,105 +1694,74 @@ This appends to the output.</string>
          </item>
          <item>
           <property name="text">
-           <string>dash</string>
-          </property>
-         </item>
-        </widget>
-        <widget class="QComboBox" name="VideoPixFormat">
-         <property name="geometry">
-          <rect>
-           <x>644</x>
-           <y>31</y>
-           <width>111</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>8</pointsize>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string>pix_fmt: Refer to FFmpeg Help tab for more options.</string>
-         </property>
-         <property name="editable">
-          <bool>true</bool>
-         </property>
-         <item>
-          <property name="text">
-           <string/>
+           <string>matroska</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>yuv420p</string>
+           <string>mov</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>yuv422p</string>
+           <string>mp4</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>yuv444p</string>
+           <string>mpeg</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>nv12</string>
+           <string>mpeg1video</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>yuvj420p</string>
+           <string>mpeg2video</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>gray</string>
+           <string>mxf</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>rgb24</string>
+           <string>mxf_d10</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>rgba</string>
+           <string>mxf_opatom</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>bgr24</string>
+           <string>nut</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>uyvy422</string>
+           <string>ogg</string>
           </property>
          </item>
-        </widget>
-        <widget class="QLabel" name="label_6">
-         <property name="geometry">
-          <rect>
-           <x>600</x>
-           <y>35</y>
-           <width>57</width>
-           <height>14</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>8</pointsize>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Pix_Fmt</string>
-         </property>
+         <item>
+          <property name="text">
+           <string>m4a</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>wav</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>webm</string>
+          </property>
+         </item>
         </widget>
        </widget>
        <widget class="QLabel" name="l_SubtitleCodec">
@@ -2117,7 +1871,7 @@ Adds the flag -c:s to the command line</string>
           <x>660</x>
           <y>90</y>
           <width>101</width>
-          <height>23</height>
+          <height>25</height>
          </rect>
         </property>
         <property name="font">
@@ -2131,6 +1885,125 @@ Adds the flag -c:s to the command line</string>
         </property>
         <property name="placeholderText">
          <string>hh:mm:ss[.xxx]</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox">
+        <property name="geometry">
+         <rect>
+          <x>240</x>
+          <y>90</y>
+          <width>121</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>This will lock the bitrate with minrate and maxrate values in the command string.
+ ie: -b:v 50M -minrate 50M -maxrate 50M</string>
+        </property>
+        <property name="text">
+         <string>Lock Min/Max Bitrate</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="VideoPixFormat">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>87</y>
+          <width>121</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>pix_fmt: Refer to FFmpeg Help tab for more options.</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>yuv420p</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>yuv422p</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>yuv444p</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>nv12</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>yuvj420p</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>gray</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rgb24</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rgba</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bgr24</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>uyvy422</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QLabel" name="label_6">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>93</y>
+          <width>41</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Pix_Fmt</string>
         </property>
        </widget>
       </widget>
@@ -2707,7 +2580,7 @@ Video Wrapper. You CANNOT use both.</string>
           <x>630</x>
           <y>31</y>
           <width>41</width>
-          <height>23</height>
+          <height>25</height>
          </rect>
         </property>
         <property name="font">
@@ -2788,7 +2661,7 @@ Video Wrapper. You CANNOT use both.</string>
         </rect>
        </property>
        <property name="title">
-        <string>FreeFactory Service Options (These ignored when direct encoding)</string>
+        <string>FreeFactory Service Options (These are ignored when direct encoding)</string>
        </property>
        <widget class="QRadioButton" name="ActionCopy">
         <property name="geometry">
@@ -2989,7 +2862,7 @@ See the FFmpeg Help tab.</string>
      <widget class="QLineEdit" name="PreviewCommandLine">
       <property name="geometry">
        <rect>
-        <x>420</x>
+        <x>390</x>
         <y>617</y>
         <width>471</width>
         <height>25</height>
@@ -3083,7 +2956,7 @@ The input and output filenames are generic.</string>
        <rect>
         <x>330</x>
         <y>617</y>
-        <width>82</width>
+        <width>51</width>
         <height>23</height>
        </rect>
       </property>
@@ -3177,27 +3050,33 @@ FreeFactory-service is running.</string>
      <widget class="QLabel" name="l_DirectMediaConvert">
       <property name="geometry">
        <rect>
-        <x>910</x>
-        <y>570</y>
-        <width>121</width>
+        <x>913</x>
+        <y>534</y>
+        <width>141</width>
         <height>16</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="toolTip">
        <string>Convert media files on the fly. 
 Uses loaded factory.</string>
       </property>
       <property name="text">
-       <string>Direct Media Convert</string>
+       <string>- Direct Media Convert -</string>
       </property>
      </widget>
      <widget class="DropTextEdit" name="dropZone">
       <property name="geometry">
        <rect>
         <x>900</x>
-        <y>590</y>
-        <width>151</width>
-        <height>51</height>
+        <y>550</y>
+        <width>171</width>
+        <height>91</height>
        </rect>
       </property>
       <property name="toolTip">
@@ -3205,7 +3084,7 @@ Uses loaded factory.</string>
 or Factory Testing</string>
       </property>
       <property name="placeholderText">
-       <string>Drop Media Files Here</string>
+       <string>Drop Media File Here</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_2">
@@ -3242,6 +3121,46 @@ or Factory Testing</string>
       </property>
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff5454;&quot;&gt;If you define -i and/or -f flag here, FreeFactory will ignore ALL automatic input generation.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="clearPreviewButton">
+      <property name="geometry">
+       <rect>
+        <x>864</x>
+        <y>619</y>
+        <width>28</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Clear Preview</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="clearDropZoneButton">
+      <property name="geometry">
+       <rect>
+        <x>1043</x>
+        <y>620</y>
+        <width>28</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Clear Drop Zone</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
       </property>
      </widget>
     </widget>
@@ -4225,9 +4144,9 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>90</x>
-         <y>330</y>
+         <y>329</y>
          <width>381</width>
-         <height>22</height>
+         <height>25</height>
         </rect>
        </property>
        <property name="font">
@@ -4282,9 +4201,9 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>90</x>
-         <y>300</y>
+         <y>299</y>
          <width>381</width>
-         <height>22</height>
+         <height>25</height>
         </rect>
        </property>
        <property name="font">
@@ -4319,7 +4238,7 @@ or Factory Testing</string>
          <x>90</x>
          <y>236</y>
          <width>381</width>
-         <height>24</height>
+         <height>25</height>
         </rect>
        </property>
        <property name="font">
@@ -6440,6 +6359,206 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <string>sowt</string>
        </property>
       </item>
+     </widget>
+     <widget class="QComboBox" name="Threads">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>810</x>
+        <y>130</y>
+        <width>101</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>ffmpeg threads</string>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="placeholderText">
+       <string/>
+      </property>
+      <item>
+       <property name="text">
+        <string/>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>1</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>4</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>8</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>16</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>20</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>24</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>28</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>32</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="l_Threads">
+      <property name="geometry">
+       <rect>
+        <x>740</x>
+        <y>133</y>
+        <width>62</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Threads</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="VideoTarget">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>770</x>
+        <y>157</y>
+        <width>131</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Video Target</string>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="placeholderText">
+       <string/>
+      </property>
+      <item>
+       <property name="text">
+        <string/>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>dvcprohd</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>xdcamhd422</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>ntsc-dvd</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>pal-dvd</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>film-dvd</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>vcd</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>svcd</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>imx30</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>imx50</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="l_Vtarget">
+      <property name="geometry">
+       <rect>
+        <x>730</x>
+        <y>160</y>
+        <width>62</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Target</string>
+      </property>
      </widget>
     </widget>
    </widget>
