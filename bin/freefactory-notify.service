@@ -1,3 +1,7 @@
+### This is the FreeFactory service script. Please use the script setup-notifyservice.sh to install either as
+### user controlled or system-wide (root).
+### FreeFactory-Notify.service -> FreeFactoryNotifyRunner.sh -> FreeFactoryNotify.sh -> FreeFactoryConversion.tcl
+### This is not necessary if only using FF for direct encoding.
 [Unit]
 Description=FreeFactory Drop Folder Monitor
 After=network.target local-fs.target remote-fs.target

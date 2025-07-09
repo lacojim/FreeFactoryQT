@@ -305,8 +305,10 @@ class FreeFactoryApp(QMainWindow):
         update_notify_service_mode_display(self)
         connect_notify_service_controls(self)
 
-        #self.labelNotifyServiceMode.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.clearNotifyStatusButton.clicked.connect(lambda: self.listNotifyServiceStatus.clear())
+        
+        self.clearPreviewButton.clicked.connect(lambda: self.PreviewCommandLine.clear())
+        self.clearDropZoneButton.clicked.connect(lambda: self.dropZone.clear())
 
 
         

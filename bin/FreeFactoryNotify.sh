@@ -6,7 +6,7 @@
 #
 #                           Free Factory
 #
-#                          Copyright 2013
+#                          Copyright 2013-2025
 #                               by
 #                     Jim Hines and Karl Swisher
 #
@@ -25,9 +25,9 @@
 #
 #  Script Name: FreeFactoryNotify.sh
 #
-#  This is script accepts the three variables piped by intofywait
+#  This script accepts the three variables piped by intofywait
 #  and then passes two of them, the directory path and the file
-#  name file name to the tcl conversion script.
+#  name file to FreeFactoryConversion.tcl script.
 #############################################################################
 LOG=/var/log/FreeFactory/FreeFactoryNotifyError.log
 ####################################################################################
