@@ -2,7 +2,8 @@
 
 # FreeFactoryQT
 
-![image](https://github.com/user-attachments/assets/bb583240-d3d9-4dc1-885b-aa1119428fde)
+![image](https://github.com/user-attachments/assets/20cec6d1-8585-49f5-8f12-3d96902ecf51)
+
 
 ### New - 2025-06-26 -- Added support for live Streaming via the Stream Manager tab and freefactory-notify.service control.
 
@@ -37,13 +38,15 @@ Here is an example of a very complex "Manual Options" command:
 ```
 These Manual Options would most likely never be used for home or general use, but an example for a professional broadcast playback system. 
 
-![image](https://github.com/user-attachments/assets/1d00dd88-7b60-48a7-9519-2e3ef100ddac)
+![image](https://github.com/user-attachments/assets/67483fc7-79f5-4d83-a304-c558422ec186)
+
 
 
 ![image](https://github.com/user-attachments/assets/56e8962a-9877-4658-94bc-874de6afdc4f)
 
 
-![image](https://github.com/user-attachments/assets/529ee922-abc4-4549-a521-3d1913625f9e)
+![image](https://github.com/user-attachments/assets/f0b33da3-b1b8-42eb-857f-4ee838b8ae18)
+
 
  
       
