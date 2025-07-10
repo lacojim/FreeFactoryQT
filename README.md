@@ -83,5 +83,12 @@ systemctl --user enable freefactory-notify
 to start whenever the user logs in.
 
 You can also start and stop the service from within the FreeFactoryQT user interface.
- 
-      
+
+
+### To-Do list:
+- Dynamic UI: Presets, audio options, pix_fmt etc will only show items that are compatible with the selected video or audio codec completely eliminating impossible options. Without a proper FFmpeg API, this seems like it's impossible without completely parsing "ffmpeg -h full" and still not perfect by far, but what a killer feature this could be! Anybody up for helping out with this challange?
+
+- Batch processing with different factories. This would allow dropping a file with a factory selected, switching the factory then adding more files. The factory gets attached to each job. Then all files could convert using a different factory.
+
+- Rewrite FreeFactoryConversion.tcl in Python3 (in progress, but the TCL program does work fine for now).
+  
