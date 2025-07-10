@@ -47,6 +47,42 @@ These Manual Options would most likely never be used for home or general use, bu
 
 ![image](https://github.com/user-attachments/assets/f0b33da3-b1b8-42eb-857f-4ee838b8ae18)
 
+### Setting up FreeFactory service:
 
+This requires TCL be installed on your system until this gets ported to Python3.
+
+Simply run the script setup-notifyservice.sh.
+
+```
+$ ./setup-notifyservice.sh 
+🔧 FreeFactory Notify Service Setup
+----------------------------------
+🔍 Checking if the service is currently running...
+✅ Service is not currently running.
+
+📂 Installed in USER mode
+
+Choose an action:
+1) Install/enable in USER mode
+2) Install/enable in SYSTEM-WIDE mode (requires sudo)
+3) Uninstall from USER mode
+4) Uninstall from SYSTEM-WIDE mode
+5) Quit
+Selection:
+```
+
+Unless you are running the FreeFactory service for a company environment, you will want to select USER mode.
+
+Once setup, you can run:
+```
+systemctl --user start freefactory-notify
+```
+and
+```
+systemctl --user enable freefactory-notify
+```
+to start whenever the user logs in.
+
+You can also start and stop the service from within the FreeFactoryQT user interface.
  
       
