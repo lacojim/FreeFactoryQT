@@ -36,13 +36,12 @@ Here is an example of a very complex "Manual Options" command:
 ```
 -c:v mpeg2video -pix_fmt yuv422p -aspect 16:9 -intra_vlc 1 -b:v 50000000 -minrate 50000000 -maxrate 50000000 -bufsize 17825792 -rc_init_occupancy 17825792 -bf 2 -non_linear_quant 1 -color_primaries bt709 -color_trc bt709 -colorspace bt709 -seq_disp_ext 1 -video_format component -color_range 1 -chroma_sample_location topleft -signal_standard 4 -dc 8 -qmin 5 -qmax 23 -g 12 -field_order tt -top 1 -flags +ildct+ilme -alternate_scan 1 -c:a pcm_s24le -ar:a 48000
 ```
-These Manual Options would most likely never be used for home or general use, but an example for a professional broadcast playback system. 
+These Manual Options would most likely never be used for home or general use, but an example for a professional broadcast playback system. More info below the screen shots.
 
 ![image](https://github.com/user-attachments/assets/67483fc7-79f5-4d83-a304-c558422ec186)
 
 
 ![image](https://github.com/user-attachments/assets/890e97ae-b5d3-4050-93a2-8c4c16d7d3dd)
-
 
 
 ![image](https://github.com/user-attachments/assets/f0b33da3-b1b8-42eb-857f-4ee838b8ae18)
@@ -51,7 +50,7 @@ These Manual Options would most likely never be used for home or general use, bu
 
 This requires TCL be installed on your system until this gets ported to Python3.
 
-Simply run the script setup-notifyservice.sh.
+Simply run the script setup-notifyservice.sh found in /opt/FreeFactory/bin/. No need to run as root. If you decide to run the service system wide, it will ask for the sudo password.
 
 ```
 $ ./setup-notifyservice.sh 
@@ -71,7 +70,7 @@ Choose an action:
 Selection:
 ```
 
-Unless you are running the FreeFactory service for a company environment, you will want to select USER mode.
+Unless you are running the FreeFactory service for a corporate environment with multiple users, you will generally want to select USER mode.
 
 Once setup, you can run:
 ```
