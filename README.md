@@ -22,7 +22,13 @@ Now using Systemd, the background notification monitoring is a service instead o
 
 As there is not an Installer yet, just create a folder in /opt called FreeFactory and copy all these files into it.
 
-You need to have ffmpeg installed in /usr/bin/
+- You need to have ffmpeg installed in /usr/bin/ (or /usr/local/bin).
+- You need python3 installed.
+- You need the PyQT6 python3 module.
+- You need to have inotifywait installed if using the FreeFactory-Notify service.
+- You need to have TCL installed if using the FreeFactory-Notify service.
+
+All these requirements should be available using your distribution's package manager.
 
 For now, start it using:
 ```
