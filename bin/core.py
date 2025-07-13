@@ -243,6 +243,7 @@ class FreeFactoryCore:
 
         encode_length = factory_data.get("ENCODELENGTH", "").strip()
         video_codec = factory_data.get("VIDEOCODECS", "").strip()
+        video_bitrate = factory_data.get("VIDEOBITRATE", "").strip()
         size = factory_data.get("VIDEOSIZE", "").strip()
         subtitle = factory_data.get("SUBTITLECODECS", "").strip()
         audio_codec = factory_data.get("AUDIOCODECS", "").strip()
@@ -266,6 +267,8 @@ class FreeFactoryCore:
 #=======Video encoding
         if video_codec:
             cmd += ["-c:v", video_codec]
+        if video_bitrate:
+            cmd += ["-b:v", video_bitrate]
         if gop_size:
             cmd += ["-g", gop_size]
         if bframes:
