@@ -621,7 +621,7 @@ class FreeFactoryApp(QMainWindow):
             f"VIDEOSTREAMID={self.VideoStreamID.text().strip()}",
             f"GROUPPICSIZE={self.VideoGroupPicSize.text().strip()}",
             f"BFRAMES={self.VideoBFrames.text().strip()}",
-            f"FRAMESTRATEGY={self.FrameStrategy.text().strip()}",
+            f"FRAMESTRATEGY={self.FrameStrategy.currentText().strip()}",
             f"FORCEFORMAT={self.ForceFormat.currentText().strip()}",
             f"ENCODELENGTH={self.EncodeLength.text().strip()}",
             f"STARTTIMEOFFSET={self.VideoStartTimeOffset.text().strip()}",

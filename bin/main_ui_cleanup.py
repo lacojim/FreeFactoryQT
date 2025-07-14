@@ -612,11 +612,16 @@ class FreeFactoryApp(QMainWindow):
             f"THREADS={self.Threads.currentText().strip()}",
             f"ASPECT={self.VideoAspect.currentText().strip()}",
             f"VIDEOBITRATE={self.VideoBitrate.currentText().strip()}",
+            
+            f"VIDEOPROFILE={self.VideoProfile.currentText().strip()}",
+            f"VIDEOPROFILELEVEL={self.VideoProfileLevel.currentText().strip()}",
+            
+            
             f"VIDEOPRESET={self.VideoPreset.currentText().strip()}",
             f"VIDEOSTREAMID={self.VideoStreamID.text().strip()}",
             f"GROUPPICSIZE={self.VideoGroupPicSize.text().strip()}",
             f"BFRAMES={self.VideoBFrames.text().strip()}",
-            f"FRAMESTRATEGY={self.FrameStrategy.text().strip()}",
+            f"FRAMESTRATEGY={self.FrameStrategy.currentText().strip()}",
             f"FORCEFORMAT={self.ForceFormat.currentText().strip()}",
             f"ENCODELENGTH={self.EncodeLength.text().strip()}",
             f"STARTTIMEOFFSET={self.VideoStartTimeOffset.text().strip()}",
@@ -706,6 +711,8 @@ class FreeFactoryApp(QMainWindow):
             "VideoFrameRate": "VIDEOFRAMERATE",
             "VideoSize": "VIDEOSIZE",
             "VideoBitrate": "VIDEOBITRATE",
+            "VideoProfile": "VIDEOPROFILE",
+            "VideoProfileLevel": "VIDEOPROFILELEVEL",
             "VideoAspect": "ASPECT",
             "VideoTarget": "VIDEOTARGET",
             "VideoTags": "VIDEOTAGS",

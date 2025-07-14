@@ -282,7 +282,7 @@ class FreeFactoryCore:
         if bframes:
             cmd += ["-bf", bframes]
         if frame_strategy:
-            cmd += ["-flags", frame_strategy]
+            cmd += ["-b_strategy", frame_strategy]
         if pix_format:
             cmd += ["-pix_fmt", pix_format]
         if size and video_codec:

@@ -1438,7 +1438,7 @@ You can also manually add extra options after the rate such as minrate 10M minra
          </rect>
         </property>
         <property name="toolTip">
-         <string>These options are mostly for MPEG2 streams except for Offset and Force Format.</string>
+         <string>Advanced Video Options: Not normally used for casual users.</string>
         </property>
         <property name="title">
          <string>Advanced Video Options</string>
@@ -1446,7 +1446,7 @@ You can also manually add extra options after the rate such as minrate 10M minra
         <widget class="QLineEdit" name="VideoStartTimeOffset">
          <property name="geometry">
           <rect>
-           <x>308</x>
+           <x>218</x>
            <y>29</y>
            <width>31</width>
            <height>25</height>
@@ -1459,7 +1459,8 @@ You can also manually add extra options after the rate such as minrate 10M minra
           </font>
          </property>
          <property name="toolTip">
-          <string>Video Start Time Offset in frames</string>
+          <string>Start Position Offset: Decodes but discards input until the timestamps reach position.
+Value in seconds. Adds the -ss flag to the commandline.</string>
          </property>
          <property name="inputMethodHints">
           <set>Qt::InputMethodHint::ImhNone</set>
@@ -1471,29 +1472,10 @@ You can also manually add extra options after the rate such as minrate 10M minra
           <number>8</number>
          </property>
         </widget>
-        <widget class="QLineEdit" name="FrameStrategy">
-         <property name="geometry">
-          <rect>
-           <x>600</x>
-           <y>29</y>
-           <width>151</width>
-           <height>25</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>8</pointsize>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string>Frame Stratagy: Adds the flag -flags to the command line</string>
-         </property>
-        </widget>
         <widget class="QLabel" name="l_VideoStartTimeOffset">
          <property name="geometry">
           <rect>
-           <x>276</x>
+           <x>186</x>
            <y>33</y>
            <width>41</width>
            <height>17</height>
@@ -1505,6 +1487,9 @@ You can also manually add extra options after the rate such as minrate 10M minra
            <bold>false</bold>
           </font>
          </property>
+         <property name="toolTip">
+          <string/>
+         </property>
          <property name="text">
           <string>Offset</string>
          </property>
@@ -1512,9 +1497,9 @@ You can also manually add extra options after the rate such as minrate 10M minra
         <widget class="QLabel" name="l_VideoBFrames">
          <property name="geometry">
           <rect>
-           <x>100</x>
+           <x>10</x>
            <y>32</y>
-           <width>62</width>
+           <width>51</width>
            <height>17</height>
           </rect>
          </property>
@@ -1531,9 +1516,9 @@ You can also manually add extra options after the rate such as minrate 10M minra
         <widget class="QLabel" name="l_FrameStrategy">
          <property name="geometry">
           <rect>
-           <x>540</x>
+           <x>440</x>
            <y>32</y>
-           <width>62</width>
+           <width>81</width>
            <height>17</height>
           </rect>
          </property>
@@ -1544,13 +1529,13 @@ You can also manually add extra options after the rate such as minrate 10M minra
           </font>
          </property>
          <property name="text">
-          <string>F.Strategy</string>
+          <string>Frame Strategy</string>
          </property>
         </widget>
         <widget class="QLineEdit" name="VideoGroupPicSize">
          <property name="geometry">
           <rect>
-           <x>238</x>
+           <x>148</x>
            <y>29</y>
            <width>31</width>
            <height>25</height>
@@ -1569,7 +1554,7 @@ You can also manually add extra options after the rate such as minrate 10M minra
         <widget class="QLabel" name="l_VideoGroupPicSize">
          <property name="geometry">
           <rect>
-           <x>190</x>
+           <x>100</x>
            <y>33</y>
            <width>51</width>
            <height>17</height>
@@ -1588,7 +1573,7 @@ You can also manually add extra options after the rate such as minrate 10M minra
         <widget class="QLineEdit" name="VideoBFrames">
          <property name="geometry">
           <rect>
-           <x>149</x>
+           <x>59</x>
            <y>29</y>
            <width>31</width>
            <height>25</height>
@@ -1604,29 +1589,10 @@ You can also manually add extra options after the rate such as minrate 10M minra
           <string>B-Frames: Adds the flag -bf to the command line</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="VideoStreamID">
-         <property name="geometry">
-          <rect>
-           <x>60</x>
-           <y>29</y>
-           <width>31</width>
-           <height>25</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>8</pointsize>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string>Video Stream ID: Adds the flag -streamid:v to the command line</string>
-         </property>
-        </widget>
         <widget class="QLabel" name="l_VideoForceFormat">
          <property name="geometry">
           <rect>
-           <x>351</x>
+           <x>261</x>
            <y>32</y>
            <width>71</width>
            <height>20</height>
@@ -1645,7 +1611,7 @@ You can also manually add extra options after the rate such as minrate 10M minra
         <widget class="QLabel" name="l_VideoStreamID">
          <property name="geometry">
           <rect>
-           <x>5</x>
+           <x>580</x>
            <y>32</y>
            <width>62</width>
            <height>17</height>
@@ -1667,7 +1633,7 @@ You can also manually add extra options after the rate such as minrate 10M minra
          </property>
          <property name="geometry">
           <rect>
-           <x>421</x>
+           <x>331</x>
            <y>29</y>
            <width>101</width>
            <height>25</height>
@@ -1798,6 +1764,71 @@ This appends to the output.</string>
            <string>webm</string>
           </property>
          </item>
+        </widget>
+        <widget class="QComboBox" name="FrameStrategy">
+         <property name="geometry">
+          <rect>
+           <x>520</x>
+           <y>29</y>
+           <width>51</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Frame Strategy: Adds the flag -b_strategy to the command line.
+Strategy to choose between I/P/B-frames.
+Range and Defaults are codec dependent.</string>
+         </property>
+         <item>
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>-1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>0</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QLineEdit" name="VideoStreamID">
+         <property name="geometry">
+          <rect>
+           <x>640</x>
+           <y>29</y>
+           <width>41</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Video Stream ID: Adds the flag -streamid:v to the command line</string>
+         </property>
         </widget>
        </widget>
        <widget class="QLabel" name="l_SubtitleCodec">
@@ -2295,7 +2326,7 @@ Adds the flag -c:s to the command line</string>
         </property>
         <property name="toolTip">
          <string>Audio Codec: Adds the flag -c:a to the command line.
-If you need a codec not listed, use Manual Options.</string>
+If you need a codec not listed, you may type it in here.</string>
         </property>
         <property name="editable">
          <bool>true</bool>
@@ -2434,7 +2465,7 @@ If you need a codec not listed, use Manual Options.</string>
          </font>
         </property>
         <property name="toolTip">
-         <string>Audio Bitrate:Adds the flag -b:a to the command line</string>
+         <string>Audio Bitrate: Adds the flag -b:a to the command line</string>
         </property>
         <property name="editable">
          <bool>true</bool>
@@ -2830,7 +2861,7 @@ Video Wrapper. You CANNOT use both.</string>
        <widget class="QLineEdit" name="AudioStreamID">
         <property name="geometry">
          <rect>
-          <x>630</x>
+          <x>650</x>
           <y>31</y>
           <width>41</width>
           <height>25</height>
@@ -2849,7 +2880,7 @@ Video Wrapper. You CANNOT use both.</string>
        <widget class="QLabel" name="l_AStreamID">
         <property name="geometry">
          <rect>
-          <x>574</x>
+          <x>590</x>
           <y>34</y>
           <width>62</width>
           <height>17</height>
