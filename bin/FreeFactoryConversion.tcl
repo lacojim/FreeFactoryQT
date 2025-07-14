@@ -34,6 +34,11 @@ exec tclsh "$0" "$@"
 ########################################################################################
 ########################################################################################
 ########################################################################################
+# 2025-07-13 Added options for 
+# ForceFormat -f
+# VideoProfile -profile:v
+# VideoProfileLevel -level:v
+
 proc ::main {argc argv} {
 # Get notify variables passed from inotify passed from FreeFactoryNotify.sh
 	set PassedVariables $argv
@@ -134,6 +139,8 @@ proc ::main {argc argv} {
 						"VIDEOCODECS" {set FactoryArray($FactoryCounter,VideoCodecs) $FactoryValue}
 						"VIDEOWRAPPER" {set FactoryArray($FactoryCounter,VideoWrapper) $FactoryValue}
 						"VIDEOFRAMERATE" {set FactoryArray($FactoryCounter,VideoFrameRate) $FactoryValue}
+						"VIDEOPROFILE" {set FactoryArray($FactoryCounter,VideoProfile) $FactoryValue}
+						"VIDEOPROFILELEVEL" {set FactoryArray($FactoryCounter,VideoProfileLevel) $FactoryValue}
 						"VIDEOSIZE" {set FactoryArray($FactoryCounter,VideoSize) $FactoryValue}
 						"VIDEOTARGET" {set FactoryArray($FactoryCounter,VideoTarget) $FactoryValue}
 						"VIDEOTAGS" {set FactoryArray($FactoryCounter,VideoTags) $FactoryValue}
@@ -205,7 +212,7 @@ proc ::main {argc argv} {
 			if {$FactoryArray($FactoryCounter,EnableFactory) == "Yes"} {
 # If match occurs then assemble the AV options from the factory.
 				if {$SourcePath == $FactoryArray($FactoryCounter,NotifyDirectory)} {
-# A match of the notify directory has occurred
+# A match of the notify directory has occurred 
 # Check if the action is to be conversion or copy.
 ########################################################################################
 # Make sure the copy of source file is complete.
@@ -370,7 +377,7 @@ proc ::main {argc argv} {
 # Check to see if email is enabled and both list variables have list
 # variable data in them
 					if {$FactoryArray($FactoryCounter,FactoryEnableEMail) == "Yes" && $FactoryArray($FactoryCounter,FactoryEMailsName) != "" && $FactoryArray($FactoryCounter,FactoryEMailsAddress) != ""} {
-# Load in emal connection data from Free Factory config file
+# Load in email connection data from Free Factory config file
 						set PrefFileHandle [open /opt/FreeFactory/FreeFactory.config r]
 						while {![eof $PrefFileHandle]} {
 							gets $PrefFileHandle PrefVar
@@ -555,6 +562,14 @@ proc FFMXOptionsFFMxConversionFTP {} {
 		append FFMx_AVOptions "-c:v "
 		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,VideoCodecs) "
 	}
+	if {[string trim $FactoryArray($FactoryCounterUsed,VideoProfile)] != ""} {
+		append FFMx_AVOptions "-profile:v "
+		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,VideoProfile) "
+	}
+	if {[string trim $FactoryArray($FactoryCounterUsed,VideoProfileLevel)] != ""} {
+		append FFMx_AVOptions "-level:v "
+		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,VideoProfileLevel) "
+	}
 	if {[string trim $FactoryArray($FactoryCounterUsed,OutputFileSuffix)] != ""} {
 		append OutputFileName $FactoryArray($FactoryCounterUsed,OutputFileSuffix)
 	}
@@ -678,9 +693,9 @@ proc FFMXOptionsFFMxConversionFTP {} {
 	set FFMxScript /opt/FreeFactory/bin/FFMxScript-$SourceFileName.sh
 # Determine where to run the FFMx program from.  Either /usr/bin or /opt/FreeFactory/bin.
 	if {$FactoryArray($FactoryCounterUsed,RunFrom) == "usr"} {
-		set FFMxString "$FactoryArray($FactoryCounterUsed,FFMxProgram) -y -i \"$SourcePath$SourceFileName\" $FFMx_AVOptions \"$FactoryArray($FactoryCounterUsed,OutputDirectory)$OutputFileName\" 2>> \"$ConversionLog\""
+		set FFMxString "$FactoryArray($FactoryCounterUsed,FFMxProgram) -hide_banner -y -i \"$SourcePath$SourceFileName\" $FFMx_AVOptions \"$FactoryArray($FactoryCounterUsed,OutputDirectory)$OutputFileName\" 2>> \"$ConversionLog\""
 	} else {
-		set FFMxString "/opt/FreeFactory/bin/$FactoryArray($FactoryCounterUsed,FFMxProgram) -y -i \"$SourcePath$SourceFileName\" $FFMx_AVOptions \"$FactoryArray($FactoryCounterUsed,OutputDirectory)$OutputFileName\" 2>> \"$ConversionLog\""
+		set FFMxString "/opt/FreeFactory/bin/$FactoryArray($FactoryCounterUsed,FFMxProgram) -hide_banner -y -i \"$SourcePath$SourceFileName\" $FFMx_AVOptions \"$FactoryArray($FactoryCounterUsed,OutputDirectory)$OutputFileName\" 2>> \"$ConversionLog\""
 	}
 # Write FFMx command to log
 	exec echo  "########################################################################################################" >> $ConversionLog

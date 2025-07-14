@@ -244,6 +244,10 @@ class FreeFactoryCore:
         encode_length = factory_data.get("ENCODELENGTH", "").strip()
         video_codec = factory_data.get("VIDEOCODECS", "").strip()
         video_bitrate = factory_data.get("VIDEOBITRATE", "").strip()
+
+        video_profile = factory_data.get("VIDEOPROFILE", "").strip()
+        video_profile_level = factory_data.get("VIDEOPROFILELEVEL", "").strip()
+      
         size = factory_data.get("VIDEOSIZE", "").strip()
         subtitle = factory_data.get("SUBTITLECODECS", "").strip()
         audio_codec = factory_data.get("AUDIOCODECS", "").strip()
@@ -269,6 +273,10 @@ class FreeFactoryCore:
             cmd += ["-c:v", video_codec]
         if video_bitrate:
             cmd += ["-b:v", video_bitrate]
+        if video_profile:
+            cmd += ["-profile:v", video_profile]
+        if video_profile_level:
+            cmd += ["-level:v", video_profile_level]
         if gop_size:
             cmd += ["-g", gop_size]
         if bframes:

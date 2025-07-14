@@ -84,28 +84,6 @@
       <property name="title">
        <string>Factory Selection</string>
       </property>
-      <widget class="QPushButton" name="FactoryReadOnly">
-       <property name="geometry">
-        <rect>
-         <x>68</x>
-         <y>540</y>
-         <width>82</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Set Factory to Read Only. (chmod 0644)</string>
-       </property>
-       <property name="text">
-        <string>Read Only</string>
-       </property>
-      </widget>
       <widget class="QLabel" name="l_FactoryFilename">
        <property name="geometry">
         <rect>
@@ -149,6 +127,63 @@
          <pointsize>8</pointsize>
          <bold>false</bold>
         </font>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ImportFactory">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>540</y>
+         <width>91</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Import Factory</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ExportFactory">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>540</y>
+         <width>91</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Export Factory</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="BackupFactories">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>564</y>
+         <width>201</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Backup Factories</string>
        </property>
       </widget>
      </widget>
@@ -492,9 +527,9 @@ If you need a codec not listed, simply type it in.</string>
         </property>
         <property name="geometry">
          <rect>
-          <x>250</x>
+          <x>230</x>
           <y>27</y>
-          <width>111</width>
+          <width>141</width>
           <height>25</height>
          </rect>
         </property>
@@ -634,7 +669,7 @@ Audio File Extension. You CANNOT use both.</string>
          </font>
         </property>
         <property name="text">
-         <string>Wrapper</string>
+         <string>Muxer</string>
         </property>
        </widget>
        <widget class="QComboBox" name="VideoFrameRate">
@@ -963,9 +998,9 @@ Audio File Extension. You CANNOT use both.</string>
         </property>
         <property name="geometry">
          <rect>
-          <x>250</x>
+          <x>230</x>
           <y>57</y>
-          <width>111</width>
+          <width>141</width>
           <height>25</height>
          </rect>
         </property>
@@ -976,7 +1011,8 @@ Audio File Extension. You CANNOT use both.</string>
          </font>
         </property>
         <property name="toolTip">
-         <string>Video Bitrate: Adds the flag -b:v to the command line</string>
+         <string>Video Bitrate: Adds the flag -b:v to the command line
+You can also manually add extra options after the rate such as minrate 10M minrate 10M.</string>
         </property>
         <property name="editable">
          <bool>true</bool>
@@ -1584,7 +1620,7 @@ Audio File Extension. You CANNOT use both.</string>
           </font>
          </property>
          <property name="toolTip">
-          <string>Video Stream ID: Adds the flag -streamid to the command line</string>
+          <string>Video Stream ID: Adds the flag -streamid:v to the command line</string>
          </property>
         </widget>
         <widget class="QLabel" name="l_VideoForceFormat">
@@ -1887,29 +1923,6 @@ Adds the flag -c:s to the command line</string>
          <string>hh:mm:ss[.xxx]</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="checkBox">
-        <property name="geometry">
-         <rect>
-          <x>240</x>
-          <y>90</y>
-          <width>121</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="toolTip">
-         <string>This will lock the bitrate with minrate and maxrate values in the command string.
- ie: -b:v 50M -minrate 50M -maxrate 50M</string>
-        </property>
-        <property name="text">
-         <string>Lock Min/Max Bitrate</string>
-        </property>
-       </widget>
        <widget class="QComboBox" name="VideoPixFormat">
         <property name="geometry">
          <rect>
@@ -2004,6 +2017,246 @@ Adds the flag -c:s to the command line</string>
         </property>
         <property name="text">
          <string>Pix_Fmt</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="l_VideoProfile">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>90</y>
+          <width>62</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Profile</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="VideoProfile">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>87</y>
+          <width>141</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Video Profile: add profile:v to the command line.</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <property name="placeholderText">
+         <string/>
+        </property>
+        <item>
+         <property name="text">
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>baseline</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>main</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>high</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>high10</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>high422</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>high444</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QComboBox" name="VideoProfileLevel">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>450</x>
+          <y>87</y>
+          <width>101</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Video Profile Level: add level:v to the command line.</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <property name="placeholderText">
+         <string/>
+        </property>
+        <item>
+         <property name="text">
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1.0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1b</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1.1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1.2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1.3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2.0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2.1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2.2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>3.0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>3.1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>3.2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>4.0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>4.1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>4.2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>5.0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>5.1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>5.2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>6.0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>6.1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>6.2</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QLabel" name="l_VideoProfileLevel">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>90</y>
+          <width>62</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Profile Level</string>
         </property>
        </widget>
       </widget>
@@ -3907,7 +4160,7 @@ or Factory Testing</string>
         <x>10</x>
         <y>50</y>
         <width>481</width>
-        <height>71</height>
+        <height>91</height>
        </rect>
       </property>
       <property name="font">
@@ -3957,6 +4210,28 @@ or Factory Testing</string>
         <string>Company Name</string>
        </property>
       </widget>
+      <widget class="QCheckBox" name="CompanyNameMetadata">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>56</y>
+         <width>311</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>This will include your company name within all output files as metadata.</string>
+       </property>
+       <property name="text">
+        <string>Include in Metadata (Not yet active)</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="ffmxprogramglob">
       <property name="enabled">
@@ -3965,7 +4240,7 @@ or Factory Testing</string>
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>130</y>
+        <y>160</y>
         <width>481</width>
         <height>441</height>
        </rect>
@@ -4273,33 +4548,10 @@ or Factory Testing</string>
         <string>Default Factory</string>
        </property>
       </widget>
-      <widget class="QLabel" name="l_RunFrom">
-       <property name="geometry">
-        <rect>
-         <x>260</x>
-         <y>373</y>
-         <width>71</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-         <underline>false</underline>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>usr is the system install version, opt is a custom compiled version</string>
-       </property>
-       <property name="text">
-        <string>Run From</string>
-       </property>
-      </widget>
       <widget class="QLabel" name="l_Ffmxprogram">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>10</x>
          <y>374</y>
          <width>81</width>
          <height>17</height>
@@ -4315,57 +4567,13 @@ or Factory Testing</string>
         <string>FFMx Program</string>
        </property>
       </widget>
-      <widget class="QRadioButton" name="RunFromUsr">
-       <property name="geometry">
-        <rect>
-         <x>320</x>
-         <y>370</y>
-         <width>51</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>usr</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="RunFromOpt">
-       <property name="geometry">
-        <rect>
-         <x>370</x>
-         <y>370</y>
-         <width>51</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>opt</string>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-      </widget>
       <widget class="QComboBox" name="FFMxProgram">
        <property name="enabled">
         <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
-         <x>150</x>
+         <x>90</x>
          <y>371</y>
          <width>85</width>
          <height>25</height>
@@ -4517,7 +4725,7 @@ or Factory Testing</string>
         <x>530</x>
         <y>220</y>
         <width>541</width>
-        <height>341</height>
+        <height>381</height>
        </rect>
       </property>
       <property name="font">
@@ -4535,7 +4743,7 @@ or Factory Testing</string>
          <x>10</x>
          <y>20</y>
          <width>521</width>
-         <height>231</height>
+         <height>301</height>
         </rect>
        </property>
        <property name="font">
@@ -4549,7 +4757,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>257</y>
+         <y>330</y>
          <width>82</width>
          <height>23</height>
         </rect>
@@ -4571,7 +4779,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>110</x>
-         <y>257</y>
+         <y>330</y>
          <width>82</width>
          <height>23</height>
         </rect>
@@ -4593,7 +4801,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>310</x>
-         <y>257</y>
+         <y>330</y>
          <width>82</width>
          <height>23</height>
         </rect>
@@ -4615,7 +4823,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>410</x>
-         <y>257</y>
+         <y>330</y>
          <width>82</width>
          <height>23</height>
         </rect>
@@ -4637,7 +4845,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>210</x>
-         <y>257</y>
+         <y>330</y>
          <width>82</width>
          <height>23</height>
         </rect>
@@ -4659,7 +4867,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>503</x>
-         <y>257</y>
+         <y>330</y>
          <width>28</width>
          <height>21</height>
         </rect>
@@ -4679,7 +4887,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>290</y>
+         <y>360</y>
          <width>191</width>
          <height>16</height>
         </rect>
@@ -4701,90 +4909,6 @@ Right-click to refresh service mode.</string>
        </property>
        <property name="text">
         <string>Unknown</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_7">
-      <property name="geometry">
-       <rect>
-        <x>530</x>
-        <y>570</y>
-        <width>481</width>
-        <height>71</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="title">
-       <string>OS Notifications</string>
-      </property>
-      <widget class="QCheckBox" name="OSNoticicationsGlobal">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>30</y>
-         <width>211</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Your OS will notify you when a job has completed.</string>
-       </property>
-       <property name="layoutDirection">
-        <enum>Qt::LayoutDirection::RightToLeft</enum>
-       </property>
-       <property name="autoFillBackground">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>OS Notifications When Jobs Complete</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="CompletedNotifyTimeGlobal">
-       <property name="geometry">
-        <rect>
-         <x>370</x>
-         <y>30</y>
-         <width>91</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="toolTip">
-        <string>How long the completed notification 
- stays on screen (in milliseconds).</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="l_CompletedNotifyTime">
-       <property name="geometry">
-        <rect>
-         <x>280</x>
-         <y>33</y>
-         <width>91</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>How long the completed notification 
- stays on screen (in milliseconds).</string>
-       </property>
-       <property name="text">
-        <string>Time to Display</string>
        </property>
       </widget>
      </widget>
@@ -5476,7 +5600,7 @@ Right-click to refresh service mode.</string>
         <bool>true</bool>
        </property>
        <property name="plainText">
-        <string>Note: These help dialogs are read on the fly from your existing ffmpeg installation. They are not internal to FreeFactory.
+        <string>Note: These help dialogs are read on the fly from your existing FFmpeg installation. They are not internal to FreeFactory.
 
 Why is this here, you may ask. Well it's here to make it easier to find options that are not included within the GUI. As FFmpeg has hundreds of options, it's simply not possible to include each and every one. So this is here to allow you to easily find advanced options that you may use within the Manual Options dialog on the Factory Builder tab. This is mostly used as a built-in reference.
 
@@ -6274,7 +6398,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
       </property>
       <property name="geometry">
        <rect>
-        <x>760</x>
+        <x>750</x>
         <y>87</y>
         <width>111</width>
         <height>25</height>
@@ -6366,8 +6490,8 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
       </property>
       <property name="geometry">
        <rect>
-        <x>810</x>
-        <y>130</y>
+        <x>750</x>
+        <y>117</y>
         <width>101</width>
         <height>25</height>
        </rect>
@@ -6444,8 +6568,8 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
      <widget class="QLabel" name="l_Threads">
       <property name="geometry">
        <rect>
-        <x>740</x>
-        <y>133</y>
+        <x>680</x>
+        <y>120</y>
         <width>62</width>
         <height>17</height>
        </rect>
@@ -6466,8 +6590,8 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
       </property>
       <property name="geometry">
        <rect>
-        <x>770</x>
-        <y>157</y>
+        <x>750</x>
+        <y>150</y>
         <width>131</width>
         <height>25</height>
        </rect>
@@ -6544,8 +6668,8 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
      <widget class="QLabel" name="l_Vtarget">
       <property name="geometry">
        <rect>
-        <x>730</x>
-        <y>160</y>
+        <x>710</x>
+        <y>153</y>
         <width>62</width>
         <height>17</height>
        </rect>
@@ -6558,6 +6682,121 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
       </property>
       <property name="text">
        <string>Target</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="FactoryReadOnly">
+      <property name="geometry">
+       <rect>
+        <x>740</x>
+        <y>210</y>
+        <width>82</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Set Factory to Read Only. (chmod 0644)</string>
+      </property>
+      <property name="text">
+       <string>Read Only</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="l_RunFrom">
+      <property name="geometry">
+       <rect>
+        <x>650</x>
+        <y>243</y>
+        <width>71</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+        <underline>false</underline>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>usr is the system install version, opt is a custom compiled version</string>
+      </property>
+      <property name="text">
+       <string>Run From</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="RunFromUsr">
+      <property name="geometry">
+       <rect>
+        <x>710</x>
+        <y>240</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>usr</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="RunFromOpt">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>240</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>opt</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox">
+      <property name="geometry">
+       <rect>
+        <x>650</x>
+        <y>260</y>
+        <width>121</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>This will lock the bitrate with minrate and maxrate values in the command string.
+ ie: -b:v 50M -minrate 50M -maxrate 50M</string>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>Use Min/Max Bitrate</string>
       </property>
      </widget>
     </widget>
