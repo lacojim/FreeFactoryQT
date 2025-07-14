@@ -1,4 +1,4 @@
-FACTORYDESCRIPTION=Downmix_6ch_to_stereo - Set the Video Codec to copy to keep video as is.
+FACTORYDESCRIPTION=Example downmix_6ch_to_stereo - Set the Video Codec to copy to keep video as is, or change settings to whatever needed.
 NOTIFYDIRECTORY=
 OUTPUTDIRECTORY=/video/
 OUTPUTFILESUFFIX=
@@ -21,6 +21,8 @@ VIDEOPIXFORMAT=
 THREADS=
 ASPECT=
 VIDEOBITRATE=
+VIDEOPROFILE=
+VIDEOPROFILELEVEL=
 VIDEOPRESET=
 VIDEOSTREAMID=
 GROUPPICSIZE=
