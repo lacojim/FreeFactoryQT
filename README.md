@@ -8,7 +8,7 @@
 ### New - 2025-07-14
 - Added Video Profile and Video Profile Level support to UI and FreeFactoryConversion.tcl. Be aware if using pix_fmt with these options can be very tricky. So turn it off first to verify Video Profile is working, then start figuring out the compatible pix_fmts that work if still needed.
 - Bugfix. Video bitrate (-b:v) was not being included in the Direct Conversion Dropzone, Batch File encoding and Commandline Preview. This has been fixed. It was not broken in the FreeFactory service however as the Factories were both written and read correctly. This took a while for me to find because I use the FF service more than I do direct encoding. RC1 is broken, but fixed in RC2 if downloading. The new Profiles (baseline, main, etc) are not in RC2. Considered experimental for now but working if all settings (pix_fmt, profile, profile level) are agreeable with FFmpeg. If you experience failures, test by copying the Preview commandline into a shell. You need to change the GENERIC input and output files names as these are completely generic.
-- Added buttons for Import, Export and Backup Factories. Not yet functional but soon.
+- Added buttons for Import, Export and Backup Factories. Now functional.
 
 ### New - 2025-06-26 
 - Added support for live Streaming via the Stream Manager tab and freefactory-notify.service control within the UI.
