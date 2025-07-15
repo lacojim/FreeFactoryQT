@@ -106,11 +106,6 @@ class StreamWorker(QThread):
             self.process.terminate()
 
 
-
-
-
-
-
 class FreeFactoryCore:
     def __init__(self, config):
         self.factory_dir = Path(config.get("FactoryLocation"))
@@ -154,7 +149,8 @@ class FreeFactoryCore:
         if path.exists():
             path.unlink()
             self.factory_files.remove(path)
-
+        
+        
     def view_command_line(self, input_file, options):
         # Construct an ffmpeg command or similar based on options
         output_file = self.output_directory / f"converted_{input_file.name}"
@@ -174,14 +170,6 @@ class FreeFactoryCore:
             raise RuntimeError("No command line to run.")
         
         pass
-
-    # def load_factory(self, name):
-    #     for file_path in self.factory_files:
-    #         if Path(file_path).stem == name:
-    #             with open(file_path, "r") as f:
-    #                 lines = f.readlines()
-    #             return self.parse_factory_file(lines)
-    #     return None
     
     
     def load_factory(self, factory_path):

@@ -30,8 +30,11 @@
 import sys
 import os
 import shlex
+import shutil
 import subprocess
+
 from pathlib import Path
+from datetime import datetime
 
 from PyQt6.QtCore import Qt, QThread, QTimer
 from PyQt6.QtGui import QPixmap
@@ -58,6 +61,10 @@ from ffnotifyservice import (
     update_notify_service_mode_display,
     show_notify_service_menu
 )
+from importexport import ExportFactoryDialog, export_factory_logic, backup_factories_zip
+#from importexport import backup_factories_zip
+
+
 
 
 # ============================
@@ -216,7 +223,9 @@ class FreeFactoryApp(QMainWindow):
         self.streamTable.setColumnWidth(4, 100)
         self.streamTable.horizontalHeader().setStretchLastSection(True)
 
-        factory_names = [f.stem for f in factory_files if f.is_file()]
+        # Streaming Factories List
+        factory_files = sorted(Path(factory_dir).glob("*"))
+        factory_names = [f.name for f in factory_files if f.is_file()]
         self.streamFactorySelect.clear()
         self.streamFactorySelect.addItems(factory_names)
         
@@ -297,20 +306,23 @@ class FreeFactoryApp(QMainWindow):
             lambda: self.open_ffmpeg_help_dialog("Full FFmpeg Help", ["-h", "full"])
         )
         
-
+        # FreeFactory DropZones 
         self.dropZone.filesDropped.connect(self.handle_dropped_files)
         self.queueDropZone.filesDropped.connect(self.handle_dropped_files_to_queue)
         
         # FreeFactory Service Buttons
         update_notify_service_mode_display(self)
         connect_notify_service_controls(self)
-
         self.clearNotifyStatusButton.clicked.connect(lambda: self.listNotifyServiceStatus.clear())
-        
+
+        # FreeFactory Clear Preview and Dropzone Buttons        
         self.clearPreviewButton.clicked.connect(lambda: self.PreviewCommandLine.clear())
         self.clearDropZoneButton.clicked.connect(lambda: self.dropZone.clear())
 
-
+        # FreeFactory Factory Management Buttons
+        self.ImportFactory.clicked.connect(self.import_factory)
+        self.ExportFactory.clicked.connect(self.export_factory)
+        self.BackupFactories.clicked.connect(self.backup_factories)
         
 
     # ============================
@@ -755,7 +767,106 @@ class FreeFactoryApp(QMainWindow):
         self.core.reload_factory_files()  # 👈 Now cleaner and centralized
         self.listFactoryFiles.clear()
         for path in sorted(self.core.factory_files, key=lambda p: p.name.lower()):
-            self.listFactoryFiles.addItem(path.name)    
+            self.listFactoryFiles.addItem(path.name)
+            
+    # Import, Export and Backup Factories =========================================================
+    def import_factory(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "Import Factory", "", "All Files (*)")
+        if not file_path:
+            return
+
+        try:
+            src_path = Path(file_path)
+            filename = src_path.name
+            dest_path = self.core.factory_dir / filename
+
+            if dest_path.exists():
+                msg_box = QMessageBox(self)
+                msg_box.setWindowTitle("Factory Exists")
+                msg_box.setText(f"Factory '{filename}' already exists.")
+                msg_box.setInformativeText("Do you want to overwrite it or rename the import?")
+                overwrite = msg_box.addButton("Overwrite", QMessageBox.ButtonRole.AcceptRole)
+                rename = msg_box.addButton("Rename", QMessageBox.ButtonRole.ActionRole)
+                cancel = msg_box.addButton("Cancel", QMessageBox.ButtonRole.RejectRole)
+                msg_box.exec()
+
+                clicked = msg_box.clickedButton()
+                if clicked == cancel:
+                    return
+                elif clicked == rename:
+                    new_name, ok = QFileDialog.getSaveFileName(self, "Rename Factory As", str(dest_path))
+                    if not ok or not new_name:
+                        return
+                    dest_path = Path(new_name)
+
+            shutil.copy(src_path, dest_path)
+            self.populate_factory_list()
+            QMessageBox.information(self, "Import Successful", f"Factory '{dest_path.name}' imported.")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Import Failed", f"Could not import factory:\n{e}")
+
+
+    def export_factory(self):
+        selected_item = self.listFactoryFiles.currentItem()
+        if not selected_item:
+            QMessageBox.warning(self, "No Factory Selected", "Select a factory to export.")
+            return
+
+        factory_name = selected_item.text()
+        factory_path = self.core.factory_dir / factory_name
+
+        dialog = ExportFactoryDialog(factory_name, factory_path, self)
+        if dialog.exec():
+            dest_path_str, portable = dialog.get_export_info()
+            if not dest_path_str:
+                QMessageBox.warning(self, "No Destination", "Please specify a destination path.")
+                return
+
+            dest_path = Path(dest_path_str)
+            success, message = export_factory_logic(factory_path, dest_path, portable)
+            if success:
+                QMessageBox.information(self, "Export Successful", message)
+            else:
+                QMessageBox.critical(self, "Export Failed", message)
+
+
+    
+
+    def backup_factories(self):
+        timestamp = datetime.now().strftime("%Y-%m-%d")
+        default_name = f"Factories-Backup-{timestamp}.zip"
+        zip_path_str, _ = QFileDialog.getSaveFileName(
+            self, "Save Backup As", default_name, "ZIP Archives (*.zip)"
+        )
+        if not zip_path_str:
+            return
+
+        zip_path = Path(zip_path_str)
+        success, message = backup_factories_zip(self.core.factory_dir, zip_path)
+
+        if success:
+            QMessageBox.information(self, "Backup Complete", message)
+        else:
+            QMessageBox.critical(self, "Backup Failed", message)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     # ============================
     #     Global Config Logic

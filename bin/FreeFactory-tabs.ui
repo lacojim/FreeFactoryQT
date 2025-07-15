@@ -1446,9 +1446,9 @@ You can also manually add extra options after the rate such as minrate 10M minra
         <widget class="QLineEdit" name="VideoStartTimeOffset">
          <property name="geometry">
           <rect>
-           <x>218</x>
+           <x>216</x>
            <y>29</y>
-           <width>31</width>
+           <width>41</width>
            <height>25</height>
           </rect>
          </property>
@@ -1475,7 +1475,7 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
         <widget class="QLabel" name="l_VideoStartTimeOffset">
          <property name="geometry">
           <rect>
-           <x>186</x>
+           <x>184</x>
            <y>33</y>
            <width>41</width>
            <height>17</height>
@@ -6828,6 +6828,25 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
       </property>
       <property name="text">
        <string>Use Min/Max Bitrate</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="L_DevelopementPlaceholder">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>10</y>
+        <width>701</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff5454;&quot;&gt;THIS TAB IS FOR DEVELOPMENT PURPOSES ONLY AND IS A PLACEHOLDER FOR DEPRECATED FEATURES.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </widget>
