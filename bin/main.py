@@ -190,12 +190,18 @@ class FreeFactoryApp(QMainWindow):
         self.toolButton_notifyDir.clicked.connect(self.select_notify_directory)
         self.toolButton_outputDir.clicked.connect(self.select_output_directory)
         self.PreviewCommand.clicked.connect(self.on_generate_command)
-        # Factory Mgmt Buttons
+        
+        # FreeFactory Factory Management Buttons
         self.SaveFactory.clicked.connect(self.save_current_factory)
         self.DeleteFactory.clicked.connect(self.delete_current_factory)
         self.NewFactory.clicked.connect(self.new_factory)
+        self.ImportFactory.clicked.connect(self.import_factory)
+        self.ExportFactory.clicked.connect(self.export_factory)
+        self.BackupFactories.clicked.connect(self.backup_factories)
+        
         # Factory List
         self.listFactoryFiles.itemClicked.connect(self.load_selected_factory)
+        
         # File Queue Buttons
         self.startQueueButton.clicked.connect(self.start_conversion_queue)
         self.pauseQueueButton.clicked.connect(self.pause_or_resume_queue)
@@ -205,6 +211,7 @@ class FreeFactoryApp(QMainWindow):
         self.conversionQueueTable.setColumnWidth(1, 300)  # Output file
         self.conversionQueueTable.setColumnWidth(2, 120)  # Status column
         self.conversionQueueTable.horizontalHeader().setStretchLastSection(True)
+        
         # Streaming Buttons
         self.StartAllStreams.clicked.connect(self.start_all_streams)
         self.StopAllStreams.clicked.connect(self.stop_all_streams)
@@ -212,6 +219,7 @@ class FreeFactoryApp(QMainWindow):
         self.StopStream.clicked.connect(self.stop_selected_stream)
         self.AddNewStream.clicked.connect(self.add_stream_to_table)
         self.RemoveStream.clicked.connect(self.remove_selected_stream)
+        
         # Populate Streaming Factory list
         factory_dir = self.config.get("FactoryLocation") or "/opt/FreeFactory/Factories"
         factory_files = sorted(Path(factory_dir).glob("*"))
@@ -319,10 +327,7 @@ class FreeFactoryApp(QMainWindow):
         self.clearPreviewButton.clicked.connect(lambda: self.PreviewCommandLine.clear())
         self.clearDropZoneButton.clicked.connect(lambda: self.dropZone.clear())
 
-        # FreeFactory Factory Management Buttons
-        self.ImportFactory.clicked.connect(self.import_factory)
-        self.ExportFactory.clicked.connect(self.export_factory)
-        self.BackupFactories.clicked.connect(self.backup_factories)
+        
         
 
     # ============================
