@@ -295,9 +295,13 @@ class FreeFactoryCore:
         #    cmd += ["-tags:a", audio_tags]
 #=======Stream mapping
         if video_stream_id:
-            cmd += ["-streamid", f"v:{video_stream_id}"]
+            cmd += ["-streamid:v", video_stream_id]
         if audio_stream_id:
-            cmd += ["-streamid", f"a:{audio_stream_id}"]
+            cmd += ["-streamid:a", audio_stream_id]
+        #if video_stream_id:
+        #    cmd += ["-streamid", f"v:{video_stream_id}"]
+        #if audio_stream_id:
+        #    cmd += ["-streamid", f"a:{audio_stream_id}"]
 
 #=======Output seeking and format
         if encode_length:
