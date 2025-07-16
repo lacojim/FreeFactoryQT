@@ -2465,7 +2465,9 @@ If you need a codec not listed, you may type it in here.</string>
          </font>
         </property>
         <property name="toolTip">
-         <string>Audio Bitrate: Adds the flag -b:a to the command line</string>
+         <string>Audio Bitrate: Adds the flag -b:a to the command line.
+Commonly used for lossy audio formats.
+ie. aac, mp3, ogg, etc</string>
         </property>
         <property name="editable">
          <bool>true</bool>
@@ -2551,11 +2553,6 @@ If you need a codec not listed, you may type it in here.</string>
           <string>448k</string>
          </property>
         </item>
-        <item>
-         <property name="text">
-          <string>1536k</string>
-         </property>
-        </item>
        </widget>
        <widget class="QLabel" name="l_AsampleRate">
         <property name="geometry">
@@ -2613,57 +2610,62 @@ If you need a codec not listed, you may type it in here.</string>
         </item>
         <item>
          <property name="text">
-          <string>8k</string>
+          <string>8000</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>11.025k</string>
+          <string>11025</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>22.05k</string>
+          <string>22050</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>32k</string>
+          <string>32000</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>44.1k</string>
+          <string>44100</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>48k</string>
+          <string>48000</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>96k</string>
+          <string>88200</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>192k</string>
+          <string>96000</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>384k</string>
+          <string>176400</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>768k</string>
+          <string>192000</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>1536k</string>
+          <string>352800</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>384000</string>
          </property>
         </item>
        </widget>
@@ -3430,7 +3432,7 @@ or Factory Testing</string>
      <widget class="QToolButton" name="clearDropZoneButton">
       <property name="geometry">
        <rect>
-        <x>1043</x>
+        <x>900</x>
         <y>620</y>
         <width>28</width>
         <height>21</height>
