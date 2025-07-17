@@ -4,4 +4,4 @@ In the future, it is hoped this can also be used to create a dynamic UI by only 
 
 Presently there are seven python scripts used to create this database. I will include those here at some point. Once they are more refined. They can be used to create a new database completely based on the version of the FFmpeg you have installed on your system.
 
-As I am not normally a database administrator, I am sure there are many ways to make this much more efficient and much better. Database experts welcome to offer improvments, please.
+As I am not normally a database administrator, I am sure there are many ways to make this much more efficient and much better. Database experts welcomed to offer improvments, please.
