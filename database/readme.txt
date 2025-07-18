@@ -8,8 +8,9 @@ As I am not normally a database administrator, I am sure there are many ways to 
 
 
 FFmpeg Database tools descriptions:
+These scripts will use YOUR installed version FFmpeg to build the database. There is no guarantee these scripts will work with your version. These were written for FFmpeg 7.1.1. Make a backup of the existing .db file before attempting this. 
 
-rebuild_database.sh: This will delete ffmpeg_options.db and run the following python scipts in the following order:
+rebuild_database.sh: This will DELETE ffmpeg_options.db and run the following python scipts in the following order:
 
 - ffmpeg_db_builder.py --mode rebuild
 This will rebuild the database in a basic state and creates and populates the following tables: bitstream_filters, codecs, filters, muxers, pixel_formats
