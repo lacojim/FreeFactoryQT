@@ -30,7 +30,7 @@ This parses, creates and populates the FFmpeg muxer_options table.
 This parses, creates and populates the FFmpeg filter_options table. 
 
 - populate_bsf_options.py
-This parses, creates and populates the FFmpeg filter_options table. This takes several minutes to complete.
+This parses, creates and populates the FFmpeg bitstream_filter_options table. This takes several minutes to complete.
 
 - populate_encoder_compat.py
 This one is a beast on its own. It will actually run ffmpeg with generic options and according to your CPU core count can run many instances. It attempt to create compatible video+audio codec compatibility. It will use 100% off all your CPU cores and depending on your HW, can take from 15 minutes to several hours to complete. It is Not included in the rebuild_database.sh script because of this. You must run this one MANUALLY. 
