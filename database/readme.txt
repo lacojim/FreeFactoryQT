@@ -12,7 +12,7 @@ FFmpeg Database tools descriptions:
 rebuild_database.sh: This will delete ffmpeg_options.db and run the following python scipts in the following order:
 
 - ffmpeg_db_builder.py --mode rebuild
-This will rebuild the database in a basic state and creats and populates the following tables: bitstream_filters, codecs, filters, muxers, pixel_formats
+This will rebuild the database in a basic state and creates and populates the following tables: bitstream_filters, codecs, filters, muxers, pixel_formats
 
 - populate_encoders.py
 This parses, creates and populates the FFmpeg encoders/decoders table. 
