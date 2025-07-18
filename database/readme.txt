@@ -37,7 +37,7 @@ This parses, creates and populates the FFmpeg bitstream_filter_options table. Th
 This one is a beast on its own. It will actually run ffmpeg with generic options and according to your CPU core count can run many instances. It attempt to create compatible video+audio codec compatibility. It will use 100% off all your CPU cores and depending on your HW, can take from 15 minutes to several hours to complete. It is Not included in the rebuild_database.sh script because of this. You must run this one MANUALLY. 
 
 - compatibility_overrides.json
-This file is only used by the above script (populate_encoder_compat.py). If you already know what video codecs are compatible with whatever video codec, edit this file to skip the probe and it gets automatically added to the database table encoder_compatibility. This is because some codecs (ie dnxhd) only support 48khz audio streams and the test was originally written for 44.1k audio streams. Yea, it gets really complicated. Any combination of options for dnxhd for example, will fail if the audio is not 48khz. We are trying to prevent these types of misconfigurations but it gets complicated.
+This file is only used by the above script (populate_encoder_compat.py). If you already know what video codecs are compatible with whatever audio codec, edit this file to skip the probe and it gets automatically added to the database table encoder_compatibility when the above script is ran. This is because some codecs (ie dnxhd) only support 48khz audio streams and the test was originally written for 44.1k audio streams. Yea, it gets really complicated. Any combination of options for dnxhd for example, will fail if the audio is not 48khz. We are trying to prevent these types of misconfigurations but it gets complicated.
 
 
 
