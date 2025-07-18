@@ -398,12 +398,7 @@ If you need a codec not listed, simply type it in.</string>
         </item>
         <item>
          <property name="text">
-          <string>dv</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>dvcpro-hd</string>
+          <string>dvvideo</string>
          </property>
         </item>
         <item>
@@ -900,6 +895,11 @@ Audio File Extension. You CANNOT use both.</string>
         <item>
          <property name="text">
           <string>1366x768</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1440x1080</string>
          </property>
         </item>
         <item>
