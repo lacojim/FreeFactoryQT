@@ -1,4 +1,4 @@
-FACTORYDESCRIPTION=Basic convert to DVCPro-HD - Does not yet support subtitles.
+FACTORYDESCRIPTION=Basic convert to DVCPro-HD - Does not yet support subtitles.  A .mxf file is created. Adjust Frame Rate as needed.
 NOTIFYDIRECTORY=
 OUTPUTDIRECTORY=/video/
 OUTPUTFILESUFFIX=
