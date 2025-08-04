@@ -303,18 +303,22 @@ class FreeFactoryCore:
         #if audio_stream_id:
         #    cmd += ["-streamid", f"a:{audio_stream_id}"]
 
-#=======Output seeking and format
+#=======Output seeking
         if encode_length:
             cmd += ["-t", encode_length]
         if start_offset:
             cmd += ["-ss", start_offset]
             print("DEBUG force_format raw value:", repr(force_format))
-        if force_format:
-            cmd += ["-f", force_format]
+        
+        # this has been moved below to be the last thing before the output.file.
+        #if force_format:
+        #    cmd += ["-f", force_format]
 
-#=======Manual options (always last before output)
+#=======Manual options (always last before output.file except for -f on the output side.)
         if manual:
             cmd += shlex.split(manual)
+        if force_format:
+            cmd += ["-f", force_format]
 
         cmd.append(output_path.as_posix())
 
