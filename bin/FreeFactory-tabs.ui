@@ -3148,9 +3148,9 @@ See the FFmpeg Help tab.</string>
      <widget class="QLineEdit" name="PreviewCommandLine">
       <property name="geometry">
        <rect>
-        <x>390</x>
+        <x>414</x>
         <y>617</y>
-        <width>471</width>
+        <width>477</width>
         <height>25</height>
        </rect>
       </property>
@@ -3243,7 +3243,7 @@ The input and output filenames are generic.</string>
         <x>330</x>
         <y>617</y>
         <width>51</width>
-        <height>23</height>
+        <height>25</height>
        </rect>
       </property>
       <property name="toolTip">
@@ -3412,10 +3412,10 @@ or Factory Testing</string>
      <widget class="QToolButton" name="clearPreviewButton">
       <property name="geometry">
        <rect>
-        <x>864</x>
-        <y>619</y>
+        <x>383</x>
+        <y>617</y>
         <width>28</width>
-        <height>21</height>
+        <height>25</height>
        </rect>
       </property>
       <property name="toolTip">
