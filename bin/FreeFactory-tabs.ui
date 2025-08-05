@@ -1516,7 +1516,7 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
         <widget class="QLabel" name="l_FrameStrategy">
          <property name="geometry">
           <rect>
-           <x>440</x>
+           <x>270</x>
            <y>32</y>
            <width>81</width>
            <height>17</height>
@@ -1592,9 +1592,9 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
         <widget class="QLabel" name="l_VideoForceFormat">
          <property name="geometry">
           <rect>
-           <x>261</x>
+           <x>520</x>
            <y>32</y>
-           <width>71</width>
+           <width>111</width>
            <height>20</height>
           </rect>
          </property>
@@ -1605,13 +1605,13 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
           </font>
          </property>
          <property name="text">
-          <string>Force Format</string>
+          <string>Force Format (Output)</string>
          </property>
         </widget>
         <widget class="QLabel" name="l_VideoStreamID">
          <property name="geometry">
           <rect>
-           <x>580</x>
+           <x>412</x>
            <y>32</y>
            <width>62</width>
            <height>17</height>
@@ -1633,9 +1633,9 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
          </property>
          <property name="geometry">
           <rect>
-           <x>331</x>
+           <x>632</x>
            <y>29</y>
-           <width>101</width>
+           <width>121</width>
            <height>25</height>
           </rect>
          </property>
@@ -1648,7 +1648,9 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
          <property name="toolTip">
           <string>Force Format: Adds the flag -f to the command line.
 This can be used for either audio or video.
-This appends to the output.</string>
+This appends to the output.
+This will always be the last flag applied to the
+FFmpeg command string.</string>
          </property>
          <property name="editable">
           <bool>true</bool>
@@ -1768,7 +1770,7 @@ This appends to the output.</string>
         <widget class="QComboBox" name="FrameStrategy">
          <property name="geometry">
           <rect>
-           <x>520</x>
+           <x>352</x>
            <y>29</y>
            <width>51</width>
            <height>25</height>
@@ -1814,7 +1816,7 @@ Range and Defaults are codec dependent.</string>
         <widget class="QLineEdit" name="VideoStreamID">
          <property name="geometry">
           <rect>
-           <x>640</x>
+           <x>470</x>
            <y>29</y>
            <width>41</width>
            <height>25</height>
@@ -1890,6 +1892,11 @@ Adds the flag -c:s to the command line</string>
         <item>
          <property name="text">
           <string>copy</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>a53cc</string>
          </property>
         </item>
         <item>
