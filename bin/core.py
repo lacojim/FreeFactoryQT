@@ -209,8 +209,6 @@ class FreeFactoryCore:
             self.listFactoryFiles.blockSignals(False)
 
 
-
-# Added to support Drag and Drop Encoding directly from the UI.
 # This builds the ffmpeg command via cmd. 
     def build_ffmpeg_command(self, input_path, factory_data, preview=False):
         import shlex
@@ -243,6 +241,7 @@ class FreeFactoryCore:
         sample_rate = factory_data.get("AUDIOSAMPLERATE", "").strip()
         audio_channels = factory_data.get("AUDIOCHANNELS", "").strip()
         manual = factory_data.get("MANUALOPTIONS", "").strip()
+        manual_input = factory_data.get("MANUALOPTIONSINPUT", "").strip()
         bframes = factory_data.get("BFRAMES", "").strip()
         frame_strategy = factory_data.get("FRAMESTRATEGY", "").strip()
         gop_size = factory_data.get("GROUPPICSIZE", "").strip()
@@ -310,11 +309,13 @@ class FreeFactoryCore:
             cmd += ["-ss", start_offset]
             print("DEBUG force_format raw value:", repr(force_format))
         
-        # this has been moved below to be the last thing before the output.file.
+        # this has been moved below to be the last flag before the output.file.
         #if force_format:
         #    cmd += ["-f", force_format]
 
 #=======Manual options (always last before output.file except for -f on the output side.)
+        if manual_input:
+            cmd = ["ffmpeg", "-hide_banner", "-y", str(manual_input), "-i", str(input_path)]
         if manual:
             cmd += shlex.split(manual)
         if force_format:
@@ -325,6 +326,8 @@ class FreeFactoryCore:
         print("DEBUG final cmd:", cmd)
         return cmd
 #======
+
+
 
 #===Build streaming flags
     def build_streaming_flags(self, factory_data):
