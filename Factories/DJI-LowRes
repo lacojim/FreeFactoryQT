@@ -1,5 +1,5 @@
-FACTORYDESCRIPTION=Convert DJI drone video to 480p maintaining telemetry via captions. Hardware Encoding for NVidia. Change the codec if no Nvidia.
-NOTIFYDIRECTORY=/video/dropbox/1080-MP4-NVENC-264/
+FACTORYDESCRIPTION=Convert DJI drone video to 480p and keeping telemetry. Hardware Encoding for Nvidia. Change the codec if no Nvidia.
+NOTIFYDIRECTORY=/video/dropbox/DJI-LowRes/
 OUTPUTDIRECTORY=/video/
 OUTPUTFILESUFFIX=
 FFMXPROGRAM=ffmpeg
@@ -40,6 +40,7 @@ AUDIOTAG=
 AUDIOCHANNELS=
 AUDIOSTREAMID=
 MANUALOPTIONS=-metadata comment="Created by FreeFactory"
+MANUALOPTIONSINPUT=
 DELETESOURCE=Yes
 DELETECONVERSIONLOGS=No
 ENABLEFACTORY=Yes
