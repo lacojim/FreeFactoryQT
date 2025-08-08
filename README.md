@@ -2,7 +2,7 @@
 
 # FreeFactoryQT
 
-<img width="1097" height="727" alt="image" src="https://github.com/user-attachments/assets/9b74883c-003e-4602-98d9-b483c5313336" />
+<img width="1101" height="729" alt="image" src="https://github.com/user-attachments/assets/3a662538-cee1-4161-8d8e-cdc645e47155" />
 
 
 ### New - 2025-08-07 
