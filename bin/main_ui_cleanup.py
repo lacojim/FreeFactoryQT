@@ -629,11 +629,8 @@ class FreeFactoryApp(QMainWindow):
             f"THREADS={self.Threads.currentText().strip()}",
             f"ASPECT={self.VideoAspect.currentText().strip()}",
             f"VIDEOBITRATE={self.VideoBitrate.currentText().strip()}",
-            
             f"VIDEOPROFILE={self.VideoProfile.currentText().strip()}",
             f"VIDEOPROFILELEVEL={self.VideoProfileLevel.currentText().strip()}",
-            
-            
             f"VIDEOPRESET={self.VideoPreset.currentText().strip()}",
             f"VIDEOSTREAMID={self.VideoStreamID.text().strip()}",
             f"GROUPPICSIZE={self.VideoGroupPicSize.text().strip()}",
@@ -651,13 +648,12 @@ class FreeFactoryApp(QMainWindow):
             f"AUDIOCHANNELS={self.AudioChannels.currentText().strip()}",
             f"AUDIOSTREAMID={self.AudioStreamID.text().strip()}",
             f"MANUALOPTIONS={self.ManualOptions.text().strip()}",
+            f"MANUALOPTIONSINPUT={self.ManualOptionsInput.text().strip()}",
             f"DELETESOURCE={'Yes' if self.DeleteSource.isChecked() else 'No'}",
             f"DELETECONVERSIONLOGS={'Yes' if self.DeleteConversionLogs.isChecked() else 'No'}",
             f"ENABLEFACTORY={'Yes' if self.EnableFactory.isChecked() else 'No'}",
             f"FREEFACTORYACTION={'Encode' if self.ActionEncode.isChecked() else 'Copy'}",
-            # Depreciated for Removal
-            f"ENABLEFACTORYLINKING={'Yes' if self.EnableFactoryLinking.isChecked() else 'No'}",
-            # Depreciated for Removal
+            f"ENABLEFACTORYLINKING={'Yes' if self.EnableFactoryLinking.isChecked() else 'No'}", # Depreciated for Removal
             f"FACTORYLINKS=", # Depreciated for Removal
             f"FACTORYENABLEEMAIL=Yes", # Depreciated for Removal
             f"FACTORYEMAILNAME=", # Depreciated for Removal
@@ -769,7 +765,7 @@ class FreeFactoryApp(QMainWindow):
             #    print(f"[DEBUG] Skipping widget {obj_name} — key '{key}' not in factory data.")                      
 
     def populate_factory_list(self):
-        self.core.reload_factory_files()  # 👈 Now cleaner and centralized
+        self.core.reload_factory_files()  # Now cleaner and centralized
         self.listFactoryFiles.clear()
         for path in sorted(self.core.factory_files, key=lambda p: p.name.lower()):
             self.listFactoryFiles.addItem(path.name)
@@ -854,22 +850,6 @@ class FreeFactoryApp(QMainWindow):
             QMessageBox.information(self, "Backup Complete", message)
         else:
             QMessageBox.critical(self, "Backup Failed", message)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

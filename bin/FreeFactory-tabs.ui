@@ -1012,7 +1012,7 @@ Audio File Extension. You CANNOT use both.</string>
         </property>
         <property name="toolTip">
          <string>Video Bitrate: Adds the flag -b:v to the command line
-You can also manually add extra options after the rate such as minrate 10M minrate 10M.</string>
+You can also manually add extra options after the rate such as minrate 50M maxrate 50M.</string>
         </property>
         <property name="editable">
          <bool>true</bool>
@@ -1446,8 +1446,8 @@ You can also manually add extra options after the rate such as minrate 10M minra
         <widget class="QLineEdit" name="VideoStartTimeOffset">
          <property name="geometry">
           <rect>
-           <x>216</x>
-           <y>29</y>
+           <x>218</x>
+           <y>25</y>
            <width>41</width>
            <height>25</height>
           </rect>
@@ -1475,8 +1475,8 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
         <widget class="QLabel" name="l_VideoStartTimeOffset">
          <property name="geometry">
           <rect>
-           <x>184</x>
-           <y>33</y>
+           <x>186</x>
+           <y>29</y>
            <width>41</width>
            <height>17</height>
           </rect>
@@ -1498,7 +1498,7 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>32</y>
+           <y>28</y>
            <width>51</width>
            <height>17</height>
           </rect>
@@ -1517,7 +1517,7 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
          <property name="geometry">
           <rect>
            <x>270</x>
-           <y>32</y>
+           <y>28</y>
            <width>81</width>
            <height>17</height>
           </rect>
@@ -1536,7 +1536,7 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
          <property name="geometry">
           <rect>
            <x>148</x>
-           <y>29</y>
+           <y>25</y>
            <width>31</width>
            <height>25</height>
           </rect>
@@ -1555,7 +1555,7 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
          <property name="geometry">
           <rect>
            <x>100</x>
-           <y>33</y>
+           <y>29</y>
            <width>51</width>
            <height>17</height>
           </rect>
@@ -1574,7 +1574,7 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
          <property name="geometry">
           <rect>
            <x>59</x>
-           <y>29</y>
+           <y>25</y>
            <width>31</width>
            <height>25</height>
           </rect>
@@ -1592,8 +1592,8 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
         <widget class="QLabel" name="l_VideoForceFormat">
          <property name="geometry">
           <rect>
-           <x>520</x>
-           <y>32</y>
+           <x>514</x>
+           <y>28</y>
            <width>111</width>
            <height>20</height>
           </rect>
@@ -1612,7 +1612,7 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
          <property name="geometry">
           <rect>
            <x>412</x>
-           <y>32</y>
+           <y>28</y>
            <width>62</width>
            <height>17</height>
           </rect>
@@ -1633,8 +1633,8 @@ Value in seconds. Adds the -ss flag to the commandline.</string>
          </property>
          <property name="geometry">
           <rect>
-           <x>632</x>
-           <y>29</y>
+           <x>628</x>
+           <y>25</y>
            <width>121</width>
            <height>25</height>
           </rect>
@@ -1771,7 +1771,7 @@ FFmpeg command string.</string>
          <property name="geometry">
           <rect>
            <x>352</x>
-           <y>29</y>
+           <y>25</y>
            <width>51</width>
            <height>25</height>
           </rect>
@@ -1816,8 +1816,8 @@ Range and Defaults are codec dependent.</string>
         <widget class="QLineEdit" name="VideoStreamID">
          <property name="geometry">
           <rect>
-           <x>470</x>
-           <y>29</y>
+           <x>463</x>
+           <y>25</y>
            <width>41</width>
            <height>25</height>
           </rect>
@@ -2320,8 +2320,8 @@ Adds the flag -c:s to the command line</string>
         <property name="geometry">
          <rect>
           <x>60</x>
-          <y>27</y>
-          <width>131</width>
+          <y>30</y>
+          <width>121</width>
           <height>25</height>
          </rect>
         </property>
@@ -2419,8 +2419,8 @@ If you need a codec not listed, you may type it in here.</string>
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>30</y>
-          <width>62</width>
+          <y>34</y>
+          <width>41</width>
           <height>17</height>
          </rect>
         </property>
@@ -2431,15 +2431,15 @@ If you need a codec not listed, you may type it in here.</string>
          </font>
         </property>
         <property name="text">
-         <string>Codecs</string>
+         <string>Codec</string>
         </property>
        </widget>
        <widget class="QLabel" name="l_Abitrate">
         <property name="geometry">
          <rect>
-          <x>210</x>
+          <x>217</x>
           <y>33</y>
-          <width>62</width>
+          <width>41</width>
           <height>17</height>
          </rect>
         </property>
@@ -2564,9 +2564,9 @@ ie. aac, mp3, ogg, etc</string>
        <widget class="QLabel" name="l_AsampleRate">
         <property name="geometry">
          <rect>
-          <x>390</x>
-          <y>31</y>
-          <width>81</width>
+          <x>190</x>
+          <y>64</y>
+          <width>61</width>
           <height>20</height>
          </rect>
         </property>
@@ -2586,9 +2586,9 @@ ie. aac, mp3, ogg, etc</string>
         </property>
         <property name="geometry">
          <rect>
-          <x>460</x>
-          <y>30</y>
-          <width>91</width>
+          <x>260</x>
+          <y>60</y>
+          <width>111</width>
           <height>25</height>
          </rect>
         </property>
@@ -2703,7 +2703,7 @@ ie. aac, mp3, ogg, etc</string>
          <rect>
           <x>60</x>
           <y>60</y>
-          <width>131</width>
+          <width>121</width>
           <height>25</height>
          </rect>
         </property>
@@ -2788,8 +2788,8 @@ Video Wrapper. You CANNOT use both.</string>
         </property>
         <property name="geometry">
          <rect>
-          <x>460</x>
-          <y>60</y>
+          <x>450</x>
+          <y>30</y>
           <width>91</width>
           <height>25</height>
          </rect>
@@ -2852,8 +2852,8 @@ Video Wrapper. You CANNOT use both.</string>
         <property name="geometry">
          <rect>
           <x>390</x>
-          <y>63</y>
-          <width>71</width>
+          <y>33</y>
+          <width>51</width>
           <height>20</height>
          </rect>
         </property>
@@ -2870,9 +2870,9 @@ Video Wrapper. You CANNOT use both.</string>
        <widget class="QLineEdit" name="AudioStreamID">
         <property name="geometry">
          <rect>
-          <x>650</x>
-          <y>31</y>
-          <width>41</width>
+          <x>450</x>
+          <y>60</y>
+          <width>91</width>
           <height>25</height>
          </rect>
         </property>
@@ -2889,9 +2889,9 @@ Video Wrapper. You CANNOT use both.</string>
        <widget class="QLabel" name="l_AStreamID">
         <property name="geometry">
          <rect>
-          <x>590</x>
-          <y>34</y>
-          <width>62</width>
+          <x>390</x>
+          <y>65</y>
+          <width>51</width>
           <height>17</height>
          </rect>
         </property>
@@ -3100,8 +3100,8 @@ Video Wrapper. You CANNOT use both.</string>
       <property name="geometry">
        <rect>
         <x>240</x>
-        <y>590</y>
-        <width>81</width>
+        <y>588</y>
+        <width>111</width>
         <height>17</height>
        </rect>
       </property>
@@ -3112,7 +3112,7 @@ Video Wrapper. You CANNOT use both.</string>
        </font>
       </property>
       <property name="text">
-       <string>Manual Options</string>
+       <string>Manual Out Options</string>
       </property>
      </widget>
      <widget class="QLabel" name="l_CommandLine">
@@ -3137,14 +3137,14 @@ Video Wrapper. You CANNOT use both.</string>
      <widget class="QLineEdit" name="ManualOptions">
       <property name="geometry">
        <rect>
-        <x>330</x>
-        <y>587</y>
-        <width>561</width>
+        <x>350</x>
+        <y>584</y>
+        <width>541</width>
         <height>25</height>
        </rect>
       </property>
       <property name="toolTip">
-       <string>Insert any additional ffmpeg options
+       <string>Output Options Only: Insert any additional ffmpeg options
 here that are not available via this GUI.
 See the FFmpeg Help tab.</string>
       </property>
@@ -3399,9 +3399,9 @@ or Factory Testing</string>
      <widget class="QLabel" name="label_11">
       <property name="geometry">
        <rect>
-        <x>330</x>
-        <y>570</y>
-        <width>551</width>
+        <x>350</x>
+        <y>532</y>
+        <width>511</width>
         <height>16</height>
        </rect>
       </property>
@@ -3454,6 +3454,43 @@ or Factory Testing</string>
       <property name="icon">
        <iconset>
         <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ManualOptionsInput">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>550</y>
+        <width>541</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Input Options Only: Insert any additional ffmpeg options
+here that are not available via the GUI.
+See the FFmpeg Help tab.</string>
+      </property>
+      <property name="placeholderText">
+       <string>-f lavfi -sample_rate 44100 -f s16le</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="l_ManualOptionsInput">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>554</y>
+        <width>101</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Manual In Options</string>
       </property>
      </widget>
     </widget>
