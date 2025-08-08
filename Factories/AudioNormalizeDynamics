@@ -1,4 +1,4 @@
-FACTORYDESCRIPTION=This will normalize every 10 milliseconds the dynamics of voice recordings (not music). Mostly done with Manual Options
+FACTORYDESCRIPTION=This will normalize every 10 milliseconds the dynamics of voice recordings Not good for music. Great for spoken room audio.
 NOTIFYDIRECTORY=
 OUTPUTDIRECTORY=/video/
 OUTPUTFILESUFFIX=
@@ -40,6 +40,7 @@ AUDIOTAG=
 AUDIOCHANNELS=
 AUDIOSTREAMID=
 MANUALOPTIONS=-filter:a "dynaudnorm=f=10:p=0.9:s=25" -report
+MANUALOPTIONSINPUT=
 DELETESOURCE=Yes
 DELETECONVERSIONLOGS=No
 ENABLEFACTORY=Yes
