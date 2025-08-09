@@ -3112,7 +3112,7 @@ Video Wrapper. You CANNOT use both.</string>
        </font>
       </property>
       <property name="text">
-       <string>Manual Out Options</string>
+       <string>Manual Output Opts</string>
       </property>
      </widget>
      <widget class="QLabel" name="l_CommandLine">
@@ -3146,7 +3146,8 @@ Video Wrapper. You CANNOT use both.</string>
       <property name="toolTip">
        <string>Output Options Only: Insert any additional ffmpeg options
 here that are not available via this GUI.
-See the FFmpeg Help tab.</string>
+See the FFmpeg Help tab.
+ (These flags start after -i (input file) and before -f at the output)</string>
       </property>
       <property name="placeholderText">
        <string>-c:s copy -c:v copy -c:a copy</string>
@@ -3468,7 +3469,7 @@ or Factory Testing</string>
       <property name="toolTip">
        <string>Input Options Only: Insert any additional ffmpeg options
 here that are not available via the GUI.
-See the FFmpeg Help tab.</string>
+(These flags start before the -i (input file)</string>
       </property>
       <property name="placeholderText">
        <string>-f lavfi -sample_rate 44100 -f s16le</string>
@@ -3490,7 +3491,7 @@ See the FFmpeg Help tab.</string>
        </font>
       </property>
       <property name="text">
-       <string>Manual In Options</string>
+       <string>Manual Input Opts</string>
       </property>
      </widget>
     </widget>
@@ -5412,7 +5413,7 @@ Right-click to refresh service mode.</string>
        <property name="geometry">
         <rect>
          <x>190</x>
-         <y>230</y>
+         <y>260</y>
          <width>121</width>
          <height>21</height>
         </rect>
@@ -5653,7 +5654,7 @@ Right-click to refresh service mode.</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>310</y>
+         <y>330</y>
          <width>661</width>
          <height>181</height>
         </rect>
@@ -5693,7 +5694,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
        <property name="geometry">
         <rect>
          <x>140</x>
-         <y>260</y>
+         <y>300</y>
          <width>61</width>
          <height>22</height>
         </rect>
@@ -5715,7 +5716,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>263</y>
+         <y>303</y>
          <width>121</width>
          <height>16</height>
         </rect>
@@ -5804,6 +5805,25 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
        </property>
        <property name="placeholderText">
         <string>Required: ie. noise</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="helpDevicesAll">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>260</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Devices All</string>
        </property>
       </widget>
      </widget>

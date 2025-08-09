@@ -163,6 +163,7 @@ proc ::main {argc argv} {
 						"AUDIOCHANNELS" {set FactoryArray($FactoryCounter,AudioChannels) $FactoryValue}
 						"AUDIOSTREAMID" {set FactoryArray($FactoryCounter,AudioStreamID) $FactoryValue}
 						"MANUALOPTIONS" {set FactoryArray($FactoryCounter,ManualOptions) $FactoryValue}
+						"MANUALOPTIONSINPUT" {set FactoryArray($FactoryCounter,ManualOptionsInput) $FactoryValue}
 						"DELETESOURCE" {set FactoryArray($FactoryCounter,DeleteSource) $FactoryValue}
 						"DELETECONVERSIONLOGS" {set FactoryArray($FactoryCounter,DeleteConversionLogs) $FactoryValue}
 						"ENABLEFACTORY" {set FactoryArray($FactoryCounter,EnableFactory) $FactoryValue}
@@ -624,10 +625,6 @@ proc FFMXOptionsFFMxConversionFTP {} {
 		append FFMx_AVOptions "-b_strategy "
 		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,FrameStrategy) "
 	}
-	if {[string trim $FactoryArray($FactoryCounterUsed,ForceFormat)] != ""} {
-		append FFMx_AVOptions "-f "
-		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,ForceFormat) "
-	}
 	if {[string trim $FactoryArray($FactoryCounterUsed,EncodeLength)] != ""} {
 		append FFMx_AVOptions "-t "
 		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,EncodeLength) "
@@ -666,6 +663,10 @@ proc FFMXOptionsFFMxConversionFTP {} {
 	if {[string trim $FactoryArray($FactoryCounterUsed,ManualOptions)] != ""} {
 		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,ManualOptions) "
 	}
+	if {[string trim $FactoryArray($FactoryCounterUsed,ForceFormat)] != ""} {
+		append FFMx_AVOptions "-f "
+		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,ForceFormat) "
+	}	
 #
 # End Assemble A/V options
 #
@@ -693,9 +694,19 @@ proc FFMXOptionsFFMxConversionFTP {} {
 	set FFMxScript /opt/FreeFactory/bin/FFMxScript-$SourceFileName.sh
 # Determine where to run the FFMx program from.  Either /usr/bin or /opt/FreeFactory/bin.
 	if {$FactoryArray($FactoryCounterUsed,RunFrom) == "usr"} {
-		set FFMxString "$FactoryArray($FactoryCounterUsed,FFMxProgram) -hide_banner -y -i \"$SourcePath$SourceFileName\" $FFMx_AVOptions \"$FactoryArray($FactoryCounterUsed,OutputDirectory)$OutputFileName\" 2>> \"$ConversionLog\""
+		if {[string trim $FactoryArray($FactoryCounterUsed,ManualOptionsInput)] ne ""} {
+		    set inputFlags "$FactoryArray($FactoryCounterUsed,ManualOptionsInput) "
+		} else {
+		    set inputFlags ""
+		}
+		set FFMxString "$FactoryArray($FactoryCounterUsed,FFMxProgram) -hide_banner -y $inputFlags-i \"$SourcePath$SourceFileName\" $FFMx_AVOptions \"$FactoryArray($FactoryCounterUsed,OutputDirectory)$OutputFileName\" 2>> \"$ConversionLog\""
 	} else {
-		set FFMxString "/opt/FreeFactory/bin/$FactoryArray($FactoryCounterUsed,FFMxProgram) -hide_banner -y -i \"$SourcePath$SourceFileName\" $FFMx_AVOptions \"$FactoryArray($FactoryCounterUsed,OutputDirectory)$OutputFileName\" 2>> \"$ConversionLog\""
+		if {[string trim $FactoryArray($FactoryCounterUsed,ManualOptionsInput)] ne ""} {
+		    set inputFlags "$FactoryArray($FactoryCounterUsed,ManualOptionsInput) "
+		} else {
+		    set inputFlags ""
+		}
+		set FFMxString "$FactoryArray($FactoryCounterUsed,FFMxProgram) -hide_banner -y $inputFlags-i \"$SourcePath$SourceFileName\" $FFMx_AVOptions \"$FactoryArray($FactoryCounterUsed,OutputDirectory)$OutputFileName\" 2>> \"$ConversionLog\""
 	}
 # Write FFMx command to log
 	exec echo  "########################################################################################################" >> $ConversionLog

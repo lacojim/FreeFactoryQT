@@ -313,9 +313,9 @@ class FreeFactoryCore:
         #if force_format:
         #    cmd += ["-f", force_format]
 
-#=======Manual options (always last before output.file except for -f on the output side.)
+#=======Manual options
         if manual_input:
-            cmd = ["ffmpeg", "-hide_banner", "-y", str(manual_input), "-i", str(input_path)]
+            cmd = ["ffmpeg", "-hide_banner", "-y", *shlex.split(manual_input), "-i", str(input_path)]
         if manual:
             cmd += shlex.split(manual)
         if force_format:

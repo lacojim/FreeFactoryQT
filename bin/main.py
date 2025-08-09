@@ -310,10 +310,14 @@ class FreeFactoryApp(QMainWindow):
             lambda: self.open_ffmpeg_help_dialog("Pixel Formats", ["-pix_fmts"])
         )
 
+        self.helpDevicesAll.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog("Devices", ["-devices"])
+        )
+
         self.helpAllHelp.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog("Full FFmpeg Help", ["-h", "full"])
         )
-        
+
         # FreeFactory DropZones 
         self.dropZone.filesDropped.connect(self.handle_dropped_files)
         self.queueDropZone.filesDropped.connect(self.handle_dropped_files_to_queue)
