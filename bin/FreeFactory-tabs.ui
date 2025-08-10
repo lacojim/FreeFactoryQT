@@ -4253,9 +4253,9 @@ or Factory Testing</string>
       <widget class="QLineEdit" name="CompanyNameGlobal">
        <property name="geometry">
         <rect>
-         <x>100</x>
+         <x>120</x>
          <y>30</y>
-         <width>371</width>
+         <width>351</width>
          <height>25</height>
         </rect>
        </property>
@@ -4291,7 +4291,7 @@ or Factory Testing</string>
       <widget class="QCheckBox" name="CompanyNameMetadata">
        <property name="geometry">
         <rect>
-         <x>100</x>
+         <x>120</x>
          <y>56</y>
          <width>311</width>
          <height>20</height>
@@ -4320,7 +4320,7 @@ or Factory Testing</string>
         <x>10</x>
         <y>160</y>
         <width>481</width>
-        <height>441</height>
+        <height>311</height>
        </rect>
       </property>
       <property name="font">
@@ -4335,8 +4335,8 @@ or Factory Testing</string>
       <widget class="QLineEdit" name="AppleDelaySecondsGlobal">
        <property name="geometry">
         <rect>
-         <x>77</x>
-         <y>27</y>
+         <x>120</x>
+         <y>110</y>
          <width>41</width>
          <height>25</height>
         </rect>
@@ -4347,15 +4347,21 @@ or Factory Testing</string>
          <bold>false</bold>
         </font>
        </property>
+       <property name="toolTip">
+        <string>Apple Delay (in seconds).</string>
+       </property>
        <property name="text">
         <string/>
+       </property>
+       <property name="placeholderText">
+        <string>30</string>
        </property>
       </widget>
       <widget class="QLabel" name="l_AppleDelay">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>30</y>
+         <y>113</y>
          <width>61</width>
          <height>17</height>
         </rect>
@@ -4373,131 +4379,11 @@ or Factory Testing</string>
         <string>Apple Delay</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="EnableFactoryGlobal">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>60</y>
-         <width>141</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Enable Factory</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="RemoveSourceGlobal">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>80</y>
-         <width>141</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Remove Source</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="RemoveLogsGlobal">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>100</y>
-         <width>131</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Remove Logs</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="FtpRemoveOutputGlobal">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>140</y>
-         <width>231</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Remove output file after FTP</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="EnableEmailGlobal">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>160</y>
-         <width>121</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Enable Email</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="FactoryLinkingGlobal">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>180</y>
-         <width>191</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Enable Factory Linking</string>
-       </property>
-      </widget>
       <widget class="QLineEdit" name="PathtoFFmpegGlobal">
        <property name="geometry">
         <rect>
          <x>90</x>
-         <y>329</y>
+         <y>228</y>
          <width>381</width>
          <height>25</height>
         </rect>
@@ -4516,7 +4402,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>330</y>
+         <y>229</y>
          <width>71</width>
          <height>22</height>
         </rect>
@@ -4535,7 +4421,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>300</y>
+         <y>199</y>
          <width>71</width>
          <height>22</height>
         </rect>
@@ -4554,7 +4440,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>90</x>
-         <y>299</y>
+         <y>198</y>
          <width>381</width>
          <height>25</height>
         </rect>
@@ -4576,7 +4462,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>280</y>
+         <y>179</y>
          <width>101</width>
          <height>16</height>
         </rect>
@@ -4588,9 +4474,9 @@ or Factory Testing</string>
       <widget class="QComboBox" name="DefaultFactoryGlobal">
        <property name="geometry">
         <rect>
-         <x>90</x>
-         <y>236</y>
-         <width>381</width>
+         <x>120</x>
+         <y>140</y>
+         <width>351</width>
          <height>25</height>
         </rect>
        </property>
@@ -4608,7 +4494,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>240</y>
+         <y>144</y>
          <width>91</width>
          <height>16</height>
         </rect>
@@ -4630,7 +4516,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>374</y>
+         <y>273</y>
          <width>81</width>
          <height>17</height>
         </rect>
@@ -4652,7 +4538,7 @@ or Factory Testing</string>
        <property name="geometry">
         <rect>
          <x>90</x>
-         <y>371</y>
+         <y>270</y>
          <width>85</width>
          <height>25</height>
         </rect>
@@ -4679,9 +4565,100 @@ or Factory Testing</string>
        </item>
        <item>
         <property name="text">
-         <string>ffmpeg.exe (supported soon)</string>
+         <string>ffmpeg.exe (not yet supported)</string>
         </property>
        </item>
+      </widget>
+      <widget class="QLabel" name="l_CpuMaxConcurrentJobsGlobal">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>33</y>
+         <width>131</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Older Apple computers need this when copying to a shared SMB Linux folder.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>CPU Max Concurrent Jobs</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="CpuMaxConcurrentJobsGlobal">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>30</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Set this to limit how many CPU jobs the FreeFactory service
+will process in parallel (1 = safest).</string>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="GpuMaxConcurrentJobsGlobal">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>57</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Set this to limit how many GPU jobs the FreeFactory service
+will process in parallel (2-3 = safest).
+This can be higher if using Quadro H/W.</string>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_GpuMaxConcurrentJobsGlobal">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>131</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Older Apple computers need this when copying to a shared SMB Linux folder.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>GPU Max Concurrent Jobs</string>
+       </property>
       </widget>
      </widget>
      <widget class="QPushButton" name="SaveFFConfigGlobal">
@@ -4803,7 +4780,7 @@ or Factory Testing</string>
         <x>530</x>
         <y>220</y>
         <width>541</width>
-        <height>381</height>
+        <height>421</height>
        </rect>
       </property>
       <property name="font">
@@ -4987,6 +4964,44 @@ Right-click to refresh service mode.</string>
        </property>
        <property name="text">
         <string>Unknown</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="notifyRemoteHost">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>380</y>
+         <width>113</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="placeholderText">
+        <string>user@10.1.1.1</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="l_notifyRemoteHost">
+       <property name="geometry">
+        <rect>
+         <x>350</x>
+         <y>382</y>
+         <width>71</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Remote Host</string>
        </property>
       </widget>
      </widget>
@@ -6913,6 +6928,126 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
       </property>
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff5454;&quot;&gt;THIS TAB IS FOR DEVELOPMENT PURPOSES ONLY AND IS A PLACEHOLDER FOR DEPRECATED FEATURES.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="EnableEmailGlobal">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>550</y>
+        <width>121</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Enable Email</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="EnableFactoryGlobal">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>430</y>
+        <width>141</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Enable Factory</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="RemoveLogsGlobal">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>470</y>
+        <width>131</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Remove Logs</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="FtpRemoveOutputGlobal">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>530</y>
+        <width>231</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Remove output file after FTP</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="FactoryLinkingGlobal">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>570</y>
+        <width>191</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Enable Factory Linking</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="RemoveSourceGlobal">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>450</y>
+        <width>141</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Remove Source</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>

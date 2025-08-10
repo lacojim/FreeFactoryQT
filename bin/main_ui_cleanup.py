@@ -158,13 +158,17 @@ class FreeFactoryApp(QMainWindow):
         # Populate DefaultFactoryGlobal combo box with available factories
         factory_dir = self.config.get("FactoryLocation") or "/opt/FreeFactory/Factories"
         factory_paths = sorted(Path(factory_dir).glob("*"))
-        factory_names = [f.stem for f in factory_paths if f.is_file()]
+        factory_names = [f.name for f in factory_paths if f.is_file()] # Changed f.stem to f.name to fix factory files with a dot inside the name.
         self.DefaultFactoryGlobal.clear()
         self.DefaultFactoryGlobal.addItems(factory_names)
         self.DefaultFactoryGlobal.setCurrentText(self.config.get("DefaultFactory", "default"))
 
         # Set Global Settings tab with config values
         self.CompanyNameGlobal.setText(self.config.get("CompanyNameGlobal"))
+#        self.MaxConcurrentJobsGlobal.setText(self.config.get("MaxConcurrentJobs", "1"))
+        self.CpuMaxConcurrentJobsGlobal.setValue(int(self.config.get("MaxConcurrentJobsCPU", "1") or 1))
+        self.GpuMaxConcurrentJobsGlobal.setValue(int(self.config.get("MaxConcurrentJobsGPU", "2") or 2))
+
         self.AppleDelaySecondsGlobal.setText(self.config.get("AppleDelaySeconds"))
         self.PathtoFFmpegGlobal.setText(self.config.get("PathtoFFmpegGlobal"))
         self.PathtoFactoriesGlobal.setText(self.config.get("FactoryLocation"))
@@ -310,10 +314,14 @@ class FreeFactoryApp(QMainWindow):
             lambda: self.open_ffmpeg_help_dialog("Pixel Formats", ["-pix_fmts"])
         )
 
+        self.helpDevicesAll.clicked.connect(
+            lambda: self.open_ffmpeg_help_dialog("Devices", ["-devices"])
+        )
+
         self.helpAllHelp.clicked.connect(
             lambda: self.open_ffmpeg_help_dialog("Full FFmpeg Help", ["-h", "full"])
         )
-        
+
         # FreeFactory DropZones 
         self.dropZone.filesDropped.connect(self.handle_dropped_files)
         self.queueDropZone.filesDropped.connect(self.handle_dropped_files_to_queue)
@@ -861,7 +869,33 @@ class FreeFactoryApp(QMainWindow):
         self.config.set("AppleDelaySeconds", self.AppleDelaySecondsGlobal.text())
         self.config.set("FactoryLocation", self.PathtoFactoriesGlobal.text().strip())
         self.config.set("DefaultFactory", self.DefaultFactoryGlobal.currentText())
-        
+ 
+ 
+ 
+        # CPU/GPU concurrency with safe parsing
+        try:
+            cpu_n = max(1, int(self.CpuMaxConcurrentJobsGlobal.value()))
+        except Exception:
+            cpu_n = 1
+        try:
+            gpu_n = max(1, int(self.GpuMaxConcurrentJobsGlobal.value()))
+        except Exception:
+            gpu_n = 2
+
+        self.config.set("MaxConcurrentJobsCPU", str(cpu_n))
+        self.config.set("MaxConcurrentJobsGPU", str(gpu_n))
+
+        # keep the existing global fallback too
+        raw = (self.MaxConcurrentJobsGlobal.text() or "").strip()
+        try:
+            n = int(raw);  n = 1 if n < 1 else n
+        except Exception:
+            n = 1
+        self.config.set("MaxConcurrentJobs", str(n))
+
+
+
+                
         self.config.save()
         QMessageBox.information(self, "Saved", "Global settings saved to ~/.freefactoryrc")
 
