@@ -13,6 +13,7 @@ class ConfigManager:
             "CompanyNameGlobal": "ACME Broadcasting",
             "FactoryLocation": "/opt/FreeFactory/Factories",
             "DefaultFactory": "",
+            "MaxConcurrentJobs": "1",
             "AppleDelaySeconds": "30",
             "PathtoFFmpegGlobal": "/usr/bin/",
             "SMTPServerGlobal": "",

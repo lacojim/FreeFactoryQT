@@ -213,7 +213,7 @@ class FreeFactoryCore:
     def build_ffmpeg_command(self, input_path, factory_data, preview=False):
         import shlex
         from pathlib import Path
-
+        
         output_dir = factory_data.get("OUTPUTDIRECTORY") or "."
         wrapper = factory_data.get("VIDEOWRAPPER", "").strip().lstrip(".")
         audio_ext = factory_data.get("AUDIOFILEEXTENSION", "").strip().lstrip(".")
@@ -253,7 +253,12 @@ class FreeFactoryCore:
         audio_stream_id = factory_data.get("AUDIOSTREAMID", "").strip()
         
 
-        cmd = ["ffmpeg", "-hide_banner", "-y", "-i", str(input_path)]
+#        cmd = ["ffmpeg", "-hide_banner", "-y", "-i", str(input_path)]
+        # --- Build base, add manual *input* flags BEFORE -i ---
+        cmd = ["ffmpeg", "-hide_banner", "-y"]
+        if manual_input:
+            cmd += shlex.split(manual_input)
+        cmd += ["-i", str(input_path)]
 
 #=======Video encoding
         if video_codec:
@@ -308,14 +313,10 @@ class FreeFactoryCore:
         if start_offset:
             cmd += ["-ss", start_offset]
             print("DEBUG force_format raw value:", repr(force_format))
-        
-        # this has been moved below to be the last flag before the output.file.
-        #if force_format:
-        #    cmd += ["-f", force_format]
 
 #=======Manual options
-        if manual_input:
-            cmd = ["ffmpeg", "-hide_banner", "-y", *shlex.split(manual_input), "-i", str(input_path)]
+#        if manual_input:
+#            cmd = ["ffmpeg", "-hide_banner", "-y", *shlex.split(manual_input), "-i", str(input_path)]
         if manual:
             cmd += shlex.split(manual)
         if force_format:

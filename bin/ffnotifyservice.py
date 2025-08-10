@@ -3,15 +3,31 @@ from pathlib import Path
 from PyQt6.QtWidgets import QMessageBox, QMenu
 from PyQt6.QtCore import Qt
 
+SERVICE_NAME = "freefactory-notify.service"
+
+def _get_remote_host(main_window) -> str:
+    host_widget = getattr(main_window, "notifyRemoteHost", None)
+    if host_widget is None:
+        return ""
+    try:
+        return (host_widget.text() or "").strip()
+    except Exception:
+        return ""
+
 def run_notify_service_command(main_window, action: str):
-    """Run systemctl command for notify service and show output in listNotifyServiceStatus."""
-    cmd = ["systemctl"]
+    """Run systemctl command (locally or via SSH) and show output in listNotifyServiceStatus."""
+    host = _get_remote_host(main_window)
 
-    user_service_exists = Path.home().joinpath(".config/systemd/user/freefactory-notify.service").exists()
-    if user_service_exists:
-        cmd.append("--user")
-
-    cmd += [action, "freefactory-notify.service"]
+    if host:
+        # Remote: do not try to guess --user; rely on remote system configuration.
+        cmd = ["ssh", host, "systemctl", action, SERVICE_NAME]
+    else:
+        # Local: prefer user service if present
+        cmd = ["systemctl"]
+        user_service_exists = Path.home().joinpath(".config/systemd/user/" + SERVICE_NAME).exists()
+        if user_service_exists:
+            cmd.append("--user")
+        cmd += [action, SERVICE_NAME]
 
     try:
         output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, text=True)
@@ -28,19 +44,27 @@ def run_notify_service_command(main_window, action: str):
 
 
 def update_notify_service_mode_display(main_window):
-    """Update label showing whether service is installed in user or system mode."""
-    user_path = Path.home() / ".config/systemd/user/freefactory-notify.service"
-    system_path = Path("/etc/systemd/system/freefactory-notify.service")
+    """Update label showing service mode or remote host indicator."""
+    host = _get_remote_host(main_window)
+    label = main_window.labelNotifyServiceMode
+
+    if host:
+        label.setText(f"Service Mode: 🌐 Remote ({host})")
+        label.setStyleSheet("color: #8a2be2; font-weight: bold;")
+        return
+
+    user_path = Path.home() / ".config/systemd/user" / SERVICE_NAME
+    system_path = Path("/etc/systemd/system/") / SERVICE_NAME
 
     if user_path.exists():
-        main_window.labelNotifyServiceMode.setText("Service Mode: 🧍 User")
-        main_window.labelNotifyServiceMode.setStyleSheet("color: #2e8b57; font-weight: bold;")
+        label.setText("Service Mode: 🧍 User")
+        label.setStyleSheet("color: #2e8b57; font-weight: bold;")
     elif system_path.exists():
-        main_window.labelNotifyServiceMode.setText("Service Mode: 🛡️ Root")
-        main_window.labelNotifyServiceMode.setStyleSheet("color: #1e90ff; font-weight: bold;")
+        label.setText("Service Mode: 🛡️ Root")
+        label.setStyleSheet("color: #1e90ff; font-weight: bold;")
     else:
-        main_window.labelNotifyServiceMode.setText("Service Mode: ⚠️ Not Installed")
-        main_window.labelNotifyServiceMode.setStyleSheet("color: #cc0000; font-weight: bold;")
+        label.setText("Service Mode: ⚠️ Not Installed")
+        label.setStyleSheet("color: #cc0000; font-weight: bold;")
 
 
 def show_notify_service_menu(main_window, position):
