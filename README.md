@@ -49,7 +49,8 @@ Here is an example of a very complex "Manual Options" command:
 ```
 The "Manual Options" would most likely never be used for home or general use, but only an example for a professional broadcast playback system. This may be expanded in the future by adding Manual Options for both Input and Output as we are starting to possibly see a need for this.
 
-![image](https://github.com/user-attachments/assets/67483fc7-79f5-4d83-a304-c558422ec186)
+<img width="1102" height="730" alt="image" src="https://github.com/user-attachments/assets/63606932-cf27-4531-b0ec-c91bdccf6219" />
+
 
 
 ![image](https://github.com/user-attachments/assets/890e97ae-b5d3-4050-93a2-8c4c16d7d3dd)
