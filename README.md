@@ -47,7 +47,7 @@ Here is an example of a very complex "Manual Output Options" command:
 ```
 -c:v mpeg2video -pix_fmt yuv422p -aspect 16:9 -intra_vlc 1 -b:v 50000000 -minrate 50000000 -maxrate 50000000 -bufsize 17825792 -rc_init_occupancy 17825792 -bf 2 -non_linear_quant 1 -color_primaries bt709 -color_trc bt709 -colorspace bt709 -seq_disp_ext 1 -video_format component -color_range 1 -chroma_sample_location topleft -signal_standard 4 -dc 8 -qmin 5 -qmax 23 -g 12 -field_order tt -top 1 -flags +ildct+ilme -alternate_scan 1 -c:a pcm_s24le -ar:a 48000
 ```
-The "Manual Options" would most likely never be used for home or general use, but only an example for a professional broadcast playback system. This has recently been expanded by adding Manual Input Options. This allows both multiple -f and -i commands to be entered into this field. The Live Stream Manager tab will also work much better with this addition in the near future.
+The "Manual Options" would most likely never be used for home or general use, but only an example for a professional broadcast playback system. This has recently been expanded by adding Manual Input Options. This allows both multiple -f and -i commands to be entered into this field. The Live Stream Manager tab will also work much better and be less confusing with this addition. To be corrected soon.
 
 <img width="1102" height="731" alt="image" src="https://github.com/user-attachments/assets/f90a6c36-4993-47cb-8694-8bf5193b2343" />
 
