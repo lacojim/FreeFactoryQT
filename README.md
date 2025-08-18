@@ -184,5 +184,3 @@ FreeFactoryQT will eventually support integration with external tools like:
 - [sox-dsd](https://github.com/peterekepeter/sox-dsd) for DSD audio processing
 
 ---
-
-📢 *Created with care by a longtime broadcast engineer. Peace and long encodes, Number One.*
