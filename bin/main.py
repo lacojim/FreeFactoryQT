@@ -42,7 +42,7 @@ from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QListWidgetItem, QMessageBox,
     QTableWidgetItem, QDialog, QVBoxLayout, QPlainTextEdit,
     QPushButton, QFileDialog, QHeaderView, QLabel, QComboBox,
-    QLineEdit, QMenu
+    QLineEdit, QMenu, QCheckBox
 )
 from PyQt6.uic import loadUi
 
@@ -64,7 +64,7 @@ from ffnotifyservice import (
 from importexport import ExportFactoryDialog, export_factory_logic, backup_factories_zip
 #from importexport import backup_factories_zip
 
-
+STATUS_COL = 5
 
 
 # ============================
@@ -195,6 +195,8 @@ class FreeFactoryApp(QMainWindow):
         self.toolButton_outputDir.clicked.connect(self.select_output_directory)
         self.PreviewCommand.clicked.connect(self.on_generate_command)
         
+        
+        
         # FreeFactory Factory Management Buttons
         self.SaveFactory.clicked.connect(self.save_current_factory)
         self.DeleteFactory.clicked.connect(self.delete_current_factory)
@@ -219,7 +221,7 @@ class FreeFactoryApp(QMainWindow):
         # Streaming Buttons
         self.StartAllStreams.clicked.connect(self.start_all_streams)
         self.StopAllStreams.clicked.connect(self.stop_all_streams)
-        self.StartStream.clicked.connect(self.start_all_streams)
+        self.StartStream.clicked.connect(self.start_selected_stream)
         self.StopStream.clicked.connect(self.stop_selected_stream)
         self.AddNewStream.clicked.connect(self.add_stream_to_table)
         self.RemoveStream.clicked.connect(self.remove_selected_stream)
@@ -230,7 +232,7 @@ class FreeFactoryApp(QMainWindow):
         
         self.streamTable.setColumnWidth(0, 250)  # Input file
         self.streamTable.setColumnWidth(1, 250)  # Output file
-        self.streamTable.setColumnWidth(2, 200)  # Status column
+        self.streamTable.setColumnWidth(2, 200)  # Input Audio column
         self.streamTable.setColumnWidth(3, 100)
         self.streamTable.setColumnWidth(4, 100)
         self.streamTable.horizontalHeader().setStretchLastSection(True)
@@ -506,25 +508,115 @@ class FreeFactoryApp(QMainWindow):
                 continue
 
             start_single_stream(self, stream_data=stream_data)
+            
+    def start_selected_stream(self):
+        row = self.streamTable.currentRow()
+        if row < 0:
+            QMessageBox.warning(self, "No Selection", "Please select a stream row.")
+            return
+        self.start_stream_for_row(row)
+
+
+
+
+    def start_stream_for_row(self, row: int):
+        # Status → Starting...
+        self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Starting..."))
+
+        item0 = self.streamTable.item(row, 0)
+        stream_data = item0.data(Qt.ItemDataRole.UserRole) if item0 else None
+        if not stream_data:
+            self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Error: No data"))
+            return
+
+        # Mirror row → UI if your builder reads from UI fields (optional but harmless)
+        if hasattr(self, "streamFactorySelect"):
+            self.streamFactorySelect.setCurrentText(stream_data.get("factory_name", ""))
+        if hasattr(self, "streamRTMPUrl"):
+            self.streamRTMPUrl.setText(stream_data.get("rtmp_url", ""))
+        if hasattr(self, "streamKey"):
+            self.streamKey.setText(stream_data.get("stream_key", ""))
+
+        # Build & launch
+        cmd = build_streaming_command(self.config, self.core, self)
+        if not cmd:
+            self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Error: Bad command"))
+            return
+
+        full_output_url = cmd[-1]
+        worker = StreamWorker(cmd, full_output_url)
+        worker.output.connect(self.streamLogOutput.appendPlainText)
+        worker.finished.connect(lambda: self._on_stream_finished(row, full_output_url, False))
+        worker.error.connect(lambda m: self._on_stream_error(row, full_output_url, m))
+
+        if not hasattr(self, "active_streams"):
+            self.active_streams = {}
+        self.active_streams[full_output_url] = worker
+
+        worker.start()
+        self.streamLogOutput.appendPlainText(f"🟢 Started stream: {full_output_url}")
+
+    def _on_stream_finished(self, row: int, url: str, had_error: bool):
+        # Cleanup worker dict
+        if hasattr(self, "active_streams") and url in self.active_streams:
+            del self.active_streams[url]
+        # Update status and re-enable Start if a row is selected
+        self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Error" if had_error else "Stopped"))
+        self.StartStream.setEnabled(self.streamTable.currentRow() >= 0)
+
+
+
+    def _maybe_mark_live(self, row: int, line: str):
+        if "frame=" in line or "bitrate=" in line or "Connected" in line:
+            # Only flip if still in Starting…
+            item = self.streamTable.item(row, STATUS_COL)
+            if item and item.text().startswith("Starting"):
+                self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Live"))
+
+
+    def _on_stream_finished(self, row: int, url: str, had_error: bool):
+        # Drop the worker reference keyed by FULL destination URL
+        if hasattr(self, "active_streams") and url in self.active_streams:
+            del self.active_streams[url]
+
+        # Update table status
+        self.streamTable.setItem(row, STATUS_COL,
+                                QTableWidgetItem("Error" if had_error else "Stopped"))
+
+        # Re-enable Start if a row is selected
+        self.StartStream.setEnabled(self.streamTable.currentRow() >= 0)
+
+
+    def _on_stream_error(self, row: int, url: str, msg: str):
+        # Log the error and funnel to the same finisher with had_error=True
+        self.streamLogOutput.appendPlainText(f"🔴 {msg}")
+        self._on_stream_finished(row, url, had_error=True)
+
+
+
 
     def stop_all_streams(self):
         stop_all_streams(self)
 
     def stop_selected_stream(self):
-        selected_row = self.streamTable.currentRow()
-        if selected_row < 0:
-            QMessageBox.warning(self, "No Selection", "Please select a stream to stop.")
+        row = self.streamTable.currentRow()
+        if row < 0:
             return
 
-        item = self.streamTable.item(selected_row, 0)
-        if not item:
+        # Build full URL key just like start did
+        base = self.streamRTMPUrl.text().strip()
+        key  = self.streamKey.text().strip()
+        url  = f"{base.rstrip('/')}/{key}" if key else base
+
+        worker = self.active_streams.get(url) if hasattr(self, "active_streams") else None
+        if not worker:
+            self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Stopped"))
+            self.StartStream.setEnabled(self.streamTable.currentRow() >= 0)
             return
 
-        stream_data = item.data(Qt.ItemDataRole.UserRole)
-        if not stream_data:
-            return
+        worker.stop()
+        # _on_stream_finished will run via worker.finished / worker.error
 
-        stop_single_stream(self, stream_data=stream_data)
  
     def remove_selected_stream(self):
         selected_row = self.streamTable.currentRow()
@@ -547,48 +639,51 @@ class FreeFactoryApp(QMainWindow):
         self.streamTable.removeRow(selected_row)
 
     def add_stream_to_table(self):
-        row_position = self.streamTable.rowCount()
-        self.streamTable.insertRow(row_position)
+        row = self.streamTable.rowCount()
+        self.streamTable.insertRow(row)
 
-        factory_name = self.streamFactorySelect.currentText()
-        rtmp_url = self.streamRTMPUrl.text().strip()
-        stream_key = self.streamKey.text().strip()
-        input_video = self.streamInputVideo.text().strip()
-        input_audio = self.streamInputAudio.text().strip()
-        format_video = self.ForceFormatInputVideo.currentText().strip()
-        format_audio = self.ForceFormatInputAudio.currentText().strip()
+        # Gather current UI values
+        factory_name = self.streamFactorySelect.currentText().strip() if hasattr(self, "streamFactorySelect") else ""
+        v_in   = self.streamInputVideo.text().strip()   if hasattr(self, "streamInputVideo") else ""
+        a_in   = self.streamInputAudio.text().strip()   if hasattr(self, "streamInputAudio") else ""
+        base   = self.streamRTMPUrl.text().strip()      if hasattr(self, "streamRTMPUrl")   else ""
+        key    = self.streamKey.text().strip()          if hasattr(self, "streamKey")       else ""
+        mux    = ""  # optional: summary; leave blank or fill from factory if you like
 
-        full_rtmp = f"{rtmp_url.rstrip('/')}/{stream_key}" if rtmp_url and stream_key else rtmp_url
+        # Build the full destination URL (with auth if streamAuthMode == 'url')
+        full_url = base.rstrip("/")
+        if key:
+            full_url = f"{full_url}/{key}"
 
+        if hasattr(self, "streamAuthMode") and self.streamAuthMode.currentText().strip() == "url":
+            user = self.streamUsername.text().strip() if hasattr(self, "streamUsername") else ""
+            pwd  = self.streamPassword.text().strip() if hasattr(self, "streamPassword") else ""
+            if user and pwd and "@" not in full_url.split("://", 1)[-1]:
+                scheme, rest = full_url.split("://", 1) if "://" in full_url else ("rtmp", full_url)
+                full_url = f"{scheme}://{user}:{pwd}@{rest}"
+
+        # Fill visible columns
+        self.streamTable.setItem(row, 0, QTableWidgetItem(factory_name or "<factory>"))
+        self.streamTable.setItem(row, 1, QTableWidgetItem(v_in))
+        self.streamTable.setItem(row, 2, QTableWidgetItem(a_in))
+        self.streamTable.setItem(row, 3, QTableWidgetItem(base))     # base URL (no key), useful to read back
+        self.streamTable.setItem(row, 4, QTableWidgetItem(mux))      # summary (optional)
+        self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Idle"))
+
+        # Stash per-row metadata (this is what Start will read)
         stream_data = {
             "factory_name": factory_name,
-            "rtmp_url": rtmp_url,
-            "stream_key": stream_key,
-            "input_video": input_video,
-            "input_audio": input_audio,
-            "format_video": format_video,
-            "format_audio": format_audio
+            "video_input": v_in,
+            "audio_input": a_in,
+            "rtmp_url": base,           # base without key
+            "stream_key": key,
+            "output_url": full_url,     # full destination (with key/auth if any)
         }
+        item0 = self.streamTable.item(row, 0)
+        item0.setData(Qt.ItemDataRole.UserRole, stream_data)
 
-        # Column 0: Factory Name
-        item = QTableWidgetItem(factory_name)
-        item.setData(Qt.ItemDataRole.UserRole, stream_data)
-        self.streamTable.setItem(row_position, 0, item)
-
-        # Column 1: Input Video
-        self.streamTable.setItem(row_position, 1, QTableWidgetItem(input_video))
-
-        # Column 2: Input Audio
-        self.streamTable.setItem(row_position, 2, QTableWidgetItem(input_audio))
-
-        # Column 3: RTMP URL
-        self.streamTable.setItem(row_position, 3, QTableWidgetItem(full_rtmp))
-
-        # Column 4: Format Summary
-        format_summary = f"{format_video or 'default'} / {format_audio or 'default'}"
-        self.streamTable.setItem(row_position, 4, QTableWidgetItem(format_summary))
-
-        self.streamLogOutput.appendPlainText(f"➕ Added stream: {factory_name}")
+        # Select the new row so Start is enabled
+        self.streamTable.setCurrentCell(row, 0)
 
     def handle_stream_stopped(self, message):
         self.streamLogOutput.appendPlainText(f"🔴 Stream ended: {message}")
@@ -617,22 +712,23 @@ class FreeFactoryApp(QMainWindow):
             f"FACTORYDESCRIPTION={self.FactoryDescription.text().strip()}",
             f"NOTIFYDIRECTORY={notify_dir}",
             f"OUTPUTDIRECTORY={output_dir}",
-            "OUTPUTFILESUFFIX=",  # <— hardcoded empty line since this was removed from UI
-            f"FFMXPROGRAM=ffmpeg", # Depreciated for Removal
-            f"RUNFROM=usr", # Depreciated for Removal
-            f"FTPPROGRAM=", # Depreciated for Removal
-            f"FTPURL=", # Depreciated for Removal
-            f"FTPUSERNAME=", # Depreciated for Removal
-            f"FTPPASSWORD=", # Depreciated for Removal
-            f"FTPREMOTEPATH=", # Depreciated for Removal
-            f"FTPTRANSFERTYPE=bin", # Depreciated for Removal
-            f"FTPDELETEAFTER=Yes", # Depreciated for Removal
+            "OUTPUTFILESUFFIX=",                                            # <— hardcoded empty line since this was removed from UI
+            f"FFMXPROGRAM=ffmpeg",                                          # Depreciated for Removal
+            f"RUNFROM=usr",                                                 # Depreciated for Removal
+            f"FTPPROGRAM=",                                                 # Depreciated for Removal
+            f"FTPURL=",                                                     # Depreciated for Removal
+            f"FTPUSERNAME=",                                                # Depreciated for Removal
+            f"FTPPASSWORD=",                                                # Depreciated for Removal
+            f"FTPREMOTEPATH=",                                              # Depreciated for Removal
+            f"FTPTRANSFERTYPE=bin",                                         # Depreciated for Removal
+            f"FTPDELETEAFTER=Yes",                                          # Depreciated for Removal
             f"VIDEOCODECS={self.VideoCodec.currentText().strip()}",
             f"VIDEOWRAPPER={self.VideoWrapper.currentText().strip()}",
             f"VIDEOFRAMERATE={self.VideoFrameRate.currentText().strip()}",
             f"VIDEOSIZE={self.VideoSize.currentText().strip()}",
             f"VIDEOTARGET={self.VideoTarget.currentText().strip()}",
             f"VIDEOTAGS={self.VideoTags.currentText().strip()}",
+            f"VIDEOFILTERS={self.videoFiltersCombo.currentText().strip()}",
             f"VIDEOPIXFORMAT={self.VideoPixFormat.currentText().strip()}",
             f"THREADS={self.Threads.currentText().strip()}",
             f"ASPECT={self.VideoAspect.currentText().strip()}",
@@ -653,6 +749,7 @@ class FreeFactoryApp(QMainWindow):
             f"AUDIOSAMPLERATE={self.AudioSampleRate.currentText().strip()}",
             f"AUDIOFILEEXTENSION={self.AudioExtension.currentText().strip()}",
             f"AUDIOTAG={self.AudioTag.text().strip() if hasattr(self, 'AudioTag') else ''}",
+            f"AUDIOFILTERS={self.audioFiltersCombo.currentText().strip()}",
             f"AUDIOCHANNELS={self.AudioChannels.currentText().strip()}",
             f"AUDIOSTREAMID={self.AudioStreamID.text().strip()}",
             f"MANUALOPTIONS={self.ManualOptions.text().strip()}",
@@ -661,12 +758,12 @@ class FreeFactoryApp(QMainWindow):
             f"DELETECONVERSIONLOGS={'Yes' if self.DeleteConversionLogs.isChecked() else 'No'}",
             f"ENABLEFACTORY={'Yes' if self.EnableFactory.isChecked() else 'No'}",
             f"FREEFACTORYACTION={'Encode' if self.ActionEncode.isChecked() else 'Copy'}",
-            f"ENABLEFACTORYLINKING={'Yes' if self.EnableFactoryLinking.isChecked() else 'No'}", # Depreciated for Removal
-            f"FACTORYLINKS=", # Depreciated for Removal
-            f"FACTORYENABLEEMAIL=Yes", # Depreciated for Removal
-            f"FACTORYEMAILNAME=", # Depreciated for Removal
-            f"FACTORYEMAILADDRESS=", # Depreciated for Removal
-            f"FACTORYEMAILMESSAGESTART=", # Depreciated for Removal
+            f"ENABLEFACTORYLINKING={'Yes' if self.EnableFactoryLinking.isChecked() else 'No'}",   # Depreciated for Removal
+            f"FACTORYLINKS=",                                                                       # Depreciated for Removal
+            f"FACTORYENABLEEMAIL=Yes",                                                          # Depreciated for Removal
+            f"FACTORYEMAILNAME=",                                                             # Depreciated for Removal
+            f"FACTORYEMAILADDRESS=",                                                             # Depreciated for Removal
+            f"FACTORYEMAILMESSAGESTART=",                                                           # Depreciated for Removal
             f"FACTORYEMAILMESSAGEEND=",
             
 #===========streaming widgets             
@@ -675,13 +772,17 @@ class FreeFactoryApp(QMainWindow):
             f"STREAMINPUTVIDEO={self.streamInputVideo.text().strip()}",
             f"STREAMINPUTAUDIO={self.streamInputAudio.text().strip()}",
             f"STREAMRTMPURL={self.streamRTMPUrl.text().strip()}",
-            f"STREAMKEY={self.streamKey.text().strip()}"
+            f"STREAMKEY={self.streamKey.text().strip()}",
+            f"STREAMINGFACTORYNAME={self.StreamingFactoryName.text().strip()}",
+            f"INCLUDETQS={'True' if self.checkIncludeTQS.isChecked() else 'False'}",
+            f"TQSSIZE={self.tqsSizeCombo.currentText().strip()}",
+            f"LOWLATENCYINPUT={'True' if self.checkLowLatencyInput.isChecked() else 'False'}",
+            f"AUTOMAPAV={'True' if self.checkMapAVInputs.isChecked() else 'False'}"
+
         ]
 
         filepath.write_text("\n".join(lines) + "\n")
-        
-        
-        
+
         #print(f"Saved to: {filepath}")
         #print("Calling populate_factory_list()...")
         #print("populate_factory_list() called")
@@ -709,6 +810,7 @@ class FreeFactoryApp(QMainWindow):
             field.clear()
         self.factory_dirty = True
 
+
     def load_selected_factory(self, item):
         factory_name = item.text()
         factory_path = Path(self.config.get("FactoryLocation")) / factory_name
@@ -719,58 +821,114 @@ class FreeFactoryApp(QMainWindow):
             return
 
         self.FactoryFilename.setText(factory_name)
-        for field in self.findChildren(QLineEdit):
-            key = field.objectName().upper()
-            if key in factory_data:
-                field.setText(factory_data[key])
+        # for field in self.findChildren(QLineEdit):
+        #     key = field.objectName().upper()
+        #     if key in factory_data:
+        #         field.setText(factory_data[key])
         self.factory_dirty = False
- 
+  
         combo_key_map = {
-            "FFMxProgram": "FFMXPROGRAM",
-            "VideoCodec": "VIDEOCODECS",
-            "VideoWrapper": "VIDEOWRAPPER",
-            "VideoFrameRate": "VIDEOFRAMERATE",
-            "VideoSize": "VIDEOSIZE",
-            "VideoBitrate": "VIDEOBITRATE",
-            "VideoProfile": "VIDEOPROFILE",
-            "VideoProfileLevel": "VIDEOPROFILELEVEL",
-            "VideoAspect": "ASPECT",
-            "VideoTarget": "VIDEOTARGET",
-            "VideoTags": "VIDEOTAGS",
-            "VideoPixFormat": "VIDEOPIXFORMAT",
-            "SubtitleCodecs": "SUBTITLECODECS",
-            "AudioCodec": "AUDIOCODECS",
-            "AudioBitrate": "AUDIOBITRATE",
-            "AudioSampleRate": "AUDIOSAMPLERATE",
-            "AudioExtension": "AUDIOFILEEXTENSION",
-            "AudioChannels": "AUDIOCHANNELS",
-            "FTPProgram": "FTPPROGRAM",
-            "Threads": "THREADS",
-            "VideoPreset": "VIDEOPRESET",
-            "ForceFormatInputVideo": "FORCEFORMATINPUTVIDEO",
-            "ForceFormatInputAudio": "FORCEFORMATINPUTAUDIO",
-            "VideoGroupPicSize": "GROUPPICSIZE",
-            "VideoStartTimeOffset": "STARTTIMEOFFSET",
-            "AudioTags": "AUDIOTAG",
-            "VideoBFrames": "BFRAMES"
+            # QLineEdit
+            "FactoryDescription":       "FACTORYDESCRIPTION",
+            "NotifyDirectory":          "NOTIFYDIRECTORY",
+            "OutputDirectory":          "OUTPUTDIRECTORY",
+
+            # Video (QComboBox unless noted)
+            "VideoCodec":               "VIDEOCODECS",
+            "VideoWrapper":             "VIDEOWRAPPER",
+            "VideoFrameRate":           "VIDEOFRAMERATE",     # <-- was VideoFramerate
+            "VideoSize":                "VIDEOSIZE",
+            "VideoTarget":              "VIDEOTARGET",
+            "videoFiltersCombo":        "VIDEOFILTERS",       # <-- actual widget id
+            "VideoPixFormat":           "VIDEOPIXFORMAT",
+            "Threads":                  "THREADS",            # exists on DepPage
+            "VideoAspect":              "ASPECT",
+            "VideoBitrate":             "VIDEOBITRATE",
+            "VideoProfile":             "VIDEOPROFILE",
+            "VideoProfileLevel":        "VIDEOPROFILELEVEL",
+            "VideoPreset":              "VIDEOPRESET",
+            "VideoStreamID":            "VIDEOSTREAMID",      # QLineEdit
+            "VideoGroupPicSize":        "GROUPPICSIZE",       # QLineEdit
+            "VideoBFrames":             "BFRAMES",            # QLineEdit
+            "FrameStrategy":            "FRAMESTRATEGY",
+            "ForceFormat":              "FORCEFORMAT",
+            "EncodeLength":             "ENCODELENGTH",       # QLineEdit
+            "VideoStartTimeOffset":     "STARTTIMEOFFSET",    # QLineEdit
+
+            # Subtitles
+            "SubtitleCodecs":           "SUBTITLECODECS",
+
+            # Audio
+            "AudioCodec":               "AUDIOCODECS",
+            "AudioBitrate":             "AUDIOBITRATE",
+            "AudioSampleRate":          "AUDIOSAMPLERATE",    # <-- was AudioSamplerate
+            "AudioExtension":           "AUDIOFILEEXTENSION", # <-- was AudioFileExtension
+            "audioFiltersCombo":        "AUDIOFILTERS",       # <-- actual widget id
+            "AudioChannels":            "AUDIOCHANNELS",
+            "AudioStreamID":            "AUDIOSTREAMID",      # QLineEdit
+            "AudioTag":                 "AUDIOTAG",           # on DepPage, QLineEdit
+
+            # Manual options (QLineEdit)
+            "ManualOptions":            "MANUALOPTIONS",
+            "ManualOptionsInput":       "MANUALOPTIONSINPUT",
+
+            # Streaming
+            "ForceFormatInputVideo":    "FORCEFORMATINPUTVIDEO",
+            "ForceFormatInputAudio":    "FORCEFORMATINPUTAUDIO",
+            "streamInputVideo":         "STREAMINPUTVIDEO",   # QLineEdit
+            "streamInputAudio":         "STREAMINPUTAUDIO",   # QLineEdit (fix missing quote typo)
+            "streamRTMPUrl":            "STREAMRTMPURL",      # QLineEdit
+            "streamKey":                "STREAMKEY",          # QLineEdit
+            "StreamingFactoryName":     "STREAMINGFACTORYNAME",
+
+            # TQS / low latency (combos/checkboxes exist; booleans handled separately)
+            "tqsSizeCombo":             "TQSSIZE",
+            # checkIncludeTQS → INCLUDETQS      (bool Yes/No or True/False)
+            # checkLowLatencyInput → LOWLATENCYINPUT
+            # checkMapAVInputs → AUTOMAPAV
+
+            # Deprecated we still serialize as blanks (don’t map to UI):
+            # OUTPUTFILESUFFIX, FFMXPROGRAM, RUNFROM, FTP*, FACTORYLINKS, FACTORYEMAIL*
         }
 
-        for widget in self.findChildren((QLineEdit, QComboBox)):
-            obj_name = widget.objectName()
-            key = combo_key_map.get(obj_name, obj_name.upper())
-            if key in factory_data:
-                value = factory_data[key]
-                #print(f"[DEBUG] Setting widget {obj_name} ({key}) to {value}")
-                if isinstance(widget, QLineEdit):
-                    widget.setText(value)
-                elif isinstance(widget, QComboBox):
-                    index = widget.findText(value)
-                    if index >= 0:
-                        widget.setCurrentIndex(index)
-                    else:
-                        widget.setEditText(value)
-            #else:
-            #    print(f"[DEBUG] Skipping widget {obj_name} — key '{key}' not in factory data.")                      
+
+
+        DEFAULTS = {
+            "STREAMINGFACTORYNAME": "",
+            "INCLUDETQS":           "True",   # Designer default = checked
+            "TQSSIZE":              "512",    # Designer default
+            "LOWLATENCYINPUT":      "False",
+            "AUTOMAPAV":            "False",
+        }
+
+        for w in self.findChildren((QLineEdit, QComboBox, QCheckBox)):
+            key = combo_key_map.get(w.objectName())
+            if not key:
+                continue
+            raw = (factory_data.get(key, DEFAULTS.get(key, "")) or "")
+
+            if isinstance(w, QLineEdit):
+                w.setText(raw)
+
+            elif isinstance(w, QComboBox):
+                val = (raw or "").strip()
+                if val == "":
+                    if w.isEditable():
+                        w.setEditText("")
+                        w.setCurrentIndex(-1)
+                    elif w.count() > 0:
+                        w.setCurrentIndex(0)
+                    continue
+                idx = w.findText(val)
+                if idx < 0:
+                    w.addItem(val)
+                    idx = w.findText(val)
+                w.setCurrentIndex(idx)
+
+            elif isinstance(w, QCheckBox):
+                s = str(raw).strip().lower()
+                w.setChecked(s in ("true", "1", "yes", "on"))
+
 
     def populate_factory_list(self):
         self.core.reload_factory_files()  # Now cleaner and centralized

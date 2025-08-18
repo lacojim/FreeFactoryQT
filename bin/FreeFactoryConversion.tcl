@@ -39,6 +39,13 @@ exec tclsh "$0" "$@"
 # VideoProfile -profile:v
 # VideoProfileLevel -level:v
 
+# 2025-08-09
+# Added MANUALOPTIONSINPUT
+# Added check for NVENC availibility
+
+# 2025-08-15
+# Added VIDEOFILTERS (-vf) and AUDIOFILTERS (-af)
+
 proc ::main {argc argv} {
 # Get notify variables passed from inotify passed from FreeFactoryNotify.sh
 	set PassedVariables $argv
@@ -144,6 +151,7 @@ proc ::main {argc argv} {
 						"VIDEOSIZE" {set FactoryArray($FactoryCounter,VideoSize) $FactoryValue}
 						"VIDEOTARGET" {set FactoryArray($FactoryCounter,VideoTarget) $FactoryValue}
 						"VIDEOTAGS" {set FactoryArray($FactoryCounter,VideoTags) $FactoryValue}
+						"VIDEOFILTERS" {set FactoryArray($FactoryCounter,VideoFilters) $FactoryValue}
 						"THREADS" {set FactoryArray($FactoryCounter,Threads) $FactoryValue}
 						"ASPECT" {set FactoryArray($FactoryCounter,Aspect) $FactoryValue}
 						"VIDEOBITRATE" {set FactoryArray($FactoryCounter,VideoBitRate) $FactoryValue}
@@ -160,6 +168,7 @@ proc ::main {argc argv} {
 						"AUDIOSAMPLERATE" {set FactoryArray($FactoryCounter,AudioSampleRate) $FactoryValue}
 						"AUDIOFILEEXTENSION" {set FactoryArray($FactoryCounter,AudioFileExtension) $FactoryValue}
 						"AUDIOTAG" {set FactoryArray($FactoryCounter,AudioTag) $FactoryValue}
+						"AUDIOFILTERS" {set FactoryArray($FactoryCounter,AudioFilters) $FactoryValue}
 						"AUDIOCHANNELS" {set FactoryArray($FactoryCounter,AudioChannels) $FactoryValue}
 						"AUDIOSTREAMID" {set FactoryArray($FactoryCounter,AudioStreamID) $FactoryValue}
 						"MANUALOPTIONS" {set FactoryArray($FactoryCounter,ManualOptions) $FactoryValue}
@@ -593,6 +602,9 @@ proc FFMXOptionsFFMxConversionFTP {} {
 		append FFMx_AVOptions "-vtag "
 		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,VideoTags) "
 	}
+	if {[string trim $FactoryArray($FactoryCounterUsed,VideoFilters)] != ""} {
+		append FFMx_AVOptions "-vf "
+		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,VideoFilters) "
 	if {[string trim $FactoryArray($FactoryCounterUsed,Threads)] != ""} {
 		append FFMx_AVOptions "-threads "
 		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,Threads) "
@@ -651,6 +663,10 @@ proc FFMXOptionsFFMxConversionFTP {} {
 	if {[string trim $FactoryArray($FactoryCounterUsed,AudioTag)] != ""} {
 		append FFMx_AVOptions "-atag "
 		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,AudioTag) "
+	}
+	if {[string trim $FactoryArray($FactoryCounterUsed,AudioFilters)] != ""} {
+		append FFMx_AVOptions "-af "
+		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,AudioFilters) "
 	}
 	if {[string trim $FactoryArray($FactoryCounterUsed,AudioChannels)] != ""} {
 		append FFMx_AVOptions "-ac "
@@ -735,7 +751,50 @@ proc FFMXOptionsFFMxConversionFTP {} {
 	exec echo "============ Executing script FFMxScript-$SourceFileName.sh" >> $ConversionLog
 ########################################################################################
 # Execute the FFMx conversion program.
-	exec $FFMxScript 2>> $ConversionLog
+#	exec $FFMxScript 2>> $ConversionLog
+
+
+# Replace the old exec line with this block
+	set status [catch {exec $FFMxScript} result]
+	if {$status} {
+	    # Look in the log, since ffmpeg's stderr was redirected there
+	    set tailout ""
+	    catch { set tailout [exec tail -n 200 $ConversionLog] }
+
+	    set nvencFail [expr {
+		[string match "*CUDA_ERROR_NOT_INITIALIZED*" $tailout] ||
+		[string match "*h264_nvenc*@*Error while opening encoder*" $tailout]
+	    }]
+
+	    if {$nvencFail} {
+		exec echo ">>> NVENC init failed, retrying in 5s..." >> $ConversionLog
+		after 5000
+		set status2 [catch {exec $FFMxScript} result2]
+		if {$status2} {
+		    exec echo ">>> Second try failed; switching to libx264." >> $ConversionLog
+		    # swap encoder in the generated script and re-run
+		    set fh [open $FFMxScript r]; set txt [read $fh]; close $fh
+		    set txt [string map {
+			"-c:v h264_nvenc" "-c:v libx264"
+			"-c:v hevc_nvenc" "-c:v libx265"
+		    } $txt]
+		    set fh [open $FFMxScript w]; puts $fh $txt; close $fh
+		    catch {exec $FFMxScript} _
+		}
+		return
+	    }
+
+	    # Not an NVENC init issue; bubble up the original error
+	    error $result
+	}
+
+
+
+
+
+
+
+
 # End execution section  Factory Linking
 ########################################################################################
 # Get system time for logs
