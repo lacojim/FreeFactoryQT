@@ -179,7 +179,7 @@ python3 migrate_factories.py --add LOWLATENCYINPUT=False,AUTOAPAV=False,INCLUDET
 > - Use the GUI for hands-on or dropzone-based encoding
 > - Use the service for fully automated background workflows
 
-FreeFactoryQT will eventually support integration with external tools like:
+FreeFactoryQT may eventually support integration with external tools like:
 - [Demucs](https://github.com/facebookresearch/demucs) for stem separation
 - [sox-dsd](https://github.com/peterekepeter/sox-dsd) for DSD audio processing
 
