@@ -129,6 +129,7 @@ These would be stored under the `Manual Options` field in your Factory, and save
   - Low Latency Input
 - 🧠 Added CPU/GPU concurrency tuning in Global Program Settings (affects service only).
 - 🧪 Experimental: sample *SRT Streaming Factory* included.
+- 🛠 Introduced a beta version of FreeFactoryConversion.py. Can be ran stand-alone for testing. Please do test.
 - 🛠 Introduced `migrate_factories.py` tool to auto-update all factories with missing fields.
 
 New data fields:
