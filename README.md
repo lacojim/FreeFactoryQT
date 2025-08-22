@@ -200,7 +200,7 @@ python3 migrate_factories.py --add LOWLATENCYINPUT=False,AUTOAPAV=False,INCLUDET
 
 - ✅ Dynamic UI: only show valid `pix_fmt`, audio, and video profiles based on selected codec
 - ✅ Batch queue with mixed Factories
-- 🔄 Rewrite `FreeFactoryConversion.tcl` in Python
+- 🔄 Rewrite `FreeFactoryConversion.tcl` in Python (as of 2025-08-22 this has been completed but still may need some minor work). FreeFactoryConversion.tcl is now officially broken. Several keys in the factory files have been removed that FFC.tcl once relied on. With the changeover to a python FreeFactoryConversion.py, it is just not worth to keep the .tcl version up to date. Sorry for the inconvience.
 - 🪟 Port FreeFactoryQT to Windows (experimental; may be limited by background service)
 
 ---
