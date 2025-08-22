@@ -120,6 +120,35 @@ These would be stored under the `Manual Options` field in your Factory, and save
 
 ## 🆕 Changelog
 
+### 📅 New – 2025-08-21
+
+* 🗑️ Removed legacy/deprecated fields and widgets:
+
+  * `VIDEOTARGET` (FFmbc leftover)
+  * `AUDIOTAG` (FFmbc leftover)
+  * Entire **DepPage** tab (including `THREADS`, `RemoveSourceGlobal`, etc.).
+* ✅ Promoted the following to first-class, factory-level options (in `_combo_key_map`):
+
+  * `ENABLEFACTORY`
+  * `DELETECONVERSIONLOGS`
+  * `DELETESOURCE`
+* 📝 Added support in **FreeFactoryConversion.py** for:
+
+  * Skipping factories where `ENABLEFACTORY=False`
+  * Removing logs on success when `DELETECONVERSIONLOGS=True`
+  * Deleting source file on success when `DELETESOURCE=True`
+* 📂 Improved logging:
+
+  * Per-file log files are always written on run
+  * Logs are automatically deleted when requested (success only)
+  * Failures always keep logs, with clear console status
+  * Log file names now include parent directory context to avoid collisions
+* 🔒 Added file “settle” logic: new files must be older than 2s before processing
+* 🖥️ GUI cleanups:
+
+  * Added `checkMatchMinMaxBitrate` checkbox → locks `-minrate`/`-maxrate` to `-b:v`
+  * Ghosts automatically when no `VideoBitrate` is set or in streaming context
+  
 ### 📅 New – 2025-08-17
 
 - 🔧 Major Live Stream Manager overhaul — now uses `core.py` for FFmpeg command generation.
@@ -129,8 +158,9 @@ These would be stored under the `Manual Options` field in your Factory, and save
   - Low Latency Input
 - 🧠 Added CPU/GPU concurrency tuning in Global Program Settings (affects service only).
 - 🧪 Experimental: sample *SRT Streaming Factory* included.
-- 🛠 Introduced a beta version of FreeFactoryConversion.py. Can be ran stand-alone for testing. Please do test.
 - 🛠 Introduced `migrate_factories.py` tool to auto-update all factories with missing fields.
+- Added a menu which inclues New Factory, Save Factory and Delete Factory as well as Tools and Help.
+- Created FactoryTools.py which allows to Import, Export, Backup factories and also includes Tools/FactoryTools, a GUI for managing and migrating factories. Import, Export and Backup will eventually be removed from the main UI and live in FactoryTools.py only.
 
 New data fields:
 - `INCLUDETQS`: Enable thread queue size (default: `True`)
@@ -169,7 +199,7 @@ python3 migrate_factories.py --add LOWLATENCYINPUT=False,AUTOAPAV=False,INCLUDET
 
 - ✅ Dynamic UI: only show valid `pix_fmt`, audio, and video profiles based on selected codec
 - ✅ Batch queue with mixed Factories
-- 🔄 Rewrite `FreeFactoryConversion.tcl` in Python (beta version introduced in the latest release)
+- 🔄 Rewrite `FreeFactoryConversion.tcl` in Python
 - 🪟 Port FreeFactoryQT to Windows (experimental; may be limited by background service)
 
 ---
@@ -180,7 +210,7 @@ python3 migrate_factories.py --add LOWLATENCYINPUT=False,AUTOAPAV=False,INCLUDET
 > - Use the GUI for hands-on or dropzone-based encoding
 > - Use the service for fully automated background workflows
 
-FreeFactoryQT may eventually support integration with external tools like:
+FreeFactoryQT will eventually support integration with external tools like:
 - [Demucs](https://github.com/facebookresearch/demucs) for stem separation
 - [sox-dsd](https://github.com/peterekepeter/sox-dsd) for DSD audio processing
 
