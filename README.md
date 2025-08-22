@@ -148,6 +148,7 @@ These would be stored under the `Manual Options` field in your Factory, and save
 
   * Added `checkMatchMinMaxBitrate` checkbox → locks `-minrate`/`-maxrate` to `-b:v`
   * Ghosts automatically when no `VideoBitrate` is set or in streaming context
+  * Now has a drop-down menu including File, Tools and Help drop downs. 
   
 ### 📅 New – 2025-08-17
 
