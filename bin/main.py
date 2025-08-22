@@ -36,13 +36,13 @@ import subprocess
 from pathlib import Path
 from datetime import datetime
 
-from PyQt6.QtCore import Qt, QThread, QTimer
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import Qt, QThread, QTimer, QUrl
+from PyQt6.QtGui import QPixmap, QDesktopServices
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QListWidgetItem, QMessageBox,
     QTableWidgetItem, QDialog, QVBoxLayout, QPlainTextEdit,
     QPushButton, QFileDialog, QHeaderView, QLabel, QComboBox,
-    QLineEdit, QMenu, QCheckBox
+    QLineEdit, QMenu, QCheckBox, QTextEdit, QTextBrowser
 )
 from PyQt6.uic import loadUi
 
@@ -183,20 +183,86 @@ class FreeFactoryApp(QMainWindow):
                 self.load_selected_factory(matching_items[0]) 
 
 
+    # Set up the Mappings for ALL Widgets
+    def _combo_key_map(self) -> dict[str, str]:
+        # QLineEdit
+        return {
+            "FactoryDescription":       "FACTORYDESCRIPTION",       # QLineEdit
+            "NotifyDirectory":          "NOTIFYDIRECTORY",          # QLineEdit
+            "OutputDirectory":          "OUTPUTDIRECTORY",          # QLineEdit
+
+            # Video
+            "VideoCodec":               "VIDEOCODECS",              # QComboBox
+            "VideoWrapper":             "VIDEOWRAPPER",             # QComboBox
+            "VideoFrameRate":           "VIDEOFRAMERATE",           # QComboBox
+            "VideoSize":                "VIDEOSIZE",                # QComboBox
+            "videoFiltersCombo":        "VIDEOFILTERS",             # QComboBox
+            "VideoPixFormat":           "VIDEOPIXFORMAT",           # QComboBox
+            "Threads":                  "THREADS",                  # Deprecated
+            "VideoAspect":              "ASPECT",                   # QComboBox
+            "VideoBitrate":             "VIDEOBITRATE",             # QComboBox
+            "checkMatchMinMaxBitrate":  "MATCHMINMAXBITRATE",       # QCheckBox
+            "VideoProfile":             "VIDEOPROFILE",             # QComboBox
+            "VideoProfileLevel":        "VIDEOPROFILELEVEL",        # QComboBox
+            "VideoPreset":              "VIDEOPRESET",              # QComboBox
+            "VideoStreamID":            "VIDEOSTREAMID",            # QLineEdit
+            "VideoGroupPicSize":        "GROUPPICSIZE",             # QLineEdit
+            "VideoBFrames":             "BFRAMES",                  # QLineEdit
+            "FrameStrategy":            "FRAMESTRATEGY",            # QComboBox
+            "ForceFormat":              "FORCEFORMAT",              # QComboBox
+            "EncodeLength":             "ENCODELENGTH",             # QLineEdit
+            "VideoStartTimeOffset":     "STARTTIMEOFFSET",          # QLineEdit
+
+            # Subtitles
+            "SubtitleCodecs":           "SUBTITLECODECS",           # QComboBox
+
+            # Audio
+            "AudioCodec":               "AUDIOCODECS",              # QComboBox
+            "AudioBitrate":             "AUDIOBITRATE",             # QComboBox
+            "AudioSampleRate":          "AUDIOSAMPLERATE",          # QComboBox
+            "AudioExtension":           "AUDIOFILEEXTENSION",       # QComboBox
+            "audioFiltersCombo":        "AUDIOFILTERS",             # QComboBox
+            "AudioChannels":            "AUDIOCHANNELS",            # QComboBox
+            "AudioStreamID":            "AUDIOSTREAMID",            # QLineEdit
+
+            # Manual options
+            "ManualOptionsOutput":      "MANUALOPTIONSOUTPUT",      # QLineEdit
+            "ManualOptionsInput":       "MANUALOPTIONSINPUT",       # QLineEdit
+
+            # Streaming
+            "ForceFormatInputVideo":    "FORCEFORMATINPUTVIDEO",    # QComboBox
+            "ForceFormatInputAudio":    "FORCEFORMATINPUTAUDIO",    # QComboBox
+            "streamInputVideo":         "STREAMINPUTVIDEO",         # QComboBox
+            "streamInputAudio":         "STREAMINPUTAUDIO",         # QComboBox
+            "streamRTMPUrl":            "STREAMRTMPURL",            # QLineEdit
+            "streamKey":                "STREAMKEY",                # QLineEdit
+            "checkIncludeTQS":          "INCLUDETQS",               # QCheckBox
+            "checkLowLatencyInput":     "LOWLATENCYINPUT",          # QCheckBox
+            "checkMapAVInputs":         "AUTOMAPAV",                # QCheckBox
+            "tqsSizeCombo":             "TQSSIZE",                  # QComboBox
+            #"StreamingFactoryName":   "STREAMINGFACTORYNAME",      # If/when STREAMINGFACTORYNAME is used, re-add this:
+            
+            # Pre/Post Processing Options
+            "EnableFactory":            "ENABLEFACTORY",            # QCheckBox
+            "DeleteConversionLogs":     "DELETECONVERSIONLOGS",     # QCheckBox
+            "DeleteSource":             "DELETESOURCE",             # QCheckBox
+        }
+
 
     # ============================
     #       UI Setup Logic
     # ============================
     def setup_ui(self):
         self.SaveFFConfigGlobal.clicked.connect(self.save_global_config)
+        
+        self.LoadFactoryTools.clicked.connect(self.launch_factory_tools)
+        
         self.ViewLicense.clicked.connect(self.show_license)
         self.AboutFreeFactory.clicked.connect(self.show_about)
         self.toolButton_notifyDir.clicked.connect(self.select_notify_directory)
         self.toolButton_outputDir.clicked.connect(self.select_output_directory)
         self.PreviewCommand.clicked.connect(self.on_generate_command)
-        
-        
-        
+       
         # FreeFactory Factory Management Buttons
         self.SaveFactory.clicked.connect(self.save_current_factory)
         self.DeleteFactory.clicked.connect(self.delete_current_factory)
@@ -242,6 +308,19 @@ class FreeFactoryApp(QMainWindow):
         factory_names = [f.name for f in factory_files if f.is_file()]
         self.streamFactorySelect.clear()
         self.streamFactorySelect.addItems(factory_names)
+        
+        # Set up the Menu Items
+        self.actionNewFactory.triggered.connect(self.new_factory)
+        self.actionSaveFactory.triggered.connect(self.save_current_factory)
+        self.actionDeleteFactory.triggered.connect(self.delete_current_factory)
+        self.actionExitProgram.triggered.connect(self.close)
+
+        self.actionOpenFactoryTools.triggered.connect(self.launch_factory_tools)
+        self.actionFreeFactory_Manual.triggered.connect(self.open_manual)
+        self.actionAbout_QT.triggered.connect(QApplication.instance().aboutQt)
+        self.actionAboutFFmpeg.triggered.connect(self.show_about_ffmpeg)
+        self.actionAboutFreeFactory.triggered.connect(self.show_about_dialog_existing)
+ 
         
     # ============================
     #     Help Buttons
@@ -337,6 +416,11 @@ class FreeFactoryApp(QMainWindow):
         self.clearPreviewButton.clicked.connect(lambda: self.PreviewCommandLine.clear())
         self.clearDropZoneButton.clicked.connect(lambda: self.dropZone.clear())
 
+        # Ghost MinMaxBitrate checkbox if VideoBitrate is empty (uses _update_minmax_lock_state method below)
+        self.VideoBitrate.currentTextChanged.connect(self._update_minmax_lock_state)
+        self.checkMatchMinMaxBitrate.toggled.connect(self._update_minmax_lock_state)
+        self._update_minmax_lock_state()
+
         
         
 
@@ -406,6 +490,13 @@ class FreeFactoryApp(QMainWindow):
         for row in sorted(selected_rows, reverse=True):
             self.conversionQueueTable.removeRow(row)
 
+
+    # Method for ghosting the Lock Min/Max Bitrate whenever no VideoBitrate is selected.
+    def _update_minmax_lock_state(self):
+        has_bitrate = bool(self.VideoBitrate.currentText().strip())
+        self.checkMatchMinMaxBitrate.setEnabled(has_bitrate)
+        if not has_bitrate and self.checkMatchMinMaxBitrate.isChecked():
+            self.checkMatchMinMaxBitrate.setChecked(False)
 
     # ============================
     #     Drag and Drop Logic
@@ -483,6 +574,107 @@ class FreeFactoryApp(QMainWindow):
         self.conversionQueueTable.setItem(row_position, 0, QTableWidgetItem(str(input_path)))
         self.conversionQueueTable.setItem(row_position, 1, QTableWidgetItem(str(output_path)))
         self.conversionQueueTable.setItem(row_position, 2, QTableWidgetItem("Queued"))
+
+
+    # ============================
+    #     Menu Support
+    # ============================
+
+    def launch_factory_tools(self):
+        import sys
+        from pathlib import Path
+        import subprocess
+
+        try:
+            # Explicit path to FactoryTools.py
+            factorytools_path = Path("/opt/FreeFactory/bin/FactoryTools.py")
+
+            if not factorytools_path.exists():
+                raise FileNotFoundError(f"{factorytools_path} does not exist")
+
+            # Log path for debugging
+            log_path = Path("/tmp/factorytools.log")
+
+            with open(log_path, "w") as log_file:
+                subprocess.Popen(
+                    [sys.executable, str(factorytools_path)],
+                    stdout=log_file,
+                    stderr=log_file,
+                    cwd=str(factorytools_path.parent)
+                )
+        except Exception as e:
+            QMessageBox.critical(
+                self,
+                "Launch Error",
+                f"Could not launch FactoryTools:\n{str(e)}"
+            )
+
+    def open_manual(self):
+        # Replace with actual PDF/manual path
+        QDesktopServices.openUrl(QUrl.fromLocalFile("/opt/FreeFactory/docs/FreeFactoryQT-Documentation.pdf"))
+
+    def show_about_dialog_existing(self):
+        dialog = AboutDialog(self)
+        dialog.exec()
+
+    def show_about_ffmpeg(self):
+        try:
+            ffmpeg_path = self.PathtoFFmpegGlobal.text().strip() or "ffmpeg"
+
+            if os.path.isdir(ffmpeg_path):
+                ffmpeg_path = os.path.join(ffmpeg_path, "ffmpeg")
+
+            result = subprocess.run(
+                [ffmpeg_path, "-version"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                check=True
+            )
+            version_info = result.stdout
+
+        except Exception as e:
+            version_info = f"Failed to retrieve FFmpeg info:\n{str(e)}"
+
+        dialog = QDialog(self)
+        dialog.setWindowTitle("About FFmpeg")
+        dialog.setMinimumSize(700, 500)
+
+        layout = QVBoxLayout(dialog)
+
+        browser = QTextBrowser()
+        browser.setOpenExternalLinks(True)
+
+        # Use the corrected logo path
+        logo_path = Path("/opt/FreeFactory/Pics/ffmpeg.png")
+        logo_tag = ""
+        if logo_path.exists():
+            logo_tag = f"<img src='file://{logo_path.as_posix()}' height='32' style='vertical-align:middle;'/> "
+
+        # Wrap long preformatted lines using CSS
+        browser.setHtml(f"""
+            <h3>{logo_tag}FFmpeg</h3>
+            <p>FFmpeg is a complete, cross-platform solution to record, convert, and stream audio and video.
+            It includes libavcodec — the leading audio/video codec library.</p>
+            <p>FFmpeg is free software licensed under the LGPL or GPL. Visit
+            <a href='http://ffmpeg.org'>http://ffmpeg.org</a> for more information.</p>
+            <hr>
+            <div style="white-space: pre-wrap; font-family: monospace;">
+    {version_info}
+            </div>
+        """)
+
+        layout.addWidget(browser)
+
+        close_btn = QPushButton("OK")
+        close_btn.clicked.connect(dialog.accept)
+        layout.addWidget(close_btn, alignment=Qt.AlignmentFlag.AlignRight)
+
+        dialog.setLayout(layout)
+        dialog.exec()
+
+
+
 
 
     # ============================
@@ -693,107 +885,83 @@ class FreeFactoryApp(QMainWindow):
     #     Factory Management
     # ============================
     def save_current_factory(self):
+        """
+        Save the current factory to disk.
+        - Uses ordered _combo_key_map() for primary fields
+        - Preserves trailing slashes on NOTIFY/OUTPUT dirs
+        - Keeps admin flags (DeleteSource, etc.)
+        - Omits deprecated fields entirely
+        """
         filename = self.FactoryFilename.text().strip()
-        notify_dir = self.NotifyDirectory.text().strip()
-        output_dir = self.OutputDirectory.text().strip()
-        # Ensure trailing slash
-        if notify_dir and not notify_dir.endswith("/"):
-            notify_dir += "/"
-        if output_dir and not output_dir.endswith("/"):
-            output_dir += "/"
-            
         if not filename:
             QMessageBox.warning(self, "Missing Filename", "Please provide a factory filename.")
             return
 
-        filepath = self.core.factory_dir / filename
+        # Normalize the two directory fields (preserve trailing '/')
+        notify_dir = (self.NotifyDirectory.text() or "").strip()
+        output_dir = (self.OutputDirectory.text() or "").strip()
+        if notify_dir and not notify_dir.endswith("/"):
+            notify_dir += "/"
+        if output_dir and not output_dir.endswith("/"):
+            output_dir += "/"
 
-        lines = [
-            f"FACTORYDESCRIPTION={self.FactoryDescription.text().strip()}",
-            f"NOTIFYDIRECTORY={notify_dir}",
-            f"OUTPUTDIRECTORY={output_dir}",
-            "OUTPUTFILESUFFIX=",                                            # <— hardcoded empty line since this was removed from UI
-            f"FFMXPROGRAM=ffmpeg",                                          # Depreciated for Removal
-            f"RUNFROM=usr",                                                 # Depreciated for Removal
-            f"FTPPROGRAM=",                                                 # Depreciated for Removal
-            f"FTPURL=",                                                     # Depreciated for Removal
-            f"FTPUSERNAME=",                                                # Depreciated for Removal
-            f"FTPPASSWORD=",                                                # Depreciated for Removal
-            f"FTPREMOTEPATH=",                                              # Depreciated for Removal
-            f"FTPTRANSFERTYPE=bin",                                         # Depreciated for Removal
-            f"FTPDELETEAFTER=Yes",                                          # Depreciated for Removal
-            f"VIDEOCODECS={self.VideoCodec.currentText().strip()}",
-            f"VIDEOWRAPPER={self.VideoWrapper.currentText().strip()}",
-            f"VIDEOFRAMERATE={self.VideoFrameRate.currentText().strip()}",
-            f"VIDEOSIZE={self.VideoSize.currentText().strip()}",
-            f"VIDEOTARGET={self.VideoTarget.currentText().strip()}",
-            f"VIDEOTAGS={self.VideoTags.currentText().strip()}",
-            f"VIDEOFILTERS={self.videoFiltersCombo.currentText().strip()}",
-            f"VIDEOPIXFORMAT={self.VideoPixFormat.currentText().strip()}",
-            f"THREADS={self.Threads.currentText().strip()}",
-            f"ASPECT={self.VideoAspect.currentText().strip()}",
-            f"VIDEOBITRATE={self.VideoBitrate.currentText().strip()}",
-            f"VIDEOPROFILE={self.VideoProfile.currentText().strip()}",
-            f"VIDEOPROFILELEVEL={self.VideoProfileLevel.currentText().strip()}",
-            f"VIDEOPRESET={self.VideoPreset.currentText().strip()}",
-            f"VIDEOSTREAMID={self.VideoStreamID.text().strip()}",
-            f"GROUPPICSIZE={self.VideoGroupPicSize.text().strip()}",
-            f"BFRAMES={self.VideoBFrames.text().strip()}",
-            f"FRAMESTRATEGY={self.FrameStrategy.currentText().strip()}",
-            f"FORCEFORMAT={self.ForceFormat.currentText().strip()}",
-            f"ENCODELENGTH={self.EncodeLength.text().strip()}",
-            f"STARTTIMEOFFSET={self.VideoStartTimeOffset.text().strip()}",
-            f"SUBTITLECODECS={self.SubtitleCodecs.currentText().strip()}",
-            f"AUDIOCODECS={self.AudioCodec.currentText().strip()}",
-            f"AUDIOBITRATE={self.AudioBitrate.currentText().strip()}",
-            f"AUDIOSAMPLERATE={self.AudioSampleRate.currentText().strip()}",
-            f"AUDIOFILEEXTENSION={self.AudioExtension.currentText().strip()}",
-            f"AUDIOTAG={self.AudioTag.text().strip() if hasattr(self, 'AudioTag') else ''}",
-            f"AUDIOFILTERS={self.audioFiltersCombo.currentText().strip()}",
-            f"AUDIOCHANNELS={self.AudioChannels.currentText().strip()}",
-            f"AUDIOSTREAMID={self.AudioStreamID.text().strip()}",
-            f"MANUALOPTIONS={self.ManualOptions.text().strip()}",
-            f"MANUALOPTIONSINPUT={self.ManualOptionsInput.text().strip()}",
-            f"DELETESOURCE={'Yes' if self.DeleteSource.isChecked() else 'No'}",
-            f"DELETECONVERSIONLOGS={'Yes' if self.DeleteConversionLogs.isChecked() else 'No'}",
-            f"ENABLEFACTORY={'Yes' if self.EnableFactory.isChecked() else 'No'}",
-            f"FREEFACTORYACTION={'Encode' if self.ActionEncode.isChecked() else 'Copy'}",
-            f"ENABLEFACTORYLINKING={'Yes' if self.EnableFactoryLinking.isChecked() else 'No'}",   # Depreciated for Removal
-            f"FACTORYLINKS=",                                                                       # Depreciated for Removal
-            f"FACTORYENABLEEMAIL=Yes",                                                          # Depreciated for Removal
-            f"FACTORYEMAILNAME=",                                                             # Depreciated for Removal
-            f"FACTORYEMAILADDRESS=",                                                             # Depreciated for Removal
-            f"FACTORYEMAILMESSAGESTART=",                                                           # Depreciated for Removal
-            f"FACTORYEMAILMESSAGEEND=",
-            
-#===========streaming widgets             
-            f"FORCEFORMATINPUTVIDEO={self.ForceFormatInputVideo.currentText().strip()}",
-            f"FORCEFORMATINPUTAUDIO={self.ForceFormatInputAudio.currentText().strip()}",
-            f"STREAMINPUTVIDEO={self.streamInputVideo.text().strip()}",
-            f"STREAMINPUTAUDIO={self.streamInputAudio.text().strip()}",
-            f"STREAMRTMPURL={self.streamRTMPUrl.text().strip()}",
-            f"STREAMKEY={self.streamKey.text().strip()}",
-            f"STREAMINGFACTORYNAME={self.StreamingFactoryName.text().strip()}",
-            f"INCLUDETQS={'True' if self.checkIncludeTQS.isChecked() else 'False'}",
-            f"TQSSIZE={self.tqsSizeCombo.currentText().strip()}",
-            f"LOWLATENCYINPUT={'True' if self.checkLowLatencyInput.isChecked() else 'False'}",
-            f"AUTOMAPAV={'True' if self.checkMapAVInputs.isChecked() else 'False'}"
+        combo_key_map = self._combo_key_map()
+        lines: list[str] = []
 
-        ]
+        # 1) Primary fields written in the order of the map
+        for obj_name, key in combo_key_map.items():
+            w = getattr(self, obj_name, None) or self.findChild(
+                (QLineEdit, QComboBox, QCheckBox), obj_name
+            )
+            if not w:
+                continue
 
-        filepath.write_text("\n".join(lines) + "\n")
+            if isinstance(w, QLineEdit):
+                val = (w.text() or "").strip()
+            elif isinstance(w, QComboBox):
+                val = (w.currentText() or "").strip()
+            elif isinstance(w, QCheckBox):
+                val = "True" if w.isChecked() else "False"
+            else:
+                continue
 
-        #print(f"Saved to: {filepath}")
-        #print("Calling populate_factory_list()...")
-        #print("populate_factory_list() called")
-        #print("Files found:", list(self.core.factory_dir.glob("*")))
-        self.listFactoryFiles.clear()
-        self.populate_factory_list()
-        QMessageBox.information(self, "Factory Saved", f"Factory saved: {filename}")
-        matching_items = self.listFactoryFiles.findItems(filename, Qt.MatchFlag.MatchExactly)
-        # Select factory after saving it
-        if matching_items:
-            self.listFactoryFiles.setCurrentItem(matching_items[0])
+            if key == "NOTIFYDIRECTORY":
+                val = notify_dir
+            elif key == "OUTPUTDIRECTORY":
+                val = output_dir
+
+            lines.append(f"{key}={val}")
+
+        # 2) Admin flags intentionally *not* in the map (factory-level)
+        #lines += [
+            #f"DELETESOURCE={'Yes' if getattr(self, 'DeleteSource', None) and self.DeleteSource.isChecked() else 'No'}",
+            #f"DELETECONVERSIONLOGS={'Yes' if getattr(self, 'DeleteConversionLogs', None) and self.DeleteConversionLogs.isChecked() else 'No'}",
+            #f"ENABLEFACTORY={'Yes' if getattr(self, 'EnableFactory', None) and self.EnableFactory.isChecked() else 'No'}",
+            #f"FREEFACTORYACTION={'Encode' if getattr(self, 'ActionEncode', None) and self.ActionEncode.isChecked() else 'Copy'}",
+            #f"ENABLEFACTORYLINKING={'Yes' if getattr(self, 'EnableFactoryLinking', None) and self.EnableFactoryLinking.isChecked() else 'No'}",
+        #]
+
+        # 3) Optional: Streaming factory name if present
+        if hasattr(self, "StreamingFactoryName"):
+            val = (self.StreamingFactoryName.text() or "").strip()
+            lines.append(f"STREAMINGFACTORYNAME={val}")
+
+        # 4) Write file + refresh UI
+        factory_path = self.core.factory_dir / filename
+        try:
+            factory_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+            self.factory_dirty = False
+
+            self.listFactoryFiles.clear()
+            self.populate_factory_list()
+            QMessageBox.information(self, "Factory Saved", f"Factory saved: {filename}")
+
+            matches = self.listFactoryFiles.findItems(filename, Qt.MatchFlag.MatchExactly)
+            if matches:
+                self.listFactoryFiles.setCurrentItem(matches[0])
+        except Exception as e:
+            QMessageBox.critical(self, "Save Error", f"Failed to save factory:\n{e}")
+
 
 
     def delete_current_factory(self):
@@ -812,6 +980,7 @@ class FreeFactoryApp(QMainWindow):
 
 
     def load_selected_factory(self, item):
+        self.PreviewCommandLine.clear()
         factory_name = item.text()
         factory_path = Path(self.config.get("FactoryLocation")) / factory_name
         factory_data = self.core.load_factory(factory_path)
@@ -821,77 +990,9 @@ class FreeFactoryApp(QMainWindow):
             return
 
         self.FactoryFilename.setText(factory_name)
-        # for field in self.findChildren(QLineEdit):
-        #     key = field.objectName().upper()
-        #     if key in factory_data:
-        #         field.setText(factory_data[key])
         self.factory_dirty = False
-  
-        combo_key_map = {
-            # QLineEdit
-            "FactoryDescription":       "FACTORYDESCRIPTION",
-            "NotifyDirectory":          "NOTIFYDIRECTORY",
-            "OutputDirectory":          "OUTPUTDIRECTORY",
-
-            # Video (QComboBox unless noted)
-            "VideoCodec":               "VIDEOCODECS",
-            "VideoWrapper":             "VIDEOWRAPPER",
-            "VideoFrameRate":           "VIDEOFRAMERATE",     # <-- was VideoFramerate
-            "VideoSize":                "VIDEOSIZE",
-            "VideoTarget":              "VIDEOTARGET",
-            "videoFiltersCombo":        "VIDEOFILTERS",       # <-- actual widget id
-            "VideoPixFormat":           "VIDEOPIXFORMAT",
-            "Threads":                  "THREADS",            # exists on DepPage
-            "VideoAspect":              "ASPECT",
-            "VideoBitrate":             "VIDEOBITRATE",
-            "VideoProfile":             "VIDEOPROFILE",
-            "VideoProfileLevel":        "VIDEOPROFILELEVEL",
-            "VideoPreset":              "VIDEOPRESET",
-            "VideoStreamID":            "VIDEOSTREAMID",      # QLineEdit
-            "VideoGroupPicSize":        "GROUPPICSIZE",       # QLineEdit
-            "VideoBFrames":             "BFRAMES",            # QLineEdit
-            "FrameStrategy":            "FRAMESTRATEGY",
-            "ForceFormat":              "FORCEFORMAT",
-            "EncodeLength":             "ENCODELENGTH",       # QLineEdit
-            "VideoStartTimeOffset":     "STARTTIMEOFFSET",    # QLineEdit
-
-            # Subtitles
-            "SubtitleCodecs":           "SUBTITLECODECS",
-
-            # Audio
-            "AudioCodec":               "AUDIOCODECS",
-            "AudioBitrate":             "AUDIOBITRATE",
-            "AudioSampleRate":          "AUDIOSAMPLERATE",    # <-- was AudioSamplerate
-            "AudioExtension":           "AUDIOFILEEXTENSION", # <-- was AudioFileExtension
-            "audioFiltersCombo":        "AUDIOFILTERS",       # <-- actual widget id
-            "AudioChannels":            "AUDIOCHANNELS",
-            "AudioStreamID":            "AUDIOSTREAMID",      # QLineEdit
-            "AudioTag":                 "AUDIOTAG",           # on DepPage, QLineEdit
-
-            # Manual options (QLineEdit)
-            "ManualOptions":            "MANUALOPTIONS",
-            "ManualOptionsInput":       "MANUALOPTIONSINPUT",
-
-            # Streaming
-            "ForceFormatInputVideo":    "FORCEFORMATINPUTVIDEO",
-            "ForceFormatInputAudio":    "FORCEFORMATINPUTAUDIO",
-            "streamInputVideo":         "STREAMINPUTVIDEO",   # QLineEdit
-            "streamInputAudio":         "STREAMINPUTAUDIO",   # QLineEdit (fix missing quote typo)
-            "streamRTMPUrl":            "STREAMRTMPURL",      # QLineEdit
-            "streamKey":                "STREAMKEY",          # QLineEdit
-            "StreamingFactoryName":     "STREAMINGFACTORYNAME",
-
-            # TQS / low latency (combos/checkboxes exist; booleans handled separately)
-            "tqsSizeCombo":             "TQSSIZE",
-            # checkIncludeTQS → INCLUDETQS      (bool Yes/No or True/False)
-            # checkLowLatencyInput → LOWLATENCYINPUT
-            # checkMapAVInputs → AUTOMAPAV
-
-            # Deprecated we still serialize as blanks (don’t map to UI):
-            # OUTPUTFILESUFFIX, FFMXPROGRAM, RUNFROM, FTP*, FACTORYLINKS, FACTORYEMAIL*
-        }
-
-
+   
+        combo_key_map = self._combo_key_map()
 
         DEFAULTS = {
             "STREAMINGFACTORYNAME": "",
@@ -928,6 +1029,13 @@ class FreeFactoryApp(QMainWindow):
             elif isinstance(w, QCheckBox):
                 s = str(raw).strip().lower()
                 w.setChecked(s in ("true", "1", "yes", "on"))
+                
+            # Load checkMatchMinMaxBitrate manually (if not in combo_key_map)
+            #if hasattr(self, "checkMatchMinMaxBitrate"):
+            #    val = factory_data.get("MATCHMINMAXBITRATE", "").strip().lower()
+            #    self.checkMatchMinMaxBitrate.setChecked(val in ("true", "1", "yes", "on"))
+                
+
 
 
     def populate_factory_list(self):
@@ -1028,8 +1136,6 @@ class FreeFactoryApp(QMainWindow):
         self.config.set("FactoryLocation", self.PathtoFactoriesGlobal.text().strip())
         self.config.set("DefaultFactory", self.DefaultFactoryGlobal.currentText())
  
- 
- 
         # CPU/GPU concurrency with safe parsing
         try:
             cpu_n = max(1, int(self.CpuMaxConcurrentJobsGlobal.value()))
@@ -1039,9 +1145,9 @@ class FreeFactoryApp(QMainWindow):
             gpu_n = max(1, int(self.GpuMaxConcurrentJobsGlobal.value()))
         except Exception:
             gpu_n = 2
-
         self.config.set("MaxConcurrentJobsCPU", str(cpu_n))
         self.config.set("MaxConcurrentJobsGPU", str(gpu_n))
+
 
         # keep the existing global fallback too
         raw = (self.MaxConcurrentJobsGlobal.text() or "").strip()
@@ -1050,10 +1156,6 @@ class FreeFactoryApp(QMainWindow):
         except Exception:
             n = 1
         self.config.set("MaxConcurrentJobs", str(n))
-
-
-
-                
         self.config.save()
         QMessageBox.information(self, "Saved", "Global settings saved to ~/.freefactoryrc")
 

@@ -1,225 +1,148 @@
 #!/usr/bin/env python3
-"""
-FreeFactory migrator
-
-Add, set (override), or remove key=value pairs across factory files.
-
-CHANGES
-- Default pattern now "*" (no extension required).
-- Content sniffing ensures we only touch real factory files.
-- Backups are now OPT-IN via --backup (no .bak clutter by default).
-
-USAGE
-# Preview: add missing keys (won't touch existing values)
-python3 migrate_factories.py --add LOWLATENCYINPUT=False,AUTOMAPAV=False,INCLUDETQS=True,TQSSIZE=512 --dry-run
-
-# Apply the same
-python3 migrate_factories.py --add LOWLATENCYINPUT=False,AUTOMAPAV=False,INCLUDETQS=True,TQSSIZE=512
-
-# Force reset values everywhere (override), with explicit backup
-python3 migrate_factories.py --set LOWLATENCYINPUT=False,AUTOMAPAV=False --backup
-
-# Remove keys
-python3 migrate_factories.py --remove VIDEOSIZE,DEPRECATEDFLAG
-
-# Limit to a pattern later (e.g., new '.fact' or '.fcty')
-python3 migrate_factories.py --pattern "*.fact" --set LOWLATENCYINPUT=False
-"""
-
-from __future__ import annotations
 import argparse
-import pathlib
-import re
+import os
+from pathlib import Path
+import glob
 import shutil
 import sys
-from typing import Dict, List, Tuple
 
-DEFAULT_ROOT = "/opt/FreeFactory/Factories"
+def parse_key_value_pairs(pairs_string):
+    pairs = {}
+    for pair in pairs_string.split(','):
+        if '=' in pair:
+            key, value = pair.split('=', 1)
+            pairs[key.strip()] = value.strip()
+    return pairs
 
-# Keys we look for to decide if a file is a FreeFactory factory
-FACTORY_SIGNATURE_KEYS = (
-    "ENABLEFACTORY", "FREEFACTORYACTION", "STREAMINPUTVIDEO", "FORCEFORMATINPUTVIDEO",
-    "MANUALOPTIONS", "MANUALOPTIONSINPUT"
-)
+def backup_file(file_path):
+    backup_path = f"{file_path}.bak"
+    shutil.copyfile(file_path, backup_path)
+    print(f"🔁 Backup created: {backup_path}")
 
-def parse_pairs(arg: str | None) -> Dict[str, str]:
-    out: Dict[str, str] = {}
-    if not arg:
-        return out
-    for item in arg.split(","):
-        item = item.strip()
-        if not item:
-            continue
-        if "=" not in item:
-            raise ValueError(f"Expected key=value, got: {item}")
-        k, v = item.split("=", 1)
-        out[k.strip().upper()] = v.strip()
-    return out
+def migrate_factories(root, pattern, add, set_, remove, rename, dry_run, do_backup, quiet):
+    root_path = Path(root).expanduser().resolve()
+    files = list(root_path.glob(pattern))
 
-def parse_keys(arg: str | None) -> List[str]:
-    if not arg:
-        return []
-    return [k.strip().upper() for k in arg.split(",") if k.strip()]
+    if not files:
+        print(f"❌ No matching factory files found in: {root_path}")
+        return
 
-def has_key(text: str, key_uc: str) -> bool:
-    return re.search(rf"^\s*{re.escape(key_uc)}\s*=", text, flags=re.M|re.I) is not None
+    modified_count = 0
 
-def set_key(text: str, key_uc: str, value: str) -> Tuple[str, bool]:
-    pat = re.compile(rf"^\s*{re.escape(key_uc)}\s*=.*$", re.M|re.I)
-    replacement = f"{key_uc}={value}"
-    if pat.search(text):
-        new = pat.sub(replacement, text)
-        return new, (new != text)
-    if not text.endswith("\n"):
-        text += "\n"
-    return text + replacement + "\n", True
+    for file in files:
+        with open(file, 'r') as f:
+            lines = f.readlines()
 
-def add_key_if_missing(text: str, key_uc: str, value: str) -> Tuple[str, bool]:
-    if has_key(text, key_uc):
-        return text, False
-    if not text.endswith("\n"):
-        text += "\n"
-    return text + f"{key_uc}={value}\n", True
+        original_lines = lines[:]
+        updated_lines = []
+        keys_seen = set()
 
-def remove_key(text: str, key_uc: str) -> Tuple[str, bool]:
-    pat = re.compile(rf"^\s*{re.escape(key_uc)}\s*=.*\n?", re.M|re.I)
-    new = pat.sub("", text)
-    return new, (new != text)
+        # Parse renaming if specified
+        rename_map = {}
+        if rename:
+            for pair in rename.split(','):
+                if '=' in pair:
+                    old, new = pair.split('=', 1)
+                    rename_map[old.strip()] = new.strip()
 
-def looks_like_factory(text: str) -> bool:
-    # Identify FreeFactory files by presence of any signature key at line start
-    for k in FACTORY_SIGNATURE_KEYS:
-        if re.search(rf"^\s*{re.escape(k)}\s*=", text, flags=re.M|re.I):
-            return True
-    return False
+        for line in lines:
+            stripped = line.strip()
+            if '=' not in stripped:
+                updated_lines.append(line)
+                continue
 
-def process_file(
-    path: pathlib.Path,
-    add_pairs: Dict[str, str],
-    set_pairs: Dict[str, str],
-    remove_keys: List[str],
-    *,
-    dry_run: bool,
-    backup: bool,
-    quiet: bool,
-) -> Tuple[bool, List[str]]:
-    try:
-        original = path.read_text(encoding="utf-8")
-    except UnicodeDecodeError:
-        if not quiet:
-            print(f"skip (binary?): {path.name}")
-        return False, []
-    if not looks_like_factory(original):
-        if not quiet:
-            print(f"skip (not a factory): {path.name}")
-        return False, []
+            key, value = stripped.split('=', 1)
+            key = key.strip()
 
-    text = original
-    changes: List[str] = []
+            # Rename keys if matched
+            if key in rename_map:
+                new_key = rename_map[key]
+                updated_lines.append(f"{new_key}={value.strip()}\n")
+                keys_seen.add(new_key)
+            elif key in set_:
+                updated_lines.append(f"{key}={set_[key]}\n")
+                keys_seen.add(key)
+            elif key in remove:
+                continue  # omit this key
+            else:
+                updated_lines.append(line)
+                keys_seen.add(key)
 
-    # 1) remove requested keys
-    for k in remove_keys:
-        text2, changed = remove_key(text, k)
-        if changed:
-            changes.append(f"removed {k}")
-            text = text2
+        # Add any missing keys (only if not already present)
+        for key, value in add.items():
+            if key not in keys_seen:
+                updated_lines.append(f"{key}={value}\n")
+                keys_seen.add(key)
 
-    # 2) set/override (also adds if missing)
-    for k, v in set_pairs.items():
-        text2, changed = set_key(text, k, v)
-        if changed:
-            changes.append(("set " if has_key(original, k) else "added ") + f"{k}={v}")
-            text = text2
+        # Add or overwrite keys for --set
+        for key, value in set_.items():
+            if key not in keys_seen:
+                updated_lines.append(f"{key}={value}\n")
 
-    # 3) add if missing
-    for k, v in add_pairs.items():
-        if has_key(text, k):
-            continue
-        text2, changed = add_key_if_missing(text, k, v)
-        if changed:
-            changes.append(f"added {k}={v}")
-            text = text2
+        if updated_lines != original_lines:
+            modified_count += 1
+            if not dry_run:
+                if do_backup:
+                    backup_file(file)
+                with open(file, 'w') as f:
+                    f.writelines(updated_lines)
 
-    if text != original:
-        if not dry_run:
-            if backup:
-                shutil.copy2(path, path.with_suffix(path.suffix + ".bak"))
-            path.write_text(text, encoding="utf-8")
-        if not quiet:
-            print(f"updated: {path.name} -> {', '.join(changes)}")
-        return True, changes
+    if dry_run:
+        print(f"[DRY-RUN] {modified_count} factory file(s) would be modified.")
     else:
-        if not quiet:
-            print(f"no change: {path.name}")
-        return False, []
+        print(f"✅ {modified_count} factory file(s) modified.")
 
-def main(argv=None) -> int:
-    p = argparse.ArgumentParser(
+def main():
+    parser = argparse.ArgumentParser(
         description="Migrate FreeFactory factory files (add/set/remove key=value).",
-        formatter_class=argparse.RawTextHelpFormatter,
+        epilog="""
+Examples:
+  python3 migrate_factories.py --add LOWLATENCYINPUT=False,AUTOMAPAV=False --dry-run
+  python3 migrate_factories.py --set LOWLATENCYINPUT=False
+  python3 migrate_factories.py --remove VIDEOSIZE
+  python3 migrate_factories.py --rename MANUALOPTIONS=MANUALOPTIONSOUTPUT
+""",
+        formatter_class=argparse.RawTextHelpFormatter
     )
-    p.add_argument("--root", default=DEFAULT_ROOT,
-                   help=f"Directory containing factory files (default: {DEFAULT_ROOT})")
-    p.add_argument("--pattern", default="*",
-                   help='Glob pattern to select files (default: "*"). '
-                        'Examples: "*.fact", "*.fcty", "*.factory"')
-    p.add_argument("--add", help="Add key=value pairs ONLY if missing (comma-separated)")
-    p.add_argument("--set", help="Force-set/override key=value pairs (comma-separated)")
-    p.add_argument("--remove", help="Remove keys (comma-separated)")
-    p.add_argument("--dry-run", action="store_true", help="Show what would change; do not write")
-    p.add_argument("--backup", action="store_true", help="Create .bak backups (opt-in)")
-    p.add_argument("--quiet", action="store_true", help="Reduce output")
-    args = p.parse_args(argv)
 
-    add_pairs   = parse_pairs(args.add)
-    set_pairs   = parse_pairs(args.set)
-    remove_keys = parse_keys(args.remove)
+    # Default root path fallback logic
+    default_root = (
+        str(Path("~/.freefactory/factories").expanduser())
+        if Path("~/.freefactory/factories").expanduser().exists()
+        else "/opt/FreeFactory/Factories"
+    )
 
-    if not (add_pairs or set_pairs or remove_keys):
-        p.print_help()
-        print("\nExamples:")
-        print("  python3 migrate_factories.py --add LOWLATENCYINPUT=False,AUTOMAPAV=False --dry-run")
-        print("  python3 migrate_factories.py --set LOWLATENCYINPUT=False")
-        print("  python3 migrate_factories.py --remove VIDEOSIZE")
-        return 0
+    parser.add_argument('--root', default=default_root, help=f'Directory containing factory files (default: {default_root})')
+    parser.add_argument('--pattern', default="*", help='Glob pattern to select files (default: "*"). Examples: "*.fact", "*.fcty", "*.factory"')
+    parser.add_argument('--add', help='Add key=value pairs ONLY if missing (comma-separated)')
+    parser.add_argument('--set', dest='set_', help='Force-set/override key=value pairs (comma-separated)')
+    parser.add_argument('--remove', help='Remove keys (comma-separated)')
+    parser.add_argument('--rename', help='Rename keys (comma-separated OLD=NEW pairs)')
+    parser.add_argument('--dry-run', action='store_true', help='Show what would change; do not write')
+    parser.add_argument('--backup', action='store_true', help='Create .bak backups (opt-in)')
+    parser.add_argument('--quiet', action='store_true', help='Reduce output')
 
-    root = pathlib.Path(args.root).expanduser()
-    if not root.is_dir():
-        print(f"error: root not found: {root}", file=sys.stderr)
-        return 2
+    if len(sys.argv) == 1:
+        parser.print_help(sys.stderr)
+        sys.exit(1)
 
-    # Gather candidates; ignore hidden files and *.bak by default
-    candidates = []
-    for pth in sorted(root.glob(args.pattern)):
-        if not pth.is_file():
-            continue
-        if pth.name.startswith("."):
-            continue
-        if pth.suffix == ".bak":
-            continue
-        candidates.append(pth)
+    args = parser.parse_args()
 
-    if not candidates:
-        print(f"no files match {root}/{args.pattern}")
-        return 0
+    add_pairs = parse_key_value_pairs(args.add) if args.add else {}
+    set_pairs = parse_key_value_pairs(args.set_) if args.set_ else {}
+    remove_keys = args.remove.split(',') if args.remove else []
 
-    changed_files = 0
-    for f in candidates:
-        ch, _ = process_file(
-            f,
-            add_pairs=add_pairs,
-            set_pairs=set_pairs,
-            remove_keys=remove_keys,
-            dry_run=args.dry_run,
-            backup=args.backup,     # backups are opt-in now
-            quiet=args.quiet,
-        )
-        if ch:
-            changed_files += 1
-
-    suffix = " (dry-run)" if args.dry_run else ""
-    print(f"Done. Files changed: {changed_files}{suffix}")
-    return 0
+    migrate_factories(
+        root=args.root,
+        pattern=args.pattern,
+        add=add_pairs,
+        set_=set_pairs,
+        remove=remove_keys,
+        rename=args.rename,
+        dry_run=args.dry_run,
+        do_backup=args.backup,
+        quiet=args.quiet
+    )
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()

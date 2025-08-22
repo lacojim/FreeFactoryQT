@@ -28,6 +28,25 @@ from config_manager import ConfigManager  # type: ignore
 from core import FreeFactoryCore  # type: ignore
 
 
+def _as_bool(val: Optional[str]) -> bool:
+    s = (val or "").strip().lower()
+    return s in ("true", "yes", "1", "on")
+
+
+def is_settled(path: Path, min_age_sec: float = 2.0) -> bool:
+    """
+    Returns True if the file's mtime is at least min_age_sec old.
+    Protects against grabbing files that are still being written.
+    """
+    try:
+        st = path.stat()
+        return (time.time() - st.st_mtime) >= min_age_sec
+    except FileNotFoundError:
+        return False
+
+
+
+
 def read_factory(factory_path: Path) -> Dict[str, str]:
     data: Dict[str, str] = {}
     if not factory_path.exists():
@@ -57,10 +76,12 @@ def ensure_log_dir() -> Path:
         except Exception:
             continue
     return PROJECT_ROOT
-
+    
 
 def build_log_path(log_dir: Path, input_file: Path) -> Path:
-    return log_dir / f"{input_file.name}.log"
+    safe_parent = "_".join(input_file.parent.parts[-2:]) if len(input_file.parent.parts) >= 2 else input_file.parent.name
+    return log_dir / f"{safe_parent}__{input_file.name}.log"
+
 
 
 def _which_accel(factory: Dict[str, str]) -> str:
@@ -120,13 +141,33 @@ def run_ffmpeg(core: FreeFactoryCore, input_file: Path, factory_data: Dict[str, 
 
 def process_file(core: FreeFactoryCore, input_file: Path, factory_data: Dict[str, str]):
     rc = run_ffmpeg(core, input_file, factory_data, preview=False)
-    delete_src = (factory_data.get("DELETESOURCE", "") or "").strip().lower() in ("yes", "true", "1")
-    if rc == 0 and delete_src:
+
+    # Delete conversion logs on success if requested
+    if rc == 0 and _as_bool(factory_data.get("DELETECONVERSIONLOGS")):
+        try:
+            log_dir = ensure_log_dir()
+            build_log_path(log_dir, input_file).unlink(missing_ok=True)
+        except Exception:
+            pass
+
+    # Delete source on success if requested
+    if rc == 0 and _as_bool(factory_data.get("DELETESOURCE")):
         try:
             input_file.unlink(missing_ok=True)
         except Exception:
             pass
+
+    # --- add these status lines ---
+    if rc == 0:
+        print(f"[OK]   {input_file.name}")
+    else:
+        log_dir = ensure_log_dir()
+        log_path = build_log_path(log_dir, input_file)
+        print(f"[FAIL {rc}] {input_file.name}  (see {log_path})")
+
     return input_file, rc
+
+
 
 
 def scan_candidates(notify_dir: Path) -> List[Path]:
@@ -161,6 +202,12 @@ def main(argv: Optional[List[str]] = None) -> int:
     factory_dir = Path(cfg.get("FactoryLocation") or "/opt/FreeFactory/Factories")
     factory_path = factory_dir / args.factory
     factory_data = read_factory(factory_path)
+    
+    # Respect factory-level enable switch
+    if not _as_bool(factory_data.get("ENABLEFACTORY")):
+        print(f"[FreeFactoryConversion.py] Factory is DISABLED: {factory_path.name}")
+        return 0  # benign exit; nothing to do
+
 
     core = FreeFactoryCore(cfg)
 
@@ -222,8 +269,12 @@ def main(argv: Optional[List[str]] = None) -> int:
             if processed.get(p) != sig:
                 batch.append((p, sig))
 
+        # Filter out files that might still be "hot" (mtime too recent)
+        batch = [(p, sig) for (p, sig) in batch if is_settled(p)]
+
         if not batch:
             return 0
+
 
         mode_hint = accel if accel else "CPU"
         print(f"Discovered {len(batch)} file(s). Starting conversions... [{mode_hint}]")
@@ -233,10 +284,6 @@ def main(argv: Optional[List[str]] = None) -> int:
                 f, sig = futures[fut]
                 try:
                     in_file, rc = fut.result()
-                    if rc == 0:
-                        processed[in_file] = sig
-                    status = "OK" if rc == 0 else f"FAIL({rc})"
-                    print(f"[{status}] {in_file.name}")
                 except Exception as e:
                     print(f"[EXC] {f.name}: {e}")
         return len(batch)
