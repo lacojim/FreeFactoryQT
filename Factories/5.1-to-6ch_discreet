@@ -41,7 +41,7 @@ AUDIOTAG=
 AUDIOFILTERS=
 AUDIOCHANNELS=
 AUDIOSTREAMID=
-MANUALOPTIONS=-filter_complex "channelsplit=channel_layout=5.1[FL][FR][FC][LFE][BL][BR]" -map "[FL]" front_left.wav -map "[FR]" front_right.wav -map "[FC]" front_center.wav -map "[LFE]" lfe.wav -map "[BL]" back_left.wav -map "[BR]" back_right.wav
+MANUALOPTIONSOUTPUT=-filter_complex "channelsplit=channel_layout=5.1[FL][FR][FC][LFE][BL][BR]" -map "[FL]" front_left.wav -map "[FR]" front_right.wav -map "[FC]" front_center.wav -map "[LFE]" lfe.wav -map "[BL]" back_left.wav -map "[BR]" back_right.wav
 MANUALOPTIONSINPUT=
 DELETESOURCE=Yes
 DELETECONVERSIONLOGS=No
