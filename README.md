@@ -148,7 +148,7 @@ These would be stored under the `Manual Options` field in your Factory, and save
 
   * Added `checkMatchMinMaxBitrate` checkbox → locks `-minrate`/`-maxrate` to `-b:v`
   * Ghosts automatically when no `VideoBitrate` is set or in streaming context
-  * Now has a drop-down menu including File, Tools and Help drop downs. 
+  * Now has a drop-down menu including File, Tools and Help drop downs with hotkey support (ie CTRL+N = New Factory, CTRL+S = Save Factory, F1 = Help). 
   
 ### 📅 New – 2025-08-17
 
