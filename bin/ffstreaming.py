@@ -83,9 +83,9 @@ def build_streaming_command(config, core, ui):
     cmd += core.build_streaming_flags(factory)   # now includes -pix_fmt if set
 
     # --- MANUAL (post-input/output-stage) ---
-    manual = (factory.get("MANUALOPTIONS", "") or "").strip()
-    if manual:
-        cmd += shlex.split(manual)
+    manual_output = (factory.get("MANUALOPTIONSOUTPUT", "") or "").strip()
+    if manual_output:
+        cmd += shlex.split(manual_output)
 
     # --- MUXER + URL ---
     force_format = (factory.get("FORCEFORMAT", "") or "").strip()

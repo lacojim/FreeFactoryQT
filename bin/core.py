@@ -30,13 +30,9 @@ import subprocess
 import shlex
 from pathlib import Path
 from PyQt6.QtCore import QObject, pyqtSignal, QThread
+import re
 
 
-# @staticmethod
-# def _has_scale(vf: str) -> bool:
-#     if not vf: return False
-#     s = "".join(vf.split()).lower()
-#     return any(t in s for t in ("scale=", "zscale=", "scale_cuda=", "scale_npp=", "scale_vaapi=", "scale_qsv=", "scale2ref="))
 
 #=======For Drop Queue
 class FFmpegWorker(QThread):
@@ -241,7 +237,7 @@ class FreeFactoryCore:
         audio_bitrate       = factory_data.get("AUDIOBITRATE", "").strip()
         sample_rate         = factory_data.get("AUDIOSAMPLERATE", "").strip()
         audio_channels      = factory_data.get("AUDIOCHANNELS", "").strip()
-        manual              = factory_data.get("MANUALOPTIONS", "").strip()
+        manual_output       = factory_data.get("MANUALOPTIONSOUTPUT", "").strip()
         manual_input        = factory_data.get("MANUALOPTIONSINPUT", "").strip()
         bframes             = factory_data.get("BFRAMES", "").strip()
         frame_strategy      = factory_data.get("FRAMESTRATEGY", "").strip()
@@ -264,8 +260,29 @@ class FreeFactoryCore:
 #=======Video encoding
         if video_codec:
             cmd += ["-c:v", video_codec]
+
+
         if video_bitrate:
             cmd += ["-b:v", video_bitrate]
+
+            # New feature: MATCHMINMAXBITRATE support
+            match_minmax = factory_data.get("MATCHMINMAXBITRATE", "False").strip().lower() == "true"
+            if match_minmax:
+                # Clean up any existing -minrate/-maxrate from manual options (just in case)
+                def strip_flag(flagname):
+                    try:
+                        while flagname in cmd:
+                            i = cmd.index(flagname)
+                            del cmd[i:i+2]
+                    except:
+                        pass
+                strip_flag("-minrate")
+                strip_flag("-maxrate")
+                cmd += ["-minrate", video_bitrate, "-maxrate", video_bitrate]
+
+
+
+
         if video_profile:
             cmd += ["-profile:v", video_profile]
         if video_profile_level:
@@ -323,10 +340,8 @@ class FreeFactoryCore:
             print("DEBUG force_format raw value:", repr(force_format))
 
 #=======Manual options
-#        if manual_input:
-#            cmd = ["ffmpeg", "-hide_banner", "-y", *shlex.split(manual_input), "-i", str(input_path)]
-        if manual:
-            cmd += shlex.split(manual)
+        if manual_output:
+            cmd += shlex.split(manual_output)
         if force_format:
             cmd += ["-f", force_format]
 
@@ -430,16 +445,16 @@ class FreeFactoryCore:
             raise ValueError("Missing output_url for streaming command.")
 
         # -------------------- config / toggles --------------------
-        manual_input = (factory_data.get("MANUALOPTIONSINPUT", "") or "").strip()
-        manual       = (factory_data.get("MANUALOPTIONS", "") or "").strip()
-        force_format = (factory_data.get("FORCEFORMAT", "") or "").strip()
+        manual_input    = (factory_data.get("MANUALOPTIONSINPUT", "") or "").strip()
+        manual_output   = (factory_data.get("MANUALOPTIONSOUTPUT", "") or "").strip()
+        force_format    = (factory_data.get("FORCEFORMAT", "") or "").strip()
 
         # New widgets / fields
-        include_tqs  = (factory_data.get("INCLUDETQS", "True") or "True").strip().lower() == "true"
-        tqs_size     = (factory_data.get("TQSSIZE", "512")    or "512").strip() or "512"
-        low_latency  = (factory_data.get("LOWLATENCYINPUT", "False") or "False").strip().lower() == "true"
-        auto_map_av  = (factory_data.get("AUTOMAPAV", "False")        or "False").strip().lower() == "true"
-        factory_name = (factory_data.get("STREAMINGFACTORYNAME", "")  or "").strip()
+        include_tqs     = (factory_data.get("INCLUDETQS", "True") or "True").strip().lower() == "true"
+        tqs_size        = (factory_data.get("TQSSIZE", "512")    or "512").strip() or "512"
+        low_latency     = (factory_data.get("LOWLATENCYINPUT", "False") or "False").strip().lower() == "true"
+        auto_map_av     = (factory_data.get("AUTOMAPAV", "False")        or "False").strip().lower() == "true"
+        factory_name    = (factory_data.get("STREAMINGFACTORYNAME", "")  or "").strip()
 
         cmd = ["ffmpeg", "-hide_banner", "-y"]
 
@@ -492,8 +507,8 @@ class FreeFactoryCore:
                 cmd += ["-map", "0:v:0"]
 
         # -------------------- MANUAL (post-input overrides) --------------------
-        if manual:
-            cmd += shlex.split(manual)
+        if manual_output:
+            cmd += shlex.split(manual_output)
 
         # Optional: tag the factory name as metadata if provided (harmless for FLV/TS)
         if factory_name:
