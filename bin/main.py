@@ -165,7 +165,6 @@ class FreeFactoryApp(QMainWindow):
 
         # Set Global Settings tab with config values
         self.CompanyNameGlobal.setText(self.config.get("CompanyNameGlobal"))
-#        self.MaxConcurrentJobsGlobal.setText(self.config.get("MaxConcurrentJobs", "1"))
         self.CpuMaxConcurrentJobsGlobal.setValue(int(self.config.get("MaxConcurrentJobsCPU", "1") or 1))
         self.GpuMaxConcurrentJobsGlobal.setValue(int(self.config.get("MaxConcurrentJobsGPU", "2") or 2))
 
@@ -183,7 +182,7 @@ class FreeFactoryApp(QMainWindow):
                 self.load_selected_factory(matching_items[0]) 
 
 
-    # Set up the Mappings for ALL Widgets
+    # Set up the Dictionary for all Widgets and Factory keys
     def _combo_key_map(self) -> dict[str, str]:
         # QLineEdit
         return {
@@ -198,7 +197,7 @@ class FreeFactoryApp(QMainWindow):
             "VideoSize":                "VIDEOSIZE",                # QComboBox
             "videoFiltersCombo":        "VIDEOFILTERS",             # QComboBox
             "VideoPixFormat":           "VIDEOPIXFORMAT",           # QComboBox
-            "Threads":                  "THREADS",                  # Deprecated
+            #"Threads":                  "THREADS",                  # Removed
             "VideoAspect":              "ASPECT",                   # QComboBox
             "VideoBitrate":             "VIDEOBITRATE",             # QComboBox
             "checkMatchMinMaxBitrate":  "MATCHMINMAXBITRATE",       # QCheckBox
@@ -1150,14 +1149,17 @@ class FreeFactoryApp(QMainWindow):
 
 
         # keep the existing global fallback too
-        raw = (self.MaxConcurrentJobsGlobal.text() or "").strip()
-        try:
-            n = int(raw);  n = 1 if n < 1 else n
-        except Exception:
-            n = 1
-        self.config.set("MaxConcurrentJobs", str(n))
+        raw = (self.CpuMaxConcurrentJobsGlobal.text() or "").strip()
+        if raw.isdigit():
+            self.config.set("MaxConcurrentJobsCPU", raw)
+
+        raw = (self.GpuMaxConcurrentJobsGlobal.text() or "").strip()
+        if raw.isdigit():
+            self.config.set("MaxConcurrentJobsGPU", raw)
+
         self.config.save()
         QMessageBox.information(self, "Saved", "Global settings saved to ~/.freefactoryrc")
+
 
     def select_notify_directory(self):
         directory = QFileDialog.getExistingDirectory(self, "Select Notify Directory")

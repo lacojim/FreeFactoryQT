@@ -1,3 +1,5 @@
+# This is the python3 module for controlling the FreeFactory service functions within the Global Program Settings Tab.
+
 import subprocess
 from pathlib import Path
 from PyQt6.QtWidgets import QMessageBox, QMenu

@@ -46,6 +46,10 @@ exec tclsh "$0" "$@"
 # 2025-08-15
 # Added VIDEOFILTERS (-vf) and AUDIOFILTERS (-af)
 
+# 2025-08-18
+# Renamed MANUALOPTIONS to MANUALOPTIONSOUTPUT
+
+
 proc ::main {argc argv} {
 # Get notify variables passed from inotify passed from FreeFactoryNotify.sh
 	set PassedVariables $argv
@@ -171,7 +175,7 @@ proc ::main {argc argv} {
 						"AUDIOFILTERS" {set FactoryArray($FactoryCounter,AudioFilters) $FactoryValue}
 						"AUDIOCHANNELS" {set FactoryArray($FactoryCounter,AudioChannels) $FactoryValue}
 						"AUDIOSTREAMID" {set FactoryArray($FactoryCounter,AudioStreamID) $FactoryValue}
-						"MANUALOPTIONS" {set FactoryArray($FactoryCounter,ManualOptions) $FactoryValue}
+						"MANUALOPTIONSOUTPUT" {set FactoryArray($FactoryCounter,ManualOptionsOutput) $FactoryValue}
 						"MANUALOPTIONSINPUT" {set FactoryArray($FactoryCounter,ManualOptionsInput) $FactoryValue}
 						"DELETESOURCE" {set FactoryArray($FactoryCounter,DeleteSource) $FactoryValue}
 						"DELETECONVERSIONLOGS" {set FactoryArray($FactoryCounter,DeleteConversionLogs) $FactoryValue}
@@ -605,6 +609,7 @@ proc FFMXOptionsFFMxConversionFTP {} {
 	if {[string trim $FactoryArray($FactoryCounterUsed,VideoFilters)] != ""} {
 		append FFMx_AVOptions "-vf "
 		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,VideoFilters) "
+	}	
 	if {[string trim $FactoryArray($FactoryCounterUsed,Threads)] != ""} {
 		append FFMx_AVOptions "-threads "
 		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,Threads) "
@@ -676,8 +681,8 @@ proc FFMXOptionsFFMxConversionFTP {} {
 		append FFMx_AVOptions "-map "
 		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,AudioStreamID) "
 	}
-	if {[string trim $FactoryArray($FactoryCounterUsed,ManualOptions)] != ""} {
-		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,ManualOptions) "
+	if {[string trim $FactoryArray($FactoryCounterUsed,ManualOptionsOutput)] != ""} {
+		append FFMx_AVOptions "$FactoryArray($FactoryCounterUsed,ManualOptionsOutput) "
 	}
 	if {[string trim $FactoryArray($FactoryCounterUsed,ForceFormat)] != ""} {
 		append FFMx_AVOptions "-f "

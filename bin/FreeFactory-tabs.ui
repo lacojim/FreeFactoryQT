@@ -1942,17 +1942,17 @@ Adds the flag -c:s to the command line</string>
         </item>
         <item>
          <property name="text">
+          <string>mov_text</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>srt</string>
          </property>
         </item>
         <item>
          <property name="text">
           <string>ssa</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>mov_text</string>
          </property>
         </item>
        </widget>
@@ -2025,6 +2025,36 @@ Adds the flag -c:s to the command line</string>
         </item>
         <item>
          <property name="text">
+          <string>bgr24</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>gray</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>nv12</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rgb24</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rgba</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>uyvy422</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>yuv420p</string>
          </property>
         </item>
@@ -2040,37 +2070,7 @@ Adds the flag -c:s to the command line</string>
         </item>
         <item>
          <property name="text">
-          <string>nv12</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
           <string>yuvj420p</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>gray</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>rgb24</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>rgba</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>bgr24</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>uyvy422</string>
          </property>
         </item>
        </widget>
@@ -6928,7 +6928,4 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
  </customwidgets>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="ActionButtonGroup"/>
- </buttongroups>
 </ui>
