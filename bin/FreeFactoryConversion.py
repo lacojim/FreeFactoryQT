@@ -1,12 +1,43 @@
 #!/usr/bin/env python3
-"""
-FreeFactoryConversion.py — Python rewrite (watch service)
+#############################################################################
+#               This code is licensed under the GPLv3
+#    The following terms apply to all files associated with the software
+#    unless explicitly disclaimed in individual files or parts of files.
+#
+#                           Free Factory
+#
+#                      Copyright 2013 - 2025
+#                               by
+#                     Jim Hines and Karl Swisher
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Script Name:Conversion.py
+#
+#  This script converts the file passed in the SoureFileName variable
+#  to a output file in a output directory with the audio and video
+#  options specified in the factory. This script calls FFmpeg to do the 
+#  conversion(s).
+########################################################################################
+#
+#FreeFactoryConversion.py — Python rewrite (watch service)
+#
+#Enhancements in this build:
+# - Robust reprocess detection using (st_dev, st_ino, st_mtime_ns, st_size).
+# - Prevents FFmpeg from reading your TTY (adds -nostdin and uses stdin=DEVNULL).
+# - Prints a clear concurrency banner (CPU/GPU) and encoder in use.
 
-Enhancements in this build:
-- Robust reprocess detection using (st_dev, st_ino, st_mtime_ns, st_size).
-- Prevents FFmpeg from reading your TTY (adds -nostdin and uses stdin=DEVNULL).
-- Prints a clear concurrency banner (CPU/GPU) and encoder in use.
-"""
 
 from __future__ import annotations
 
@@ -19,13 +50,13 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, NamedTuple
 
+from config_manager import ConfigManager  # type: ignore
+from core import FreeFactoryCore  # type: ignore
+
 # Ensure local project modules are importable when running this script standalone.
 PROJECT_ROOT = Path(__file__).resolve().parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
-
-from config_manager import ConfigManager  # type: ignore
-from core import FreeFactoryCore  # type: ignore
 
 
 def _as_bool(val: Optional[str]) -> bool:
@@ -190,26 +221,80 @@ def file_sig(p: Path) -> Sig:
 
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="FreeFactory Conversion Service (Python)")
-    parser.add_argument("--factory", required=True, help="Factory filename (e.g., MyFactory)")
+    parser.add_argument("--factory", help="Factory filename (e.g., MyFactory)")
+
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--once", action="store_true", help="Process current files and exit")
     mode.add_argument("--watch", action="store_true", help="Watch the notify directory and process continuously")
+    mode.add_argument("--daemon", action="store_true", help="Run in event-triggered mode (one file, one conversion)")
+
+    parser.add_argument("--sourcepath", help="Path to directory containing the input file (for daemon mode)")
+    parser.add_argument("--filename", help="Name of the file to process (for daemon mode)")
+    parser.add_argument("--notify-event", help="Inotify event type (optional)")
+
     parser.add_argument("--max-workers", type=int, default=None, help="Override global concurrency limit")
     parser.add_argument("--poll-interval", type=float, default=2.0, help="Seconds between scans in watch mode")
     args = parser.parse_args(argv)
 
     cfg = ConfigManager()
-    factory_dir = Path(cfg.get("FactoryLocation") or "/opt/FreeFactory/Factories")
-    factory_path = factory_dir / args.factory
-    factory_data = read_factory(factory_path)
-    
-    # Respect factory-level enable switch
-    if not _as_bool(factory_data.get("ENABLEFACTORY")):
-        print(f"[FreeFactoryConversion.py] Factory is DISABLED: {factory_path.name}")
-        return 0  # benign exit; nothing to do
 
+    if args.daemon:
+        # --- Daemon Mode ---
+        if not args.sourcepath or not args.filename:
+            print("ERROR: --sourcepath and --filename are required in --daemon mode", file=sys.stderr)
+            return 2
 
-    core = FreeFactoryCore(cfg)
+        input_file = Path(args.sourcepath) / args.filename
+
+        if not input_file.exists():
+            print(f"ERROR: Input file does not exist: {input_file}", file=sys.stderr)
+            return 2
+
+        factory_dir = Path(cfg.get("FactoryLocation") or "/opt/FreeFactory/Factories")
+        source_dir = Path(args.sourcepath).resolve()
+
+        # Determine which factory to use
+        if args.factory:
+            factory_path = factory_dir / args.factory
+            factory_data = read_factory(factory_path)
+        else:
+            # Try to auto-discover factory by matching NOTIFYDIRECTORY
+            matches: List[Path] = []
+            for fpath in factory_dir.iterdir():
+                if not fpath.is_file():
+                    continue
+                try:
+                    fdata = read_factory(fpath)
+                    notify = fdata.get("NOTIFYDIRECTORY", "").strip()
+                    if notify:
+                        npath = Path(notify).expanduser().resolve()
+                        print(f"[debug] Checking {fpath.name} -> NOTIFYDIRECTORY={npath} vs source={source_dir}")
+                        if npath.as_posix() == source_dir.as_posix():
+                            matches.append(fpath)
+                except Exception:
+                    continue
+
+            if len(matches) == 0:
+                print(f"ERROR: No factory matches notify path: {source_dir}", file=sys.stderr)
+                return 2
+            elif len(matches) > 1:
+                print(f"ERROR: Multiple factories match notify path: {source_dir}", file=sys.stderr)
+                for m in matches:
+                    print(f" - {m.name}", file=sys.stderr)
+                return 2
+            else:
+                factory_path = matches[0]
+                factory_data = read_factory(factory_path)
+                print(f"[daemon] Matched factory: {factory_path.name}")
+
+        if not _as_bool(factory_data.get("ENABLEFACTORY")):
+            print(f"[FreeFactoryConversion.py] Factory is DISABLED: {factory_path.name}")
+            return 0
+
+        core = FreeFactoryCore(cfg)
+        process_file(core, input_file, factory_data)
+        return 0
+
 
     notify_raw = (factory_data.get("NOTIFYDIRECTORY") or "").strip()
     if not notify_raw:
