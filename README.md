@@ -115,15 +115,12 @@ This can also be started/stopped from within the FreeFactoryQT interface.
 
 ---
 
-## ✍ Example: Advanced Manual FFmpeg Options
+## ✍ Advanced Manual Input and Output FFmpeg Options
 
-Even highly specialized commands can be stored in a Factory. For example:
+Even highly specialized commands can be stored in a Factory.
 
-```bash
--c:v mpeg2video -pix_fmt yuv422p -aspect 16:9 -intra_vlc 1 -b:v 50000000 -minrate 50000000 -maxrate 50000000 -bufsize 17825792 -rc_init_occupancy 17825792 -bf 2 -non_linear_quant 1 -color_primaries bt709 -color_trc bt709 -colorspace bt709 -seq_disp_ext 1 -video_format component -color_range 1 -chroma_sample_location topleft -signal_standard 4 -dc 8 -qmin 5 -qmax 23 -g 12 -field_order tt -top 1 -flags +ildct+ilme -alternate_scan 1 -c:a pcm_s24le -ar:a 48000
-```
+These are stored under the `Manual Options (both input and output)` fields in your Factory, and saved for future use.
 
-These would be stored under the `Manual Options` field in your Factory, and saved for future use.
 =======
 ## ✍ Example: Advanced Manual Input FFmpeg Options
 
