@@ -72,7 +72,7 @@ Fully editable factories with support for complex options:
 
 ## ⚙️ Setting Up the FreeFactory Service (Optional)
 
-> ⚠️ Until ported to Python, this service requires **Tcl** and **inotifywait**.
+> ⚠️ The FreeFactoryConversion service requires **inotifywait** to be installed.
 
 To install or manage the background notify service:
 ```bash
