@@ -1,4 +1,4 @@
-FACTORYDESCRIPTION=Streams live audio and video in flv format from a file BROKEN
+FACTORYDESCRIPTION=Streams live audio and video in flv format from a file
 NOTIFYDIRECTORY=
 OUTPUTDIRECTORY=
 OUTPUTFILESUFFIX=
