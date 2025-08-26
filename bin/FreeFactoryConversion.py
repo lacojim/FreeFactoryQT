@@ -59,6 +59,96 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 
+# --- global concurrency gate (process-safe) ---
+import json, fcntl, os
+from contextlib import contextmanager
+
+def _cap_int(s, default=None):
+    try:
+        v = int(str(s).strip())
+        return None if v <= 0 else v  # 0/None => unlimited
+    except Exception:
+        return default
+
+def _sema_dir():
+    # user-writable, no root needed
+    d = Path.home() / ".freefactory" / "run"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+@contextmanager
+def acquire_concurrency_slot(is_gpu: bool, cfg: ConfigManager):
+    """Block until both the global cap and the per-type cap have room."""
+    g_cap = _cap_int(cfg.get("MaxConcurrentJobs", 0))           # 0 => unlimited
+    c_cap = _cap_int(cfg.get("MaxConcurrentJobsCPU", 5))
+    u_cap = _cap_int(cfg.get("MaxConcurrentJobsGPU", 2))
+
+    sema = _sema_dir() / "concurrency.lock"
+    state_path = _sema_dir() / "concurrency.json"
+
+    # open lock file once
+    with open(sema, "a+") as lf:
+        while True:
+            fcntl.flock(lf, fcntl.LOCK_EX)
+            try:
+                try:
+                    data = json.loads(state_path.read_text())
+                except Exception:
+                    data = {"total": 0, "cpu": 0, "gpu": 0}
+
+                total = int(data.get("total", 0))
+                cpu   = int(data.get("cpu",   0))
+                gpu   = int(data.get("gpu",   0))
+
+                # room under caps?
+                total_room = (g_cap is None) or (total < g_cap)
+                type_room  = ( (u_cap is None) if is_gpu else (c_cap is None) ) or \
+                             ( (gpu if is_gpu else cpu) < (u_cap if is_gpu else c_cap) )
+
+                if total_room and type_room:
+                    # take slot
+                    data["total"] = total + 1
+                    if is_gpu:
+                        data["gpu"] = gpu + 1
+                    else:
+                        data["cpu"] = cpu + 1
+                    state_path.write_text(json.dumps(data))
+                    break
+            finally:
+                fcntl.flock(lf, fcntl.LOCK_UN)
+
+            time.sleep(0.5)  # wait then retry
+
+        try:
+            yield  # run job
+        finally:
+            # release slot
+            fcntl.flock(lf, fcntl.LOCK_EX)
+            try:
+                try:
+                    data = json.loads(state_path.read_text())
+                except Exception:
+                    data = {"total": 0, "cpu": 0, "gpu": 0}
+                data["total"] = max(0, int(data.get("total", 0)) - 1)
+                if is_gpu:
+                    data["gpu"] = max(0, int(data.get("gpu", 0)) - 1)
+                else:
+                    data["cpu"] = max(0, int(data.get("cpu", 0)) - 1)
+                state_path.write_text(json.dumps(data))
+            finally:
+                fcntl.flock(lf, fcntl.LOCK_UN)
+
+
+
+
+
+
+
+
+
+
+
+
 def _as_bool(val: Optional[str]) -> bool:
     s = (val or "").strip().lower()
     return s in ("true", "yes", "1", "on")
@@ -115,34 +205,38 @@ def build_log_path(log_dir: Path, input_file: Path) -> Path:
 
 
 
-def _which_accel(factory: Dict[str, str]) -> str:
-    """Return a short name for the hardware encoder inferred from VIDEOCODECS, or '' for CPU."""
+def _which_accel(factory: dict) -> str:
+    """
+    Return accelerator tag for concurrency gating:
+      "" (CPU), "NVENC", "Intel QSV", "VAAPI", "AMD AMF", "CUDA"
+    Uses VIDEOCODECS only.
+    """
     vc = (factory.get("VIDEOCODECS") or "").strip().lower()
-    if any(x in vc for x in ("h264_nvenc", "hevc_nvenc", "nvenc")):
-        return "NVENC"
-    if any(x in vc for x in ("h264_qsv", "hevc_qsv", "qsv")):
-        return "Intel QSV"
-    if any(x in vc for x in ("h264_vaapi", "hevc_vaapi", "vaapi")):
-        return "VAAPI"
-    if any(x in vc for x in ("h264_amf", "hevc_amf", "amf")):
-        return "AMD AMF"
-    if "cuda" in vc:
-        return "CUDA"
-    return ""
+    # tolerate comma/space separated values
+    tokens = vc.replace(",", " ").split()
+
+    s = " ".join(tokens)  # simple contains is fine here
+    if "nvenc" in s:   return "NVENC"
+    if "qsv"   in s:   return "Intel QSV"
+    if "vaapi" in s:   return "VAAPI"
+    if "amf"   in s:   return "AMD AMF"
+    if "cuda"  in s:   return "CUDA"
+    return ""  # CPU
+
 
 
 def run_ffmpeg(core: FreeFactoryCore, input_file: Path, factory_data: Dict[str, str], preview: bool=False) -> int:
     cmd = core.build_ffmpeg_command(input_file, factory_data, preview=preview)
     cmd = [str(x) for x in cmd]
 
-    # Make sure ffmpeg won't read from stdin (prevents shell lockups)
+    # Ensure -nostdin is after the binary (cmd[0])
     try:
         idx = cmd.index("ffmpeg")
         if "-nostdin" not in cmd:
             cmd.insert(idx + 1, "-nostdin")
     except ValueError:
         if "-nostdin" not in cmd:
-            cmd.insert(0, "-nostdin")
+            cmd.insert(1, "-nostdin")  # was 0; this keeps the exe at cmd[0]
 
     log_dir = ensure_log_dir()
     log_path = build_log_path(log_dir, input_file)
@@ -291,9 +385,11 @@ def main(argv: Optional[List[str]] = None) -> int:
             print(f"[FreeFactoryConversion.py] Factory is DISABLED: {factory_path.name}")
             return 0
 
-        core = FreeFactoryCore(cfg)
+    core = FreeFactoryCore(cfg)
+    is_gpu = bool(_which_accel(factory_data))  # '' -> CPU, 'NVENC'/'QSV'/... -> GPU
+    with acquire_concurrency_slot(is_gpu, cfg):
         process_file(core, input_file, factory_data)
-        return 0
+    return 0
 
 
     notify_raw = (factory_data.get("NOTIFYDIRECTORY") or "").strip()

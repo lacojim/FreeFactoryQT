@@ -29,7 +29,7 @@ class ExportFactoryDialog(QDialog):
         self.layout.addLayout(path_layout)
 
         # Portable Export checkbox
-        self.portable_checkbox = QCheckBox("Portable Export (strip system paths)")
+        self.portable_checkbox = QCheckBox("Portable Export (strip system paths, passwords, URLs and Stream Keys)")
         self.layout.addWidget(self.portable_checkbox)
 
         # Buttons
@@ -90,4 +90,5 @@ def backup_factories_zip(factory_dir: Path, destination_zip: Path):
         return True, f"Backup created at: {destination_zip}"
     except Exception as e:
         return False, str(e)
+
 

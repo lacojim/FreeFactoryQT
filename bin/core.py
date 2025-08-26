@@ -427,10 +427,7 @@ class FreeFactoryCore:
         video_input_format: str = "",
         audio_input_format: str = "",
         output_url: str = "",
-<<<<<<< HEAD
-=======
         re_for_file_inputs=False,
->>>>>>> release/1.1.0
     ) -> list[str]:
         """
         Build the ffmpeg command for streaming.
@@ -474,24 +471,6 @@ class FreeFactoryCore:
         def add_input(fmt: str, src: str, pre_first: bool):
             if not src:
                 return
-<<<<<<< HEAD
-            if pre_first:
-                cmd.extend(tokens)  # pre-video opts only appear before the *video* -i
-            if fmt:
-                cmd += ["-f", fmt]
-            if include_tqs and tqs_size:
-                cmd += ["-thread_queue_size", str(tqs_size)]
-            cmd += ["-i", src]
-
-        if manual_input and has_i:
-            # Verbatim input graph (already includes -i) → paste as-is
-            cmd += tokens
-        else:
-            # Treat ManualOptionsInput (if present) as PRE-VIDEO options (x11grab-style)
-            # IMPORTANT: only inject these pre-opts if we're actually using an explicit video input
-            # and this isn't a plain file demux (i.e., user provided a video_input).
-            pre_before_video = bool(video_input)
-=======
 
             fmt_norm = (fmt or "").strip().lower()
             is_filelike = fmt_norm in ("file", "", "concat")  # treat concat like file
@@ -525,7 +504,6 @@ class FreeFactoryCore:
                 (video_input_format or "").strip().lower() not in ("file", "", "concat")
 
             )
->>>>>>> release/1.1.0
 
             # VIDEO input
             add_input(video_input_format, video_input, pre_before_video)
@@ -533,12 +511,9 @@ class FreeFactoryCore:
             # AUDIO input
             add_input(audio_input_format, audio_input, pre_first=False)
 
-<<<<<<< HEAD
-=======
         # ...below unchanged...
 
 
->>>>>>> release/1.1.0
         # -------------------- FLAGS FROM WIDGETS --------------------
         cmd += self.build_streaming_flags(factory_data)
 
