@@ -427,6 +427,10 @@ class FreeFactoryCore:
         video_input_format: str = "",
         audio_input_format: str = "",
         output_url: str = "",
+<<<<<<< HEAD
+=======
+        re_for_file_inputs=False,
+>>>>>>> release/1.1.0
     ) -> list[str]:
         """
         Build the ffmpeg command for streaming.
@@ -470,6 +474,7 @@ class FreeFactoryCore:
         def add_input(fmt: str, src: str, pre_first: bool):
             if not src:
                 return
+<<<<<<< HEAD
             if pre_first:
                 cmd.extend(tokens)  # pre-video opts only appear before the *video* -i
             if fmt:
@@ -486,6 +491,41 @@ class FreeFactoryCore:
             # IMPORTANT: only inject these pre-opts if we're actually using an explicit video input
             # and this isn't a plain file demux (i.e., user provided a video_input).
             pre_before_video = bool(video_input)
+=======
+
+            fmt_norm = (fmt or "").strip().lower()
+            is_filelike = fmt_norm in ("file", "", "concat")  # treat concat like file
+
+            # Only put pre-video manual opts before capture inputs, not file/concat
+            if pre_first and not is_filelike:
+                cmd.extend(tokens)
+
+            # For capture formats include -f
+            if not is_filelike and fmt_norm:
+                cmd.extend(["-f", fmt_norm])
+
+            # Thread queue only for capture inputs
+            if include_tqs and tqs_size and not is_filelike:
+                cmd.extend(["-thread_queue_size", str(tqs_size)])
+
+            # Throttle file-like inputs (-re) right before their -i
+            if is_filelike and re_for_file_inputs:
+                cmd.append("-re")
+
+            cmd.extend(["-i", src])
+
+
+
+        if manual_input and has_i:
+            cmd += tokens
+        else:
+            # Only treat ManualOptionsInput as pre-video when the *video* is capture (not "File")
+            #pre_before_video = bool(video_input) and ((video_input_format or "").strip().lower() != "file")
+            pre_before_video = bool(video_input) and (
+                (video_input_format or "").strip().lower() not in ("file", "", "concat")
+
+            )
+>>>>>>> release/1.1.0
 
             # VIDEO input
             add_input(video_input_format, video_input, pre_before_video)
@@ -493,6 +533,12 @@ class FreeFactoryCore:
             # AUDIO input
             add_input(audio_input_format, audio_input, pre_first=False)
 
+<<<<<<< HEAD
+=======
+        # ...below unchanged...
+
+
+>>>>>>> release/1.1.0
         # -------------------- FLAGS FROM WIDGETS --------------------
         cmd += self.build_streaming_flags(factory_data)
 
