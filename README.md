@@ -106,6 +106,7 @@ This can also be started/stopped from within the FreeFactoryQT interface.
 
 ---
 
+<<<<<<< HEAD
 ## ✍ Example: Advanced Manual FFmpeg Options
 
 Even highly specialized commands can be stored in a Factory. For example:
@@ -115,23 +116,84 @@ Even highly specialized commands can be stored in a Factory. For example:
 ```
 
 These would be stored under the `Manual Options` field in your Factory, and saved for future use.
+=======
+## ✍ Example: Advanced Manual Input FFmpeg Options
+
+Even highly specialized input commands can be stored in a Factory. For example:
+
+```bash
+-thread_queue_size 512 -f x11grab -framerate 60 -video_size 1920x1080 -i :0.0+1920,2160 -thread_queue_size 512 -f pulse -i default
+```
+
+These would be stored under the `Manual Input Ops` field in your Factory, and saved for future use.
+
+## ✍ Example: Advanced Manual Output FFmpeg Options
+
+Highly specialized output commands can be stored in a Factory too. For example:
+
+```bash
+-intra_vlc 1 -bufsize 17825792 -rc_init_occupancy 17825792 -bf 2 -non_linear_quant 1 -color_primaries bt709 -color_trc bt709 -colorspace bt709 -seq_disp_ext 1 -video_format component -color_range 1 -chroma_sample_location topleft -signal_standard 4 -dc 8 -qmin 5 -qmax 23 -g 12 -field_order tt -top 1 -flags +ildct+ilme -alternate_scan 1
+```
+
+These would be stored under the `Manual Output Ops` field in your Factory, and saved for future use.
+>>>>>>> release/1.1.0
 
 ---
 
 ## 🆕 Changelog
 
+<<<<<<< HEAD
+=======
+### 📅 New – 2025-08-23
+
+Notify subsystem (runner + notifier)
+
+✨ Added support for multiple NotifyFolders in .freefactoryrc (semicolon-separated).
+The runner generator now quotes every path, validates each directory, and comments any missing paths in the script.
+
+⏱️ Switched FreeFactoryNotifyRunner.sh to 4-field output with timestamps and sane excludes:
+--timefmt '%F %T' --format '%T|%w|%e|%f' --exclude '\.swp$' --exclude '~$' --exclude '\.tmp$' --exclude '\.part$' --exclude '\.crdownload$' --exclude '\.kate-swp$' --exclude '\.DS_Store$'
+(Paths are always shell-quoted.)
+
+🧰 Hardened FreeFactoryNotify.sh:
+
+set -Eeuo pipefail, predictable logging, and 3/4-field stdin parser (back-compatible with older 3-field runners).
+
+Safe path join (%w + %f) and optional “soft settle” window using AppleDelaySeconds from ~/.freefactoryrc (default 2s; exits early once size stabilizes).
+
+Direct hand-off to FreeFactoryConversion.py (no more Tcl fallback):
+--daemon --sourcepath <dir> --filename <file> --notify-event <event>
+(PYTHONUNBUFFERED=1 for timely logs.)
+
+🧭 Logging & systemd:
+
+Documented user-unit logging (journalctl --user -u freefactory-notify -f) and ensured unit captures stdout/stderr (StandardOutput=journal).
+
+Install / Ops
+
+
+>>>>>>> release/1.1.0
 ### 📅 New – 2025-08-21
 
 * 🗑️ Removed legacy/deprecated fields and widgets:
 
   * `VIDEOTARGET` (FFmbc leftover)
   * `AUDIOTAG` (FFmbc leftover)
+<<<<<<< HEAD
   * Entire **DepPage** tab (including `THREADS`, `RemoveSourceGlobal`, etc.).
+=======
+  * Entire **DepPage** tab (including `THREADS`, `RemoveSourceGlobal`, etc.)
+>>>>>>> release/1.1.0
 * ✅ Promoted the following to first-class, factory-level options (in `_combo_key_map`):
 
   * `ENABLEFACTORY`
   * `DELETECONVERSIONLOGS`
   * `DELETESOURCE`
+<<<<<<< HEAD
+=======
+  * `FFMXPROGRAM`
+  
+>>>>>>> release/1.1.0
 * 📝 Added support in **FreeFactoryConversion.py** for:
 
   * Skipping factories where `ENABLEFACTORY=False`
@@ -148,8 +210,14 @@ These would be stored under the `Manual Options` field in your Factory, and save
 
   * Added `checkMatchMinMaxBitrate` checkbox → locks `-minrate`/`-maxrate` to `-b:v`
   * Ghosts automatically when no `VideoBitrate` is set or in streaming context
+<<<<<<< HEAD
   * Now has a drop-down menu including File, Tools and Help drop downs with hotkey support (ie CTRL+N = New Factory, CTRL+S = Save Factory, F1 = Help). 
   
+=======
+  * Updated tooltips for Input Manual Options, Output Manual Options, and Preview Command for clarity
+
+
+>>>>>>> release/1.1.0
 ### 📅 New – 2025-08-17
 
 - 🔧 Major Live Stream Manager overhaul — now uses `core.py` for FFmpeg command generation.
@@ -200,7 +268,11 @@ python3 migrate_factories.py --add LOWLATENCYINPUT=False,AUTOAPAV=False,INCLUDET
 
 - ✅ Dynamic UI: only show valid `pix_fmt`, audio, and video profiles based on selected codec
 - ✅ Batch queue with mixed Factories
+<<<<<<< HEAD
 - 🔄 Rewrite `FreeFactoryConversion.tcl` in Python (as of 2025-08-22 this has been completed but still may need some minor work). FreeFactoryConversion.tcl is now officially broken. Several keys in the factory files have been removed that FFC.tcl once relied on. With the changeover to a python FreeFactoryConversion.py, it is just not worth to keep the .tcl version up to date. Sorry for the inconvience.
+=======
+- 🔄 Rewrite `FreeFactoryConversion.tcl` in Python
+>>>>>>> release/1.1.0
 - 🪟 Port FreeFactoryQT to Windows (experimental; may be limited by background service)
 
 ---

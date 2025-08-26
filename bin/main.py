@@ -32,6 +32,10 @@ import os
 import shlex
 import shutil
 import subprocess
+<<<<<<< HEAD
+=======
+import atexit
+>>>>>>> release/1.1.0
 
 from pathlib import Path
 from datetime import datetime
@@ -44,18 +48,32 @@ from PyQt6.QtWidgets import (
     QPushButton, QFileDialog, QHeaderView, QLabel, QComboBox,
     QLineEdit, QMenu, QCheckBox, QTextEdit, QTextBrowser
 )
+<<<<<<< HEAD
+=======
+from PyQt6 import QtCore
+>>>>>>> release/1.1.0
 from PyQt6.uic import loadUi
 
 from config_manager import ConfigManager
 from core import FFmpegWorker, FreeFactoryCore, FFmpegWorkerZone
 from droptextedit import DropTextEdit
 from ffmpeghelp import FFmpegHelpDialog
+<<<<<<< HEAD
 from ffstreaming import (
     StreamWorker, build_streaming_command,
     start_single_stream, stop_single_stream,
     start_all_streams, stop_all_streams,
     handle_stream_stopped
 )
+=======
+
+from ffstreaming import (
+    StreamWorker, start_single_stream, stop_single_stream,
+    start_all_streams, stop_all_streams,
+    handle_stream_stopped
+)
+
+>>>>>>> release/1.1.0
 from ffnotifyservice import (
     connect_notify_service_controls,
     update_notify_service_mode_display,
@@ -148,6 +166,12 @@ class FreeFactoryApp(QMainWindow):
         self.active_threads = []
         self.queue_paused = False
         self.active_streams = {}
+<<<<<<< HEAD
+=======
+        self.active_streams_by_row = {}   # row_uid -> worker
+        self._stream_row_seq = 0          # monotonic uid for stream rows
+
+>>>>>>> release/1.1.0
 
         ui_path = Path(__file__).parent / "FreeFactory-tabs.ui"
         loadUi(ui_path, self)
@@ -167,6 +191,10 @@ class FreeFactoryApp(QMainWindow):
         self.CompanyNameGlobal.setText(self.config.get("CompanyNameGlobal"))
         self.CpuMaxConcurrentJobsGlobal.setValue(int(self.config.get("MaxConcurrentJobsCPU", "1") or 1))
         self.GpuMaxConcurrentJobsGlobal.setValue(int(self.config.get("MaxConcurrentJobsGPU", "2") or 2))
+<<<<<<< HEAD
+=======
+        self.MaxConcurrentJobsGlobal.setValue(int(self.config.get("MaxConcurrentJobs", "0") or 0))
+>>>>>>> release/1.1.0
 
         self.AppleDelaySecondsGlobal.setText(self.config.get("AppleDelaySeconds"))
         self.PathtoFFmpegGlobal.setText(self.config.get("PathtoFFmpegGlobal"))
@@ -179,8 +207,13 @@ class FreeFactoryApp(QMainWindow):
             matching_items = self.listFactoryFiles.findItems(default_factory, Qt.MatchFlag.MatchExactly)
             if matching_items:
                 self.listFactoryFiles.setCurrentItem(matching_items[0])
+<<<<<<< HEAD
                 self.load_selected_factory(matching_items[0]) 
 
+=======
+                self.load_selected_factory(matching_items[0])
+                
+>>>>>>> release/1.1.0
 
     # Set up the Dictionary for all Widgets and Factory keys
     def _combo_key_map(self) -> dict[str, str]:
@@ -239,15 +272,32 @@ class FreeFactoryApp(QMainWindow):
             "checkLowLatencyInput":     "LOWLATENCYINPUT",          # QCheckBox
             "checkMapAVInputs":         "AUTOMAPAV",                # QCheckBox
             "tqsSizeCombo":             "TQSSIZE",                  # QComboBox
+<<<<<<< HEAD
             #"StreamingFactoryName":   "STREAMINGFACTORYNAME",      # If/when STREAMINGFACTORYNAME is used, re-add this:
+=======
+            "StreamMgrMode":            "STREAMMGRMODE",            # QComboBox
+            "checkReadFilesRealTime":   "READFILESREALTIME",        # QCheckBox
+>>>>>>> release/1.1.0
             
             # Pre/Post Processing Options
             "EnableFactory":            "ENABLEFACTORY",            # QCheckBox
             "DeleteConversionLogs":     "DELETECONVERSIONLOGS",     # QCheckBox
             "DeleteSource":             "DELETESOURCE",             # QCheckBox
+<<<<<<< HEAD
         }
 
 
+=======
+            
+            #Recording Fields
+            "RecordInput":              "RECORDINPUT",
+            "RecordOutputFolder":       "RECORDFOLDER",
+            "RecordFilename":           "RECORDFILENAME",
+        }
+
+
+
+>>>>>>> release/1.1.0
     # ============================
     #       UI Setup Logic
     # ============================
@@ -291,6 +341,14 @@ class FreeFactoryApp(QMainWindow):
         self.AddNewStream.clicked.connect(self.add_stream_to_table)
         self.RemoveStream.clicked.connect(self.remove_selected_stream)
         
+<<<<<<< HEAD
+=======
+        if hasattr(self, "AddVideoStreamFile"):
+            self.AddVideoStreamFile.clicked.connect(self._on_add_video_stream_file)
+        if hasattr(self, "AddAudioStreamFile"):
+            self.AddAudioStreamFile.clicked.connect(self._on_add_audio_stream_file)
+        
+>>>>>>> release/1.1.0
         # Populate Streaming Factory list
         factory_dir = self.config.get("FactoryLocation") or "/opt/FreeFactory/Factories"
         factory_files = sorted(Path(factory_dir).glob("*"))
@@ -308,6 +366,10 @@ class FreeFactoryApp(QMainWindow):
         self.streamFactorySelect.clear()
         self.streamFactorySelect.addItems(factory_names)
         
+<<<<<<< HEAD
+=======
+        
+>>>>>>> release/1.1.0
         # Set up the Menu Items
         self.actionNewFactory.triggered.connect(self.new_factory)
         self.actionSaveFactory.triggered.connect(self.save_current_factory)
@@ -319,6 +381,11 @@ class FreeFactoryApp(QMainWindow):
         self.actionAbout_QT.triggered.connect(QApplication.instance().aboutQt)
         self.actionAboutFFmpeg.triggered.connect(self.show_about_ffmpeg)
         self.actionAboutFreeFactory.triggered.connect(self.show_about_dialog_existing)
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> release/1.1.0
  
         
     # ============================
@@ -410,6 +477,16 @@ class FreeFactoryApp(QMainWindow):
         update_notify_service_mode_display(self)
         connect_notify_service_controls(self)
         self.clearNotifyStatusButton.clicked.connect(lambda: self.listNotifyServiceStatus.clear())
+<<<<<<< HEAD
+=======
+        
+        self.buttonAddNotifyDir.clicked.connect(self._add_notify_folder)
+        self.RemoveNotifyFolders.clicked.connect(self._remove_notify_folder)
+
+        # Populate on startup:
+        for p in self.config.get_notify_folders():
+            self.listNotifyFolders.addItem(p)
+>>>>>>> release/1.1.0
 
         # FreeFactory Clear Preview and Dropzone Buttons        
         self.clearPreviewButton.clicked.connect(lambda: self.PreviewCommandLine.clear())
@@ -420,7 +497,29 @@ class FreeFactoryApp(QMainWindow):
         self.checkMatchMinMaxBitrate.toggled.connect(self._update_minmax_lock_state)
         self._update_minmax_lock_state()
 
+<<<<<<< HEAD
         
+=======
+ 
+ 
+ 
+ 
+ 
+        # after loading factories & building tabs
+        if hasattr(self, "_wire_stream_tab_minimal"):
+            self._wire_stream_tab_minimal()
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+>>>>>>> release/1.1.0
         
 
     # ============================
@@ -673,9 +772,12 @@ class FreeFactoryApp(QMainWindow):
         dialog.exec()
 
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> release/1.1.0
     # ============================
     #     Help Dialog
     # ============================
@@ -685,6 +787,7 @@ class FreeFactoryApp(QMainWindow):
         self._ffmpeg_help_dialog = FFmpegHelpDialog(title, args, self)
         self._ffmpeg_help_dialog.show()
 
+<<<<<<< HEAD
     # ============================
     #     Streaming Controls
     # ============================
@@ -699,6 +802,95 @@ class FreeFactoryApp(QMainWindow):
                 continue
 
             start_single_stream(self, stream_data=stream_data)
+=======
+
+    # ============================
+    #     Streaming Controls
+    # ============================
+    
+    def _on_add_video_stream_file(self):
+        start_dir = getattr(self, "_last_stream_dir", os.path.expanduser("~"))
+        fname, _ = QFileDialog.getOpenFileName(
+            self,
+            "Select video file to stream",
+            start_dir,
+            "Media files (*.mp4 *.mov *.mkv *.flv *.ts *.mxf *.avi *.webm *.m4v);;All files (*)",
+        )
+        if not fname:
+            return
+
+        # Fill the input box
+        self.streamInputVideo.setText(fname)
+        self._last_stream_dir = os.path.dirname(fname)
+        
+    def _on_add_audio_stream_file(self):
+        start_dir = getattr(self, "_last_stream_dir", os.path.expanduser("~"))
+        fname, _ = QFileDialog.getOpenFileName(
+            self,
+            "Select audio file to stream",
+            start_dir,
+            "Media files (*.flac *.mp3 *.aac *.wav *.ac3 *.dts *.m4a);;All files (*)",
+        )
+        if not fname:
+            return
+
+        # Fill the input box
+        self.streamInputAudio.setText(fname)
+        self._last_stream_dir = os.path.dirname(fname)
+        
+
+        # Ensure ForceFormatInputVideo == 'file' so core skips '-f' and TQS
+        try:
+            idx = self.ForceFormatInputVideo.findText("file")  # exact, lowercase
+            if idx >= 0:
+                self.ForceFormatInputVideo.setCurrentIndex(idx)
+            elif self.ForceFormatInputVideo.isEditable():
+                self.ForceFormatInputVideo.setEditText("file")
+        except Exception:
+            pass
+
+        # nice UX ping
+        if hasattr(self, "statusBar"):
+            self.statusBar().showMessage("Selected stream file", 2000)
+        
+    
+    def start_all_streams(self):
+        """Start every idle row using the exact same path as manual Start."""
+        rows = self.streamTable.rowCount()
+        started = 0
+
+        for row in range(rows):
+            # fetch per-row metadata and worker (if any)
+            item0 = self.streamTable.item(row, 0)
+            if not item0:
+                continue
+            sd = item0.data(Qt.ItemDataRole.UserRole)
+            row_uid = sd.get("row_uid") if sd else None
+
+            # skip rows that are already running
+            worker = None
+            if row_uid is not None and hasattr(self, "active_streams_by_row"):
+                worker = self.active_streams_by_row.get(row_uid)
+            if worker:
+                continue  # already live/starting
+
+            # ensure a status cell exists, then set Starting…
+            if not self.streamTable.item(row, STATUS_COL):
+                self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Starting..."))
+            else:
+                self.streamTable.item(row, STATUS_COL).setText("Starting...")
+
+            # IMPORTANT: use the same function as the single-row Start button
+            self.start_stream_for_row(row)
+            started += 1
+
+        if hasattr(self, "statusBar"):
+            try:
+                self.statusBar().showMessage(f"Started {started} stream(s)", 3000)
+            except Exception:
+                pass
+
+>>>>>>> release/1.1.0
             
     def start_selected_stream(self):
         row = self.streamTable.currentRow()
@@ -707,11 +899,15 @@ class FreeFactoryApp(QMainWindow):
             return
         self.start_stream_for_row(row)
 
+<<<<<<< HEAD
 
 
 
     def start_stream_for_row(self, row: int):
         # Status → Starting...
+=======
+    def start_stream_for_row(self, row: int):
+>>>>>>> release/1.1.0
         self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Starting..."))
 
         item0 = self.streamTable.item(row, 0)
@@ -720,26 +916,71 @@ class FreeFactoryApp(QMainWindow):
             self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Error: No data"))
             return
 
+<<<<<<< HEAD
         # Mirror row → UI if your builder reads from UI fields (optional but harmless)
+=======
+        row_uid = stream_data.get("row_uid")
+        if row_uid is None:
+            self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Error: No row uid"))
+            return
+
+        # Mirror (optional)
+>>>>>>> release/1.1.0
         if hasattr(self, "streamFactorySelect"):
             self.streamFactorySelect.setCurrentText(stream_data.get("factory_name", ""))
         if hasattr(self, "streamRTMPUrl"):
             self.streamRTMPUrl.setText(stream_data.get("rtmp_url", ""))
         if hasattr(self, "streamKey"):
             self.streamKey.setText(stream_data.get("stream_key", ""))
+<<<<<<< HEAD
 
         # Build & launch
         cmd = build_streaming_command(self.config, self.core, self)
+=======
+        
+        # Build & launch (use core.build_streaming_command)
+        factory_name = (stream_data.get("factory_name") or "").strip()
+        factory_root = self.config.get("FactoryLocation") or "/opt/FreeFactory/Factories"
+        factory_path = Path(factory_root) / factory_name
+        factory_data = self.core.load_factory(factory_path)
+
+        fmt_v = (self.ForceFormatInputVideo.currentText() or "").strip().lower()
+        fmt_a = (self.ForceFormatInputAudio.currentText() or "").strip().lower()
+
+        full_output_url = stream_data.get("output_url", "")
+        
+        re_files = bool(self.checkReadFilesRealTime.isChecked())
+        
+        cmd = self.core.build_streaming_command(
+            factory_data,
+            video_input=stream_data.get("video_input", ""),
+            audio_input=stream_data.get("audio_input", ""),
+            video_input_format=fmt_v,
+            audio_input_format=fmt_a,
+            output_url=full_output_url,
+            re_for_file_inputs=re_files,
+        )
+
+        print("DEBUG Streaming CMD:", cmd)  # optional
+
+>>>>>>> release/1.1.0
         if not cmd:
             self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Error: Bad command"))
             return
 
         full_output_url = cmd[-1]
         worker = StreamWorker(cmd, full_output_url)
+<<<<<<< HEAD
+=======
+
+        # Promote status changes
+        worker.output.connect(lambda line, r=row: self._maybe_mark_live(r, line))
+>>>>>>> release/1.1.0
         worker.output.connect(self.streamLogOutput.appendPlainText)
         worker.finished.connect(lambda: self._on_stream_finished(row, full_output_url, False))
         worker.error.connect(lambda m: self._on_stream_error(row, full_output_url, m))
 
+<<<<<<< HEAD
         if not hasattr(self, "active_streams"):
             self.active_streams = {}
         self.active_streams[full_output_url] = worker
@@ -754,10 +995,62 @@ class FreeFactoryApp(QMainWindow):
         # Update status and re-enable Start if a row is selected
         self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Error" if had_error else "Stopped"))
         self.StartStream.setEnabled(self.streamTable.currentRow() >= 0)
+=======
+        # Store both mappings:
+        if not hasattr(self, "active_streams_by_row"):
+            self.active_streams_by_row = {}
+        self.active_streams_by_row[row_uid] = worker
+
+        if not hasattr(self, "active_streams"):
+            self.active_streams = {}
+        self.active_streams[full_output_url] = worker  # keep legacy URL map for Stop All etc.
+
+        worker.start()
+        self.streamLogOutput.appendPlainText(f"🟢 Started stream (row {row_uid}): {full_output_url}")
+        
+        if hasattr(self, "statusBar"):
+            try:
+                self.statusBar().showMessage(f"Started stream (row {row_uid})", 3000)
+            except Exception:
+                pass
+
+
+
+
+    def _on_stream_finished(self, row: int, url: str, had_error: bool):
+        # Resolve row_uid for cleanup
+        row_uid = None
+        try:
+            item0 = self.streamTable.item(row, 0)
+            sd = item0.data(Qt.ItemDataRole.UserRole) if item0 else None
+            if sd:
+                row_uid = sd.get("row_uid")
+        except Exception:
+            pass
+
+        # Clean per-row map
+        if row_uid is not None and hasattr(self, "active_streams_by_row"):
+            self.active_streams_by_row.pop(row_uid, None)
+
+        # Clean legacy URL map
+        if hasattr(self, "active_streams") and url:
+            self.active_streams.pop(url, None)
+
+        # Update UI
+        self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Error" if had_error else "Stopped"))
+        
+        if hasattr(self, "statusBar"):
+            try:
+                self.statusBar().showMessage("Stream finished", 3000)
+            except Exception:
+                pass
+
+>>>>>>> release/1.1.0
 
 
 
     def _maybe_mark_live(self, row: int, line: str):
+<<<<<<< HEAD
         if "frame=" in line or "bitrate=" in line or "Connected" in line:
             # Only flip if still in Starting…
             item = self.streamTable.item(row, STATUS_COL)
@@ -776,6 +1069,31 @@ class FreeFactoryApp(QMainWindow):
 
         # Re-enable Start if a row is selected
         self.StartStream.setEnabled(self.streamTable.currentRow() >= 0)
+=======
+        """
+        Promote 'Starting...' → 'Live' as soon as ffmpeg emits meaningful output.
+        Mark 'Error' on obvious error lines. No stopping/cleanup here.
+        """
+        try:
+            tbl = self.streamTable
+            if row < 0 or row >= tbl.rowCount():
+                return
+            txt = (line or "").strip()
+            # Error heuristics (local, immediate)
+            low = txt.lower()
+            if any(k in low for k in ("error", "failed", "permission denied", "no such file")):
+                tbl.setItem(row, STATUS_COL, QTableWidgetItem("Error"))
+                return
+
+            # Flip to Live once real stderr arrives and we're still "Starting…"
+            item = tbl.item(row, STATUS_COL)
+            cur = (item.text() if item else "").strip().lower()
+            if cur.startswith("starting"):
+                if txt and not txt.startswith("ffmpeg version"):
+                    tbl.setItem(row, STATUS_COL, QTableWidgetItem("Live"))
+        except Exception:
+            pass
+>>>>>>> release/1.1.0
 
 
     def _on_stream_error(self, row: int, url: str, msg: str):
@@ -783,17 +1101,30 @@ class FreeFactoryApp(QMainWindow):
         self.streamLogOutput.appendPlainText(f"🔴 {msg}")
         self._on_stream_finished(row, url, had_error=True)
 
+<<<<<<< HEAD
 
 
 
     def stop_all_streams(self):
         stop_all_streams(self)
+=======
+    def stop_all_streams(self):
+        stop_all_streams(self)
+        
+        if hasattr(self, "statusBar"):
+            try:
+                self.statusBar().showMessage("All streams stopped", 3000)
+            except Exception:
+                pass
+
+>>>>>>> release/1.1.0
 
     def stop_selected_stream(self):
         row = self.streamTable.currentRow()
         if row < 0:
             return
 
+<<<<<<< HEAD
         # Build full URL key just like start did
         base = self.streamRTMPUrl.text().strip()
         key  = self.streamKey.text().strip()
@@ -809,6 +1140,34 @@ class FreeFactoryApp(QMainWindow):
         # _on_stream_finished will run via worker.finished / worker.error
 
  
+=======
+        item0 = self.streamTable.item(row, 0)
+        stream_data = item0.data(Qt.ItemDataRole.UserRole) if item0 else None
+        if not stream_data:
+            self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Stopped"))
+            return
+
+        row_uid = stream_data.get("row_uid")
+        worker = None
+        if hasattr(self, "active_streams_by_row"):
+            worker = self.active_streams_by_row.get(row_uid)
+
+        if not worker:
+            # Already gone; just mark UI
+            self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Stopped"))
+            return
+
+        worker.stop()  # _on_stream_finished will finalize state
+        
+        if hasattr(self, "statusBar"):
+            try:
+                self.statusBar().showMessage("Stream stopped", 3000)
+            except Exception:
+                pass
+                
+
+
+>>>>>>> release/1.1.0
     def remove_selected_stream(self):
         selected_row = self.streamTable.currentRow()
         if selected_row < 0:
@@ -821,6 +1180,7 @@ class FreeFactoryApp(QMainWindow):
 
         stream_data = item.data(Qt.ItemDataRole.UserRole)
         if stream_data:
+<<<<<<< HEAD
             rtmp_url = stream_data.get("rtmp_url")
             if rtmp_url and rtmp_url in self.active_streams:
                 self.active_streams[rtmp_url].stop()
@@ -828,20 +1188,65 @@ class FreeFactoryApp(QMainWindow):
                 self.streamLogOutput.appendPlainText(f"🔴 Stopped and removed: {rtmp_url}")
 
         self.streamTable.removeRow(selected_row)
+=======
+            row_uid = stream_data.get("row_uid")
+            worker = None
+            if hasattr(self, "active_streams_by_row"):
+                worker = self.active_streams_by_row.pop(row_uid, None)
+
+            # Best-effort stop & legacy cleanup
+            if worker:
+                try:
+                    worker.stop()
+                except Exception:
+                    pass
+
+            url = stream_data.get("output_url")
+            if hasattr(self, "active_streams") and url:
+                self.active_streams.pop(url, None)
+
+            self.streamLogOutput.appendPlainText(f"🔴 Removed row {row_uid} ({url or ''})")
+
+        self.streamTable.removeRow(selected_row)
+        
+        if hasattr(self, "statusBar"):
+            try:
+                self.statusBar().showMessage("Stream removed", 3000)
+            except Exception:
+                pass
+
+    
+
+>>>>>>> release/1.1.0
 
     def add_stream_to_table(self):
         row = self.streamTable.rowCount()
         self.streamTable.insertRow(row)
 
+<<<<<<< HEAD
+=======
+        # Assign stable row uid
+        if not hasattr(self, "_stream_row_seq"):
+            self._stream_row_seq = 0
+        self._stream_row_seq += 1
+        row_uid = self._stream_row_seq
+
+>>>>>>> release/1.1.0
         # Gather current UI values
         factory_name = self.streamFactorySelect.currentText().strip() if hasattr(self, "streamFactorySelect") else ""
         v_in   = self.streamInputVideo.text().strip()   if hasattr(self, "streamInputVideo") else ""
         a_in   = self.streamInputAudio.text().strip()   if hasattr(self, "streamInputAudio") else ""
         base   = self.streamRTMPUrl.text().strip()      if hasattr(self, "streamRTMPUrl")   else ""
         key    = self.streamKey.text().strip()          if hasattr(self, "streamKey")       else ""
+<<<<<<< HEAD
         mux    = ""  # optional: summary; leave blank or fill from factory if you like
 
         # Build the full destination URL (with auth if streamAuthMode == 'url')
+=======
+        mux    = ""
+
+        # Build full destination URL (with auth if streamAuthMode == 'url')
+>>>>>>> release/1.1.0
         full_url = base.rstrip("/")
         if key:
             full_url = f"{full_url}/{key}"
@@ -853,6 +1258,7 @@ class FreeFactoryApp(QMainWindow):
                 scheme, rest = full_url.split("://", 1) if "://" in full_url else ("rtmp", full_url)
                 full_url = f"{scheme}://{user}:{pwd}@{rest}"
 
+<<<<<<< HEAD
         # Fill visible columns
         self.streamTable.setItem(row, 0, QTableWidgetItem(factory_name or "<factory>"))
         self.streamTable.setItem(row, 1, QTableWidgetItem(v_in))
@@ -869,13 +1275,38 @@ class FreeFactoryApp(QMainWindow):
             "rtmp_url": base,           # base without key
             "stream_key": key,
             "output_url": full_url,     # full destination (with key/auth if any)
+=======
+        # Visible columns
+        self.streamTable.setItem(row, 0, QTableWidgetItem(factory_name or "<factory>"))
+        self.streamTable.setItem(row, 1, QTableWidgetItem(v_in))
+        self.streamTable.setItem(row, 2, QTableWidgetItem(a_in))
+        self.streamTable.setItem(row, 3, QTableWidgetItem(base))
+        self.streamTable.setItem(row, 4, QTableWidgetItem(mux))
+        self.streamTable.setItem(row, STATUS_COL, QTableWidgetItem("Idle"))
+
+        # Stash per-row metadata (Start/Stop read only from here)
+        stream_data = {
+            "row_uid":      row_uid,        # <— NEW
+            "factory_name": factory_name,
+            "video_input":  v_in,
+            "audio_input":  a_in,
+            "rtmp_url":     base,           # base without key
+            "stream_key":   key,
+            "output_url":   full_url,       # full destination
+>>>>>>> release/1.1.0
         }
         item0 = self.streamTable.item(row, 0)
         item0.setData(Qt.ItemDataRole.UserRole, stream_data)
 
+<<<<<<< HEAD
         # Select the new row so Start is enabled
         self.streamTable.setCurrentCell(row, 0)
 
+=======
+        self.streamTable.setCurrentCell(row, 0)
+
+
+>>>>>>> release/1.1.0
     def handle_stream_stopped(self, message):
         self.streamLogOutput.appendPlainText(f"🔴 Stream ended: {message}")
 
@@ -961,8 +1392,11 @@ class FreeFactoryApp(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Save Error", f"Failed to save factory:\n{e}")
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> release/1.1.0
     def delete_current_factory(self):
         factory_name = self.FactoryFilename.text().strip()
         if factory_name:
@@ -977,6 +1411,38 @@ class FreeFactoryApp(QMainWindow):
             field.clear()
         self.factory_dirty = True
 
+<<<<<<< HEAD
+=======
+        # Force Mode → Off
+        try:
+            self.StreamMgrMode.setCurrentIndex(0)   # 0 == "Off"
+            # keep UI in sync (enable/disable inputs, etc.)
+            if hasattr(self, "update_stream_ui_state"):
+                self.update_stream_ui_state()
+        except Exception:
+            pass
+        
+        # Don’t call .clear() on the QComboBox itself (that nukes items)
+        try:
+            self.ForceFormatInputVideo.setCurrentIndex(-1)
+            self.ForceFormatInputVideo.setEditText("")
+            self.ForceFormatInputAudio.setCurrentIndex(-1)
+            self.ForceFormatInputAudio.setEditText("")
+        except Exception:
+            pass
+        try:
+            self.checkReadFilesRealTime.setChecked(False)
+        except Exception:
+            pass
+        
+
+        # Optional feedback
+        if hasattr(self, "statusBar"):
+            try:
+                self.statusBar().showMessage("New Factory: fields cleared", 3000)
+            except Exception:
+                pass
+>>>>>>> release/1.1.0
 
     def load_selected_factory(self, item):
         self.PreviewCommandLine.clear()
@@ -1033,7 +1499,13 @@ class FreeFactoryApp(QMainWindow):
             #if hasattr(self, "checkMatchMinMaxBitrate"):
             #    val = factory_data.get("MATCHMINMAXBITRATE", "").strip().lower()
             #    self.checkMatchMinMaxBitrate.setChecked(val in ("true", "1", "yes", "on"))
+<<<<<<< HEAD
                 
+=======
+            
+        self._sync_stream_selector_to_builder(factory_name)
+        self.update_stream_ui_state()
+>>>>>>> release/1.1.0
 
 
 
@@ -1125,10 +1597,28 @@ class FreeFactoryApp(QMainWindow):
             QMessageBox.critical(self, "Backup Failed", message)
 
 
+<<<<<<< HEAD
 
     # ============================
     #     Global Config Logic
     # ============================
+=======
+    # ============================
+    #     Global Config Logic
+    # ============================
+    def _add_notify_folder(self):
+        d = QFileDialog.getExistingDirectory(self, "Add Notify Folder")
+        if d:
+            d = d.rstrip("/")
+            if not any(self.listNotifyFolders.item(i).text() == d for i in range(self.listNotifyFolders.count())):
+                self.listNotifyFolders.addItem(d)
+
+    def _remove_notify_folder(self):
+        for item in self.listNotifyFolders.selectedItems():
+            self.listNotifyFolders.takeItem(self.listNotifyFolders.row(item))    
+    
+    
+>>>>>>> release/1.1.0
     def save_global_config(self):
         self.config.set("CompanyNameGlobal", self.CompanyNameGlobal.text())
         self.config.set("AppleDelaySeconds", self.AppleDelaySecondsGlobal.text())
@@ -1144,8 +1634,22 @@ class FreeFactoryApp(QMainWindow):
             gpu_n = max(1, int(self.GpuMaxConcurrentJobsGlobal.value()))
         except Exception:
             gpu_n = 2
+<<<<<<< HEAD
         self.config.set("MaxConcurrentJobsCPU", str(cpu_n))
         self.config.set("MaxConcurrentJobsGPU", str(gpu_n))
+=======
+        # Global total concurrency (0 = unlimited)
+        try:
+            total_n = int(self.MaxConcurrentJobsGlobal.value())
+        except Exception:
+            total_n = 0
+        if total_n < 0:
+            total_n = 0
+        
+        self.config.set("MaxConcurrentJobsCPU", str(cpu_n))
+        self.config.set("MaxConcurrentJobsGPU", str(gpu_n))
+        self.config.set("MaxConcurrentJobs", str(total_n))
+>>>>>>> release/1.1.0
 
 
         # keep the existing global fallback too
@@ -1156,6 +1660,21 @@ class FreeFactoryApp(QMainWindow):
         raw = (self.GpuMaxConcurrentJobsGlobal.text() or "").strip()
         if raw.isdigit():
             self.config.set("MaxConcurrentJobsGPU", raw)
+<<<<<<< HEAD
+=======
+            
+            
+
+        # Inside your "save global config" method:
+        folders = [self.listNotifyFolders.item(i).text().strip()
+                for i in range(self.listNotifyFolders.count())
+                if self.listNotifyFolders.item(i).text().strip()]
+        self.config.set_notify_folders(folders)
+
+        # Update the runner shell script line
+        from ffnotifyservice import write_notify_runner_sh
+        write_notify_runner_sh(self)
+>>>>>>> release/1.1.0
 
         self.config.save()
         QMessageBox.information(self, "Saved", "Global settings saved to ~/.freefactoryrc")
@@ -1171,6 +1690,10 @@ class FreeFactoryApp(QMainWindow):
         if directory:
             self.OutputDirectory.setText(directory)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> release/1.1.0
     # ============================
     #     Dialog Actions
     # ============================
@@ -1211,6 +1734,207 @@ class FreeFactoryApp(QMainWindow):
 
 
     # ============================
+<<<<<<< HEAD
+=======
+    #     Stream Tab Mode Handlers
+    # ============================
+    
+    def _sync_stream_selector_to_builder(self, factory_name: str):
+        """Preselect builder’s factory in streamFactorySelect if its mode != Off."""
+        if not factory_name or not hasattr(self, "streamFactorySelect"):
+            return
+        try:
+            mode = (self._read_stream_mode_from_factory(factory_name) or "").upper()
+            if mode == "OFF":
+                return
+            # Make sure the selector is filtered & fresh (non-Off only)
+            self._rebuild_stream_factory_selector()
+            w = self.streamFactorySelect
+            if hasattr(w, "findText"):
+                idx = w.findText(factory_name)
+                if idx >= 0:
+                    w.setCurrentIndex(idx)
+        except Exception:
+            pass
+
+
+    # --- Stream tab wiring: OFF vs STREAM + selector filter (exclude OFF) ---
+    def _factory_root(self) -> Path:
+        return Path(self.config.get("FactoryLocation", "/opt/FreeFactory/Factories"))
+
+    def _read_stream_mode_from_factory(self, name: str) -> str:
+        """Return normalized STREAMMGRMODE for a factory name; '' if not found."""
+        from pathlib import Path
+        if not name:
+            return ""
+        root = self._factory_root()
+
+        # support: plain file (no extension), <name>.factory, or <name>/factory
+        candidates = [
+            root / name,                   # plain file (your common case)
+            root / f"{name}.factory",      # legacy/alt layout
+            root / name / "factory",       # directory layout
+        ]
+        for p in candidates:
+            if p.exists() and p.is_file():
+                try:
+                    for line in p.read_text(errors="ignore").splitlines():
+                        line = line.strip()
+                        if not line or line.startswith("#") or "=" not in line:
+                            continue
+                        k, v = line.split("=", 1)
+                        if k.strip().upper() == "STREAMMGRMODE":
+                            return (v or "").strip().upper()
+                except Exception:
+                    pass
+        return ""
+
+    def _rebuild_stream_factory_selector(self):
+        """Populate streamFactorySelect with all factories where STREAMMGRMODE != OFF."""
+        if not hasattr(self, "streamFactorySelect"):
+            print("[stream] selector missing; skip")
+            return
+
+        root = self._factory_root()
+        names = []
+        if root.exists():
+            for p in sorted(root.iterdir(), key=lambda x: x.name.lower()):
+                if p.is_file() or p.is_dir():
+                    fname = p.name if p.is_file() else p.name  # use visible file/dir name
+                    mode = self._read_stream_mode_from_factory(fname)
+                    if mode != "OFF":
+                        names.append(fname)
+
+        w = self.streamFactorySelect
+        try: w.blockSignals(True)
+        except Exception: pass
+        if hasattr(w, "clear"): w.clear()
+        for n in names:
+            try: w.addItem(n)
+            except Exception: pass
+        try: w.blockSignals(False)
+        except Exception: pass
+
+        #print(f"[stream] rebuilt selector: {len(names)} factories (root={root})")
+        if not names:
+            try:
+                all_entries = [p.name for p in sorted(root.iterdir())]
+                print(f"[stream] note: directory contains {len(all_entries)} entries: {all_entries[:10]}…")
+            except Exception:
+                pass
+
+
+    def _selected_stream_factory_name(self) -> str:
+        """Get current text from streamFactorySelect (supports combo or list)."""
+        if not hasattr(self, "streamFactorySelect"):
+            return ""
+        w = self.streamFactorySelect
+        # QComboBox path
+        if hasattr(w, "currentText"):
+            return (w.currentText() or "").strip()
+        # QListWidget/LB path
+        try:
+            item = w.currentItem()
+            return (item.text() if item else "") .strip()
+        except Exception:
+            return ""
+
+    def _stream_table_has_selection(self) -> bool:
+        try:
+            tbl = getattr(self, "streamTable", None)
+            if tbl and tbl.selectionModel():
+                return tbl.selectionModel().hasSelection()
+        except Exception:
+            pass
+        return False
+
+    def update_stream_ui_state(self):
+        """
+        Mode gating only (no table/worker logic).
+        - Off: disable inputs + Add + Start + StartAll
+        - Stream/Record/Record+Stream: enable inputs + Add + StartAll
+        Start row button: only force-disable in Off; otherwise leave table logic to manage.
+        Stop/StopAll: always enabled.
+        """
+        raw = (self.StreamMgrMode.currentText() or "Off").strip().lower() \
+            if hasattr(self, "StreamMgrMode") and hasattr(self.StreamMgrMode, "currentText") else "off"
+        is_off = (raw == "off")
+
+        # Inputs that follow the mode (include your checkboxes/combos)
+        input_names = [
+            "ForceFormatInputVideo","ForceFormatInputAudio",
+            "streamRTMPUrl","streamKey","streamInputVideo","streamInputAudio",
+            "streamFactorySelect","streamAuthMode","streamUsername","streamPassword",
+            "checkIncludeTQS","tqsSizeCombo","checkMapAVInputs","checkLowLatencyInput",
+            "AddVideoStreamFile","streamInputProfile","RecordInput","RecordOutputFolder",
+            "RecordFilename","buttonRecordOutputFolder","StartStopRecording",
+            "checkReadFilesRealTime",
+        ]
+        for name in input_names:
+            if hasattr(self, name):
+                try: getattr(self, name).setEnabled(not is_off)
+                except Exception: pass
+
+        # Buttons we explicitly gate
+        for name in ("AddNewStream", "StartAllStreams"):
+            if hasattr(self, name):
+                try: getattr(self, name).setEnabled(not is_off)
+                except Exception: pass
+
+        # StartStream: only force-disable in Off; otherwise leave as-is for table logic
+        if hasattr(self, "StartStream"):
+            try:
+                if is_off:
+                    self.StartStream.setEnabled(False)
+                # else: do not change; table logic will set appropriately
+            except Exception:
+                pass
+
+        # Stop buttons: always enabled
+        for name in ("StopStream", "StopAllStreams"):
+            if hasattr(self, name):
+                try: getattr(self, name).setEnabled(True)
+                except Exception: pass
+            
+            
+        # Buttons that follow the mode (fully enabled for Stream/Record/Record+Stream)
+        for name in ("AddNewStream", "StartStream", "StartAllStreams"):
+            if hasattr(self, name):
+                try: getattr(self, name).setEnabled(not is_off)
+                except Exception: pass
+        
+        for name in ("StopStream", "StopAllStreams"):
+            if hasattr(self, name):
+                try: getattr(self, name).setEnabled(True)
+                except Exception: pass
+    
+
+        #print(f"[stream] mode={raw} -> inputs={not is_off}, add/startAll={not is_off}, start_row={'free' if not is_off else 'forced off'}, stop/stopAll=always on")
+
+
+    def _wire_stream_tab_minimal(self):
+        """Call this once after UI is built and factories are loaded."""
+        # Build filtered selector (exclude OFF)
+        self._rebuild_stream_factory_selector()
+
+        # React to Mode changes and selector changes
+        if hasattr(self, "StreamMgrMode") and hasattr(self.StreamMgrMode, "currentTextChanged"):
+            self.StreamMgrMode.currentTextChanged.connect(lambda _=None: self.update_stream_ui_state())
+
+        # QComboBox has currentTextChanged; QListWidget has currentItemChanged
+        w = getattr(self, "streamFactorySelect", None)
+        if w:
+            # Try both; only one will exist.
+            if hasattr(w, "currentTextChanged"):
+                w.currentTextChanged.connect(lambda _=None: self.update_stream_ui_state())
+            elif hasattr(w, "currentItemChanged"):
+                w.currentItemChanged.connect(lambda *_: self.update_stream_ui_state())
+
+        # Initial pass
+        self.update_stream_ui_state()
+
+    # ============================
+>>>>>>> release/1.1.0
     #     End __init__ Stub
     # ============================
 
@@ -1225,11 +1949,45 @@ class FreeFactoryApp(QMainWindow):
 #         Entry Point
 # ============================
 if __name__ == "__main__":
+<<<<<<< HEAD
     import signal
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     app = QApplication(sys.argv)
     app.setStyle('Fusion')
     window = FreeFactoryApp()
+=======
+    import sys, signal, subprocess, atexit
+    from PyQt6.QtWidgets import QApplication
+
+    # Let Ctrl+C kill the app cleanly
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+    # TTY saver/restorer so you don't have to type `reset` after exit
+    _TTY_STATE = None
+    if sys.stdout.isatty():
+        try:
+            _TTY_STATE = subprocess.check_output(["stty", "-g"]).strip().decode()
+        except Exception:
+            _TTY_STATE = None
+
+        def _restore_tty_state():
+            try:
+                if _TTY_STATE:
+                    subprocess.run(["stty", _TTY_STATE], check=False)
+                else:
+                    subprocess.run(["stty", "sane"], check=False)
+                # reset attrs, show cursor, re-enable wrap
+                sys.stdout.write("\x1b[0m\x1b[?25h\x1b[?7h")
+                sys.stdout.flush()
+            except Exception:
+                pass
+
+        atexit.register(_restore_tty_state)
+
+    app = QApplication(sys.argv)
+    app.setStyle("Fusion")
+    window = FreeFactoryApp()  # <-- your QMainWindow subclass
+>>>>>>> release/1.1.0
     window.show()
     sys.exit(app.exec())

@@ -1,0 +1,76 @@
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Testing / tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Coverage
+.coverage
+coverage.xml
+htmlcov/
+
+# Build / packaging / installers
+build/
+dist/
+pip-wheel-metadata/
+*.spec
+
+# --- Editors / IDEs ---
+.vscode/
+.idea/
+
+# --- OS cruft ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Qt / optional ---
+*.pro.user
+*.qmake.stash
+*.user
+
+# --- Logs / backups / temp ---
+*.log
+*.bak
+*-bak
+.factory.bak
+backups/
+temp/
+tmp/
+MyFactories/
+FactoryArchive/
+Pics-UpperCasebackup/
+database/filters1
+bin/notes.txt
+docs/ffmpegStreamingExamples.txt
+docs/Freefactory Unique Features.docx
+
+
+# --- Project outputs / large media ---
+video/
+videos/
+
+# --- Specific Factories to exclude ---
+Factories/DVCProHD-MOV
+Factories/DVCProHD-MXF
+Factories/EllieFBM-Convert
+Factories/Omninon-MPEG2-MXF-with-Subs
+Factories/Recording_Factory_Test
+Factories/WDTV-8-Channel-Audio-Test
+Factories/WDTV-Captions
+
+# (Optional) If you later standardize on an extension for factory files,
+# you can ignore user-generated factories but keep defaults:
+# Factories/*.bak
+# Factories/*.cache
+# !Factories/Defaults/**
