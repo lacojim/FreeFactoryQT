@@ -28,8 +28,8 @@ AUDIOFILEEXTENSION=
 AUDIOFILTERS=
 AUDIOCHANNELS=
 AUDIOSTREAMID=
-MANUALOPTIONSOUTPUT=-f x11grab -s 3840x2160 -thread_queue_size 512 -i :0.0 -f pulse -thread_queue_size 512 -i default -c:v h264_nvenc -preset fast -b:v 4M -c:a aac -b:a 192k -vf scale=1920x1080 -pix_fmt yuv420p
-MANUALOPTIONSINPUT=
+MANUALOPTIONSOUTPUT=-c:v h264_nvenc -preset fast -b:v 4M -c:a aac -b:a 192k -vf scale=1920x1080 -pix_fmt yuv420p
+MANUALOPTIONSINPUT=-thread_queue_size 512 -f x11grab -framerate 60 -video_size 1920x1080 -i :0.0+1920,2160 -thread_queue_size 512 -f pulse -i default
 FORCEFORMATINPUTVIDEO=
 FORCEFORMATINPUTAUDIO=
 STREAMINPUTVIDEO=
