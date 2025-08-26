@@ -1,0 +1,148 @@
+
+Live Stream Manager tab re-work v2
+
+Preview doesn't work correctly on Streaming factories. Does not include anything that should go before the -i flag. This is because the CMD is not the same as in core.py. We should always use core.py for command line building, regardless whether it's a FreeFactory Service factory, Direct Encode Factory or a Streaming Factory. 
+
+- Remove Select Streaming Factory (streamFactorySelect). OR change it to a information box showing which factory is selected on the Factory Builder tab. I like the second option better.
+- Move "Force Format Input Video" (ForceFormatInputVideo) to -f on Manual Input Options (or keep and add contents to Manual Input Options
+- move "Force Format Input Audio" (ForceFormatInputAudio) to -f on Manual Input Options (or keep and add contents to Manual Input Options
+- Keep everything else.
+
+Add to .factory files a field called STREAMINGFACTORY= (We failed to do this in the first run, but maybe that was in part 2). 
+
+If any field here is filled in within the Streaming tab, then STREAMINGFACTORY gets tagged YES or 1. Should there also be a manual switch? I think we decided no.
+
+REALLY IMPORTANT: There is a block of code somewhere that ignores all "automatic input generation" if -i or -f is used in manual_options. This probably needs to be removed in order to move forward. This MAY have been a large part of our earlier issues. I don't see a good clean way to pull this off yet. 
+
+Thinking out loud, Lets take all the Stream tab options in ffstreaming.py, and assign all those to manualoptionsinput from manualstreamingoptionsinput. This needs to be accurate in Preview Command. This should simplify things considerably. Also, our ordering of flags in Streaming factories is messed up. We auto insert -thread_queue_size 512 between -f x11grab and -i :0.0 which breaks ffmpeg. thread_queue_size should always be the first option for both audio and video and not go between -f and -i I believe. Maybe a checkbox widget for "Include thread_queue_size" with a (default?) value should be added? 
+
+'-f' 'x11grab', '-thread_queue_size', '512', '-i', ':0.0',
+should be
+'-thread_queue_size', '512', '-f' 'x11grab', '-i', ':0.0'
+
+or
+'-thread_queue_size', '512', '-f' 'x11grab', '-i', ':0.0', '-thread_queue_size', '-f', 'pulse', '-i', 'default'
+
+
+
+CMD: ['ffmpeg', '-hide_banner', '-y', '-f', 'pulse', '-thread_queue_size', '512', '-i', 'default', '-c:a', 'aac', '-b:a', '320k', '-thread_queue_size', '512', '-f', 'flv', 'rtmp://192.168.254.15/live/test1']
+
+CMD: ['ffmpeg', '-hide_banner', '-y', '-f', 'x11grab', '-thread_queue_size', '512', '-i', ':0.0', '-f', 'pulse', '-thread_queue_size', '512', '-i', 'default', '-c:v', 'h264_nvenc', '-b:v', '4M', '-preset', 'fast', '-s', '3840x2160', '-c:a', 'aac', '-b:a', '320k', '-vf', 'scale=1280x720', '-f', 'flv', 'rtmp://192.168.254.15/live/test']
+
+
+
+
+
+#===========streaming widgets             
+            f"FORCEFORMATINPUTVIDEO={self.ForceFormatInputVideo.currentText().strip()}",
+            f"FORCEFORMATINPUTAUDIO={self.ForceFormatInputAudio.currentText().strip()}",
+            f"STREAMINPUTVIDEO={self.streamInputVideo.text().strip()}",
+            f"STREAMINPUTAUDIO={self.streamInputAudio.text().strip()}",
+            f"STREAMRTMPURL={self.streamRTMPUrl.text().strip()}",
+            f"STREAMKEY={self.streamKey.text().strip()}"
+            
+            
+            
+            
+Offsets for your three screens
+
+Top (3840×2160)
+-video_size 3840x2160 -i :0.0+0,0
+
+Bottom-left (1920×1080)
+-video_size 1920x1080 -i :0.0+0,2160
+
+Bottom-right (1920×1080)
+-video_size 1920x1080 -i :0.0+1920,2160
+
+
+
+
+
+
+
+
+# =========================
+# GIT CHECKPOINT CHEAT SHEET
+# Project dir: /opt/FreeFactory  (change if needed)
+# =========================
+
+# 0) go to your repo
+cd /opt/FreeFactory
+
+# 1) who am i? (set once if empty)
+git config --get user.name  || git config user.name  "Your Name"
+git config --get user.email || git config user.email "you@example.com"
+
+# 2) see what's changed (working tree vs last commit)
+git status
+git diff                  # unstaged changes
+git diff --cached         # staged changes vs last commit
+
+# 3) stage exactly what you want in the checkpoint
+#    (choose ONE of these)
+# a) stage everything that changed:
+# git add -A
+# b) stage specific files:
+# git add core.py main_ui_cleanup.py ffstreaming.py FreeFactoryConversion.py
+
+# 4) review what you staged (optional but good)
+git diff --cached
+
+# 5) create the checkpoint (commit)
+#    -> edit the message after -m to describe what you did
+git commit -m "checkpoint: Option B input builder + TQS combo + GUI tweaks"
+
+# 6) (optional) tag the checkpoint so it's easy to jump back to
+git tag -a "ckpt-$(date +%Y%m%d-%H%M)" -m "checkpoint tag"
+
+# 7) inspect history / what changed
+git log --oneline --decorate --graph -n 10
+git show HEAD
+# compare two points (example: from a tag to current)
+# git diff ckpt-20250816-2315..HEAD
+
+# 8) common “oops” fixes
+# a) forgot a file in the last commit (not pushed)? add it and amend:
+# git add missing_file.py
+# git commit --amend --no-edit
+#
+# b) undo the last commit safely (creates a new inverse commit):
+# git revert HEAD
+#
+# c) discard local edits in a file (restore from last commit):
+# git restore path/to/file.py
+#
+# d) restore a file from an older checkpoint tag:
+# git restore --source=ckpt-YYYYMMDD-HHMM path/to/file.py
+#
+# e) rename/remove tracked files:
+# git mv oldname.py newname.py
+# git rm obsolete.py
+# git commit -m "refactor: rename oldname→newname; remove obsolete"
+
+# 9) minimal .gitignore (run once if you don’t have one)
+# (comment this block out if you already committed a .gitignore)
+if [ ! -f .gitignore ]; then
+  cat > .gitignore << 'EOF'
+__pycache__/
+*.pyc
+*.log
+*.bak
+*.factory.bak
+.vscode/
+.idea/
+dist/
+build/
+# large media/output dirs (tweak these to your paths)
+video/
+videos/
+EOF
+  git add .gitignore
+  git commit -m "chore: add .gitignore"
+fi
+
+# 10) (optional) simple “checkpoint” alias you can add to your shell
+#    usage: ckpt "message here"
+#    it stages all, commits, and tags with a timestamp
+# echo "alias ckpt='msg=\${*:-checkpoint}; git add -A && git commit -m \"\$msg\" && git tag -a ckpt-\$(date +%Y%m%d-%H%M) -m \"\$msg\"'" >> ~/.bashrc && source ~/.bashrc
