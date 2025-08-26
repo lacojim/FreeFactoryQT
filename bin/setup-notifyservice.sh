@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+trap 'echo "[setup-notifyservice] error on line $LINENO (exit $?): $BASH_COMMAND" >&2' ERR
 
 SERVICE_NAME="freefactory-notify.service"
 USER_PATH="$HOME/.config/systemd/user/$SERVICE_NAME"
@@ -10,8 +13,8 @@ echo "----------------------------------"
 # Check if service is currently running
 echo "🔍 Checking if the service is currently running..."
 
-user_active=$(systemctl --user is-active "$SERVICE_NAME" 2>/dev/null)
-system_active=$(systemctl is-active "$SERVICE_NAME" 2>/dev/null)
+user_active=$(systemctl --user is-active "$SERVICE_NAME" 2>/dev/null || true)
+system_active=$(systemctl is-active "$SERVICE_NAME" 2>/dev/null || true)
 
 if [[ "$user_active" == "active" ]]; then
     echo "⚠️  The service is currently running in USER mode."

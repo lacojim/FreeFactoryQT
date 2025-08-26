@@ -1,90 +1,85 @@
-#!/bin/bash
-#############################################################################
-#               This code is licensed under the GPLv3
-#    The following terms apply to all files associated with the software
-#    unless explicitly disclaimed in individual files or parts of files.
-#
-#                           Free Factory
-#
-#                          Copyright 2013
-#                               by
-#                     Jim Hines and Karl Swisher
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-#  Script Name: FreeFactoryNotify.sh
-#
-#  This is script accepts the three variables piped by intofywait
-#  and then passes two of them, the directory path and the file
-#  name file name to the tcl conversion script.
-#############################################################################
-LOG=/var/log/FreeFactory/FreeFactoryNotifyError.log
-####################################################################################
-# Clear variables to null value
-SOURCEPATH=
-NOTIFY_EVENT=
-FILENAME=
-#LASTSOURCEPATH=
-#LASTFILENAME=
-#FILESIZE=0
-#LASTFILESIZE=0
-####################################################################################
-# Set up continous loop.
-for (( ; ; ))
-do
-####################################################################################
-# Read variables piped in from inotifywait
-	read SOURCEPATH NOTIFY_EVENT FILENAME
-# Get file size to compare when the file is completely written.
-#	sleep 5
-#	FILESIZE=$(stat -c%s "$SOURCEPATH$FILENAME")
-# This loop repeats the above procedure until the file
-# size does not change.
-#	while [ $FILESIZE -ne $LASTFILESIZE ]
-#	do
-#		sleep 3
-#		LASTFILESIZE=$FILESIZE
-#		FILESIZE=$(stat -c%s "$SOURCEPATH$FILENAME")
-#		sleep 2
-#	done
-# Checking for dot files
- 	if [ "${FILENAME:0:1}" != "." ]; then
-####################################################################################
-# Write variables to the stdout which is screen
-		echo ""
-		echo "*****************************************************************************************"
-		echo "********************************* Report From *******************************************"
-		echo "***************************** FreeFactoryNotify.sh **************************************"
-		echo "============ Received the following variables from inotifywait"
-		echo "============ Directory path and filename $SOURCEPATH$FILENAME"
-		echo "============ Inotify Event   $NOTIFY_EVENT"
-		/opt/FreeFactory/bin/FreeFactoryConversion.tcl $SOURCEPATH $FILENAME 2>> $LOG &
-		echo "============ Running Free Fractory conversion script."
-		echo "============ Converting $SOURCEPATH$FILENAME"
-		echo "*****************************************************************************************"
-		echo "*****************************************************************************************"
-	fi
-#
-# End Apple work around.
-#
-####################################################################################
-# Clear variables to null value
-	SOURCEPATH=
-	NOTIFY_EVENT=
-	FILENAME=
-# ===== END ==========
-# End continous loop
+#!/usr/bin/env bash
+# FreeFactoryNotify.sh — read inotify events and dispatch a single-file job.
+
+set -Eeuo pipefail
+
+# ----- paths -----
+PYTHON_BIN="${PYTHON_BIN:-/usr/bin/python3}"
+CONVERTER_PY="${CONVERTER_PY:-/opt/FreeFactory/bin/FreeFactoryConversion.py}"
+
+if [[ ! -f "$CONVERTER_PY" ]]; then
+  echo "[FreeFactoryNotify] ERROR: converter not found at $CONVERTER_PY"
+  exit 1
+fi
+
+# Unbuffer Python so logs show promptly in journald (user unit)
+export PYTHONUNBUFFERED=1
+
+# ----- settle time (default 2s; override via ~/.freefactoryrc AppleDelaySeconds=NN) -----
+SETTLE_SECS=2
+RC="$HOME/.freefactoryrc"
+if [[ -f "$RC" ]]; then
+  rc_settle="$(grep -E '^AppleDelaySeconds=' "$RC" | sed -E 's/^[^=]+=([0-9]+)/\1/' || true)"
+  if [[ -n "$rc_settle" ]]; then SETTLE_SECS="$rc_settle"; fi
+fi
+
+settle_file() {
+  # wait until file size stops changing or timeout reached
+  local p="$1"
+  local timeout="${2:-0}"
+  local end=$((SECONDS+timeout)) last=-1 curr=-2
+  while (( SECONDS < end )); do
+    [[ -f "$p" ]] || return 1
+    curr=$(stat -c%s -- "$p" 2>/dev/null || echo -1)
+    if [[ "$curr" -eq "$last" && "$curr" -gt 0 ]]; then return 0; fi
+    last="$curr"
+    sleep 1
+  done
+  return 0
+}
+
+# NOTE: plain echo -> captured by your *user* unit:
+#   journalctl --user -u freefactory-notify -f
+
+# Accept either:
+#  - 4 fields (timestamp | dir | event | file)  -> '%T|%w|%e|%f'
+#  - 3 fields (dir | event | file)              -> '%w|%e|%f'
+while IFS='|' read -r f1 f2 f3 f4; do
+  if [[ -n "${f4:-}" ]]; then
+    ts="$f1"; watch_dir="$f2"; event="$f3"; filename="$f4"
+  else
+    ts="";    watch_dir="$f1"; event="$f2"; filename="$f3"
+  fi
+
+  # Build full path
+  case "$watch_dir" in
+    */) full_path="${watch_dir}${filename}" ;;
+    *)  full_path="${watch_dir}/${filename}" ;;
+  esac
+
+  echo "[FreeFactoryNotify] DROP DETECTED: ${full_path} (event=${event}) ts=${ts:-N/A}"
+
+  # Runner already filters to close_write,moved_to; harmless to double-check
+  if [[ "$event" != *"MOVED_TO"* && "$event" != *"CLOSE_WRITE"* ]]; then
+    continue
+  fi
+
+  # Ensure file exists and is stable
+  [[ -f "$full_path" ]] || continue
+  if ! settle_file "$full_path" "$SETTLE_SECS"; then
+    echo "[FreeFactoryNotify] WARNING: file disappeared during settle: $full_path"
+    continue
+  fi
+
+  # Hand off to Python worker; FFC discovers the correct factory by NOTIFYDIRECTORY (no --factory).
+  src_dir="${watch_dir%/}"
+  base_name="$filename"
+
+  echo "[FreeFactoryNotify] RUN: $PYTHON_BIN \"$CONVERTER_PY\" --daemon --sourcepath \"$src_dir\" --filename \"$base_name\" --notify-event \"$event\" &"
+  "$PYTHON_BIN" "$CONVERTER_PY" \
+    --daemon \
+    --sourcepath "$src_dir" \
+    --filename "$base_name" \
+    --notify-event "$event" \
+    &
 done
-# Exit script.
-exit

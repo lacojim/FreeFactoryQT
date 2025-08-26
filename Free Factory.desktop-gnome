@@ -7,4 +7,4 @@ Icon[en_US]=/opt/FreeFactory/Pics/DesktopIcons/GradientBackground/FreeFactoryIco
 Exec=/opt/FreeFactory/bin/FreeFactory.tcl
 Name[en_US]=FreeFactory
 Name=FreeFactory
-Icon=/opt/FreeFactory/Pics/DesktopIcons/GradientBackground/FreeFactoryIconGradient-08-128x128.xpm
+Icon=/opt/FreeFactory/Pics/FreeFactoryQT.ico

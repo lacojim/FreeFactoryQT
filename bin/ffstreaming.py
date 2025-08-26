@@ -36,76 +36,67 @@ class StreamWorker(QThread):
             self.process.wait()
 
 def build_streaming_command(config, core, ui):
-    factory_name = ui.streamFactorySelect.currentText()
-    rtmp_url = ui.streamRTMPUrl.text().strip()
-    stream_key = ui.streamKey.text().strip()
+    from pathlib import Path
+    import shlex
+    from PyQt6.QtWidgets import QMessageBox
+
+    factory_name = ui.streamFactorySelect.currentText().strip()
+    base_url     = ui.streamRTMPUrl.text().strip()
+    stream_key   = ui.streamKey.text().strip()
 
     factory_location = config.get("FactoryLocation")
-    factory_path = Path(factory_location) / factory_name
-    factory = core.load_factory(factory_path)
-
+    factory_path     = Path(factory_location) / factory_name
+    factory          = core.load_factory(factory_path)
     if not factory:
         QMessageBox.warning(ui, "Error", f"Could not load factory: {factory_path}")
         return []
 
-    manual = factory.get("MANUALOPTIONS", "").strip()
-    manual_contains_input = "-i" in manual or "-f" in manual
+    # Build destination URL
+    full_url = base_url.rstrip("/")
+    if stream_key:
+        full_url = f"{full_url}/{stream_key}"
 
     cmd = ["ffmpeg", "-hide_banner", "-y"]
 
-    if manual_contains_input:
-        cmd += shlex.split(manual)
+    # --- INPUTS ---
+    manual_input = (factory.get("MANUALOPTIONSINPUT", "") or "").strip()
+    if manual_input and (" -i " in f" {manual_input} " or " -f " in f" {manual_input} "):
+        # Verbatim input graph; do NOT inject any extra inputs
+        cmd += shlex.split(manual_input)
     else:
-        video_format = ui.ForceFormatInputVideo.currentText().strip()
-        video_input = ui.streamInputVideo.text().strip()
-        audio_format = ui.ForceFormatInputAudio.currentText().strip()
-        audio_input = ui.streamInputAudio.text().strip()
+        # Assemble inputs from UI with strict adjacency
+        v_fmt = ui.ForceFormatInputVideo.currentText().strip() if hasattr(ui, "ForceFormatInputVideo") else ""
+        a_fmt = ui.ForceFormatInputAudio.currentText().strip() if hasattr(ui, "ForceFormatInputAudio") else ""
+        v_in  = ui.streamInputVideo.text().strip() if hasattr(ui, "streamInputVideo") else ""
+        a_in  = ui.streamInputAudio.text().strip() if hasattr(ui, "streamInputAudio") else ""
 
-        if video_format:
-            cmd += ["-f", video_format]
-        if video_input:
-            cmd += ["-thread_queue_size", "512", "-i", video_input]
-        if audio_format:
-            cmd += ["-f", audio_format]
-        if audio_input:
-            cmd += ["-thread_queue_size", "512", "-i", audio_input]
+        if v_in:
+            if v_fmt:
+                cmd += ["-f", v_fmt]
+            cmd += ["-thread_queue_size", "512", "-i", v_in]
+        if a_in:
+            if a_fmt:
+                cmd += ["-f", a_fmt]
+            cmd += ["-thread_queue_size", "512", "-i", a_in]
 
-        video_codec = factory.get("VIDEOCODECS", "").strip()
-        video_bitrate = factory.get("VIDEOBITRATE", "").strip()
-        preset = factory.get("VIDEOPRESET", "").strip()
-        size = factory.get("VIDEOSIZE", "").strip()
-        pix_fmt = factory.get("PIX_FMT", "").strip()
+    # --- FLAGS FROM WIDGETS (always) ---
+    cmd += core.build_streaming_flags(factory)   # now includes -pix_fmt if set
 
-        if video_codec:
-            cmd += ["-c:v", video_codec]
-        if video_bitrate:
-            cmd += ["-b:v", video_bitrate]
-        if preset:
-            cmd += ["-preset", preset]
-        if size:
-            cmd += ["-s", size]
-        if pix_fmt:
-            cmd += ["-pix_fmt", pix_fmt]
+    # --- MANUAL (post-input/output-stage) ---
+    manual_output = (factory.get("MANUALOPTIONSOUTPUT", "") or "").strip()
+    if manual_output:
+        cmd += shlex.split(manual_output)
 
-        audio_codec = factory.get("AUDIOCODECS", "").strip()
-        audio_bitrate = factory.get("AUDIOBITRATE", "").strip()
-        if audio_codec:
-            cmd += ["-c:a", audio_codec]
-        if audio_bitrate:
-            cmd += ["-b:a", audio_bitrate]
-
-        if manual:
-            cmd += shlex.split(manual)
-
-    format_flag = factory.get("FORCEFORMAT", "").strip()
-    if format_flag:
-        cmd += ["-f", format_flag]
-
-    full_output_url = f"{rtmp_url.rstrip('/')}/{stream_key}" if stream_key else rtmp_url
-    cmd.append(full_output_url)
+    # --- MUXER + URL ---
+    force_format = (factory.get("FORCEFORMAT", "") or "").strip()
+    if force_format:
+        cmd += ["-f", force_format]
+    cmd.append(full_url)
 
     print("DEBUG Streaming CMD:", cmd)
     return cmd
+
+
 
 
 def start_all_streams(main_window):
@@ -119,14 +110,14 @@ def start_all_streams(main_window):
         main_window.streamKey.setText(stream_key)
         main_window.streamRTMPUrl.setText(rtmp_url)
 
-        cmd = build_streaming_command(main_window)
+        cmd = build_streaming_command(config, core, ui)
         if not cmd:
             continue
 
         worker = StreamWorker(cmd, rtmp_url)
         worker.output.connect(main_window.streamLogOutput.appendPlainText)
         worker.finished.connect(lambda url=rtmp_url: handle_stream_stopped(main_window, url))
-        main_window.active_streams[rtmp_url] = worker
+        main_window.active_streams[full_output_url] = worker
         print(f"[DEBUG] Stream started and stored under key: {rtmp_url}")
         worker.start()
         main_window.streamLogOutput.appendPlainText(f"🟢 Started stream: {factory_name}")
