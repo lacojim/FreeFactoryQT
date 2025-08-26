@@ -5,7 +5,7 @@ This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and
 
 ## [Unreleased]
 
-## [0.9.0] - 2025-08-25
+## [1.1.0] - 2025-08-26
 
 ### Added
 - **Read files in real time**: checkbox `checkReadFilesRealTime` inserts `-re` before file-like inputs (video/audio).  
