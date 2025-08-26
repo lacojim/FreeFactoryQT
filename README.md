@@ -64,7 +64,8 @@ Preset-driven FFmpeg configurations for power users and broadcasters:
 
 Fully editable factories with support for complex options:
 
-<img width="1101" height="730" alt="image" src="https://github.com/user-attachments/assets/c0269e1a-9ce6-457a-b218-53a36bf33e72" />
+<img width="1099" height="749" alt="livestreamandrecordmgr" src="https://github.com/user-attachments/assets/c85bbc20-8b0d-4ef6-8dc2-9b517c6725b2" />
+
 
 
 ---
@@ -104,6 +105,14 @@ systemctl --user enable freefactory-notify
 
 This can also be started/stopped from within the FreeFactoryQT interface.
 
+<img width="1102" height="750" alt="globalandservicecontrols" src="https://github.com/user-attachments/assets/7fcf886b-e854-48c4-8b35-cf77f4621d24" />
+
+---
+
+## 🚀 Advanced Help Tab which utilizes the built-in help of your installed FFmpeg version
+
+<img width="1261" height="752" alt="ffmpeghelp" src="https://github.com/user-attachments/assets/dc514017-a24a-4854-b779-09a91c728c27" />
+
 ---
 
 ## ✍ Example: Advanced Manual FFmpeg Options
@@ -137,6 +146,7 @@ Highly specialized output commands can be stored in a Factory too. For example:
 These would be stored under the `Manual Output Ops` field in your Factory, and saved for future use.
 
 ---
+
 
 ## 🆕 Changelog
 
