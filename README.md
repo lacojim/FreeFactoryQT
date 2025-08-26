@@ -106,7 +106,6 @@ This can also be started/stopped from within the FreeFactoryQT interface.
 
 ---
 
-<<<<<<< HEAD
 ## ✍ Example: Advanced Manual FFmpeg Options
 
 Even highly specialized commands can be stored in a Factory. For example:
@@ -136,13 +135,11 @@ Highly specialized output commands can be stored in a Factory too. For example:
 ```
 
 These would be stored under the `Manual Output Ops` field in your Factory, and saved for future use.
->>>>>>> release/1.1.0
 
 ---
 
 ## 🆕 Changelog
 
-<<<<<<< HEAD
 =======
 ### 📅 New – 2025-08-23
 
@@ -171,25 +168,20 @@ Documented user-unit logging (journalctl --user -u freefactory-notify -f) and en
 
 Install / Ops
 
-
->>>>>>> release/1.1.0
 ### 📅 New – 2025-08-21
 
 * 🗑️ Removed legacy/deprecated fields and widgets:
 
   * `VIDEOTARGET` (FFmbc leftover)
   * `AUDIOTAG` (FFmbc leftover)
-<<<<<<< HEAD
   * Entire **DepPage** tab (including `THREADS`, `RemoveSourceGlobal`, etc.).
 =======
   * Entire **DepPage** tab (including `THREADS`, `RemoveSourceGlobal`, etc.)
->>>>>>> release/1.1.0
-* ✅ Promoted the following to first-class, factory-level options (in `_combo_key_map`):
+  * ✅ Promoted the following to first-class, factory-level options (in `_combo_key_map`):
 
   * `ENABLEFACTORY`
   * `DELETECONVERSIONLOGS`
   * `DELETESOURCE`
-<<<<<<< HEAD
 =======
   * `FFMXPROGRAM`
   
@@ -210,14 +202,11 @@ Install / Ops
 
   * Added `checkMatchMinMaxBitrate` checkbox → locks `-minrate`/`-maxrate` to `-b:v`
   * Ghosts automatically when no `VideoBitrate` is set or in streaming context
-<<<<<<< HEAD
   * Now has a drop-down menu including File, Tools and Help drop downs with hotkey support (ie CTRL+N = New Factory, CTRL+S = Save Factory, F1 = Help). 
   
 =======
   * Updated tooltips for Input Manual Options, Output Manual Options, and Preview Command for clarity
 
-
->>>>>>> release/1.1.0
 ### 📅 New – 2025-08-17
 
 - 🔧 Major Live Stream Manager overhaul — now uses `core.py` for FFmpeg command generation.
@@ -268,11 +257,9 @@ python3 migrate_factories.py --add LOWLATENCYINPUT=False,AUTOAPAV=False,INCLUDET
 
 - ✅ Dynamic UI: only show valid `pix_fmt`, audio, and video profiles based on selected codec
 - ✅ Batch queue with mixed Factories
-<<<<<<< HEAD
 - 🔄 Rewrite `FreeFactoryConversion.tcl` in Python (as of 2025-08-22 this has been completed but still may need some minor work). FreeFactoryConversion.tcl is now officially broken. Several keys in the factory files have been removed that FFC.tcl once relied on. With the changeover to a python FreeFactoryConversion.py, it is just not worth to keep the .tcl version up to date. Sorry for the inconvience.
 =======
 - 🔄 Rewrite `FreeFactoryConversion.tcl` in Python
->>>>>>> release/1.1.0
 - 🪟 Port FreeFactoryQT to Windows (experimental; may be limited by background service)
 
 ---
