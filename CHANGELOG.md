@@ -3,8 +3,6 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
-
 ## [1.1.0] - 2025-08-26
 
 ### Added
