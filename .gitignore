@@ -13,7 +13,7 @@
 # Database backups and temps
 /database/back/
 /database/ffmpeg_options (copy).db
-/database/filters1/
+/database/filters1
 /database/temp/
 /databasefull.zip
 
