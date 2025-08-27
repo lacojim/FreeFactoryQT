@@ -119,4 +119,7 @@ logs/
 
 
 # === Extras ===
-core.
+# Core dumps (safe: won't ignore bin/core.py)
+core
+core.[0-9]*
+*.core
