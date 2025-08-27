@@ -1,76 +1,122 @@
-# --- Python ---
+# === FreeFactory Exclusions ===
+
+# Backups
+/backups/
+
+# Installed scripts and temp files
+/bin/install-freefactory.sh
+/bin/migrate_factories.py-bak
+/bin/notes.txt
+/bin/PyFactory-ToDo.txt
+/bin/__pycache__/
+
+# Database backups and temps
+/database/back/
+/database/ffmpeg_options (copy).db
+/database/filters1/
+/database/temp/
+/databasefull.zip
+
+# Docs – keep main docs, exclude extras
+/docs/ffmpegStreamingExamples.txt
+/docs/Freefactory Unique Features.docx
+
+# Factories exclusions
+/Factories/DVCProHD-MOV
+/Factories/DVCProHD-MXF
+/Factories/EllieFBM-Convert
+/Factories/Omninon-MPEG2-MXF-with-Subs
+/Factories/WDTV-8-Channel-Audio-Test
+/Factories/WDTV-Captions
+
+# Factory archives and personal factories
+/FactoryArchive/
+/MyFactories/
+
+# Temporary and test directories
+/temp/
+/TestFactory/
+/tree.txt
+
+# Videos and recordings
+/videos/
+
+
+# === Standard Python Ignores ===
+
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
 
-# Virtual envs
-.venv/
-venv/
+# Virtual environments
+.env
+.venv
 env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
-# Testing / tooling caches
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-
-# Coverage
-.coverage
-coverage.xml
-htmlcov/
-
-# Build / packaging / installers
+# Distribution / packaging
 build/
+develop-eggs/
 dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
 pip-wheel-metadata/
-*.spec
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# --- Editors / IDEs ---
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Editor / IDE files
 .vscode/
 .idea/
+*.swp
+*.swo
+*.bak
 
-# --- OS cruft ---
+# OS-generated files
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# --- Qt / optional ---
-*.pro.user
-*.qmake.stash
-*.user
 
-# --- Logs / backups / temp ---
+# === Logs ===
 *.log
-*.bak
-*-bak
-.factory.bak
-backups/
-temp/
-tmp/
-MyFactories/
-FactoryArchive/
-Pics-UpperCasebackup/
-database/filters1
-bin/notes.txt
-docs/ffmpegStreamingExamples.txt
-docs/Freefactory Unique Features.docx
+logs/
 
 
-# --- Project outputs / large media ---
-video/
-videos/
-
-# --- Specific Factories to exclude ---
-Factories/DVCProHD-MOV
-Factories/DVCProHD-MXF
-Factories/EllieFBM-Convert
-Factories/Omninon-MPEG2-MXF-with-Subs
-Factories/Recording_Factory_Test
-Factories/WDTV-8-Channel-Audio-Test
-Factories/WDTV-Captions
-
-# (Optional) If you later standardize on an extension for factory files,
-# you can ignore user-generated factories but keep defaults:
-# Factories/*.bak
-# Factories/*.cache
-# !Factories/Defaults/**
+# === Extras ===
+core.

@@ -30,3 +30,7 @@ This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and
 - “Add Stream” global shortcut was explored but deferred; menu-based action works if needed.
 
 ---
+
+
+2025-08-26
+Added streamAuthMode, streamUsername and streamPassword keys which were missing.

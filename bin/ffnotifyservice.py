@@ -1,17 +1,12 @@
 # This is the python3 module for controlling the FreeFactory service functions within the Global Program Settings Tab.
 
 import subprocess
-<<<<<<< HEAD
-=======
 import shlex, os
->>>>>>> release/1.1.0
 from pathlib import Path
 from PyQt6.QtWidgets import QMessageBox, QMenu
 from PyQt6.QtCore import Qt
 
 SERVICE_NAME = "freefactory-notify.service"
-<<<<<<< HEAD
-=======
 RUNNER_PATH = Path("/opt/FreeFactory/bin/FreeFactoryNotifyRunner.sh")
 
 # For the FreeFactoryNotifyRunner.sh header when writing
@@ -34,7 +29,6 @@ INOTIFY_EXCLUDES = [
 
 
 
->>>>>>> release/1.1.0
 
 def _get_remote_host(main_window) -> str:
     host_widget = getattr(main_window, "notifyRemoteHost", None)
@@ -121,8 +115,6 @@ def connect_notify_service_controls(main_window):
         lambda pos: show_notify_service_menu(main_window, pos)
     )
     main_window.labelNotifyServiceMode.setCursor(Qt.CursorShape.PointingHandCursor)
-<<<<<<< HEAD
-=======
 
 # ==================================================================
 #   Rewrite the FreeFactoryNotifyRunner.sh script on Save Globals.
@@ -258,4 +250,3 @@ def write_notify_runner_sh(main_window, dest: Path | None = None) -> Path:
     return dest
 
 
->>>>>>> release/1.1.0

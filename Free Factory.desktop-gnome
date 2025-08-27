@@ -3,15 +3,8 @@
 Version=1.0
 Type=Application
 Terminal=false
-<<<<<<< HEAD
-Icon[en_US]=/opt/FreeFactory/Pics/FreeFactoryQT.ico
-Exec=/opt/FreeFactory/bin/main.py
-Name[en_US]=FreeFactoryQT
-Name=FreeFactoryQT
-=======
 Icon[en_US]=/opt/FreeFactory/Pics/DesktopIcons/GradientBackground/FreeFactoryIconGradient-08-128x128.xpm
 Exec=/opt/FreeFactory/bin/FreeFactory.tcl
 Name[en_US]=FreeFactory
 Name=FreeFactory
->>>>>>> release/1.1.0
 Icon=/opt/FreeFactory/Pics/FreeFactoryQT.ico

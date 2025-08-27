@@ -15,16 +15,10 @@ class ConfigManager:
             "DefaultFactory": "",
             "MaxConcurrentJobsCPU": "1",
             "MaxConcurrentJobsGPU": "1",
-<<<<<<< HEAD
-            "MaxConcurrentJobs": "1",
-            "AppleDelaySeconds": "30",
-            "PathtoFFmpegGlobal": "/usr/bin/"
-=======
             "MaxConcurrentJobs": "0", # 0 = unlimited
             "AppleDelaySeconds": "30",
             "PathtoFFmpegGlobal": "/usr/bin/",
             "NotifyFolders": "/video/dropbox"
->>>>>>> release/1.1.0
         }
         self.load()
 
@@ -75,8 +69,6 @@ class ConfigManager:
 
     def set(self, key, value):
         self.config['global'][key] = str(value).strip()
-<<<<<<< HEAD
-=======
         
     # Handle Notify Folders
     def get_notify_folders(self) -> list[str]:
@@ -90,4 +82,3 @@ class ConfigManager:
     def set_notify_folders(self, folders: list[str]):
         # store semicolon-separated for simplicity/compat
         self.set("NotifyFolders", ";".join(folders))
->>>>>>> release/1.1.0

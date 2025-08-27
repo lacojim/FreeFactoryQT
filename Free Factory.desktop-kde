@@ -1,24 +1,14 @@
 [Desktop Entry]
 Comment=
 Comment[en_US]=
-<<<<<<< HEAD
-Exec[$e]='/opt/FreeFactory/bin/main.py'
-=======
 Exec[$e]='/opt/FreeFactory/bin/FreeFactory.tcl'
->>>>>>> release/1.1.0
 GenericName=
 GenericName[en_US]=
 Icon=/opt/FreeFactory/Pics/FreeFactoryQT.ico
 MimeType=
-<<<<<<< HEAD
-Name=FreeFactoryQT
-Name[en_US]=FreeFactoryQT
-Path[$e]=/opt/FreeFactory
-=======
 Name=Free Factory
 Name[en_US]=Free Factory
 Path[$e]=
->>>>>>> release/1.1.0
 StartupNotify=true
 Terminal=false
 TerminalOptions=

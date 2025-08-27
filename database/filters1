@@ -1,0 +1,7 @@
+select * from codecs where encoder = '1' and type = 'audio';
+select * from codecs where type = 'audio' and encoder = '0';
+select * from encoder_options where encoder = 'mpeg2video';
+select * from encoder_options where option_name like '%<int>%' or option_name like '%<boolean>%' ;
+select * from encoder_options where type = '' ;
+select * from encoder_compatibility where encoder = 'dvvideo' ;
+select * from codecs where encoder = '1' and type = 'audio';
