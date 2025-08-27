@@ -109,6 +109,14 @@ This can also be started/stopped from within the FreeFactoryQT interface.
 
 ---
 
+## 🚀 FactoryTools utility. 
+This allows for Import/Export/Backup Factories as well as Factory Management such as adding or removing Factory keys. Can also check Factory integrity and for multiple Factories sharing the same Notify Folders. It can be launched stand-alone or from within FreeFactoryQT via the menu or hotkey combination (CTRL+T).
+
+<img width="681" height="382" alt="factorytools" src="https://github.com/user-attachments/assets/e19424b4-0375-48ab-85c0-fcac8b224773" />
+
+
+---
+
 ## 🚀 Advanced Help Tab which utilizes the built-in help of your installed FFmpeg version
 
 <img width="1261" height="752" alt="ffmpeghelp" src="https://github.com/user-attachments/assets/dc514017-a24a-4854-b779-09a91c728c27" />
