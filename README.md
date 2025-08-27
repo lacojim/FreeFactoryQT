@@ -191,9 +191,7 @@ Install / Ops
   * `DELETESOURCE`
 =======
   * `FFMXPROGRAM`
-  
->>>>>>> release/1.1.0
-* 📝 Added support in **FreeFactoryConversion.py** for:
+  * 📝 Added support in **FreeFactoryConversion.py** for:
 
   * Skipping factories where `ENABLEFACTORY=False`
   * Removing logs on success when `DELETECONVERSIONLOGS=True`
