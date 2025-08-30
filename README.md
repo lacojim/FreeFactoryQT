@@ -19,7 +19,7 @@ Taking full advantage of the powerful [FFmpeg](https://ffmpeg.org) backend, Free
 - Design and save reusable conversion workflows as **Factories**
 - GUI-based direct conversion of single or batch files
 - Supports drag-and-drop and watched folders
-- Clean separation between UI (FreeFactoryQT) and background service (`FreeFactoryConversion.tcl`)
+- Clean separation between UI (FreeFactoryQT) and background service (`FreeFactoryConversion.py`)
 - Fully compatible with FFmpeg — **FFmbc support has been deprecated**
 
 FreeFactory makes sharing encoding setups easy: import a Factory, update the Output and Notify directories, and you're ready to go.
