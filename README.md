@@ -153,6 +153,42 @@ These would be stored under the `Manual Output Ops` field in your Factory, and s
 
 ## 🆕 Changelog
 
+### 📅 New –  2025-09-06
+
+Added
+
+ClientConversionHQ-VAAPI_264 (VAAPI preset)
+
+SpeedupVideo (time-compression utility)
+
+Removed (deprecated/duplicates)
+
+ClientConversionHQ-HVEC-265-1080, HDAudio-2-flac_88200, HQ-NVENC264,
+LiveAVStream_FileTest, MythTVConversion, Omninon-with-Subs,
+PhotoConversion, Testing-AllFieldsFilledOut2, WDTV-Captions
+
+Application & packaging
+
+Introduced bin/version.py (tracks __version__ = 1.1.16-dev).
+
+New desktop launcher: FreeFactoryQT.desktop.
+
+Normalized executable permissions on scripts in bin/ and desktop files.
+
+Core/UI updates
+
+Large internal updates across bin/main_ui_cleanup.py, bin/core.py,
+bin/ffstreaming.py, bin/FactoryTools.py and UI files (FreeFactory-tabs.ui).
+(Refactors, stability, and workflow polish; no user-visible breaking changes intended.)
+
+Docs & repo hygiene
+
+Updated docs (docs/FreeFactoryQT-Documentation.odt/.pdf).
+
+.gitignore expanded for local clutter (export/, *-bak, etc.).
+
+Removed obsolete backup artifacts; cleaned prior conflict markers.
+
 ### 📅 New – 2025-08-23
 
 Notify subsystem (runner + notifier)
