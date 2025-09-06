@@ -3,6 +3,43 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.16-dev] - 2025-09-06
+
+### Added
+- **Factories**
+  - `ClientConversionHQ-VAAPI_264` (VAAPI-powered H.264 preset)
+  - `SpeedupVideo` (time-compression utility)
+- **App/Packaging**
+  - `bin/version.py` (tracks `__version__ = "1.1.16-dev"`)
+  - `FreeFactoryQT.desktop` launcher
+- **Docs**
+  - Updated `docs/FreeFactoryQT-Documentation.odt/.pdf`
+
+### Changed
+- **Factory renames**
+  - `AudioHD-2-flac_88200` → `AudioHD-2-wav_32-88200`
+  - `ClientConversion` → `ClientConversion-720P`
+  - `ClientConversionHQ-HVEC-265` → `ClientConversion-HVEC-1530P`
+  - `ClientConversionHQ` → `ClientConversionHQ-1080`
+  - `LiveAVStream_FileTest_Audio` → `LiveAVStream_AudioFile`
+  - `LiveAVStream_Desktop` → `LiveAVStream_VideoFile`
+- **Core/UI**
+  - Large internal updates across `main_ui_cleanup.py`, `core.py`, `ffstreaming.py`, `FactoryTools.py`, and `FreeFactory-tabs.ui` (refactors & stability; no intentional breaking changes).
+- **Permissions**
+  - Normalized executable bits (`0755`) on scripts and desktop files in `bin/`.
+- **Repo hygiene**
+  - Expanded `.gitignore` for local clutter (e.g., `export/`, `*-bak`, `*.bak`).
+
+### Removed
+- **Factories** (deprecated/duplicates)
+  - `ClientConversionHQ-HVEC-265-1080`, `HDAudio-2-flac_88200`, `HQ-NVENC264`,
+    `LiveAVStream_FileTest`, `MythTVConversion`, `Omninon-with-Subs`,
+    `PhotoConversion`, `Testing-AllFieldsFilledOut2`, `WDTV-Captions`
+- Obsolete backup artifact: `bin/migrate_factories.py-bak`
+
+### Notes
+- This is a development snapshot. Tag as `v1.1.16-dev` if you need a reproducible checkpoint.
+
 ## [1.1.15] - Unreleased
 
 ### Added
