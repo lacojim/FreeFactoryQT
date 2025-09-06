@@ -128,8 +128,6 @@ This allows for Import/Export/Backup Factories as well as Factory Management suc
 Even highly specialized commands can be stored in a Factory.
 
 These are stored under the `Manual Options (both input and output)` fields in your Factory, and saved for future use.
-
-=======
 ## ✍ Example: Advanced Manual Input FFmpeg Options
 
 Even highly specialized input commands can be stored in a Factory. For example:
@@ -155,7 +153,6 @@ These would be stored under the `Manual Output Ops` field in your Factory, and s
 
 ## 🆕 Changelog
 
-=======
 ### 📅 New – 2025-08-23
 
 Notify subsystem (runner + notifier)
@@ -190,14 +187,12 @@ Install / Ops
   * `VIDEOTARGET` (FFmbc leftover)
   * `AUDIOTAG` (FFmbc leftover)
   * Entire **DepPage** tab (including `THREADS`, `RemoveSourceGlobal`, etc.).
-=======
   * Entire **DepPage** tab (including `THREADS`, `RemoveSourceGlobal`, etc.)
   * ✅ Promoted the following to first-class, factory-level options (in `_combo_key_map`):
 
   * `ENABLEFACTORY`
   * `DELETECONVERSIONLOGS`
   * `DELETESOURCE`
-=======
   * `FFMXPROGRAM`
   * 📝 Added support in **FreeFactoryConversion.py** for:
 
@@ -216,8 +211,6 @@ Install / Ops
   * Added `checkMatchMinMaxBitrate` checkbox → locks `-minrate`/`-maxrate` to `-b:v`
   * Ghosts automatically when no `VideoBitrate` is set or in streaming context
   * Now has a drop-down menu including File, Tools and Help drop downs with hotkey support (ie CTRL+N = New Factory, CTRL+S = Save Factory, F1 = Help). 
-  
-=======
   * Updated tooltips for Input Manual Options, Output Manual Options, and Preview Command for clarity
 
 ### 📅 New – 2025-08-17
@@ -271,7 +264,6 @@ python3 migrate_factories.py --add LOWLATENCYINPUT=False,AUTOAPAV=False,INCLUDET
 - ✅ Dynamic UI: only show valid `pix_fmt`, audio, and video profiles based on selected codec
 - ✅ Batch queue with mixed Factories
 - 🔄 Rewrite `FreeFactoryConversion.tcl` in Python (as of 2025-08-22 this has been completed but still may need some minor work). FreeFactoryConversion.tcl is now officially broken. Several keys in the factory files have been removed that FFC.tcl once relied on. With the changeover to a python FreeFactoryConversion.py, it is just not worth to keep the .tcl version up to date. Sorry for the inconvience.
-=======
 - 🔄 Rewrite `FreeFactoryConversion.tcl` in Python
 - 🪟 Port FreeFactoryQT to Windows (experimental; may be limited by background service)
 

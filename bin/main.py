@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # main.py (Phase 1 Refactor: Grouping + Cleanup)
 # Functional logic extracted and converted from ProgramFrontEnd.tcl
 #############################################################################
@@ -33,25 +34,28 @@ import shlex
 import shutil
 import subprocess
 import atexit
+import time
 
 from pathlib import Path
 from datetime import datetime
 
-from PyQt6.QtCore import Qt, QThread, QTimer, QUrl
-from PyQt6.QtGui import QPixmap, QDesktopServices
+from PyQt6.QtCore import Qt, QThread, QTimer, QUrl, QProcess
+from PyQt6.QtGui import QPixmap, QDesktopServices, QPalette, QColor
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QListWidgetItem, QMessageBox,
     QTableWidgetItem, QDialog, QVBoxLayout, QPlainTextEdit,
     QPushButton, QFileDialog, QHeaderView, QLabel, QComboBox,
-    QLineEdit, QMenu, QCheckBox, QTextEdit, QTextBrowser
+    QLineEdit, QMenu, QCheckBox, QTextEdit, QTextBrowser, QLCDNumber
 )
 from PyQt6 import QtCore
 from PyQt6.uic import loadUi
+from PyQt6 import uic
 
 from config_manager import ConfigManager
 from core import FFmpegWorker, FreeFactoryCore, FFmpegWorkerZone
 from droptextedit import DropTextEdit
 from ffmpeghelp import FFmpegHelpDialog
+from version import get_version
 
 from ffstreaming import (
     StreamWorker, start_single_stream, stop_single_stream,
@@ -62,12 +66,57 @@ from ffstreaming import (
 from ffnotifyservice import (
     connect_notify_service_controls,
     update_notify_service_mode_display,
-    show_notify_service_menu
+    show_notify_service_menu,
 )
 from importexport import ExportFactoryDialog, export_factory_logic, backup_factories_zip
-#from importexport import backup_factories_zip
+
+# Absolute path to the real script location, even when launched via a symlink
+# This allows FreeFactory to launch from say /usr/local/bin/FreeFactory symlink
+APP_DIR = Path(__file__).resolve().parent          # /opt/FreeFactory/bin
+ROOT_DIR = APP_DIR.parent                          # /opt/FreeFactory (if you need it)
+
+def asset(*parts: str) -> Path:
+    """
+    Build an absolute path to an app asset (.ui, icons, etc.).
+    Tries APP_DIR first, then ROOT_DIR for convenience.
+    """
+    p = APP_DIR.joinpath(*parts)
+    if not p.exists():
+        q = ROOT_DIR.joinpath(*parts)
+        if q.exists():
+            return q
+    return p  # return even if missing so you get a clear error
+
+
 
 STATUS_COL = 5
+
+
+# --- copy-lock widget lists (module-level constants) ---
+VIDEO_COPY_WIDGETS = [
+    "VideoSize",
+    "VideoPixFormat",
+    "VideoProfile",
+    "VideoProfileLevel",
+    "VideoBitrate",
+    "VideoFrameRate",
+    "VideoAspect",
+    "VideoPreset",
+    "videoFiltersCombo",
+    "VideoBFrames",
+    "VideoGroupPicSize",
+    "FrameStrategy",
+    "VideoFormat",
+]
+
+AUDIO_COPY_WIDGETS = [
+    "AudioExtension",   # remove if you decide it's not needed
+    "AudioBitrate",
+    "AudioSampleRate",
+    "AudioChannels",
+    "audioFiltersCombo",
+]
+
 
 
 # ============================
@@ -100,11 +149,13 @@ class LicenseDialog(QDialog):
         self.setLayout(layout)
 
 
+from version import get_version   # at the top of the file
+
 class AboutDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("About FreeFactory")
-        self.setMinimumSize(335, 200)
+        self.setMinimumSize(335, 235)
         layout = QVBoxLayout()
 
         logo_label = QLabel()
@@ -119,14 +170,14 @@ class AboutDialog(QDialog):
             logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             layout.addWidget(logo_label)
 
-        about_text = ("""
+        about_text = f"""
         <b>FreeFactory</b><br>
-        Version 1.1<br>
-        An open-source professional media conversion app.<br><br>
-        © 2013–2025 Jim Hines and Karl Swisher<br>
+        Version {get_version()}<br>
+        An open-source professional media<br>conversion frontend for FFmpeg.<br><br>
+        © 2013–2025 James Hines and Karl Swisher<br>
         Licensed under <a href='https://www.gnu.org/licenses/gpl-3.0.html'>GPLv3</a><br>
         <a href='https://github.com/lacojim/FreeFactoryQT'>github.com/lacojim/FreeFactoryQT</a>
-        """)
+        """
         text_label = QLabel(about_text)
         text_label.setOpenExternalLinks(True)
         text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -137,6 +188,7 @@ class AboutDialog(QDialog):
         layout.addWidget(close_btn, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.setLayout(layout)
+
 
 
 # ============================
@@ -153,13 +205,18 @@ class FreeFactoryApp(QMainWindow):
         self.active_streams = {}
         self.active_streams_by_row = {}   # row_uid -> worker
         self._stream_row_seq = 0          # monotonic uid for stream rows
+        self._is_closing = False          # Prevents noisey exiting
+        self._is_stopping_recording = False
 
 
-        ui_path = Path(__file__).parent / "FreeFactory-tabs.ui"
-        loadUi(ui_path, self)
+        #ui_path = Path(__file__).parent / "FreeFactory-tabs.ui"
+        #loadUi(ui_path, self)
+        UI_PATH = asset("FreeFactory-tabs.ui")
+        uic.loadUi(str(UI_PATH), self)
 
         self.setup_ui()
         self.populate_factory_list()
+        self.setWindowTitle(f"FreeFactoryQT - {get_version()}")
 
         # Populate DefaultFactoryGlobal combo box with available factories
         factory_dir = self.config.get("FactoryLocation") or "/opt/FreeFactory/Factories"
@@ -204,7 +261,6 @@ class FreeFactoryApp(QMainWindow):
             "VideoSize":                "VIDEOSIZE",                # QComboBox
             "videoFiltersCombo":        "VIDEOFILTERS",             # QComboBox
             "VideoPixFormat":           "VIDEOPIXFORMAT",           # QComboBox
-            #"Threads":                  "THREADS",                  # Removed
             "VideoAspect":              "ASPECT",                   # QComboBox
             "VideoBitrate":             "VIDEOBITRATE",             # QComboBox
             "checkMatchMinMaxBitrate":  "MATCHMINMAXBITRATE",       # QCheckBox
@@ -215,6 +271,7 @@ class FreeFactoryApp(QMainWindow):
             "VideoGroupPicSize":        "GROUPPICSIZE",             # QLineEdit
             "VideoBFrames":             "BFRAMES",                  # QLineEdit
             "FrameStrategy":            "FRAMESTRATEGY",            # QComboBox
+            "VideoFormat":              "VIDEOFORMAT",              # QComboBox
             "ForceFormat":              "FORCEFORMAT",              # QComboBox
             "EncodeLength":             "ENCODELENGTH",             # QLineEdit
             "VideoStartTimeOffset":     "STARTTIMEOFFSET",          # QLineEdit
@@ -242,6 +299,9 @@ class FreeFactoryApp(QMainWindow):
             "streamInputAudio":         "STREAMINPUTAUDIO",         # QComboBox
             "streamRTMPUrl":            "STREAMRTMPURL",            # QLineEdit
             "streamKey":                "STREAMKEY",                # QLineEdit
+            "streamAuthMode":           "STREAMAUTHMODE",           # QComboBox
+            "streamUsername":           "STREAMUSERNAME",           # QLineEdit
+            "streamPassword":           "STREAMPASSWORD",           # QLineEdit
             "checkIncludeTQS":          "INCLUDETQS",               # QCheckBox
             "checkLowLatencyInput":     "LOWLATENCYINPUT",          # QCheckBox
             "checkMapAVInputs":         "AUTOMAPAV",                # QCheckBox
@@ -259,7 +319,6 @@ class FreeFactoryApp(QMainWindow):
             "RecordOutputFolder":       "RECORDFOLDER",
             "RecordFilename":           "RECORDFILENAME",
         }
-
 
 
     # ============================
@@ -285,7 +344,8 @@ class FreeFactoryApp(QMainWindow):
         self.BackupFactories.clicked.connect(self.backup_factories)
         
         # Factory List
-        self.listFactoryFiles.itemClicked.connect(self.load_selected_factory)
+        self.listFactoryFiles.itemClicked.connect(self.load_selected_factory)   # For Mouse clicks
+        self.listFactoryFiles.itemActivated.connect(self.load_selected_factory) # For Keyboard cursor and Enter
         
         # File Queue Buttons
         self.startQueueButton.clicked.connect(self.start_conversion_queue)
@@ -327,19 +387,37 @@ class FreeFactoryApp(QMainWindow):
         self.streamFactorySelect.clear()
         self.streamFactorySelect.addItems(factory_names)
         
+        # Recording Widgets Support
+        # --- Recording UI ---
+        self.buttonRecordOutputFolder.clicked.connect(self._on_choose_record_output_folder)
+        self.StartStopRecording.clicked.connect(self._on_toggle_recording)
+        self._update_record_button()  # initialize label
+        
+        self._init_record_timer()
+        self.RecordElapsed.setStyleSheet("color: red; font-weight: bold; background-color: black; font-size: 12pt;")
+       
         
         # Set up the Menu Items
         self.actionNewFactory.triggered.connect(self.new_factory)
         self.actionSaveFactory.triggered.connect(self.save_current_factory)
         self.actionDeleteFactory.triggered.connect(self.delete_current_factory)
         self.actionExitProgram.triggered.connect(self.close)
-
         self.actionOpenFactoryTools.triggered.connect(self.launch_factory_tools)
         self.actionFreeFactory_Manual.triggered.connect(self.open_manual)
         self.actionAbout_QT.triggered.connect(QApplication.instance().aboutQt)
         self.actionAboutFFmpeg.triggered.connect(self.show_about_ffmpeg)
         self.actionAboutFreeFactory.triggered.connect(self.show_about_dialog_existing)
-
+        self.actionAddFactorytoStreamTable.triggered.connect(self.add_stream_to_table)
+       
+        # ---- Simple, idempotent codec wiring ----
+        for combo, handler in [
+            (getattr(self, "VideoCodec", None), self._on_vcodec_changed),
+            (getattr(self, "AudioCodec", None), self._on_acodec_changed),
+        ]:
+            if combo:
+                try: combo.currentTextChanged.disconnect()
+                except Exception: pass
+                combo.currentTextChanged.connect(handler)
 
  
         
@@ -448,9 +526,6 @@ class FreeFactoryApp(QMainWindow):
         self.VideoBitrate.currentTextChanged.connect(self._update_minmax_lock_state)
         self.checkMatchMinMaxBitrate.toggled.connect(self._update_minmax_lock_state)
         self._update_minmax_lock_state()
-
- 
- 
  
  
  
@@ -458,16 +533,312 @@ class FreeFactoryApp(QMainWindow):
         if hasattr(self, "_wire_stream_tab_minimal"):
             self._wire_stream_tab_minimal()
 
+
+
+    # ============================
+    #     Ghost Widgets when Copy
+    #     Codec is selected Helpers
+    # ============================
+
+    def _is_copy_text(self, s: str) -> bool:
+        return (s or "").strip().lower() == "copy"
+
+    def _w(self, name: str):
+        return getattr(self, name, None)
+
+    def _lbl(self, name: str):
+        return getattr(self, f"l_{name}", None)
+
+    def _set_enabled(self, obj, on: bool):
+        if obj is not None:
+            try: obj.setEnabled(on)
+            except Exception: pass
+
+    def _clear_value(self, w):
+        if w is None:
+            return
+        # Only clear "safe" inputs; never destroy combo items.
+        try:
+            if hasattr(w, "setText"):
+                w.setText("")
+                return
+            if hasattr(w, "setPlainText"):
+                w.setPlainText("")
+                return
+            if hasattr(w, "setValue"):
+                # Reset to minimum if available, else 0
+                v = w.minimum() if hasattr(w, "minimum") else 0
+                w.setValue(v)
+                return
+            if hasattr(w, "isEditable") and hasattr(w, "setEditText") and w.isEditable():
+                w.setEditText("")  # editable combo only
+                return
+        except Exception:
+            pass
+
+    def _apply_group_copy_lock(self, names: list[str], *, is_copy: bool, clear_on_disable: bool):
+        # Toggle widgets + their "l_<name>" labels; optionally clear values when disabling.
+        for name in names:
+            w = self._w(name)
+            l = self._lbl(name)                 # <-- the "l_" lookup happens here
+            self._set_enabled(w, not is_copy)
+            self._set_enabled(l, not is_copy)
+            if is_copy and clear_on_disable:
+                self._clear_value(w)
+
+    def _apply_video_copy_lock(self, *, clear_on_disable: bool):
+        is_copy = self._is_copy_text(self._w("VideoCodec").currentText()) if self._w("VideoCodec") else False
+        self._apply_group_copy_lock(VIDEO_COPY_WIDGETS, is_copy=is_copy, clear_on_disable=clear_on_disable)
+
+    def _apply_audio_copy_lock(self, *, clear_on_disable: bool):
+        is_copy = self._is_copy_text(self._w("AudioCodec").currentText()) if self._w("AudioCodec") else False
+        self._apply_group_copy_lock(AUDIO_COPY_WIDGETS, is_copy=is_copy, clear_on_disable=clear_on_disable)
  
+    # ============================
+    #     End Ghost Widget Helpers
+    # ============================
+
+    # ============================
+    #     Copy Codec Handlers
+    # ============================
+    def _on_vcodec_changed(self, new_text: str):
+        # During factory load, never clear; just apply enabled/disabled state.
+        if getattr(self, "_loading_factory", False):
+            self._apply_video_copy_lock(clear_on_disable=False)
+            return
+        # On user change: clear dependents iff switching to "copy".
+        self._apply_video_copy_lock(clear_on_disable=self._is_copy_text(new_text))
+
+    def _on_acodec_changed(self, new_text: str):
+        if getattr(self, "_loading_factory", False):
+            self._apply_audio_copy_lock(clear_on_disable=False)
+            return
+        self._apply_audio_copy_lock(clear_on_disable=self._is_copy_text(new_text))
+
+
+
+
+
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Group ghosting helpers + unified mode gating
+    # ─────────────────────────────────────────────────────────────────────────────
+
+    def _get_stream_mode(self, *_):
+        """
+        Return one of the four canonical modes:
+        'Off', 'Stream', 'Record', 'Record+Stream'
+        Falls back to 'Off' if text isn't recognized.
+        """
+        mode_widget = getattr(self, "StreamMgrMode", None)
+        if mode_widget is not None and hasattr(mode_widget, "currentText"):
+            txt = (mode_widget.currentText() or "").strip()
+            if txt in ("Off", "Stream", "Record", "Record+Stream"):
+                return txt
+        return "Off"
+
+
+    def _iter_widgets_by_names(self, names):
+        """Yield (name, widget, label_widget_or_None) for each existing name."""
+        for name in names:
+            w = getattr(self, name, None)
+            if w is None:
+                continue
+            lbl = getattr(self, f"l_{name}", None)
+            yield name, w, lbl
+
+    def _set_enabled_pair(self, w, lbl, enabled: bool):
+        """Enable/disable a widget and its label (if present)."""
+        try:
+            w.setEnabled(enabled)
+        except Exception:
+            pass
+        if lbl is not None:
+            try:
+                lbl.setEnabled(enabled)
+            except Exception:
+                pass
+
+    def _ghost_group_by_names(self, names, enabled: bool):
+        """Enable/disable an entire group of named widgets (plus their labels)."""
+        for _, w, lbl in self._iter_widgets_by_names(names):
+            self._set_enabled_pair(w, lbl, enabled)
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Group membership (root lists) — labels auto-detected via l_<name>
+    # Adjust names if you later rename widgets in Qt Designer.
+    # ─────────────────────────────────────────────────────────────────────────────
+
+    def _stream_controls_names(self):
+        """Everything considered part of the Live Streaming Controls group."""
+        return [
+            # Format selectors shared with streaming
+            "ForceFormatInputVideo", "ForceFormatInputAudio",
+            # Core streaming controls
+            "streamRTMPUrl", "streamKey",
+            "streamInputVideo", "streamInputAudio",
+            "streamFactorySelect", "streamAuthMode",
+            "streamUsername", "streamPassword",
+            # TQS / mapping / latency / profiles, etc.
+            "checkIncludeTQS", "tqsSizeCombo",
+            "checkMapAVInputs", "checkLowLatencyInput",
+            "streamInputProfile", "AddVideoStreamFile",
+            # Buttons that follow mode (not the Stop buttons)
+            "AddNewStream", "StartAllStreams",
+            "checkReadFilesRealTime",
+        ]
+
+    def _record_controls_names(self):
+        """Everything considered part of the Recording Settings group."""
+        return [
+            "groupRecordSettings",
+            "RecordInput",
+            "RecordOutputFolder",
+            "RecordFilename",
+            "buttonRecordOutputFolder",   # ← added
+            "StartStopRecording",
+            "RecordAudioSource",          # ← added (label optional)
+            "PreviewRecInput",            # ← added (label optional)
+            "RecordLog",
+        ]
+
+    def _stream_table_names(self):
+        """
+        The streams table group (row actions live here).
+        We will override Stop buttons after group ghosting.
+        """
+        return [
+            "groupStreamsTable",
+            # If row action buttons are not children-only, include them explicitly:
+            "StartStream", "StopStream", "StartAllStreams", "StopAllStreams",
+        ]
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Unified, authoritative state machine for Streaming/Recording UI
+    # ─────────────────────────────────────────────────────────────────────────────
+
+    def update_stream_ui_state(self, *_):
+        """
+        Single source of truth for mode-based ghosting:
+        Modes:
+            - Off             → stream: off, record: off, table: off (Stop/StopAll re-enabled)
+            - Stream          → stream: on,  record: off, table: on
+            - Record          → stream: off, record: on,  table: off (Stop/StopAll re-enabled)
+            - Record+Stream   → stream: on,  record: on,  table: on
+        Additional rules:
+            - Always ghost/enabled labels with their widgets (l_<name>).
+            - Do NOT clear values here (pure enable/disable).
+            - StartStream is forcibly disabled only in Off mode.
+            - StopStream / StopAllStreams remain clickable even when the table is ghosted.
+        """
+        mode = (self._get_stream_mode() or "Off").strip()
+
+        # Decide group states
+        if mode == "Stream":
+            stream_enabled, record_enabled, table_enabled = True, False, True
+        elif mode == "Record":
+            stream_enabled, record_enabled, table_enabled = False, True, False
+        elif mode in ("Record+Stream", "Stream+Record"):
+            stream_enabled, record_enabled, table_enabled = True, True, True
+        else:  # Off
+            stream_enabled, record_enabled, table_enabled = False, False, False
+
+        # Sweep groups
+        self._ghost_group_by_names(self._stream_controls_names(), stream_enabled)
+        self._ghost_group_by_names(self._record_controls_names(), record_enabled)
+        self._ghost_group_by_names(self._stream_table_names(), table_enabled)
+
+        # Special-case: Stop buttons must stay enabled even if the table group is ghosted.
+        for stop_btn_name in ("StopStream", "StopAllStreams"):
+            btn = getattr(self, stop_btn_name, None)
+            if btn is not None:
+                try:
+                    btn.setEnabled(True)
+                except Exception:
+                    pass
+            lbl = getattr(self, f"l_{stop_btn_name}", None)
+            if lbl is not None:
+                try:
+                    lbl.setEnabled(True)
+                except Exception:
+                    pass
+
+        # Special-case: StartStream is force-disabled in Off
+        start_btn = getattr(self, "StartStream", None)
+        if start_btn is not None:
+            try:
+                start_btn.setEnabled(mode != "Off")
+            except Exception:
+                pass
+
+        # Optional: update any status badges/text here.
+        # self._refresh_stream_status_badge(mode)
+
+
+
+
+
+
+
+
+
+
  
- 
- 
- 
- 
- 
- 
- 
- 
+    # ============================
+    #     End Streams and Conversions
+    #     on Exit w/confirmation
+    #     UI Only
+    # ============================
+    def closeEvent(self, event):
+        self._is_closing = True
+
+        # UI-managed activity only (do NOT touch FreeFactoryConversion.py)
+        active_threads = list(getattr(self, "active_threads", []))
+        has_threads = any(getattr(t, "isRunning", lambda: False)() for t, _ in active_threads)
+        has_streams = bool(getattr(self, "active_streams_by_row", {}))
+
+        if has_streams or has_threads:
+            box = QMessageBox(self)
+            box.setIcon(QMessageBox.Icon.Warning)
+            box.setWindowTitle("Exit FreeFactory?")
+            box.setText("You currently have active streams and/or conversions running.<br>Exiting will abort all (UI-managed only).")
+            box.setInformativeText("Do you want to exit now?")
+            box.setStandardButtons(QMessageBox.StandardButton.Cancel | QMessageBox.StandardButton.Ok)
+            box.setDefaultButton(QMessageBox.StandardButton.Cancel)
+            result = box.exec()
+            if result == QMessageBox.StandardButton.Cancel:
+                event.ignore()
+                return
+
+            # Audit trail (UI-only shutdown)
+            print("[FreeFactory] Exit requested — stopping UI-managed streams/conversions")
+
+        # Stop UI-owned recording if running (independent of service)
+        try:
+            self._stop_recording_proc()   # <- idempotent, safe if already None/finished
+        except Exception:
+            pass
+
+
+        # Stop UI-managed streams only
+        try:
+            # This should terminate only the ffmpeg processes spawned by the UI’s stream table workers
+            self.stop_all_streams()
+        except Exception:
+            pass
+
+        # Wind down UI conversion threads only
+        try:
+            for (thread, _worker) in active_threads:
+                try:
+                    thread.quit()
+                    thread.wait(3000)
+                except Exception:
+                    pass
+        except Exception:
+            pass
+
+        super().closeEvent(event)
         
 
     # ============================
@@ -725,9 +1096,187 @@ class FreeFactoryApp(QMainWindow):
     # ============================
 
     def open_ffmpeg_help_dialog(self, title, args):
-        # Keep a reference so it doesn't get garbage collected
-        self._ffmpeg_help_dialog = FFmpegHelpDialog(title, args, self)
+        """Open FFmpeg Help dialog with the configured ffmpeg binary."""
+        import os, shutil
+        from ffmpeghelp import FFmpegHelpDialog
+
+        ffmpeg_path = (self.PathtoFFmpegGlobal.text() or "").strip() or "ffmpeg"
+        if os.path.isdir(ffmpeg_path):
+            ffmpeg_path = os.path.join(ffmpeg_path, "ffmpeg")
+        ffmpeg_path = shutil.which(ffmpeg_path) or ffmpeg_path
+
+        self._ffmpeg_help_dialog = FFmpegHelpDialog(title, args, self, ffmpeg_path=ffmpeg_path)
         self._ffmpeg_help_dialog.show()
+
+
+
+    # ============================
+    #     Recording Controls
+    # ============================
+    def _on_toggle_recording(self):
+        # Stop?
+        if getattr(self, "_recording_proc", None) and \
+        self._recording_proc.state() != self._recording_proc.ProcessState.NotRunning:
+            self._stop_recording_proc()
+            self.statusBar().showMessage("Recording stopped", 3000)
+            return
+
+            try:
+                # Graceful then hard stop
+                self._recording_proc.write(b"q")
+                self._recording_proc.waitForFinished(1500)
+            except Exception:
+                pass
+            try:
+                if self._recording_proc.state() != self._recording_proc.ProcessState.NotRunning:
+                    self._recording_proc.kill()
+                    self._recording_proc.waitForFinished(1500)
+            except Exception:
+                pass
+            self._recording_proc.deleteLater()
+            self._recording_proc = None
+            self.statusBar().showMessage("Recording stopped", 3000)
+            self._update_record_button()
+            return
+
+        # Start
+        factory_name = self.FactoryFilename.text().strip()
+        if not factory_name:
+            QMessageBox.warning(self, "Recording", "Please select or enter a factory first.")
+            return
+
+        # Load factory data
+        factory_path = Path(self.config.get("FactoryLocation")) / factory_name
+        factory_data = self.core.load_factory(factory_path)
+        if not factory_data:
+            QMessageBox.warning(self, "Recording", f"Failed to load factory: {factory_name}")
+            return
+
+        # Inputs & formats
+        video_input = (self.RecordInput.text().strip() if hasattr(self, "RecordInput") else "") or ":0.0+0,0"
+        video_fmt = "x11grab" if video_input.startswith(":") else "file"
+        audio_input = "default"  # later: add a widget if you want a selectable source
+        audio_fmt = "pulse"
+        out_path = self._resolve_record_output_path()
+        re_for_files = bool(getattr(self, "checkReadFilesRealTime", None) and self.checkReadFilesRealTime.isChecked())
+
+        # Build command via core (reuses Builder settings: fps/size/bitrate/pix_fmt/etc.)
+        cmd = self.core.build_recording_command(
+            factory_data,
+            video_input=video_input,
+            audio_input=audio_input,
+            video_input_format=video_fmt,
+            audio_input_format=audio_fmt,
+            output_path=str(out_path),
+            re_for_file_inputs=re_for_files,
+        )
+
+
+        # Resolve ffmpeg program path from config or PATH
+        ffmpeg_bin = (self.config.get("PathtoFFmpegGlobal") or "").strip()
+
+        if not ffmpeg_bin:
+            # use PATH
+            program = shutil.which("ffmpeg") or "ffmpeg"
+        else:
+            # normalize, allow user to give "/usr/bin" or "/usr/bin/"
+            p = ffmpeg_bin.rstrip("/")
+            if os.path.isdir(p):
+                p = os.path.join(p, "ffmpeg")
+            program = p
+
+        # If user gave just "ffmpeg" or a bare name, try PATH
+        program = shutil.which(program) or program
+
+        # Clean arguments (ensure they don't contain the program name)
+        arguments = cmd
+        if arguments and Path(arguments[0]).name.lower() in ("ffmpeg", "ffmpeg.exe"):
+            arguments = arguments[1:]
+
+        # Debug (just for visibility; args are passed as list, not this string)
+        print(f"[record] launching: {program} " + " ".join(shlex.quote(a) for a in arguments))
+
+        # Optional sanity check
+        from PyQt6.QtCore import QFileInfo
+        fi = QFileInfo(program)
+        if not (fi.exists() and fi.isExecutable()):
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.critical(self, "Recording", f"ffmpeg not found or not executable:\n{program}")
+            return
+
+        # create the process and hook logs BEFORE starting
+        proc = QProcess(self)
+        proc.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
+        proc.readyReadStandardError.connect(
+            lambda: print(bytes(proc.readAllStandardError()).decode("utf-8", "replace"), end="")
+        )
+        proc.errorOccurred.connect(self._on_record_error)
+        proc.finished.connect(lambda code, _st: self._on_recording_finished(code))
+
+        proc.start(program, arguments)
+
+        if not proc.waitForStarted(3000):
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.critical(self, "Recording", f"Failed to start ffmpeg:\n{program}\n(see console for args)")
+            return
+
+        self._recording_proc = proc
+        self.statusBar().showMessage(f"Recording → {Path(arguments[-1]).name}", 4000)
+        self._update_record_button()
+        self._style_record_button(True) # Make it red
+        self._start_record_timer()
+
+
+    def _on_recording_finished(self, code: int):
+        self.statusBar().showMessage(
+            "Recording finished" if code == 0 else f"Recording exited ({code})", 4000
+        )
+        self._stop_recording_proc()
+        self._style_record_button(False) # Turn off Red
+        self._stop_record_timer()
+        
+####### Recording Elapsed Time
+    def _init_record_timer(self):
+        """Call once during setup_ui()."""
+        self._rec_timer = QTimer(self)
+        self._rec_timer.setInterval(1000)  # 1s tick
+        self._rec_timer.timeout.connect(self._tick_record_timer)
+        self._rec_started_at = None
+        # Optional: ensure label exists before we touch it
+        if hasattr(self, "RecordElapsed") and self.RecordElapsed:
+            try:
+                self.RecordElapsed.setText("00:00:00")
+            except Exception:
+                pass
+
+    def _start_record_timer(self):
+        self._rec_started_at = time.monotonic()
+        if hasattr(self, "RecordElapsed") and self.RecordElapsed:
+            try:
+                self.RecordElapsed.setText("00:00:00")
+            except Exception:
+                pass
+        self._rec_timer.start()
+
+    def _stop_record_timer(self):
+        self._rec_timer.stop()
+        self._rec_started_at = None
+
+    def _tick_record_timer(self):
+        if self._rec_started_at is None:
+            return
+        elapsed = int(time.monotonic() - self._rec_started_at)
+        h, rem = divmod(elapsed, 3600)
+        m, s = divmod(rem, 60)
+        text = f"{h:02d}:{m:02d}:{s:02d}"
+        if hasattr(self, "RecordElapsed") and self.RecordElapsed:
+            try:
+                self.RecordElapsed.setText(text)
+            except Exception:
+                pass
+
+
+
 
 
     # ============================
@@ -1198,9 +1747,13 @@ class FreeFactoryApp(QMainWindow):
 
     def new_factory(self):
         self.FactoryFilename.clear()
+        self.listFactoryFiles.clearSelection()
         for field in self.findChildren(QLineEdit):
             field.clear()
         self.factory_dirty = True
+
+        self.streamUsername.clear()
+        self.streamPassword.clear()
 
         # Force Mode → Off
         try:
@@ -1210,6 +1763,8 @@ class FreeFactoryApp(QMainWindow):
                 self.update_stream_ui_state()
         except Exception:
             pass
+        
+        
         
         # Don’t call .clear() on the QComboBox itself (that nukes items)
         try:
@@ -1290,6 +1845,9 @@ class FreeFactoryApp(QMainWindow):
             
         self._sync_stream_selector_to_builder(factory_name)
         self.update_stream_ui_state()
+        
+        self._apply_video_copy_lock(clear_on_disable=False)
+        self._apply_audio_copy_lock(clear_on_disable=False)
 
 
 
@@ -1399,8 +1957,10 @@ class FreeFactoryApp(QMainWindow):
     def save_global_config(self):
         self.config.set("CompanyNameGlobal", self.CompanyNameGlobal.text())
         self.config.set("AppleDelaySeconds", self.AppleDelaySecondsGlobal.text())
-        self.config.set("FactoryLocation", self.PathtoFactoriesGlobal.text().strip())
         self.config.set("DefaultFactory", self.DefaultFactoryGlobal.currentText())
+        self.config.set("FactoryLocation", self.PathtoFactoriesGlobal.text().strip())
+        self.config.set("PathtoFFmpegGlobal", self.PathtoFFmpegGlobal.text().strip())
+
  
         # CPU/GPU concurrency with safe parsing
         try:
@@ -1481,9 +2041,9 @@ class FreeFactoryApp(QMainWindow):
 
     # ============================
     #     Preview Command Logic
+    #   (Builder/Streamer/Recorder)
     # ============================
     def on_generate_command(self):
-        input_path = Path("input.filename")
         factory_name = self.FactoryFilename.text().strip()
         if not factory_name:
             QMessageBox.warning(self, "No Factory Selected", "Please select or enter a factory first.")
@@ -1495,8 +2055,148 @@ class FreeFactoryApp(QMainWindow):
             QMessageBox.warning(self, "Error", f"Could not load factory: {factory_path}")
             return
 
-        cmd = self.core.build_ffmpeg_command(input_path, factory_data, preview=True)
+        mode = (self.StreamMgrMode.currentText() or "Off").strip().lower() if hasattr(self, "StreamMgrMode") else "off"
+        if mode == "record":
+            video_input = (self.RecordInput.text().strip() if hasattr(self, "RecordInput") else "") or ":0.0+0,0"
+            video_fmt = "x11grab" if video_input.startswith(":") else "file"
+            audio_input = "default"
+            audio_fmt = "pulse"
+            out_path = self._resolve_record_output_path()
+            re_for_files = bool(getattr(self, "checkReadFilesRealTime", None) and self.checkReadFilesRealTime.isChecked())
+
+            cmd = self.core.build_recording_command(
+                factory_data,
+                video_input=video_input,
+                audio_input=audio_input,
+                video_input_format=video_fmt,
+                audio_input_format=audio_fmt,
+                output_path=str(out_path),
+                re_for_file_inputs=re_for_files,
+            )
+        else:
+            # …your existing preview path (conversion/stream)…
+            cmd = self.core.build_ffmpeg_command(Path("input.filename"), factory_data, preview=True)
+
         self.PreviewCommandLine.setText(" ".join(cmd))
+
+
+    # ============================
+    #     Recording Mode Helpers 
+    # ============================
+    def _resolve_record_output_path(self) -> Path:
+        folder = (self.RecordOutputFolder.text().strip() if hasattr(self, "RecordOutputFolder") else "") \
+                or str(Path.home() / "Videos" / "FreeFactory")
+        folder_path = Path(folder); folder_path.mkdir(parents=True, exist_ok=True)
+
+        template = (self.RecordFilename.text().strip() if hasattr(self, "RecordFilename") else "") \
+                or "%Y%m%d-%H%M%S_{factory}.mp4"
+        factory_name = self.FactoryFilename.text().strip() or "factory"
+        ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+        fname = template.replace("%Y%m%d-%H%M%S", ts).replace("{factory}", factory_name)
+        if not fname.lower().endswith(".mp4"):
+            fname += ".mp4"
+        return folder_path / fname
+    # Record Output Path
+    def _resolve_record_output_path(self) -> Path:
+        # Folder
+        folder = (self.RecordOutputFolder.text().strip()
+                if hasattr(self, "RecordOutputFolder") else "")
+        if not folder:
+            folder = str(Path.home() / "Videos" / "FreeFactory")
+        folder_path = Path(folder)
+        folder_path.mkdir(parents=True, exist_ok=True)
+
+        # Filename template: defaults to %Y%m%d-%H%M%S_{factory}.mp4
+        tmpl = (self.RecordFilename.text().strip()
+                if hasattr(self, "RecordFilename") else "")
+        if not tmpl:
+            tmpl = "%Y%m%d-%H%M%S_{factory}.mp4"
+
+        factory_name = self.FactoryFilename.text().strip() if hasattr(self, "FactoryFilename") else "factory"
+        ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+        fname = tmpl.replace("%Y%m%d-%H%M%S", ts).replace("{factory}", factory_name)
+        if not fname.lower().endswith(".mp4"):
+            fname += ".mp4"
+        return folder_path / fname
+
+    # Pick Recording Output Folder
+    def _on_choose_record_output_folder(self):
+        start_dir = self.RecordOutputFolder.text().strip() or str(Path.home())
+        folder = QFileDialog.getExistingDirectory(self, "Choose Recording Folder", start_dir)
+        if folder:
+            self.RecordOutputFolder.setText(folder)
+
+    # Recording Button Toggle 
+    def _update_record_button(self):
+        # Treat presence of a running QProcess as “recording”
+        running = getattr(self, "_recording_proc", None) and self._recording_proc.state() != self._recording_proc.ProcessState.NotRunning
+        self.StartStopRecording.setText("Stop Recording" if running else "Start Recording")
+    
+    # Recording Button Red when Recording
+    def _style_record_button(self, recording: bool):
+        if recording:
+            # vivid red, readable text, rounded, a bit of padding
+            self.StartStopRecording.setStyleSheet("""
+                QPushButton {
+                    background: #c62828;
+                    color: white;
+                    border: 1px solid #7f1d1d;
+                    border-radius: 6px;
+                    padding: 4px 12px;
+                    font-weight: 600;
+                }
+                QPushButton:hover { background: #b71c1c; }
+                QPushButton:pressed { background: #8e1313; }
+            """)
+        else:
+            self.StartStopRecording.setStyleSheet("")  # back to default theme
+
+    # Fix for AttributeError: 'NoneType' object has no attribute 'deleteLater'
+    def _stop_recording_proc(self):
+        """Idempotent stop/cleanup for the recording QProcess."""
+        proc = getattr(self, "_recording_proc", None)
+        if not proc:
+            return
+
+        self._is_stopping_recording = True
+        try:
+            proc.write(b"q")
+            proc.waitForFinished(500)
+        except Exception:
+            pass
+
+        try:
+            if proc.state() != proc.ProcessState.NotRunning:
+                proc.terminate()                  # <— prefer graceful terminate
+                if not proc.waitForFinished(800):
+                    proc.kill()                   # <— only if needed
+                    proc.waitForFinished(800)
+        except Exception:
+            pass
+
+        try:
+            proc.deleteLater()
+        except Exception:
+            pass
+
+        self._recording_proc = None
+        self._is_stopping_recording = False
+
+        if not getattr(self, "_is_closing", False):
+            self._update_record_button()
+
+
+    def _on_record_error(self, err):
+        if getattr(self, "_is_closing", False) or getattr(self, "_is_stopping_recording", False):
+            return  # intentional shutdown — stay quiet
+        print(f"[record] QProcess error: {err}")
+
+
+
+
+
+
+
 
 
     # ============================
@@ -1612,90 +2312,41 @@ class FreeFactoryApp(QMainWindow):
             pass
         return False
 
-    def update_stream_ui_state(self):
-        """
-        Mode gating only (no table/worker logic).
-        - Off: disable inputs + Add + Start + StartAll
-        - Stream/Record/Record+Stream: enable inputs + Add + StartAll
-        Start row button: only force-disable in Off; otherwise leave table logic to manage.
-        Stop/StopAll: always enabled.
-        """
-        raw = (self.StreamMgrMode.currentText() or "Off").strip().lower() \
-            if hasattr(self, "StreamMgrMode") and hasattr(self.StreamMgrMode, "currentText") else "off"
-        is_off = (raw == "off")
-
-        # Inputs that follow the mode (include your checkboxes/combos)
-        input_names = [
-            "ForceFormatInputVideo","ForceFormatInputAudio",
-            "streamRTMPUrl","streamKey","streamInputVideo","streamInputAudio",
-            "streamFactorySelect","streamAuthMode","streamUsername","streamPassword",
-            "checkIncludeTQS","tqsSizeCombo","checkMapAVInputs","checkLowLatencyInput",
-            "AddVideoStreamFile","streamInputProfile","RecordInput","RecordOutputFolder",
-            "RecordFilename","buttonRecordOutputFolder","StartStopRecording",
-            "checkReadFilesRealTime",
-        ]
-        for name in input_names:
-            if hasattr(self, name):
-                try: getattr(self, name).setEnabled(not is_off)
-                except Exception: pass
-
-        # Buttons we explicitly gate
-        for name in ("AddNewStream", "StartAllStreams"):
-            if hasattr(self, name):
-                try: getattr(self, name).setEnabled(not is_off)
-                except Exception: pass
-
-        # StartStream: only force-disable in Off; otherwise leave as-is for table logic
-        if hasattr(self, "StartStream"):
-            try:
-                if is_off:
-                    self.StartStream.setEnabled(False)
-                # else: do not change; table logic will set appropriately
-            except Exception:
-                pass
-
-        # Stop buttons: always enabled
-        for name in ("StopStream", "StopAllStreams"):
-            if hasattr(self, name):
-                try: getattr(self, name).setEnabled(True)
-                except Exception: pass
-            
-            
-        # Buttons that follow the mode (fully enabled for Stream/Record/Record+Stream)
-        for name in ("AddNewStream", "StartStream", "StartAllStreams"):
-            if hasattr(self, name):
-                try: getattr(self, name).setEnabled(not is_off)
-                except Exception: pass
-        
-        for name in ("StopStream", "StopAllStreams"):
-            if hasattr(self, name):
-                try: getattr(self, name).setEnabled(True)
-                except Exception: pass
-    
-
-        #print(f"[stream] mode={raw} -> inputs={not is_off}, add/startAll={not is_off}, start_row={'free' if not is_off else 'forced off'}, stop/stopAll=always on")
-
 
     def _wire_stream_tab_minimal(self):
         """Call this once after UI is built and factories are loaded."""
-        # Build filtered selector (exclude OFF)
-        self._rebuild_stream_factory_selector()
+        # Prevent duplicates if setup_ui() ever calls us twice
+        if getattr(self, "_stream_tab_wired", False):
+            self.update_stream_ui_state()
+            return
+        self._stream_tab_wired = True
 
-        # React to Mode changes and selector changes
-        if hasattr(self, "StreamMgrMode") and hasattr(self.StreamMgrMode, "currentTextChanged"):
-            self.StreamMgrMode.currentTextChanged.connect(lambda _=None: self.update_stream_ui_state())
+        # React to StreamMgrMode changes
+        mode = getattr(self, "StreamMgrMode", None)
+        if mode and hasattr(mode, "currentTextChanged"):
+            mode.currentTextChanged.connect(
+                self.update_stream_ui_state,
+                type=Qt.ConnectionType.UniqueConnection
+            )
 
-        # QComboBox has currentTextChanged; QListWidget has currentItemChanged
-        w = getattr(self, "streamFactorySelect", None)
-        if w:
-            # Try both; only one will exist.
-            if hasattr(w, "currentTextChanged"):
-                w.currentTextChanged.connect(lambda _=None: self.update_stream_ui_state())
-            elif hasattr(w, "currentItemChanged"):
-                w.currentItemChanged.connect(lambda *_: self.update_stream_ui_state())
+        # React to stream factory selector changes (QComboBox or QListWidget)
+        sel = getattr(self, "streamFactorySelect", None)
+        if sel:
+            if hasattr(sel, "currentTextChanged"):      # QComboBox
+                sel.currentTextChanged.connect(
+                    self.update_stream_ui_state,
+                    type=Qt.ConnectionType.UniqueConnection
+                )
+            elif hasattr(sel, "currentItemChanged"):    # QListWidget
+                sel.currentItemChanged.connect(
+                    self.update_stream_ui_state,
+                    type=Qt.ConnectionType.UniqueConnection
+                )
 
-        # Initial pass
+        # Initial pass so the UI reflects the current mode on load
         self.update_stream_ui_state()
+
+        
 
     # ============================
     #     End __init__ Stub

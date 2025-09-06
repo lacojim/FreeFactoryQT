@@ -242,6 +242,9 @@ class FreeFactoryCore:
         bframes             = factory_data.get("BFRAMES", "").strip()
         frame_strategy      = factory_data.get("FRAMESTRATEGY", "").strip()
         gop_size            = factory_data.get("GROUPPICSIZE", "").strip()
+        
+        video_format        = factory_data.get("VIDEOFORMAT", "").strip()
+        
         pix_format          = factory_data.get("VIDEOPIXFORMAT", "").strip()
         start_offset        = factory_data.get("STARTTIMEOFFSET", "").strip()
         force_format        = factory_data.get("FORCEFORMAT", "").strip()
@@ -257,10 +260,9 @@ class FreeFactoryCore:
             cmd += shlex.split(manual_input)
         cmd += ["-i", str(input_path)]
 
-#=======Video encoding
+        #=======Video encoding
         if video_codec:
             cmd += ["-c:v", video_codec]
-
 
         if video_bitrate:
             cmd += ["-b:v", video_bitrate]
@@ -280,9 +282,6 @@ class FreeFactoryCore:
                 strip_flag("-maxrate")
                 cmd += ["-minrate", video_bitrate, "-maxrate", video_bitrate]
 
-
-
-
         if video_profile:
             cmd += ["-profile:v", video_profile]
         if video_profile_level:
@@ -293,6 +292,9 @@ class FreeFactoryCore:
             cmd += ["-bf", bframes]
         if frame_strategy:
             cmd += ["-b_strategy", frame_strategy]
+        if video_format:
+            cmd += ["-video_format", video_format]
+        
             
         # --- VIDEO filters / size
         if vf and not vf.endswith("="):
@@ -304,11 +306,11 @@ class FreeFactoryCore:
             cmd += ["-pix_fmt", pix_format]
 
             
-#=======Subtitles
+        #=======Subtitles
         if subtitle:
             cmd += ["-c:s", subtitle]
 
-#=======Audio encoding
+        #=======Audio encoding
         if audio_codec:
             cmd += ["-c:a", audio_codec]
         if audio_bitrate:
@@ -322,24 +324,20 @@ class FreeFactoryCore:
         #if audio_tags:
         #    cmd += ["-tags:a", audio_tags]
         
-#=======Stream mapping
+        #=======Stream mapping
         if video_stream_id:
             cmd += ["-streamid:v", video_stream_id]
         if audio_stream_id:
             cmd += ["-streamid:a", audio_stream_id]
-        #if video_stream_id:
-        #    cmd += ["-streamid", f"v:{video_stream_id}"]
-        #if audio_stream_id:
-        #    cmd += ["-streamid", f"a:{audio_stream_id}"]
 
-#=======Output seeking
+        #=======Output seeking
         if encode_length:
             cmd += ["-t", encode_length]
         if start_offset:
             cmd += ["-ss", start_offset]
             print("DEBUG force_format raw value:", repr(force_format))
 
-#=======Manual options
+        #=======Manual options
         if manual_output:
             cmd += shlex.split(manual_output)
         if force_format:
@@ -347,7 +345,7 @@ class FreeFactoryCore:
 
         cmd.append(output_path.as_posix())
 
-        print("DEBUG final cmd:", cmd)
+        #print("DEBUG final cmd:", cmd)
         return cmd
 #======
 
@@ -417,7 +415,9 @@ class FreeFactoryCore:
         return flags
     
 
-#===Build streaming command
+# ============================
+#      Build Streaming Command
+# ============================
     def build_streaming_command(
         self,
         factory_data: dict,
@@ -541,4 +541,88 @@ class FreeFactoryCore:
         cmd.append(output_url)
 
         return cmd
+
+
+
+    # ============================
+    #      Build Recording Command
+    # ============================    
+    def build_recording_command(
+        self,
+        factory_data: dict,
+        *,
+        video_input: str = "",          # e.g. ":0.0+0,0" (desktop) or "/path/to/file" or "rtmp://..."
+        audio_input: str = "",          # e.g. "default" (Pulse), or "" for none
+        video_input_format: str = "",   # "x11grab", "file", "gdigrab" (future Windows), etc.
+        audio_input_format: str = "",   # "pulse", "alsa", "dshow" (future Windows), etc.
+        output_path: str = "",          # full path resolved by UI (folder + filename template)
+        re_for_file_inputs: bool = True
+    ) -> list[str]:
+        """
+        Build a file-recording ffmpeg command using the same flags as streaming/encode.
+        Input graph handling mirrors build_streaming_command(...), but destination is a file.
+        """
+        import shlex
+        if not output_path:
+            raise ValueError("Missing output_path for recording.")
+
+        manual_input  = (factory_data.get("MANUALOPTIONSINPUT", "") or "").strip()
+        manual_output = (factory_data.get("MANUALOPTIONSOUTPUT", "") or "").strip()
+        force_format  = (factory_data.get("FORCEFORMAT", "") or "").strip()
+
+        # toggles also used in streaming:
+        include_tqs = (factory_data.get("INCLUDETQS", "True") or "True").strip().lower() == "true"
+        tqs_size    = (factory_data.get("TQSSIZE", "512")    or "512").strip() or "512"
+        low_latency = (factory_data.get("LOWLATENCYINPUT", "False") or "False").strip().lower() == "true"
+
+        cmd = ["ffmpeg", "-hide_banner", "-y"]
+        if low_latency:
+            cmd += ["-fflags", "nobuffer"]
+
+        tokens = shlex.split(manual_input) if manual_input else []
+        has_i  = any(tok == "-i" for tok in tokens)
+
+        def add_input(fmt: str, src: str, pre_first: bool):
+            # nonlocal cmd  # optional safety if you ever reintroduce +=
+            if not src:
+                return
+
+            fmt_norm = (fmt or "").strip().lower()
+            is_filelike = fmt_norm in ("file", "", "concat")
+
+            if pre_first and not is_filelike:
+                cmd.extend(tokens)
+
+            if not is_filelike and fmt_norm:
+                cmd.extend(["-f", fmt_norm])
+
+            if include_tqs and tqs_size and not is_filelike:
+                cmd.extend(["-thread_queue_size", str(tqs_size)])
+
+            if is_filelike and re_for_file_inputs:
+                cmd.append("-re")
+
+            cmd.extend(["-i", src])
+
+
+        if manual_input and has_i:
+            cmd += tokens
+        else:
+            pre_before_video = bool(video_input) and ((video_input_format or "").strip().lower() not in ("file", "", "concat"))
+            add_input(video_input_format, video_input, pre_before_video)
+            add_input(audio_input_format, audio_input, pre_first=False)
+
+        # Reuse your existing flag builder (same knobs as streaming/encodes)
+        cmd += self.build_streaming_flags(factory_data)
+
+        # Post-input manual overrides
+        if manual_output:
+            cmd += shlex.split(manual_output)
+
+        # Muxer/format and destination
+        if force_format:
+            cmd += ["-f", force_format]
+        cmd.append(str(output_path))
+        return cmd
+
 

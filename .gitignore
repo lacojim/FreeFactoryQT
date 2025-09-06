@@ -28,6 +28,12 @@
 /Factories/Omninon-MPEG2-MXF-with-Subs
 /Factories/WDTV-8-Channel-Audio-Test
 /Factories/WDTV-Captions
+/Factories/Audio-Volume_Detect
+/Factories/DJI-LowRes
+/Factories/Recording_Factory_Test
+/Factories/Recording_Factory_Test2
+/Factories/To-MKV
+
 
 # Factory archives and personal factories
 /FactoryArchive/
@@ -123,3 +129,10 @@ logs/
 core
 core.[0-9]*
 *.core
+
+# Local clutter & dummy
+*-bak
+*.bak
+export/
+bin/ffrecording.py
+bin/FreeFactory-tabs-bak.ui
