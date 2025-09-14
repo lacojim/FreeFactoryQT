@@ -1,6 +1,6 @@
 ![image](https://github.com/user-attachments/assets/9cca7be8-736b-4768-8cd6-79cbd008605a)
 # FreeFactoryQT
-<img width="1101" height="730" alt="image" src="https://github.com/user-attachments/assets/4caa7b05-6704-4566-8de6-ae1d6780f13d" />
+<img width="1102" height="748" alt="image" src="https://github.com/user-attachments/assets/044cd03a-9ed5-4c4f-9634-daca00260a40" />
 
 > ⚠️ **Note:** Changelogs are now located at the bottom of this README.
 
