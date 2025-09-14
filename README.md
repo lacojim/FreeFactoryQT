@@ -10,7 +10,7 @@
 
 **FreeFactoryQT** is a powerful, user-friendly media conversion system designed for both casual users and broadcast professionals. Originally developed for in-house use at a television station by a broadcast engineer with 40 years of experience, it has evolved from a set of BASH scripts into a full-featured Python3 application with a Qt6 interface.
 
-While FreeFactory is designed to make using FFmpeg easier, it supports nearly EVERY FFmpeg option available making FreeFactory the most capible front end for FFmpeg in existence today. While we attempt to hide options that are not compatible with each other from being selected, it is and will be an ongoing process as Ffmpeg is a most complicated project. Most common options are currently supported. We thrive to be the closest GUI to an (un)offical GUI as possible, which does not exist.
+While FreeFactory is designed to make using FFmpeg easier, it supports nearly EVERY FFmpeg option available making FreeFactory the most capible front end for FFmpeg in existence today. While we attempt to hide options that are not compatible with each other from being selected, it is and will be an ongoing process as FFmpeg is a most complicated project. Most common options are currently supported. We thrive to be the closest GUI to an (un)offical GUI as possible, which does not exist.
 
 Taking full advantage of the powerful [FFmpeg](https://ffmpeg.org) backend, FreeFactoryQT simplifies complex encoding workflows into reusable, sharable *Factories*. While FFmpeg is incredibly powerful, its syntax can be intimidating — FreeFactoryQT makes it accessible without sacrificing advanced capability.
 
