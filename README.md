@@ -36,7 +36,6 @@ FreeFactory makes sharing encoding setups easy: import a Factory, update the Out
 - Python 3
 - PyQt6
 - `inotifywait` (only for background service)
-- `tclsh` (only for background service)
 
 **Steps:**
 1. Create the following directory:  
