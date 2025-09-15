@@ -61,7 +61,7 @@ Drag-and-drop and batch conversion make FreeFactoryQT intuitive:
 
 Preset-driven FFmpeg configurations for power users and broadcasters:
 
-<img width="1101" height="730" alt="image" src="https://github.com/user-attachments/assets/4caa7b05-6704-4566-8de6-ae1d6780f13d" />
+<img width="1100" height="748" alt="image" src="https://github.com/user-attachments/assets/b28ab8c8-06b0-4b5e-994d-d1f284b6cb8b" />
 
 Fully editable factories with support for complex options:
 
