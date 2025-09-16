@@ -67,9 +67,12 @@ from ffstreaming import (
 from ffnotifyservice import (
     connect_notify_service_controls,
     update_notify_service_mode_display,
-    show_notify_service_menu,
+    show_notify_service_menu
 )
 from importexport import ExportFactoryDialog, export_factory_logic, backup_factories_zip
+
+from ffpresets import get_presets_for
+
 
 # Absolute path to the real script location, even when launched via a symlink
 # This allows FreeFactory to launch from say /usr/local/bin/FreeFactory symlink
@@ -110,6 +113,25 @@ VIDEO_COPY_WIDGETS = [
     "VideoGroupPicSize",
     "FrameStrategy",
     "VideoFormat",
+    "checkRemoveA53cc",
+    #Advanced Video Options
+    "ColorSpace",
+    "ColorRange",
+    "ColorTRC",
+    "ColorSampleLocation",
+    "ColorPrimaries",
+    "checkAlternateScan",
+    "checkNonLinearQuant",
+    "SignalStandard",
+    "SeqDispExt",
+    "FieldOrder",
+    "checkIntraVLC",
+    "spinDC",
+    "checkEnableQminQmax",
+    "spinQmin",
+    "spinQmax",
+    "RcInitOccupancy",
+    "BufSize",
 ]
 
 AUDIO_COPY_WIDGETS = [
@@ -206,8 +228,6 @@ class FreeFactoryApp(QMainWindow):
         self._stream_row_seq = 0          # monotonic uid for stream rows
         self._is_closing = False          # Prevents noisey exiting
         self._is_stopping_recording = False
-        #ui_path = Path(__file__).parent / "FreeFactory-tabs.ui"
-        #loadUi(ui_path, self)
         UI_PATH = asset("FreeFactory-tabs.ui")
         uic.loadUi(str(UI_PATH), self)
 
@@ -267,9 +287,6 @@ class FreeFactoryApp(QMainWindow):
         self.SaveFactory.clicked.connect(self.save_current_factory)
         self.DeleteFactory.clicked.connect(self.delete_current_factory)
         self.NewFactory.clicked.connect(self.new_factory)
-        # self.ImportFactory.clicked.connect(self.import_factory)
-        # self.ExportFactory.clicked.connect(self.export_factory)
-        # self.BackupFactories.clicked.connect(self.backup_factories)
         
         # Factory List
         self.listFactoryFiles.itemClicked.connect(self.load_selected_factory)   # For Mouse clicks
@@ -336,7 +353,7 @@ class FreeFactoryApp(QMainWindow):
         self.actionAboutFFmpeg.triggered.connect(self.show_about_ffmpeg)
         self.actionAboutFreeFactory.triggered.connect(self.show_about_dialog_existing)
         self.actionAddFactorytoStreamTable.triggered.connect(self.add_stream_to_table)
-       
+ 
         # ---- Simple, idempotent codec wiring ----
         for combo, handler in [
             (getattr(self, "VideoCodec", None), self._on_vcodec_changed),
@@ -346,7 +363,7 @@ class FreeFactoryApp(QMainWindow):
                 try: combo.currentTextChanged.disconnect()
                 except Exception: pass
                 combo.currentTextChanged.connect(handler)
-
+                
 
     # =================================
     #       FFmpeg Help Buttons
@@ -454,16 +471,111 @@ class FreeFactoryApp(QMainWindow):
         self.VideoBitrate.currentTextChanged.connect(self._update_minmax_lock_state)
         self.checkMatchMinMaxBitrate.toggled.connect(self._update_minmax_lock_state)
         self._update_minmax_lock_state()
+        
+        # Tooltips for Embedded Tabs
+        self._wire_tab_tooltips()
+
+        # --- inside FreeFactoryApp.setup_ui(), AFTER both combos exist ---
+        self.VideoCodec.currentTextChanged.connect(self._refresh_video_presets)
+        self._refresh_video_presets()  # initial populate from current codec
+        self.VideoPreset.setAttribute(Qt.WidgetAttribute.WA_AlwaysShowToolTips, True)
+        
+        
+        # Intialize flags builders
+        self._init_flags_builders()
+
+    def _init_flags_builders(self):
+        # Keep the text clean; the checkboxes are the source of truth
+        if hasattr(self, "FlagsCollector"):  self.FlagsCollector.setReadOnly(True)
+        if hasattr(self, "Flags2Collector"): self.Flags2Collector.setReadOnly(True)
+
+        for name in self._flags_map().keys():
+            w = self._w(name)
+            if w: w.toggled.connect(self._update_flags_collectors)
+        for name in self._flags2_map().keys():
+            w = self._w(name)
+            if w: w.toggled.connect(self._update_flags_collectors)
+
+        if hasattr(self, "clearFlags"):
+            self.clearFlags.clicked.connect(lambda: self._set_flags_checked(False))
+        if hasattr(self, "clearFlags2"):
+            self.clearFlags2.clicked.connect(lambda: self._set_flags2_checked(False))
+
+        self._update_flags_collectors()
+
+        # Add Support for Multiple Ouputs
+        assert hasattr(self, "checkMultiOutput"), "QCheckBox 'checkMultiOutput' not found"
+        self.checkMultiOutput.toggled.connect(self.update_output_ui_state)
+        self.update_output_ui_state()
+
+
+
+    # =================================
+    #       End UI Setup Logic
+    # =================================
+
+
+
+    # Ghost single output widgets when Multi-Outputs is checked
+    def update_output_ui_state(self, *_):
+        multi = bool(self.checkMultiOutput.isChecked())
+
+        # Widgets that only make sense when we're auto-creating ONE output file
+        single_output_widgets = [
+            "VideoWrapper",        # container/extension resolver
+            "AudioExtension",  # audio-only extension
+            "ForceFormat",         # -f <format> for single output
+            "SubtitleCodecs",      # embedding into the single output
+            "NotifyDirectory",
+            # add others that specifically feed the single auto-output file
+        ]
+
+        for name in single_output_widgets:
+            w = self._w(name)
+            lbl = self._lbl(name)
+            if w is not None:
+                self._set_enabled_pair(w, lbl, not multi)  # ghost when multi=True
+
+        if multi:
+            self.statusBar().showMessage(
+                "Multi-Output enabled: include full output paths in Manual Output Options (use {outdir} and {stem})."
+            )
+        else:
+            self.statusBar().clearMessage()
+    
+    # Read from factory → UI
+    def _truthy(self, v) -> bool:
+        return str(v).strip().lower() in {"1","true","yes","on"}
+
+    def _read_factory_into_ui(self, fac: dict):
+        ...
+        self.checkMultiOutput.setChecked(self._truthy(fac.get("MULTIOUTPUT", "False")))
+        self.update_output_ui_state()
+    
+    # Collect UI → factory
+    def _collect_ui_to_factory(self) -> dict:
+        fac = {}
+        ...
+        fac["MULTIOUTPUT"] = "True" if self.checkMultiOutput.isChecked() else "False"
+        return fac
+
+
+
+
+
+
+
+
 
     # ===================================
-    #     End All Streams and Conversions
+    #     Stop All Streams and Conversions
     #         on Exit w/confirmation
     #               UI Only
     # ===================================
     def closeEvent(self, event):
         self._is_closing = True
 
-        # UI-managed activity only (do NOT touch FreeFactoryConversion.py)
+        # UI-managed activity only (doe NOT touch FreeFactoryConversion.py processes)
         active_threads = list(getattr(self, "active_threads", []))
         has_threads = any(getattr(t, "isRunning", lambda: False)() for t, _ in active_threads)
         has_streams = bool(getattr(self, "active_streams_by_row", {}))
@@ -625,6 +737,9 @@ class FreeFactoryApp(QMainWindow):
             return
         # Only clear "safe" inputs; never destroy combo items.
         try:
+            if isinstance(w, QCheckBox):
+                w.setChecked(False)
+                return
             if hasattr(w, "setText"):
                 w.setText("")
                 return
@@ -674,11 +789,80 @@ class FreeFactoryApp(QMainWindow):
     # ============================
     #     End Ghost Widget Helpers
     # ============================
+    
+
+    # ============================
+    #     Flags Builders
+    # ============================
+    # --- Flags builders: objectName -> ffmpeg token --------
+    def _flags_map(self) -> dict[str, str]:
+        return {
+            "checkFlags_unaligned": "unaligned",
+            "checkFlags_mv4": "mv4",
+            "checkFlags_psnr": "psnr",
+            "checkFlags_global_header": "global_header",
+            "checkFlags_qpel": "qpel",
+            "checkFlags_loop": "loop",
+            "checkFlags_low_delay": "low_delay",
+            "checkFlags_aic": "aic",
+            "checkFlags_cgop": "cgop",
+            "checkFlags_gray": "gray",
+            "checkFlags_ildct": "ildct",
+            "checkFlags_ilme": "ilme",
+            "checkFlags_bitexact": "bitexact",
+            "checkFlags_output_corrupt": "output_corrupt",
+        }
+
+    def _flags2_map(self) -> dict[str, str]:
+        return {
+            "checkFlags2_fast": "fast",
+            "checkFlags2_noout": "noout",
+            "checkFlags2_ignorecrop": "ignorecrop",
+            "checkFlags2_local_header": "local_header",
+            "checkFlags2_chunks": "chunks",
+            "checkFlags2_ass_ro_flush_noop": "ass_ro_flush_noop",
+            "checkFlags2_export_mvs": "export_mvs",
+            "checkFlags2_skip_manual": "skip_manual",
+            "checkFlags2_showall": "showall",
+            "checkFlags2_icc_profiles": "icc_profiles",
+        }
+
+    def _collect_flags_text(self, mapping: dict[str, str]) -> str:
+        toks = []
+        for obj_name, token in mapping.items():
+            w = self._w(obj_name)
+            if w and w.isChecked():
+                toks.append("+" + token)
+        return "".join(toks)
+
+    def _update_flags_collectors(self):
+        if hasattr(self, "FlagsCollector"):
+            self.FlagsCollector.setText(self._collect_flags_text(self._flags_map()))
+        if hasattr(self, "Flags2Collector"):
+            self.Flags2Collector.setText(self._collect_flags_text(self._flags2_map()))
+
+    def _set_flags_checked(self, on: bool):
+        for n in self._flags_map().keys():
+            w = self._w(n)
+            if w: w.setChecked(on)
+        self._update_flags_collectors()
+
+    def _set_flags2_checked(self, on: bool):
+        for n in self._flags2_map().keys():
+            w = self._w(n)
+            if w: w.setChecked(on)
+        self._update_flags_collectors()
+
+    def _apply_flags_from_string(self, text: str, mapping: dict[str, str]):
+        wanted = {t for t in (s.strip() for s in text.split("+")) if t}
+        for obj_name, token in mapping.items():
+            w = self._w(obj_name)
+            if w: w.setChecked(token in wanted)
+        self._update_flags_collectors()
 
 
     # Set up the Dictionary for all Widgets and Factory keys
     def _combo_key_map(self) -> dict[str, str]:
-        # QLineEdit
         return {
             "FactoryDescription":       "FACTORYDESCRIPTION",       # QLineEdit
             "NotifyDirectory":          "NOTIFYDIRECTORY",          # QLineEdit
@@ -705,9 +889,12 @@ class FreeFactoryApp(QMainWindow):
             "ForceFormat":              "FORCEFORMAT",              # QComboBox
             "EncodeLength":             "ENCODELENGTH",             # QLineEdit
             "VideoStartTimeOffset":     "STARTTIMEOFFSET",          # QLineEdit
+            "FlagsCollector":           "FLAGS",                    # QLineEdit
+            "Flags2Collector":          "FLAGS2",                   # QLineEdit
 
             # Subtitles
             "SubtitleCodecs":           "SUBTITLECODECS",           # QComboBox
+            "checkRemoveA53cc":         "REMOVEA53CC",              # QCheckBox
 
             # Audio
             "AudioCodec":               "AUDIOCODECS",              # QComboBox
@@ -739,20 +926,33 @@ class FreeFactoryApp(QMainWindow):
             "StreamMgrMode":            "STREAMMGRMODE",            # QComboBox
             "checkReadFilesRealTime":   "READFILESREALTIME",        # QCheckBox
             
-            # Pre/Post Processing Options
-            "EnableFactory":            "ENABLEFACTORY",            # QCheckBox
-            "DeleteConversionLogs":     "DELETECONVERSIONLOGS",     # QCheckBox
-            "DeleteSource":             "DELETESOURCE",             # QCheckBox
+            # Block A/V/S/D 
+            "checkDisableVideo":        "DISABLEVIDEO",             # QCheckBox
+            "checkDisableAudio":        "DISABLEAUDIO",             # QCheckBox
+            "checkDisableSubs":         "DISABLESUBS",              # QCheckBox
+            "checkDisableData":         "DISABLEDATA",              # QCheckBox
             
             #Recording Fields
             "RecordInput":              "RECORDINPUT",
             "RecordOutputFolder":       "RECORDFOLDER",
             "RecordFilename":           "RECORDFILENAME",
+            
+            # Pre/Post Processing Options Service Only
+            "EnableFactory":            "ENABLEFACTORY",            # QCheckBox
+            "DeleteConversionLogs":     "DELETECONVERSIONLOGS",     # QCheckBox
+            "DeleteSource":             "DELETESOURCE",             # QCheckBox
+            
+            # Additional Output Options
+            "checkMultiOutput":         "MULTIOUTPUT"               #QCheckBox          
         }
+
+
 
 # --- 4) Codec / copy-lock mechanics ------------------------------------------
     # ============================
-    #     Copy Codec Handlers
+    #     Copy Codec Handlers 
+    #   Ghosts releated widgets 
+    #   when codec "copy" is selected
     # ============================
     def _apply_group_copy_lock(self, names: list[str], *, is_copy: bool, clear_on_disable: bool):
         # Toggle widgets + their "l_<name>" labels; optionally clear values when disabling.
@@ -767,6 +967,15 @@ class FreeFactoryApp(QMainWindow):
     def _apply_video_copy_lock(self, *, clear_on_disable: bool):
         is_copy = self._is_copy_text(self._w("VideoCodec").currentText()) if self._w("VideoCodec") else False
         self._apply_group_copy_lock(VIDEO_COPY_WIDGETS, is_copy=is_copy, clear_on_disable=clear_on_disable)
+        
+        # Flags builders live in their own group boxes; Labels in sync using l_groupFlags / l_groupFlags2
+        for name in ("groupFlags", "groupFlags2", "FlagsCollector", "Flags2Collector", "clearFlags", "clearFlags2"):
+            w   = self._w(name)
+            lbl = self._lbl(name)
+            self._set_enabled_pair(w, lbl, enabled=not is_copy)
+        if is_copy and clear_on_disable:
+            self._set_flags_checked(False)
+            self._set_flags2_checked(False)        
 
     def _apply_audio_copy_lock(self, *, clear_on_disable: bool):
         is_copy = self._is_copy_text(self._w("AudioCodec").currentText()) if self._w("AudioCodec") else False
@@ -859,10 +1068,10 @@ class FreeFactoryApp(QMainWindow):
             if txt in ("Off", "Stream", "Record", "Record+Stream"):
                 return txt
         return "Off"
+
     # ============================
     #     Stream Tab Mode Handlers
     # ============================
-    
     def _sync_stream_selector_to_builder(self, factory_name: str):
         """Preselect builder’s factory in streamFactorySelect if its mode != Off."""
         if not factory_name or not hasattr(self, "streamFactorySelect"):
@@ -1657,7 +1866,7 @@ class FreeFactoryApp(QMainWindow):
             return
 
         factory_name = self.FactoryFilename.text().strip()
-        available_factories = [Path(f).stem for f in self.core.factory_files]
+        available_factories = [Path(f).name for f in self.core.factory_files]
 
         if not factory_name or factory_name not in available_factories:
             QMessageBox.warning(self, "Invalid Factory", "Selected factory configuration is invalid.")
@@ -1826,6 +2035,21 @@ class FreeFactoryApp(QMainWindow):
         self.streamUsername.clear()
         self.streamPassword.clear()
 
+        # Snap tabs to defaults for a fresh factory
+        try:
+            # Top-level: Video
+            main = self.tabWidgetMain
+            main.setCurrentIndex(main.indexOf(self.tabVideo))
+        except Exception:
+            pass
+
+        try:
+            # Video Advanced sub-tab: GOP/Frame
+            adv = self.tabWidgetVideoAdvanced
+            adv.setCurrentIndex(adv.indexOf(self.tabGopFrame))
+        except Exception:
+            pass
+
         # Force Mode → Off
         try:
             self.StreamMgrMode.setCurrentIndex(0)   # 0 == "Off"
@@ -1834,9 +2058,7 @@ class FreeFactoryApp(QMainWindow):
                 self.update_stream_ui_state()
         except Exception:
             pass
-        
-        
-        
+       
         # Don’t call .clear() on the QComboBox itself (that nukes items)
         try:
             self.ForceFormatInputVideo.setCurrentIndex(-1)
@@ -1913,7 +2135,9 @@ class FreeFactoryApp(QMainWindow):
             #if hasattr(self, "checkMatchMinMaxBitrate"):
             #    val = factory_data.get("MATCHMINMAXBITRATE", "").strip().lower()
             #    self.checkMatchMinMaxBitrate.setChecked(val in ("true", "1", "yes", "on"))
-            
+        self._apply_flags_from_string(factory_data.get("FLAGS",  ""),  self._flags_map())
+        self._apply_flags_from_string(factory_data.get("FLAGS2", ""), self._flags2_map())            
+
         self._sync_stream_selector_to_builder(factory_name)
         self.update_stream_ui_state()
         
@@ -2035,6 +2259,8 @@ class FreeFactoryApp(QMainWindow):
             return
 
         mode = (self.StreamMgrMode.currentText() or "Off").strip().lower() if hasattr(self, "StreamMgrMode") else "off"
+        
+        
         if mode == "record":
             video_input = (self.RecordInput.text().strip() if hasattr(self, "RecordInput") else "") or ":0.0+0,0"
             video_fmt = "x11grab" if video_input.startswith(":") else "file"
@@ -2138,8 +2364,8 @@ class FreeFactoryApp(QMainWindow):
 
     def open_ffmpeg_help_dialog(self, title, args):
         """Open FFmpeg Help dialog with the configured ffmpeg binary."""
-        import os, shutil
-        from ffmpeghelp import FFmpegHelpDialog
+        # import os, shutil
+        # from ffmpeghelp import FFmpegHelpDialog
 
         ffmpeg_path = (self.PathtoFFmpegGlobal.text() or "").strip() or "ffmpeg"
         if os.path.isdir(ffmpeg_path):
@@ -2181,6 +2407,94 @@ class FreeFactoryApp(QMainWindow):
                 "Launch Error",
                 f"Could not launch FactoryTools:\n{str(e)}"
             )
+
+
+    # ============================
+    #     Tool Tips for Inner Tabs
+    # ============================
+    def _wire_tab_tooltips(self):
+        # Main tabs
+        main = self.tabWidgetMain          # e.g., the QTabWidget with Video | Video Advanced | Audio
+        main.setTabToolTip(main.indexOf(self.tabVideo),         "Primary video encoding settings and subtitle options.")
+        main.setTabToolTip(main.indexOf(self.tabVideoAdvanced), "Detailed video controls for GOP, color, standards, and quantizer.")
+        main.setTabToolTip(main.indexOf(self.tabAudio),         "Audio encoding settings and filter options.")
+        main.setTabToolTip(main.indexOf(self.tabSubtitles),     "Subtitle options.")
+
+        # Video Advanced subtabs
+        adv = self.tabWidgetVideoAdvanced  # the inner QTabWidget
+        adv.setTabToolTip(adv.indexOf(self.tabGopFrame),        "Set GOP length, B-frames, and frame strategy options.")
+        adv.setTabToolTip(adv.indexOf(self.tabColorHDR),        "Choose colorspace, range, primaries, and HDR parameters.")
+        adv.setTabToolTip(adv.indexOf(self.tabStandardsFields), "Control scan type, field order, and signal standards.")
+        adv.setTabToolTip(adv.indexOf(self.tabFlagsBuilder),       "Create flags options for both -flags and -flags2.")
+
+
+
+    def _refresh_video_presets(self, *_):
+        """Populate/ghost VideoPreset and add helpful tooltips."""
+        codec = self.VideoCodec.currentText().strip()
+        values, default, labels = get_presets_for(codec)
+
+        self.VideoPreset.blockSignals(True)
+        self.VideoPreset.clear()
+
+        # 1) Blank/neutral entry (lets user deselect → no -preset flag)
+        blank_text = ""  # keep visually blank as you wanted
+        self.VideoPreset.addItem(blank_text, None)
+        # Tooltip for blank = "Use encoder default (...)" when we know it
+        if default:
+            tip = f"Use encoder default ({codec}: {default})"
+        else:
+            tip = "Use encoder default"
+        self.VideoPreset.setItemData(0, tip, Qt.ItemDataRole.ToolTipRole)
+
+        if not values:
+            # No presets supported → ghost with a clarifying tooltip on the blank item
+            self.VideoPreset.setEnabled(False)
+            if hasattr(self, "l_VideoPreset"):
+                self.l_VideoPreset.setEnabled(False)
+            # Optional: also show '(N/A for this codec)' as the *second* item for clarity
+            # idx = self.VideoPreset.count()
+            # self.VideoPreset.addItem("(N/A for this codec)", None)
+            # self.VideoPreset.setItemData(idx, "This encoder has no native -preset option.", Qt.ItemDataRole.ToolTipRole)
+            self.VideoPreset.setCurrentIndex(0)
+            self.VideoPreset.blockSignals(False)
+            return
+
+        # Presets exist → enable widgets
+        self.VideoPreset.setEnabled(True)
+        if hasattr(self, "l_VideoPreset"):
+            self.l_VideoPreset.setEnabled(True)
+
+        # 2) Real presets with individual tooltips
+        for v in values:
+            text = labels.get(v, v)  # show friendly label if provided
+            self.VideoPreset.addItem(text, v)
+            # Lightweight, consistent tooltip scheme:
+            # - x264/x265: 'ultrafast … placebo'
+            # - NVENC: 'p1..p7 (p1 best quality/slowest, p7 fastest/lowest quality)'
+            # - QSV: 'veryfast … veryslow'
+            # - SVT-AV1: '0..13 (0 best/slowest, 13 fastest/lowest)'
+            if v in ("p1", "p7"):
+                t = "p1 = best quality/slowest · p7 = fastest/lowest quality"
+            elif v == "ultrafast":
+                t = "Fastest, lowest compression efficiency"
+            elif v == "placebo":
+                t = "Slowest, marginal gains over veryslow"
+            elif v == "0":
+                t = "Best quality / slowest"
+            elif v == "13":
+                t = "Fastest / lowest quality"
+            else:
+                t = f"{text} preset"
+            idx = self.VideoPreset.count() - 1
+            self.VideoPreset.setItemData(idx, t, Qt.ItemDataRole.ToolTipRole)
+
+        # Default selection = blank (so we omit -preset unless user chooses)
+        self.VideoPreset.setCurrentIndex(0)
+        self.VideoPreset.blockSignals(False)
+
+
+
 
 
 

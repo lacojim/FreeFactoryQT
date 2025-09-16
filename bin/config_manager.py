@@ -18,7 +18,8 @@ class ConfigManager:
             "MaxConcurrentJobs": "0", # 0 = unlimited
             "AppleDelaySeconds": "30",
             "PathtoFFmpegGlobal": "/usr/bin/",
-            "NotifyFolders": "/video/dropbox"
+            "NotifyFolders": "/video/dropbox",
+            "HelpFontSize": "10",
         }
         self.load()
 

@@ -1,5 +1,5 @@
 # core.py
-# Functional logic extracted and converted from ProgramFrontEnd.tcl
+# 
 #############################################################################
 #               This code is licensed under the GPLv3
 #    The following terms apply to all files associated with the software
@@ -30,7 +30,7 @@ import subprocess
 import shlex
 from pathlib import Path
 from PyQt6.QtCore import QObject, pyqtSignal, QThread
-import re
+import re, shutil
 
 
 
@@ -196,17 +196,22 @@ class FreeFactoryCore:
             print(f"[DEBUG] Exception occurred while reading factory: {e}")
             return None
 
- 
-    
+# Multi-Outputs Helpers
+    @staticmethod
+    def _expand_multioutput_tokens(mo: str, input_path: str, output_dir: str) -> str:
+        """Expand {stem} and {outdir} tokens before splitting manual output options."""
+        from pathlib import Path as _Path
+        import os as _os
+        stem = _Path(input_path).stem
+        outdir = _Path(output_dir or ".")
+        outdir_str = str(outdir)
+        if not outdir_str.endswith(_os.sep):
+            outdir_str += _os.sep
+        return (mo or "").replace("{stem}", stem).replace("{outdir}", outdir_str)
 
-#===Fixes loading default factory whenever a directory selector is used for output directory.
-    # def select_output_directory(self):
-    #     directory = QFileDialog.getExistingDirectory(self, "Select Output Directory")
-    #     if directory:
-    #         # Prevent unwanted list signal side-effects
-    #         self.listFactoryFiles.blockSignals(True)
-    #         self.OutputDirectory.setText(directory)
-    #         self.listFactoryFiles.blockSignals(False)
+    @staticmethod
+    def _truthy(v) -> bool:
+        return str(v).strip().lower() in {"1", "true", "yes", "on"}
 
 
 # This builds the ffmpeg command via cmd. 
@@ -226,13 +231,17 @@ class FreeFactoryCore:
             output_filename = f"{input_stem}.{ext}"
 
         output_path         = Path(output_dir) / output_filename
-        encode_length       = factory_data.get("ENCODELENGTH", "").strip()
+
         video_codec         = factory_data.get("VIDEOCODECS", "").strip()
+        video_flags         = factory_data.get("FLAGS", "").strip()
+        video_flags2        = factory_data.get("FLAGS2", "").strip()
         video_bitrate       = factory_data.get("VIDEOBITRATE", "").strip()
         video_profile       = factory_data.get("VIDEOPROFILE", "").strip()
         video_profile_level = factory_data.get("VIDEOPROFILELEVEL", "").strip()
         size                = factory_data.get("VIDEOSIZE", "").strip()
+        video_preset        = factory_data.get("VIDEOPRESET", "").strip()
         subtitle            = factory_data.get("SUBTITLECODECS", "").strip()
+        removea53cc         = factory_data.get("REMOVEA53CC", "").strip()
         audio_codec         = factory_data.get("AUDIOCODECS", "").strip()
         audio_bitrate       = factory_data.get("AUDIOBITRATE", "").strip()
         sample_rate         = factory_data.get("AUDIOSAMPLERATE", "").strip()
@@ -242,17 +251,20 @@ class FreeFactoryCore:
         bframes             = factory_data.get("BFRAMES", "").strip()
         frame_strategy      = factory_data.get("FRAMESTRATEGY", "").strip()
         gop_size            = factory_data.get("GROUPPICSIZE", "").strip()
-        
         video_format        = factory_data.get("VIDEOFORMAT", "").strip()
-        
         pix_format          = factory_data.get("VIDEOPIXFORMAT", "").strip()
         start_offset        = factory_data.get("STARTTIMEOFFSET", "").strip()
+        encode_length       = factory_data.get("ENCODELENGTH", "").strip()
         force_format        = factory_data.get("FORCEFORMAT", "").strip()
         video_stream_id     = factory_data.get("VIDEOSTREAMID", "").strip()
         audio_stream_id     = factory_data.get("AUDIOSTREAMID", "").strip()
-        # Late additions
         vf                  = (factory_data.get("VIDEOFILTERS")  or "").strip()
         af                  = (factory_data.get("AUDIOFILTERS")  or "").strip()
+        disablevideo        = (factory_data.get("DISABLEVIDEO")  or "").strip()
+        disableaudio        = (factory_data.get("DISABLEAUDIO")  or "").strip()
+        disablesubs         = (factory_data.get("DISABLESUBS")  or "").strip()
+        disabledata         = (factory_data.get("DISABLEDATA")  or "").strip()
+        
         
         # --- Build base, add manual *input* flags BEFORE -i ---
         cmd                 = ["ffmpeg", "-hide_banner", "-y"]
@@ -260,14 +272,37 @@ class FreeFactoryCore:
             cmd += shlex.split(manual_input)
         cmd += ["-i", str(input_path)]
 
+        #=======Disable Select Streams
+        disablevideo_flag    = str(disablevideo).strip().lower() in ("1", "true", "yes") # Ignore unless True, yes or 1. 
+        if disablevideo_flag:
+            cmd += ["-vn"]
+
+        disableaudio_flag    = str(disableaudio).strip().lower() in ("1", "true", "yes")
+        if disableaudio_flag:
+            cmd += ["-an"]
+        
+        disablesubs_flag    = str(disablesubs).strip().lower() in ("1", "true", "yes")
+        if disablesubs_flag:
+            cmd += ["-sn"]
+
+        disabledata_flag    = str(disabledata).strip().lower() in ("1", "true", "yes")            
+        if disabledata_flag:
+            cmd += ["-dn"]
+
         #=======Video encoding
         if video_codec:
             cmd += ["-c:v", video_codec]
 
+        if video_flags:
+            cmd += ["-flags", video_flags]
+
+        if video_flags2:
+            cmd += ["-flags2", video_flags2]
+
         if video_bitrate:
             cmd += ["-b:v", video_bitrate]
 
-            # New feature: MATCHMINMAXBITRATE support
+            # MATCHMINMAXBITRATE support
             match_minmax = factory_data.get("MATCHMINMAXBITRATE", "False").strip().lower() == "true"
             if match_minmax:
                 # Clean up any existing -minrate/-maxrate from manual options (just in case)
@@ -286,6 +321,10 @@ class FreeFactoryCore:
             cmd += ["-profile:v", video_profile]
         if video_profile_level:
             cmd += ["-level:v", video_profile_level]
+        
+        
+        if video_preset:
+            cmd += ["-preset:v", video_preset]
         if gop_size:
             cmd += ["-g", gop_size]
         if bframes:
@@ -307,8 +346,13 @@ class FreeFactoryCore:
 
             
         #=======Subtitles
+        # normalize the flag (handles None, "false", "False", etc.)
+        removea53cc_flag    = str(removea53cc).strip().lower() in ("1", "true", "yes")
+        
         if subtitle:
             cmd += ["-c:s", subtitle]
+        if removea53cc_flag and video_codec not in ("copy", "", None):
+            cmd += ["-a53cc", "0"]
 
         #=======Audio encoding
         if audio_codec:
@@ -337,16 +381,29 @@ class FreeFactoryCore:
             cmd += ["-ss", start_offset]
             print("DEBUG force_format raw value:", repr(force_format))
 
-        #=======Manual options
-        if manual_output:
-            cmd += shlex.split(manual_output)
-        if force_format:
-            cmd += ["-f", force_format]
+        #======= MULTI-OUTPUT + Manual options
+        multi = self._truthy(factory_data.get("MULTIOUTPUT", "False"))
 
-        cmd.append(output_path.as_posix())
+        if manual_output:
+            manual_output = self._expand_multioutput_tokens(
+                manual_output,
+                str(input_path),
+                output_dir
+            )
+            cmd += shlex.split(manual_output)
+
+        if not multi:
+            if force_format:
+                cmd += ["-f", force_format]
+            cmd.append(output_path.as_posix())
+        else:
+            # Safety rail: require explicit destinations in MANUALOPTIONSOUTPUT
+            if not (manual_output and manual_output.strip()):
+                raise ValueError("MULTIOUTPUT=True but MANUALOPTIONSOUTPUT is empty; no outputs would be produced.")
 
         #print("DEBUG final cmd:", cmd)
         return cmd
+
 #======
 
     @staticmethod
@@ -380,20 +437,26 @@ class FreeFactoryCore:
     def build_streaming_flags(self, factory_data):
         flags = []
 
-        video_codec   = factory_data.get("VIDEOCODECS", "").strip()
-        audio_codec   = factory_data.get("AUDIOCODECS", "").strip()
-        preset        = factory_data.get("VIDEOPRESET", "").strip()
-        video_bitrate = factory_data.get("VIDEOBITRATE", "").strip()
-        audio_bitrate = factory_data.get("AUDIOBITRATE", "").strip()
+        video_codec     = factory_data.get("VIDEOCODECS", "").strip()
+        video_flags     = factory_data.get("FLAGS", "").strip()
+        video_flags2    = factory_data.get("FLAGS2", "").strip()
+        audio_codec     = factory_data.get("AUDIOCODECS", "").strip()
+        preset          = factory_data.get("VIDEOPRESET", "").strip()
+        video_bitrate   = factory_data.get("VIDEOBITRATE", "").strip()
+        audio_bitrate   = factory_data.get("AUDIOBITRATE", "").strip()
         
-        vf_string     = (factory_data.get("VIDEOFILTERS","") or "").strip()
-        size          = (factory_data.get("VIDEOSIZE","") or "").strip()
-        af_string     = (factory_data.get("AUDIOFILTERS","") or "").strip()
+        vf_string       = (factory_data.get("VIDEOFILTERS","") or "").strip()
+        size            = (factory_data.get("VIDEOSIZE","") or "").strip()
+        af_string       = (factory_data.get("AUDIOFILTERS","") or "").strip()
         
-        pix_format    = factory_data.get("VIDEOPIXFORMAT", "").strip()
+        pix_format      = factory_data.get("VIDEOPIXFORMAT", "").strip()
 
         if video_codec:
             flags += ["-c:v", video_codec]
+        if video_flags:
+            flags += ["-flags", video_flags]
+        if video_flags2:
+            flags += ["-flags2", video_flags2]
         if video_bitrate:
             flags += ["-b:v", video_bitrate]
         if preset:
