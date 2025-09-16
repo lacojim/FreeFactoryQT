@@ -136,3 +136,4 @@ core.[0-9]*
 export/
 bin/ffrecording.py
 bin/FreeFactory-tabs-bak.ui
+bin/notes.txt
