@@ -3,6 +3,59 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+
+
+## [1.1.27-dev] - 2025-09-16
+
+### Added
+- **UI**
+  - New **Multi-Output Support** 
+    This adds a checkbox to the Factory Builder tab allowing for creating multiple output files. One example of using mode this would be to convert a 5.1 multi-channel audio file into 6 discrete .wav files.
+  - Started adding support for Sidecar Subtitles and eia608_to_smpte436m bitstream filter functionality (The latter requires FFmpeg v8.x).
+
+
+## [1.1.26-dev] - 2025-09-13
+
+### Added
+- **UI**
+  - New **Flags Builders tab** 
+    This add a checkbox based constructor set to build flags for both -flags and -flags2. All available FFmpeg flags|flags2 are included.
+
+### Notes
+- These UI refinements are aimed at better usability and flexibility.
+
+## [1.1.25-dev] - 2025-09-12
+
+### Added
+- **UI**
+  - New **Timing Controls** group box: consolidated **Start Offset (-ss)** and **Encode Length (-t)** into one section for clarity and ease of use.
+  - Added **Advanced Video** tab with four subtabs:
+    - **GOP / Frame**
+    - **Color / HDR**
+    - **Standards / Fields**
+    - **Flags Builder**
+  - Navigation arrows implemented for stacked pages (later replaced with subtabs).
+  - Tooltips for all main tabs and advanced subtabs.
+  - **Global Settings**
+  - Font size control for the FFmpeg Help window (`HelpFontSize` in `.freefactoryrc`).
+
+### Changed
+- **UI Layout**
+  - Reorganized major sections into `Video`, `Audio`, and `Video Advanced` tabs (previously grouped in a single crowded view).
+  - Moved **Video Advanced** tab to the end for more natural navigation flow.
+  - Grouped widgets consistently with their labels to simplify layout movement and improve alignment.
+- **Core**
+  - Added support for `REMOVEA53CC` factory key: if enabled and codec is compatible (mpeg2video, libx264, hevc), injects `-a53cc 0` into the FFmpeg command.
+  - Normalized handling of boolean factory values (accepts `true`, `1`, `yes`).
+
+### Fixed
+- **Ghosting/Clearing**
+  - Updated `_clear_value()` to handle `QCheckBox` correctly: checkboxes are now only unchecked, not stripped of their text.
+
+### Notes
+- These UI refinements are aimed at better usability and preparing for upcoming Sidecar subtitle and Recording feature work.
+
+
 ## [1.1.16-dev] - 2025-09-06
 
 ### Added
