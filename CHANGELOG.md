@@ -5,6 +5,23 @@ This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and
 
 
 
+## [1.1.31-dev] - 2025-09-18
+
+### Added
+- **UI**
+  - New **All Video Advanced now working** 
+    DC, Qmin & Qmax now working in Video Advanced. Swapped from QSpinBoxes to QLineEdits.
+
+    
+## [1.1.30-dev] - 2025-09-17
+
+### Added
+- **UI**
+  - New **Most of Video Advanced now working** 
+    Color / HDR tab now fully functional. Standards / Field tab now fully functional. DC, Qmin & Qmax moved to DepPage until I can map it out in a more sensible manner.
+  - Fixed bug where default factory always showed the first item in the list (if not set) but then saving Globals would make that first item the default. Fixed by forcing a blank field in the first register.
+  - Added button to select the Factories directory intead of manually typing it in.
+
 ## [1.1.27-dev] - 2025-09-16
 
 ### Added
@@ -12,7 +29,6 @@ This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and
   - New **Multi-Output Support** 
     This adds a checkbox to the Factory Builder tab allowing for creating multiple output files. One example of using mode this would be to convert a 5.1 multi-channel audio file into 6 discrete .wav files.
   - Started adding support for Sidecar Subtitles and eia608_to_smpte436m bitstream filter functionality (The latter requires FFmpeg v8.x).
-
 
 ## [1.1.26-dev] - 2025-09-13
 
