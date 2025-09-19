@@ -163,7 +163,7 @@ These would be stored under the `Manual Output Ops` field in your Factory, and s
 
 ## 🧠 Notes
 
-> FreeFactoryQT and the FreeFactory Conversion Service are **completely independent**:
+> FreeFactoryQT and the FreeFactory Conversion Service are **completely independent** with the exception of core.py which is shared:
 > - Use the GUI for hands-on or dropzone-based encoding
 > - Use the service for fully automated background workflows
 
