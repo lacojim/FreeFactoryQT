@@ -2,7 +2,7 @@
 version.py – Central version definition for FreeFactoryQT.
 """
 
-__version__ = "1.1.27-dev"
+__version__ = "1.1.31-dev"
 
 def get_version() -> str:
     """

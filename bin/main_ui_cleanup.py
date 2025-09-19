@@ -41,7 +41,7 @@ from pathlib import Path
 from datetime import datetime
 
 from PyQt6.QtCore import Qt, QThread, QTimer, QUrl, QProcess
-from PyQt6.QtGui import QPixmap, QDesktopServices, QPalette, QColor
+from PyQt6.QtGui import QPixmap, QDesktopServices, QPalette, QColor, QIntValidator
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QListWidgetItem, QMessageBox,
     QTableWidgetItem, QDialog, QVBoxLayout, QPlainTextEdit,
@@ -126,10 +126,9 @@ VIDEO_COPY_WIDGETS = [
     "SeqDispExt",
     "FieldOrder",
     "checkIntraVLC",
-    "spinDC",
-    "checkEnableQminQmax",
-    "spinQmin",
-    "spinQmax",
+    "lineEdit_DC",
+    "lineEdit_Qmin",
+    "lineEdit_Qmax",
     "RcInitOccupancy",
     "BufSize",
 ]
@@ -243,6 +242,9 @@ class FreeFactoryApp(QMainWindow):
         factory_paths = sorted(Path(factory_dir).glob("*"))
         factory_names = [f.name for f in factory_paths if f.is_file()] # Changed f.stem to f.name to fix factory files with a dot inside the name.
         self.DefaultFactoryGlobal.clear()
+        # Add a blank space above Default Factory so it can be nulled. Also prevents first factory in list from being auto-selected by mistake.
+        blank_text = ""
+        self.DefaultFactoryGlobal.addItem(blank_text, None)                
         self.DefaultFactoryGlobal.addItems(factory_names)
         self.DefaultFactoryGlobal.setCurrentText(self.config.get("DefaultFactory", "default"))
 
@@ -268,18 +270,20 @@ class FreeFactoryApp(QMainWindow):
         # after loading factories & building tabs
         if hasattr(self, "_wire_stream_tab_minimal"):
             self._wire_stream_tab_minimal()
+            
+
 
     # =============================
     #       UI Setup and Menu Logic
     # =============================
     def setup_ui(self):
         self.SaveFFConfigGlobal.clicked.connect(self.save_global_config)
-        
+        self.toolButton_FactoriesPath.clicked.connect(self.select_factories_directory)
+
         self.LoadFactoryTools.clicked.connect(self.launch_factory_tools)
-        
+      
         self.ViewLicense.clicked.connect(self.show_license)
         self.AboutFreeFactory.clicked.connect(self.show_about)
-        self.toolButton_notifyDir.clicked.connect(self.select_notify_directory)
         self.toolButton_outputDir.clicked.connect(self.select_output_directory)
         self.PreviewCommand.clicked.connect(self.on_generate_command)
        
@@ -363,6 +367,67 @@ class FreeFactoryApp(QMainWindow):
                 try: combo.currentTextChanged.disconnect()
                 except Exception: pass
                 combo.currentTextChanged.connect(handler)
+
+# --- Validators for numeric-only QLineEdits (DC, QMIN, QMAX) ---
+        def _int_field(name: str, minv: int, maxv: int):
+            w = getattr(self, name, None)
+            if w is not None:
+                w.setValidator(QIntValidator(minv, maxv, self))
+
+        _int_field("lineEdit_DC",   -8, 16)      # -dc (FFmpeg default 0; allow negatives)
+        _int_field("lineEdit_Qmin", -1, 69)      # -qmin (default 2; allow -1)
+        _int_field("lineEdit_Qmax", -1, 1024)    # -qmax (default 31; allow big)
+
+        # --- Live clamp (revert to last good) for DC/Qmin/Qmax ---
+        def _install_live_clamp(name: str, minv: int, maxv: int):
+            w = getattr(self, name, None)
+            if not w:
+                return
+
+            last_good = {"text": ""}  # per-field stash
+
+            def accept(text: str) -> bool:
+                t = (text or "").strip()
+                if t == "" or t == "-":
+                    return True  # allow blank & in-progress negative sign
+                # quick numeric check
+                if t.startswith("-"):
+                    digits = t[1:]
+                else:
+                    digits = t
+                if not digits.isdigit():
+                    return False
+                try:
+                    n = int(t)
+                except ValueError:
+                    return False
+                return (minv <= n <= maxv)
+
+            def on_text_edited(t: str):
+                if accept(t):
+                    last_good["text"] = t
+                else:
+                    # revert to last good
+                    pos = w.cursorPosition()
+                    w.blockSignals(True)
+                    w.setText(last_good["text"])
+                    w.blockSignals(False)
+                    # try to keep cursor sensible
+                    w.setCursorPosition(max(0, min(pos - 1, len(w.text()))))
+
+            # initialize last_good with current contents
+            last_good["text"] = (w.text() or "").strip()
+            w.textEdited.connect(on_text_edited)
+
+        # attach with your intended bounds
+        _install_live_clamp("lineEdit_DC",   -8, 16)
+        _install_live_clamp("lineEdit_Qmin", -1, 69)
+        _install_live_clamp("lineEdit_Qmax", -1, 1024)
+        
+
+
+
+
                 
 
     # =================================
@@ -507,7 +572,6 @@ class FreeFactoryApp(QMainWindow):
         assert hasattr(self, "checkMultiOutput"), "QCheckBox 'checkMultiOutput' not found"
         self.checkMultiOutput.toggled.connect(self.update_output_ui_state)
         self.update_output_ui_state()
-
 
 
     # =================================
@@ -732,6 +796,7 @@ class FreeFactoryApp(QMainWindow):
             try: obj.setEnabled(on)
             except Exception: pass
 
+    # Helper to clear widgets
     def _clear_value(self, w):
         if w is None:
             return
@@ -758,7 +823,7 @@ class FreeFactoryApp(QMainWindow):
             pass
 
     def _iter_widgets_by_names(self, names):
-        """Yield (name, widget, label_widget_or_None) for each existing name."""
+        # Yield (name, widget, label_widget_or_None) for each existing name.
         for name in names:
             w = getattr(self, name, None)
             if w is None:
@@ -767,7 +832,7 @@ class FreeFactoryApp(QMainWindow):
             yield name, w, lbl
 
     def _set_enabled_pair(self, w, lbl, enabled: bool):
-        """Enable/disable a widget and its label (if present)."""
+        # Enable/disable a widget and its label (if present).
         try:
             w.setEnabled(enabled)
         except Exception:
@@ -891,6 +956,24 @@ class FreeFactoryApp(QMainWindow):
             "VideoStartTimeOffset":     "STARTTIMEOFFSET",          # QLineEdit
             "FlagsCollector":           "FLAGS",                    # QLineEdit
             "Flags2Collector":          "FLAGS2",                   # QLineEdit
+            
+            # Advanced Video Options
+            "ColorSpace":               "COLORSPACE",               # QComboBox
+            "ColorRange":               "COLORRANGE",               # QComboBox
+            "ColorTRC":                 "COLORTRC",                 # QComboBox
+            "ColorSampleLocation":      "COLORSAMPLELOCATION",      # QComboBox
+            "ColorPrimaries":           "COLORPRIMARIES",           # QComboBox
+            "checkAlternateScan":       "ALTERNATESCAN",            # QCheckBox
+            "checkNonLinearQuant":      "NONLINEARQUANT",           # QCheckBox
+            "SignalStandard":           "SIGNALSTANDARD",           # QComboBox
+            "SeqDispExt":               "SEQDISPEXT",               # QComboBox
+            "FieldOrder":               "FIELDORDER",               # QComboBox
+            "checkIntraVLC":            "INTRAVLC",                 # QCheckBox
+            "lineEdit_DC":              "DC",                       # QLineEdit
+            "lineEdit_Qmin":            "QMIN",                     # QLineEdit
+            "lineEdit_Qmax":            "QMAX",                     # QLineEdit
+            "RcInitOccupancy":          "RCINITOCCUPANCY",          # QLineEdit
+            "BufSize":                  "BUFSIZE",                  # QLineEdit
 
             # Subtitles
             "SubtitleCodecs":           "SUBTITLECODECS",           # QComboBox
@@ -2030,6 +2113,9 @@ class FreeFactoryApp(QMainWindow):
         self.listFactoryFiles.clearSelection()
         for field in self.findChildren(QLineEdit):
             field.clear()
+        for field in self.findChildren(QComboBox):
+            field.clear()
+
         self.factory_dirty = True
 
         self.streamUsername.clear()
@@ -2049,8 +2135,7 @@ class FreeFactoryApp(QMainWindow):
             adv.setCurrentIndex(adv.indexOf(self.tabGopFrame))
         except Exception:
             pass
-
-        # Force Mode → Off
+        
         try:
             self.StreamMgrMode.setCurrentIndex(0)   # 0 == "Off"
             # keep UI in sync (enable/disable inputs, etc.)
@@ -2071,12 +2156,21 @@ class FreeFactoryApp(QMainWindow):
             self.checkReadFilesRealTime.setChecked(False)
         except Exception:
             pass
-        
+        # Clear all checkboxes
+        for box in self.findChildren(QCheckBox):
+            self._clear_value(box)   # calls setChecked(False)
+        # Re-enable the few needed checkboxes 
+        try:
+            self.EnableFactory.setChecked(True)
+            self.DeleteConversionLogs.setChecked(True)
+            self.DeleteSource.setChecked(True)
+        except Exception:
+            pass
 
         # Optional feedback
         if hasattr(self, "statusBar"):
             try:
-                self.statusBar().showMessage("New Factory: fields cleared", 3000)
+                self.statusBar().showMessage("New Factory: fields cleared", 5000)
             except Exception:
                 pass
 
@@ -2158,8 +2252,11 @@ class FreeFactoryApp(QMainWindow):
     # ============================
     #     Global Config Logic
     # ============================
-
-
+    def select_factories_directory(self):
+        directory = QFileDialog.getExistingDirectory(self, "Select Factories Directory")
+        if directory:
+            self.PathtoFactoriesGlobal.setText(directory)
+            
     def select_notify_directory(self):
         directory = QFileDialog.getExistingDirectory(self, "Select Notify Directory")
         if directory:
@@ -2438,7 +2535,7 @@ class FreeFactoryApp(QMainWindow):
         self.VideoPreset.clear()
 
         # 1) Blank/neutral entry (lets user deselect → no -preset flag)
-        blank_text = ""  # keep visually blank as you wanted
+        blank_text = ""  # keep visually blank
         self.VideoPreset.addItem(blank_text, None)
         # Tooltip for blank = "Use encoder default (...)" when we know it
         if default:

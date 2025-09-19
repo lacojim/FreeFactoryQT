@@ -212,6 +212,8 @@ class FreeFactoryCore:
     @staticmethod
     def _truthy(v) -> bool:
         return str(v).strip().lower() in {"1", "true", "yes", "on"}
+    
+
 
 
 # This builds the ffmpeg command via cmd. 
@@ -265,6 +267,24 @@ class FreeFactoryCore:
         disablesubs         = (factory_data.get("DISABLESUBS")  or "").strip()
         disabledata         = (factory_data.get("DISABLEDATA")  or "").strip()
         
+        # Video Advanced Options
+        adv_colorspace      = (factory_data.get("COLORSPACE")  or "").strip()
+        adv_colorrange      = (factory_data.get("COLORRANGE")  or "").strip()
+        adv_colortrc        = (factory_data.get("COLORTRC")  or "").strip()
+        adv_samplelocation  = (factory_data.get("COLORSAMPLELOCATION")  or "").strip()
+        adv_colorprimarties = (factory_data.get("COLORPRIMARIES")  or "").strip()
+        adv_altscan         = (factory_data.get("ALTERNATESCAN")  or "").strip()            #CHECK
+        adv_nonlinearquant  = (factory_data.get("NONLINEARQUANT")  or "").strip()           #CHECK
+        adv_signalstd       = (factory_data.get("SIGNALSTANDARD")  or "").strip()
+        adv_seqdispext      = (factory_data.get("SEQDISPEXT")  or "").strip()
+        adv_fieldorder      = (factory_data.get("FIELDORDER")  or "").strip()
+        adv_intravlc        = (factory_data.get("INTRAVLC")  or "").strip()        
+        adv_dc              = (factory_data.get("DC")  or "").strip()
+        adv_qmin            = (factory_data.get("QMIN")  or "").strip()
+        adv_qmax            = (factory_data.get("QMAX")  or "").strip()
+        adv_rcinitoccup     = (factory_data.get("RCINITOCCUPANCY")  or "").strip()
+        adv_bufsize         = (factory_data.get("BUFSIZE")  or "").strip()
+
         
         # --- Build base, add manual *input* flags BEFORE -i ---
         cmd                 = ["ffmpeg", "-hide_banner", "-y"]
@@ -316,6 +336,65 @@ class FreeFactoryCore:
                 strip_flag("-minrate")
                 strip_flag("-maxrate")
                 cmd += ["-minrate", video_bitrate, "-maxrate", video_bitrate]
+
+# Insert Advanced Video Here: WORK IN PROGRESS
+        # Chroma settings
+        if adv_colorspace:
+            cmd += ["-colorspace", adv_colorspace]
+        if adv_colorrange:
+            cmd += ["-color_range", adv_colorrange]
+        if adv_colortrc:
+            cmd += ["-color_trc", adv_colortrc]
+        if adv_samplelocation:
+            cmd += ["-chroma_sample_location", adv_samplelocation]
+        if adv_colorprimarties:
+            cmd += ["-color_primaries", adv_colorprimarties]
+        # Standards and Fields
+        adv_altscan_flag    = str(adv_altscan).strip().lower() in ("1", "true", "yes")
+        if adv_altscan_flag:
+            cmd += ["-alternate_scan", "1"]
+        adv_nonlinearquant_flag    = str(adv_nonlinearquant).strip().lower() in ("1", "true", "yes")
+        if adv_nonlinearquant_flag:
+            cmd += ["-non_linear_quant", "1"]
+
+        if adv_signalstd:
+            cmd += ["-signal_standard", adv_signalstd]
+        if adv_seqdispext:
+            cmd += ["-seq_disp_ext", adv_seqdispext]
+        if adv_fieldorder:
+            cmd += ["-field_order", adv_fieldorder]
+
+        adv_intravlc_flag    = str(adv_intravlc).strip().lower() in ("1", "true", "yes")
+        if adv_intravlc_flag:
+            cmd += ["-intra_vlc", "1"]
+
+        if adv_rcinitoccup:
+            cmd += ["-rc_init_occupancy", adv_rcinitoccup]
+            
+        if adv_bufsize:
+            cmd += ["-bufsize", adv_bufsize]
+            
+        if adv_dc:
+            cmd += ["-dc", str(adv_dc)]
+
+        if adv_qmin:
+            cmd += ["-qmin", str(adv_qmin)]
+
+        if adv_qmax:
+            cmd += ["-qmax", str(adv_qmax)]
+            
+        # Optional guardrail: qmin should not exceed qmax
+        try:
+            if adv_qmin and adv_qmax and int(adv_qmin) > int(adv_qmax):
+                # clamp or raise warning — here we clamp
+                cmd[-1] = adv_qmin  # replace qmax value
+        except ValueError:
+            pass
+
+
+
+
+# End Advanced Video:
 
         if video_profile:
             cmd += ["-profile:v", video_profile]
