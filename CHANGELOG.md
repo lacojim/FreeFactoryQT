@@ -9,7 +9,7 @@ This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and
 ### Added
 - **UI**
   - New **Added Constant Frame Rate**
-    This is a checkbox below the Frame Rate selector. CheckBox is ghosted if no frame rate is selected.
+    This is a checkbox below the Frame Rate selector. CheckBox is ghosted if no frame rate is selected. This uses the newer FFmpeg flag "-fps_mode:v cfr" so later versions of FFmpeg are required.
 
 
 ## [1.1.31-dev] - 2025-09-18
