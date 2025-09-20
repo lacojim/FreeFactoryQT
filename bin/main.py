@@ -536,6 +536,11 @@ class FreeFactoryApp(QMainWindow):
         self.VideoBitrate.currentTextChanged.connect(self._update_minmax_lock_state)
         self.checkMatchMinMaxBitrate.toggled.connect(self._update_minmax_lock_state)
         self._update_minmax_lock_state()
+
+        # Ghost ForceConstantFrameRate checkbox if Frame rate is empty (uses _update_minmax_lock_state method below)
+        self.VideoFrameRate.currentTextChanged.connect(self._update_cfr_lock_state)
+        self.checkForceCFR.toggled.connect(self._update_cfr_lock_state)
+        self._update_cfr_lock_state()
         
         # Tooltips for Embedded Tabs
         self._wire_tab_tooltips()
@@ -937,6 +942,7 @@ class FreeFactoryApp(QMainWindow):
             "VideoCodec":               "VIDEOCODECS",              # QComboBox
             "VideoWrapper":             "VIDEOWRAPPER",             # QComboBox
             "VideoFrameRate":           "VIDEOFRAMERATE",           # QComboBox
+            "checkForceCFR":            "FRAMERATECFR",             # QCheckBox
             "VideoSize":                "VIDEOSIZE",                # QComboBox
             "videoFiltersCombo":        "VIDEOFILTERS",             # QComboBox
             "VideoPixFormat":           "VIDEOPIXFORMAT",           # QComboBox
@@ -1084,6 +1090,13 @@ class FreeFactoryApp(QMainWindow):
         self.checkMatchMinMaxBitrate.setEnabled(has_bitrate)
         if not has_bitrate and self.checkMatchMinMaxBitrate.isChecked():
             self.checkMatchMinMaxBitrate.setChecked(False)
+            
+    # Method for ghosting the CFR rate whenever no FrameRate is selected.
+    def _update_cfr_lock_state(self):
+        has_framerate = bool(self.VideoFrameRate.currentText().strip())
+        self.checkForceCFR.setEnabled(has_framerate)
+        if not has_framerate and self.checkForceCFR.isChecked():
+            self.checkForceCFR.setChecked(False)
 
 # --- 5) Streaming helpers: selectors, table, state ---------------------------
 

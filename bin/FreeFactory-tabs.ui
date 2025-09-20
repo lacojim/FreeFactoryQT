@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1094</width>
+    <width>1100</width>
     <height>723</height>
    </rect>
   </property>
@@ -20,9 +20,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>-2</x>
       <y>0</y>
-      <width>1081</width>
+      <width>1101</width>
       <height>681</height>
      </rect>
     </property>
@@ -54,6 +54,7 @@
      <property name="font">
       <font>
        <pointsize>8</pointsize>
+       <italic>false</italic>
        <bold>false</bold>
       </font>
      </property>
@@ -78,6 +79,7 @@
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -109,6 +111,7 @@
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
@@ -125,6 +128,7 @@
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -144,6 +148,7 @@
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -385,6 +390,7 @@ FreeFactory-service is running.</string>
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>true</bold>
          </font>
         </property>
@@ -412,6 +418,7 @@ FreeFactory-service is running.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -584,11 +591,6 @@ Choosing 'copy' locks most video options (bitrate, size, profile, filters, etc).
            <string>wmv3</string>
           </property>
          </item>
-         <item>
-          <property name="text">
-           <string>xdcam</string>
-          </property>
-         </item>
         </widget>
         <widget class="QLabel" name="l_VideoCodec">
          <property name="geometry">
@@ -602,6 +604,7 @@ Choosing 'copy' locks most video options (bitrate, size, profile, filters, etc).
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -624,6 +627,7 @@ Choosing 'copy' locks most video options (bitrate, size, profile, filters, etc).
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -758,6 +762,7 @@ Audio File Extension. You CANNOT use both.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -772,7 +777,7 @@ Audio File Extension. You CANNOT use both.</string>
          <property name="geometry">
           <rect>
            <x>410</x>
-           <y>25</y>
+           <y>85</y>
            <width>91</width>
            <height>25</height>
           </rect>
@@ -780,6 +785,7 @@ Audio File Extension. You CANNOT use both.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -865,7 +871,7 @@ Audio File Extension. You CANNOT use both.</string>
          <property name="geometry">
           <rect>
            <x>340</x>
-           <y>28</y>
+           <y>88</y>
            <width>71</width>
            <height>20</height>
           </rect>
@@ -873,6 +879,7 @@ Audio File Extension. You CANNOT use both.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -895,6 +902,7 @@ Audio File Extension. You CANNOT use both.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -992,6 +1000,11 @@ Audio File Extension. You CANNOT use both.</string>
          </item>
          <item>
           <property name="text">
+           <string>1280x1080</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>1366x768</string>
           </property>
          </item>
@@ -1083,6 +1096,7 @@ Audio File Extension. You CANNOT use both.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1105,6 +1119,7 @@ Audio File Extension. You CANNOT use both.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1183,6 +1198,11 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          </item>
          <item>
           <property name="text">
+           <string>50M</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>60M</string>
           </property>
          </item>
@@ -1219,6 +1239,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1233,7 +1254,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="geometry">
           <rect>
            <x>410</x>
-           <y>85</y>
+           <y>55</y>
            <width>91</width>
            <height>25</height>
           </rect>
@@ -1241,6 +1262,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1286,7 +1308,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="geometry">
           <rect>
            <x>340</x>
-           <y>88</y>
+           <y>58</y>
            <width>41</width>
            <height>17</height>
           </rect>
@@ -1294,6 +1316,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1313,6 +1336,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1395,6 +1419,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1414,6 +1439,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1436,6 +1462,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1494,7 +1521,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="geometry">
           <rect>
            <x>410</x>
-           <y>55</y>
+           <y>25</y>
            <width>91</width>
            <height>25</height>
           </rect>
@@ -1502,6 +1529,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1627,7 +1655,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="geometry">
           <rect>
            <x>340</x>
-           <y>58</y>
+           <y>28</y>
            <width>71</width>
            <height>17</height>
           </rect>
@@ -1635,6 +1663,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1654,6 +1683,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1669,15 +1699,16 @@ Usually only needed for professional codecs.</string>
         <widget class="QLineEdit" name="VideoStreamID">
          <property name="geometry">
           <rect>
-           <x>410</x>
-           <y>117</y>
-           <width>91</width>
+           <x>570</x>
+           <y>55</y>
+           <width>111</width>
            <height>25</height>
           </rect>
          </property>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1691,8 +1722,8 @@ Usually only needed for professional codecs.</string>
         <widget class="QLabel" name="l_VideoStreamID">
          <property name="geometry">
           <rect>
-           <x>340</x>
-           <y>120</y>
+           <x>520</x>
+           <y>58</y>
            <width>51</width>
            <height>17</height>
           </rect>
@@ -1700,6 +1731,7 @@ Usually only needed for professional codecs.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1835,6 +1867,7 @@ Hover to see full content. Also see FFmpeg help.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1848,8 +1881,8 @@ Hover to see full content. Also see FFmpeg help.</string>
          </property>
          <property name="geometry">
           <rect>
-           <x>210</x>
-           <y>115</y>
+           <x>570</x>
+           <y>25</y>
            <width>111</width>
            <height>25</height>
           </rect>
@@ -1857,6 +1890,7 @@ Hover to see full content. Also see FFmpeg help.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -1976,8 +2010,8 @@ Hover to see full content. Also see FFmpeg help.</string>
         <widget class="QLabel" name="l_VideoPreset">
          <property name="geometry">
           <rect>
-           <x>168</x>
-           <y>118</y>
+           <x>520</x>
+           <y>28</y>
            <width>41</width>
            <height>20</height>
           </rect>
@@ -1985,11 +2019,36 @@ Hover to see full content. Also see FFmpeg help.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
          <property name="text">
           <string>Presets</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="checkForceCFR">
+         <property name="geometry">
+          <rect>
+           <x>341</x>
+           <y>110</y>
+           <width>161</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Convert Variable Frame Rate (VFR) to Constant Frame Rate (CFR).
+Ensures strict frame pacing by duplicating or dropping frames as needed.</string>
+         </property>
+         <property name="text">
+          <string>Force Constant Frame Rate</string>
          </property>
         </widget>
        </widget>
@@ -2001,7 +2060,7 @@ Hover to see full content. Also see FFmpeg help.</string>
        <widget class="QGroupBox" name="groupAudioOptions">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>9</x>
           <y>10</y>
           <width>811</width>
           <height>191</height>
@@ -2010,6 +2069,7 @@ Hover to see full content. Also see FFmpeg help.</string>
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>true</bold>
          </font>
         </property>
@@ -2034,6 +2094,7 @@ Hover to see full content. Also see FFmpeg help.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2140,6 +2201,7 @@ Choosing 'copy' locks most audio options (bitrate, sample rate, channels, filter
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2159,6 +2221,7 @@ Choosing 'copy' locks most audio options (bitrate, sample rate, channels, filter
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2181,6 +2244,7 @@ Choosing 'copy' locks most audio options (bitrate, sample rate, channels, filter
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2286,6 +2350,7 @@ ie. aac, mp3, ogg, etc</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2308,6 +2373,7 @@ ie. aac, mp3, ogg, etc</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2401,6 +2467,7 @@ ie. aac, mp3, ogg, etc</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2423,6 +2490,7 @@ ie. aac, mp3, ogg, etc</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2512,6 +2580,7 @@ Do NOT use with video streams.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2575,6 +2644,7 @@ Do NOT use with video streams.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2594,6 +2664,7 @@ Do NOT use with video streams.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2616,6 +2687,7 @@ Do NOT use with video streams.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2635,6 +2707,7 @@ Do NOT use with video streams.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2739,6 +2812,11 @@ Hover to see full content. Also see FFmpeg help.</string>
          </item>
          <item>
           <property name="text">
+           <string>aresample=</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string/>
           </property>
          </item>
@@ -2782,6 +2860,16 @@ Hover to see full content. Also see FFmpeg help.</string>
            <string>treble=g=5</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>aresample=dither_method=triangler</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>aresample=dither_method=triangler_hp</string>
+          </property>
+         </item>
         </widget>
        </widget>
       </widget>
@@ -2801,6 +2889,7 @@ Hover to see full content. Also see FFmpeg help.</string>
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>true</bold>
          </font>
         </property>
@@ -2822,6 +2911,7 @@ Hover to see full content. Also see FFmpeg help.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2841,6 +2931,7 @@ Hover to see full content. Also see FFmpeg help.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2863,6 +2954,7 @@ Hover to see full content. Also see FFmpeg help.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2921,6 +3013,7 @@ This should match the Video Encoding Frame Rate</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -2999,6 +3092,7 @@ and -c:s is not used in CMD.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -3024,6 +3118,7 @@ and -c:s is not used in CMD.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -3055,6 +3150,7 @@ and -c:s is not used in CMD.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -3077,6 +3173,7 @@ and -c:s is not used in CMD.</string>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
+           <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
@@ -3087,6 +3184,55 @@ Supported by mpeg2video, H.264 and HEVC video codecs.</string>
          </property>
          <property name="text">
           <string>Remove A53cc</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="SubtitlesStreamID">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>316</x>
+           <y>18</y>
+           <width>71</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>StreamID: Adds the flag -stringid:a to the command line</string>
+         </property>
+         <property name="placeholderText">
+          <string>0:2</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="l_SubtitleStreamID">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>256</x>
+           <y>22</y>
+           <width>51</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>StreamID</string>
          </property>
         </widget>
        </widget>
@@ -3189,6 +3335,7 @@ Range and Defaults are codec dependent.</string>
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3208,6 +3355,7 @@ Range and Defaults are codec dependent.</string>
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3297,6 +3445,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3316,6 +3465,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3335,6 +3485,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3354,6 +3505,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3382,6 +3534,7 @@ For advanced/broadcast workflows only.
           <property name="font">
            <font>
             <pointsize>8</pointsize>
+            <italic>false</italic>
             <bold>true</bold>
            </font>
           </property>
@@ -3400,6 +3553,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3419,6 +3573,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3518,6 +3673,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3592,6 +3748,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3611,6 +3768,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3740,6 +3898,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3759,6 +3918,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3854,6 +4014,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3873,6 +4034,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3892,6 +4054,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -3955,6 +4118,7 @@ For advanced/broadcast workflows only.
           <property name="font">
            <font>
             <pointsize>8</pointsize>
+            <italic>false</italic>
             <bold>true</bold>
            </font>
           </property>
@@ -3982,6 +4146,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4021,6 +4186,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4049,6 +4215,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4071,6 +4238,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4100,6 +4268,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4135,6 +4304,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4157,6 +4327,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4179,6 +4350,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4211,6 +4383,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4230,6 +4403,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4249,6 +4423,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4284,6 +4459,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4303,6 +4479,7 @@ For advanced/broadcast workflows only.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4373,6 +4550,7 @@ For mxf.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4392,6 +4570,7 @@ For mxf.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4411,6 +4590,7 @@ For mxf.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4433,6 +4613,7 @@ For mxf.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4482,6 +4663,7 @@ For mxf.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4504,6 +4686,7 @@ For mxf.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4553,6 +4736,7 @@ mpeg2video</string>
           <property name="font">
            <font>
             <pointsize>8</pointsize>
+            <italic>false</italic>
             <bold>true</bold>
            </font>
           </property>
@@ -4591,6 +4775,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4610,6 +4795,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4632,6 +4818,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4654,6 +4841,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4676,6 +4864,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4698,6 +4887,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4720,6 +4910,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4742,6 +4933,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4764,6 +4956,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4786,6 +4979,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4808,6 +5002,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4830,6 +5025,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4852,6 +5048,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4874,6 +5071,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4896,6 +5094,7 @@ These are low-level encoder switches. Use only when required by your workflow.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4942,6 +5141,7 @@ These are low-level encoder switches. Use only when required by your workflow.
           <property name="font">
            <font>
             <pointsize>8</pointsize>
+            <italic>false</italic>
             <bold>true</bold>
            </font>
           </property>
@@ -4979,6 +5179,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -4998,6 +5199,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -5020,6 +5222,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -5042,6 +5245,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -5064,6 +5268,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -5086,6 +5291,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -5108,6 +5314,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -5130,6 +5337,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -5152,6 +5360,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -5174,6 +5383,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -5216,6 +5426,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
            <property name="font">
             <font>
              <pointsize>8</pointsize>
+             <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
@@ -5243,6 +5454,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -5284,6 +5496,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -5303,6 +5516,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -5322,6 +5536,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -5346,6 +5561,7 @@ only used on Linux installations.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -5370,6 +5586,7 @@ background service encoding.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -5425,6 +5642,7 @@ or Factory Testing</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -5448,6 +5666,7 @@ Uses loaded factory.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -5472,6 +5691,7 @@ Uses loaded factory.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -5505,6 +5725,7 @@ If you need this on Input (which is more efficient), use Manual Input Opts below
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -5527,6 +5748,7 @@ If you need this on Input (which is more efficient), use Manual Input Opts below
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -5551,6 +5773,7 @@ If you need this on Input (which is more efficient), use Manual Input Opts below
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -5574,6 +5797,7 @@ If you need this on Input (which is more efficient), use Manual Input Opts below
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -5595,6 +5819,7 @@ If you need this on Input (which is more efficient), use Manual Input Opts below
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -5623,6 +5848,7 @@ direct encoding.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -5652,6 +5878,7 @@ Direct Encoding is unaffected.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -5699,6 +5926,7 @@ This is only valid when using the FreeFactory Service.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -5738,6 +5966,7 @@ This is only valid when using the FreeFactory Service.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -5778,6 +6007,7 @@ the final output file (-f / filename) and are not otherwise available through th
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -5870,6 +6100,7 @@ substituted with real paths when the job runs.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -6079,6 +6310,7 @@ FFmpeg command string.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -6100,6 +6332,7 @@ FFmpeg command string.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6122,6 +6355,7 @@ FFmpeg command string.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6144,6 +6378,7 @@ FFmpeg command string.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6166,6 +6401,7 @@ FFmpeg command string.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6234,6 +6470,7 @@ FFmpeg command string.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -6279,6 +6516,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -6297,6 +6535,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6316,6 +6555,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6335,6 +6575,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6351,6 +6592,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6370,6 +6612,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6389,6 +6632,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6408,6 +6652,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6470,6 +6715,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6522,6 +6768,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6541,6 +6788,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6560,6 +6808,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6579,6 +6828,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6598,6 +6848,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6658,6 +6909,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6677,6 +6929,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6696,6 +6949,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6718,6 +6972,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6749,6 +7004,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6768,6 +7024,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6794,6 +7051,7 @@ smooth live capture. Default: 512.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6816,6 +7074,7 @@ smooth live capture. Default: 512.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6842,6 +7101,7 @@ smooth live capture. Default: 512.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6907,6 +7167,7 @@ smooth live capture. Default: 512.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6947,6 +7208,7 @@ Should be on when streaming files</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -7020,6 +7282,7 @@ Should be on when streaming files</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -7039,6 +7302,7 @@ Should be on when streaming files</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -7058,6 +7322,7 @@ Should be on when streaming files</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -7103,6 +7368,7 @@ Should be on when streaming files</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -7143,6 +7409,7 @@ When Off, all widgets below are inaccessable.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -7162,6 +7429,7 @@ When Off, all widgets below are inaccessable.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -7180,6 +7448,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7199,6 +7468,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7218,6 +7488,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7249,6 +7520,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7268,6 +7540,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7287,6 +7560,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7306,6 +7580,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7325,6 +7600,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
@@ -7344,6 +7620,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
@@ -7363,6 +7640,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7380,6 +7658,7 @@ When Off, all widgets below are inaccessable.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -7414,6 +7693,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7436,6 +7716,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7455,6 +7736,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7477,6 +7759,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7496,6 +7779,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7515,6 +7799,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7534,6 +7819,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7556,6 +7842,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7575,6 +7862,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7597,6 +7885,7 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7753,11 +8042,32 @@ When Off, all widgets below are inaccessable.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
        <property name="text">
         <string>Progress</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_15">
+       <property name="geometry">
+        <rect>
+         <x>123</x>
+         <y>10</y>
+         <width>461</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <italic>true</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>NOTE: All files dropped use the selected Factory from the Factory Builder page.</string>
        </property>
       </widget>
      </widget>
@@ -7773,6 +8083,18 @@ When Off, all widgets below are inaccessable.</string>
       <property name="toolTip">
        <string>Drop Media Files Here for Direct Conversion
 or Factory Testing</string>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::InputMethodHint::ImhNone</set>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Sunken</enum>
+      </property>
+      <property name="documentTitle">
+       <string/>
+      </property>
+      <property name="lineWrapMode">
+       <enum>QPlainTextEdit::LineWrapMode::NoWrap</enum>
       </property>
       <property name="plainText">
        <string/>
@@ -7802,13 +8124,14 @@ or Factory Testing</string>
        <rect>
         <x>10</x>
         <y>50</y>
-        <width>891</width>
+        <width>141</width>
         <height>16</height>
        </rect>
       </property>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -7828,6 +8151,7 @@ or Factory Testing</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -7841,9 +8165,7 @@ or Factory Testing</string>
        <bool>true</bool>
       </property>
       <property name="plainText">
-       <string>This tab exists as a convenience. Listed below are a few notes to be aware of:
-
-- This will process all files in a serial manor, one at a time in order dropped.
+       <string>- This Tab will process all files in a serial manor, one at a time in order dropped.
 
 - All files dropped here will use the selected Factory. You cannot yet mix different Factories for batch processing. We may add this in the future.
 
@@ -7869,6 +8191,7 @@ or Factory Testing</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -7887,6 +8210,7 @@ or Factory Testing</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7906,6 +8230,7 @@ or Factory Testing</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7928,6 +8253,7 @@ or Factory Testing</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7954,6 +8280,7 @@ or Factory Testing</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -7972,6 +8299,7 @@ or Factory Testing</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -7997,6 +8325,7 @@ or Factory Testing</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8019,6 +8348,7 @@ or Factory Testing</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8038,6 +8368,7 @@ or Factory Testing</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8057,6 +8388,7 @@ or Factory Testing</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8076,6 +8408,7 @@ or Factory Testing</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8111,6 +8444,7 @@ or Factory Testing</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8135,6 +8469,7 @@ or Factory Testing</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8169,6 +8504,7 @@ or Factory Testing</string>
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -8191,6 +8527,7 @@ or Factory Testing</string>
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -8213,6 +8550,7 @@ or Factory Testing</string>
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -8240,6 +8578,7 @@ This can be higher if using Quadro H/W.</string>
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -8266,6 +8605,7 @@ will process in parallel (1 = safest).</string>
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -8297,6 +8637,7 @@ will process in parallel (1 = safest).</string>
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -8319,6 +8660,7 @@ will process in parallel (1 = safest).</string>
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -8351,6 +8693,7 @@ Takes effect for new jobs; running jobs are not interrupted.
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -8373,6 +8716,7 @@ Takes effect for new jobs; running jobs are not interrupted.
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -8395,6 +8739,7 @@ Takes effect for new jobs; running jobs are not interrupted.
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -8417,6 +8762,7 @@ Takes effect for new jobs; running jobs are not interrupted.
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -8439,6 +8785,7 @@ Takes effect for new jobs; running jobs are not interrupted.
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -8475,6 +8822,7 @@ Takes effect for new jobs; running jobs are not interrupted.
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8497,6 +8845,7 @@ Takes effect for new jobs; running jobs are not interrupted.
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8569,6 +8918,7 @@ to this tab. This includes adding Notify folders.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -8593,6 +8943,7 @@ with those changes. </string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8615,6 +8966,7 @@ with those changes. </string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8634,6 +8986,7 @@ with those changes. </string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8675,6 +9028,7 @@ Be sure to Save Global after.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -8693,6 +9047,7 @@ Be sure to Save Global after.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8709,6 +9064,7 @@ Be sure to Save Global after.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8731,6 +9087,7 @@ Be sure to Save Global after.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8753,6 +9110,7 @@ Be sure to Save Global after.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8775,6 +9133,7 @@ Be sure to Save Global after.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8797,6 +9156,7 @@ Be sure to Save Global after.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8867,6 +9227,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8886,6 +9247,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8906,6 +9268,7 @@ Right-click to refresh service mode.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -8924,6 +9287,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8946,6 +9310,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8968,6 +9333,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -8987,6 +9353,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -9006,6 +9373,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -9025,6 +9393,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -9044,6 +9413,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -9069,6 +9439,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -9094,6 +9465,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -9119,6 +9491,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -9159,6 +9532,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -9184,6 +9558,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -9244,6 +9619,7 @@ Right-click to refresh service mode.</string>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -9262,6 +9638,7 @@ Right-click to refresh service mode.</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -9317,6 +9694,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9336,6 +9714,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9355,6 +9734,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9374,6 +9754,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9393,6 +9774,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9412,6 +9794,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9431,6 +9814,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9450,6 +9834,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9469,6 +9854,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9504,6 +9890,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9523,6 +9910,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9542,6 +9930,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9561,6 +9950,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9580,6 +9970,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9599,6 +9990,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9618,6 +10010,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9637,6 +10030,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9656,6 +10050,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9675,6 +10070,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9694,6 +10090,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9713,6 +10110,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <property name="font">
          <font>
           <pointsize>8</pointsize>
+          <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
@@ -9755,6 +10153,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
       <property name="font">
        <font>
         <pointsize>10</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -9801,8 +10200,8 @@ QGroupBox QComboBox {
      <widget class="QSpinBox" name="spinBox">
       <property name="geometry">
        <rect>
-        <x>80</x>
-        <y>180</y>
+        <x>20</x>
+        <y>532</y>
         <width>42</width>
         <height>22</height>
        </rect>
@@ -9814,8 +10213,8 @@ QGroupBox QComboBox {
      <widget class="QSpinBox" name="spinBox_2">
       <property name="geometry">
        <rect>
-        <x>132</x>
-        <y>180</y>
+        <x>72</x>
+        <y>532</y>
         <width>42</width>
         <height>22</height>
        </rect>
@@ -9827,8 +10226,8 @@ QGroupBox QComboBox {
      <widget class="QSpinBox" name="spinBox_3">
       <property name="geometry">
        <rect>
-        <x>185</x>
-        <y>180</y>
+        <x>125</x>
+        <y>532</y>
         <width>42</width>
         <height>22</height>
        </rect>
@@ -9840,8 +10239,8 @@ QGroupBox QComboBox {
      <widget class="QLabel" name="label_9">
       <property name="geometry">
        <rect>
-        <x>124</x>
-        <y>183</y>
+        <x>65</x>
+        <y>535</y>
         <width>16</width>
         <height>16</height>
        </rect>
@@ -9849,6 +10248,7 @@ QGroupBox QComboBox {
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -9859,8 +10259,8 @@ QGroupBox QComboBox {
      <widget class="QLabel" name="label_10">
       <property name="geometry">
        <rect>
-        <x>177</x>
-        <y>183</y>
+        <x>118</x>
+        <y>535</y>
         <width>16</width>
         <height>16</height>
        </rect>
@@ -9868,6 +10268,7 @@ QGroupBox QComboBox {
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <italic>false</italic>
         <bold>true</bold>
        </font>
       </property>
@@ -9878,8 +10279,8 @@ QGroupBox QComboBox {
      <widget class="QLabel" name="label_12">
       <property name="geometry">
        <rect>
-        <x>85</x>
-        <y>168</y>
+        <x>25</x>
+        <y>520</y>
         <width>16</width>
         <height>16</height>
        </rect>
@@ -9891,8 +10292,8 @@ QGroupBox QComboBox {
      <widget class="QLabel" name="label_14">
       <property name="geometry">
        <rect>
-        <x>136</x>
-        <y>168</y>
+        <x>76</x>
+        <y>520</y>
         <width>16</width>
         <height>16</height>
        </rect>
@@ -9904,14 +10305,644 @@ QGroupBox QComboBox {
      <widget class="QLabel" name="label_17">
       <property name="geometry">
        <rect>
-        <x>190</x>
-        <y>168</y>
+        <x>130</x>
+        <y>520</y>
         <width>16</width>
         <height>16</height>
        </rect>
       </property>
       <property name="text">
        <string>SS</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider">
+      <property name="geometry">
+       <rect>
+        <x>228</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_16">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>65Hz</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>268</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>92Hz</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_2">
+      <property name="geometry">
+       <rect>
+        <x>276</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_19">
+      <property name="geometry">
+       <rect>
+        <x>356</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>185Hz</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_3">
+      <property name="geometry">
+       <rect>
+        <x>364</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_20">
+      <property name="geometry">
+       <rect>
+        <x>313</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>131Hz</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_4">
+      <property name="geometry">
+       <rect>
+        <x>321</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_41">
+      <property name="geometry">
+       <rect>
+        <x>448</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>370Hz</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_42">
+      <property name="geometry">
+       <rect>
+        <x>536</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>740Hz</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_9">
+      <property name="geometry">
+       <rect>
+        <x>544</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_43">
+      <property name="geometry">
+       <rect>
+        <x>493</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>523Hz</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_10">
+      <property name="geometry">
+       <rect>
+        <x>501</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_11">
+      <property name="geometry">
+       <rect>
+        <x>456</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_44">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>262Hz</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_12">
+      <property name="geometry">
+       <rect>
+        <x>408</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_13">
+      <property name="geometry">
+       <rect>
+        <x>586</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_45">
+      <property name="geometry">
+       <rect>
+        <x>578</x>
+        <y>305</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>1khz</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_46">
+      <property name="geometry">
+       <rect>
+        <x>845</x>
+        <y>305</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>8.5khz</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_47">
+      <property name="geometry">
+       <rect>
+        <x>665</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>2khz</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_48">
+      <property name="geometry">
+       <rect>
+        <x>753</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>4khz</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_14">
+      <property name="geometry">
+       <rect>
+        <x>761</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_15">
+      <property name="geometry">
+       <rect>
+        <x>805</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_49">
+      <property name="geometry">
+       <rect>
+        <x>710</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>3khz</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_50">
+      <property name="geometry">
+       <rect>
+        <x>797</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>6khz</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_16">
+      <property name="geometry">
+       <rect>
+        <x>983</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_17">
+      <property name="geometry">
+       <rect>
+        <x>718</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_51">
+      <property name="geometry">
+       <rect>
+        <x>975</x>
+        <y>305</y>
+        <width>51</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>20khz</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_18">
+      <property name="geometry">
+       <rect>
+        <x>941</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_52">
+      <property name="geometry">
+       <rect>
+        <x>933</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>16khz</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_19">
+      <property name="geometry">
+       <rect>
+        <x>673</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_53">
+      <property name="geometry">
+       <rect>
+        <x>617</x>
+        <y>305</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>1.5khz</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_20">
+      <property name="geometry">
+       <rect>
+        <x>898</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_54">
+      <property name="geometry">
+       <rect>
+        <x>890</x>
+        <y>305</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>12khz</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_21">
+      <property name="geometry">
+       <rect>
+        <x>625</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_22">
+      <property name="geometry">
+       <rect>
+        <x>853</x>
+        <y>140</y>
+        <width>16</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBothSides</enum>
       </property>
      </widget>
     </widget>
@@ -9923,7 +10954,7 @@ QGroupBox QComboBox {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1094</width>
+     <width>1100</width>
      <height>19</height>
     </rect>
    </property>

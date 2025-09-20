@@ -238,6 +238,10 @@ class FreeFactoryCore:
         video_flags         = factory_data.get("FLAGS", "").strip()
         video_flags2        = factory_data.get("FLAGS2", "").strip()
         video_bitrate       = factory_data.get("VIDEOBITRATE", "").strip()
+
+        video_framerate     = factory_data.get("VIDEOFRAMERATE", "").strip()
+        video_framerate_cfr = factory_data.get("FRAMERATECFR", "").strip()
+        
         video_profile       = factory_data.get("VIDEOPROFILE", "").strip()
         video_profile_level = factory_data.get("VIDEOPROFILELEVEL", "").strip()
         size                = factory_data.get("VIDEOSIZE", "").strip()
@@ -312,6 +316,13 @@ class FreeFactoryCore:
         #=======Video encoding
         if video_codec:
             cmd += ["-c:v", video_codec]
+            
+        if video_framerate:
+            cmd += ["-r", video_framerate]
+            
+        video_framerate_cfr_flag    = str(video_framerate_cfr).strip().lower() in ("1", "true", "yes")
+        if video_framerate_cfr_flag:
+            cmd += ["-fps_mode:v", "cfr"]
 
         if video_flags:
             cmd += ["-flags", video_flags]
