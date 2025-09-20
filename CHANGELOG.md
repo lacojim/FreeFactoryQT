@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
 
+## [1.1.32-dev] - 2025-09-20
+
+### Added
+- **UI**
+  - New **Added Constant Frame Rate**
+    This is a checkbox below the Frame Rate selector. CheckBox is ghosted if no frame rate is selected.
+
 
 ## [1.1.31-dev] - 2025-09-18
 
