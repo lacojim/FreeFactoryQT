@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
 
+## [1.1.33-dev] - 2025-09-21
+
+### Added
+- **UI**
+  - Bug Fix **ComboBoxes data cleared when clicking New Factory**
+    - By making the newer comboboxes editable, then locking them from manual input, it makes clearing them so much easier. Before doing this fix, all comboboxes were being completely cleared which was very bad.
+
 ## [1.1.32-dev] - 2025-09-20
 
 ### Added
