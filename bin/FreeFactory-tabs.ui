@@ -2045,7 +2045,8 @@ Hover to see full content. Also see FFmpeg help.</string>
          </property>
          <property name="toolTip">
           <string>Convert Variable Frame Rate (VFR) to Constant Frame Rate (CFR).
-Ensures strict frame pacing by duplicating or dropping frames as needed.</string>
+Ensures strict frame pacing by duplicating or dropping frames as needed.
+- Adds -fps_mode:v cfr to the commandl line.</string>
          </property>
          <property name="text">
           <string>Force Constant Frame Rate</string>
@@ -3053,6 +3054,16 @@ and -c:s is not used in CMD.</string>
          </item>
          <item>
           <property name="text">
+           <string>dvb_subtitle</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>dvd_subtitle</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>mov_text</string>
           </property>
          </item>
@@ -3076,6 +3087,16 @@ and -c:s is not used in CMD.</string>
            <string>Sidecar SCC (Scenarist)</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>subrip</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>webvtt</string>
+          </property>
+         </item>
         </widget>
         <widget class="QCheckBox" name="checkEmbed436">
          <property name="enabled">
@@ -3095,6 +3116,10 @@ and -c:s is not used in CMD.</string>
            <italic>false</italic>
            <bold>false</bold>
           </font>
+         </property>
+         <property name="toolTip">
+          <string>Force embed eia608 to smpte436m using a bitstream filter.
+FFmpeg 8.x required.</string>
          </property>
          <property name="layoutDirection">
           <enum>Qt::LayoutDirection::LeftToRight</enum>
@@ -3186,9 +3211,9 @@ Supported by mpeg2video, H.264 and HEVC video codecs.</string>
           <string>Remove A53cc</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="SubtitlesStreamID">
+        <widget class="QLineEdit" name="SubtitleStreamID">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="geometry">
           <rect>
@@ -3214,7 +3239,7 @@ Supported by mpeg2video, H.264 and HEVC video codecs.</string>
         </widget>
         <widget class="QLabel" name="l_SubtitleStreamID">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="geometry">
           <rect>
@@ -3296,6 +3321,9 @@ Supported by mpeg2video, H.264 and HEVC video codecs.</string>
             <string>Frame Strategy: Adds the flag -b_strategy to the command line.
 Strategy to choose between I/P/B-frames.
 Range and Defaults are codec dependent.</string>
+           </property>
+           <property name="editable">
+            <bool>true</bool>
            </property>
            <item>
             <property name="text">
@@ -3580,6 +3608,9 @@ For advanced/broadcast workflows only.
            <property name="toolTip">
             <string>Set color primaries.</string>
            </property>
+           <property name="editable">
+            <bool>true</bool>
+           </property>
            <item>
             <property name="text">
              <string/>
@@ -3690,6 +3721,9 @@ For advanced/broadcast workflows only.
 - full               2   JPEG (2^n-1)
 </string>
            </property>
+           <property name="editable">
+            <bool>true</bool>
+           </property>
            <item>
             <property name="text">
              <string/>
@@ -3774,6 +3808,9 @@ For advanced/broadcast workflows only.
            </property>
            <property name="toolTip">
             <string>Set colour space (section 7.2.2) (from -1 to 7) (default -1)</string>
+           </property>
+           <property name="editable">
+            <bool>true</bool>
            </property>
            <item>
             <property name="text">
@@ -3926,6 +3963,9 @@ For advanced/broadcast workflows only.
             <string>Color transfer characteristics (from 1 to INT_MAX) (default unknown)
 </string>
            </property>
+           <property name="editable">
+            <bool>true</bool>
+           </property>
            <item>
             <property name="text">
              <string/>
@@ -4060,6 +4100,9 @@ For advanced/broadcast workflows only.
            </property>
            <property name="toolTip">
             <string>Chroma sample location (from 0 to INT_MAX) (default unknown).</string>
+           </property>
+           <property name="editable">
+            <bool>true</bool>
            </property>
            <item>
             <property name="text">
@@ -4497,6 +4540,9 @@ For mxf.
 
 </string>
            </property>
+           <property name="editable">
+            <bool>true</bool>
+           </property>
            <item>
             <property name="text">
              <string/>
@@ -4620,6 +4666,9 @@ For mxf.
            <property name="toolTip">
             <string>Set field order.</string>
            </property>
+           <property name="editable">
+            <bool>true</bool>
+           </property>
            <item>
             <property name="text">
              <string/>
@@ -4693,6 +4742,9 @@ For mxf.
            <property name="toolTip">
             <string>Write sequence_display_extension blocks. (from -1 to 1) (default auto).
 mpeg2video</string>
+           </property>
+           <property name="editable">
+            <bool>true</bool>
            </property>
            <item>
             <property name="text">
@@ -7222,7 +7274,7 @@ Should be on when streaming files</string>
 • Webcam</string>
       </property>
       <property name="editable">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <item>
        <property name="text">
@@ -7892,6 +7944,14 @@ When Off, all widgets below are inaccessable.</string>
        <property name="toolTip">
         <string>Recording Audio Source</string>
        </property>
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+       <item>
+        <property name="text">
+         <string/>
+        </property>
+       </item>
        <item>
         <property name="text">
          <string>None</string>
@@ -10164,39 +10224,6 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QGroupBox" name="groupAdvancedVOptions">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>420</y>
-        <width>511</width>
-        <height>61</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string>Advanced Video Options: Not normally used for casual users.</string>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QGroupBox {
-    background-color: #e8e8e8;
-    border: 1px solid #448aff;
-    border-radius: 6px;
-	margin-top: 1.5em;
-}
-QGroupBox QComboBox {
-    font: 8pt &quot;Sans Serif&quot;;
-}</string>
-      </property>
-      <property name="title">
-       <string>Advanced Video Options</string>
-      </property>
-     </widget>
      <widget class="QSpinBox" name="spinBox">
       <property name="geometry">
        <rect>
@@ -10205,6 +10232,9 @@ QGroupBox QComboBox {
         <width>42</width>
         <height>22</height>
        </rect>
+      </property>
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
       </property>
       <property name="maximum">
        <number>23</number>
@@ -10943,6 +10973,25 @@ QGroupBox QComboBox {
       </property>
       <property name="tickPosition">
        <enum>QSlider::TickPosition::TicksBothSides</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_21">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>110</y>
+        <width>141</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>18 Band EQ Audio Filter</string>
+      </property>
+      <property name="scaledContents">
+       <bool>false</bool>
+      </property>
+      <property name="wordWrap">
+       <bool>false</bool>
       </property>
      </widget>
     </widget>

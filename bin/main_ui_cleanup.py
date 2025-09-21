@@ -140,6 +140,40 @@ AUDIO_COPY_WIDGETS = [
     "AudioChannels",
     "audioFiltersCombo",
 ]
+# ---------------------------------------------------------------------------
+# LOCKED_COMBOS
+#
+# List of QComboBox widget objectNames that should be made
+# "editable-but-readonly". This trick makes them behave as if they
+# are editable (so they reset cleanly to a blank/default value when
+# clearing a factory) while preventing the user from typing arbitrary
+# values or adding new items.
+#
+# Why:
+# - Non-editable QComboBoxes don’t reset to blank easily.
+# - Editable QComboBoxes do, but normally allow free text input.
+# - By setting them editable and then locking their lineEdit to
+#   read-only, we get the best of both worlds:
+#     • Clean reset behavior
+#     • No unwanted user input
+#
+# To add a new combo in the future, just include its objectName here.
+# ---------------------------------------------------------------------------
+LOCKED_COMBOS = [
+    "VideoFormat",
+    "FrameStrategy",
+    "ColorPrimaries",
+    "ColorTRC",
+    "ColorSpace",
+    "ColorRange",
+    "ColorSampleLocation",
+    "SignalStandard",
+    "SeqDispExt",
+    "FieldOrder",
+    # Streaming/Record tab
+    "streamInputProfile",
+    "RecordAudioSource",
+]
 
 
 
@@ -230,6 +264,9 @@ class FreeFactoryApp(QMainWindow):
         UI_PATH = asset("FreeFactory-tabs.ui")
         uic.loadUi(str(UI_PATH), self)
 
+        # Apply combo lock behavior right after loading UI
+        self._lock_combos()
+
         # ============================
         #     Setup UI
         # ============================
@@ -270,7 +307,6 @@ class FreeFactoryApp(QMainWindow):
         # after loading factories & building tabs
         if hasattr(self, "_wire_stream_tab_minimal"):
             self._wire_stream_tab_minimal()
-            
 
 
     # =============================
@@ -357,6 +393,7 @@ class FreeFactoryApp(QMainWindow):
         self.actionAboutFFmpeg.triggered.connect(self.show_about_ffmpeg)
         self.actionAboutFreeFactory.triggered.connect(self.show_about_dialog_existing)
         self.actionAddFactorytoStreamTable.triggered.connect(self.add_stream_to_table)
+
  
         # ---- Simple, idempotent codec wiring ----
         for combo, handler in [
@@ -419,16 +456,11 @@ class FreeFactoryApp(QMainWindow):
             last_good["text"] = (w.text() or "").strip()
             w.textEdited.connect(on_text_edited)
 
-        # attach with your intended bounds
+        # attach to intended bounds
         _install_live_clamp("lineEdit_DC",   -8, 16)
         _install_live_clamp("lineEdit_Qmin", -1, 69)
         _install_live_clamp("lineEdit_Qmax", -1, 1024)
-        
 
-
-
-
-                
 
     # =================================
     #       FFmpeg Help Buttons
@@ -785,6 +817,19 @@ class FreeFactoryApp(QMainWindow):
                 pass
 
 # --- 3) UI helpers (generic, widget-agnostic) --------------------------------
+
+# Make certain QComboBoxes editable-but-readonly so they reset cleanly while preventing users from typing values.
+# The list of locked combos is at the top of this file
+    def _lock_combos(self):
+        # Apply lock behavior to all combos listed in LOCKED_COMBOS.
+        for name in LOCKED_COMBOS:
+            cb = getattr(self, name, None)
+            if cb is not None:
+                cb.setEditable(True)
+                cb.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
+                cb.lineEdit().setReadOnly(True)
+
+
     # ============================
     #     Ghost Widgets when Copy
     #     Codec is selected Helpers
@@ -984,6 +1029,7 @@ class FreeFactoryApp(QMainWindow):
             # Subtitles
             "SubtitleCodecs":           "SUBTITLECODECS",           # QComboBox
             "checkRemoveA53cc":         "REMOVEA53CC",              # QCheckBox
+            "SubtitleStreamID":         "SUBTITLESTREAMID",         # QLineEdit
 
             # Audio
             "AudioCodec":               "AUDIOCODECS",              # QComboBox
@@ -2126,8 +2172,9 @@ class FreeFactoryApp(QMainWindow):
         self.listFactoryFiles.clearSelection()
         for field in self.findChildren(QLineEdit):
             field.clear()
-        for field in self.findChildren(QComboBox):
-            field.clear()
+        # This breaks a lot of crap!
+        # for field in self.findChildren(QComboBox):
+        #     field.clear()
 
         self.factory_dirty = True
 
