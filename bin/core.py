@@ -214,12 +214,11 @@ class FreeFactoryCore:
         return str(v).strip().lower() in {"1", "true", "yes", "on"}
     
 
-
-
 # This builds the ffmpeg command via cmd. 
     def build_ffmpeg_command(self, input_path, factory_data, preview=False):
         import shlex
         from pathlib import Path
+        fac = factory_data
         
         output_dir          = factory_data.get("OUTPUTDIRECTORY") or "."
         wrapper             = factory_data.get("VIDEOWRAPPER", "").strip().lstrip(".")
@@ -237,11 +236,10 @@ class FreeFactoryCore:
         video_codec         = factory_data.get("VIDEOCODECS", "").strip()
         video_flags         = factory_data.get("FLAGS", "").strip()
         video_flags2        = factory_data.get("FLAGS2", "").strip()
+        video_fflags        = factory_data.get("FFLAGS", "").strip()
         video_bitrate       = factory_data.get("VIDEOBITRATE", "").strip()
-
         video_framerate     = factory_data.get("VIDEOFRAMERATE", "").strip()
-        video_framerate_cfr = factory_data.get("FRAMERATECFR", "").strip()
-        
+        video_framerate_cfr = factory_data.get("FRAMERATECFR", "").strip()                  #CHECK
         video_profile       = factory_data.get("VIDEOPROFILE", "").strip()
         video_profile_level = factory_data.get("VIDEOPROFILELEVEL", "").strip()
         size                = factory_data.get("VIDEOSIZE", "").strip()
@@ -264,6 +262,7 @@ class FreeFactoryCore:
         force_format        = factory_data.get("FORCEFORMAT", "").strip()
         video_stream_id     = factory_data.get("VIDEOSTREAMID", "").strip()
         audio_stream_id     = factory_data.get("AUDIOSTREAMID", "").strip()
+        subs_stream_id      = factory_data.get("SUBTITLESTREAMID", "").strip()
         vf                  = (factory_data.get("VIDEOFILTERS")  or "").strip()
         af                  = (factory_data.get("AUDIOFILTERS")  or "").strip()
         disablevideo        = (factory_data.get("DISABLEVIDEO")  or "").strip()
@@ -329,6 +328,9 @@ class FreeFactoryCore:
 
         if video_flags2:
             cmd += ["-flags2", video_flags2]
+
+        if video_fflags:
+            cmd += ["-fflags", video_fflags]
 
         if video_bitrate:
             cmd += ["-b:v", video_bitrate]
@@ -401,10 +403,6 @@ class FreeFactoryCore:
                 cmd[-1] = adv_qmin  # replace qmax value
         except ValueError:
             pass
-
-
-
-
 # End Advanced Video:
 
         if video_profile:
@@ -433,7 +431,6 @@ class FreeFactoryCore:
             cmd += ["-s", size]          
         if pix_format:
             cmd += ["-pix_fmt", pix_format]
-
             
         #=======Subtitles
         # normalize the flag (handles None, "false", "False", etc.)
@@ -453,16 +450,18 @@ class FreeFactoryCore:
             cmd += ["-ar", sample_rate]
         if audio_channels:
             cmd += ["-ac", audio_channels]
+
+        # Audio Filters
         if af and not af.endswith("="):
             cmd += ["-af", af]
-        #if audio_tags:
-        #    cmd += ["-tags:a", audio_tags]
         
         #=======Stream mapping
         if video_stream_id:
             cmd += ["-streamid:v", video_stream_id]
         if audio_stream_id:
             cmd += ["-streamid:a", audio_stream_id]
+        if subs_stream_id:
+            cmd += ["-streamid:s", subs_stream_id]
 
         #=======Output seeking
         if encode_length:
@@ -530,6 +529,7 @@ class FreeFactoryCore:
         video_codec     = factory_data.get("VIDEOCODECS", "").strip()
         video_flags     = factory_data.get("FLAGS", "").strip()
         video_flags2    = factory_data.get("FLAGS2", "").strip()
+        video_fflags    = factory_data.get("FFLAGS", "").strip()
         audio_codec     = factory_data.get("AUDIOCODECS", "").strip()
         preset          = factory_data.get("VIDEOPRESET", "").strip()
         video_bitrate   = factory_data.get("VIDEOBITRATE", "").strip()
@@ -547,6 +547,8 @@ class FreeFactoryCore:
             flags += ["-flags", video_flags]
         if video_flags2:
             flags += ["-flags2", video_flags2]
+        if video_fflags:
+            flags += ["-fflags", video_fflags]
         if video_bitrate:
             flags += ["-b:v", video_bitrate]
         if preset:

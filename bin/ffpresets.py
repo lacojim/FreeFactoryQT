@@ -2,8 +2,15 @@
 # Central map of encoders → preset values.
 # Only includes encoders with a native "-preset" option.
 # This is used to populate the VideoPreset QComboBox with presets conforming to the selected video codec.
+# To-Add mpeg2_qsv, vp9_qsv
 
 # --- Shared dicts ---
+
+# Apple ProRes (prores_ks)
+PRORES_KS_PRESETS = {
+    "values": ["hq", "4444", "lt", "proxy"],
+    "default": "lt",
+}
 
 # x264 / x265
 X26X_PRESETS = {
@@ -65,9 +72,13 @@ ENCODER_PRESETS = {
     "h264_qsv": QSV_PRESETS,
     "hevc_qsv": QSV_PRESETS,
     "av1_qsv": QSV_PRESETS,
+    "mpeg2_qsv": QSV_PRESETS,
 
     # SVT-AV1
     "libsvtav1": SVT_AV1_PRESETS,
+    
+    # PRORES
+    "prores_ks": PRORES_KS_PRESETS
 }
 
 
@@ -88,30 +99,5 @@ def get_presets_for(encoder: str):
     labels = spec.get("labels", {})
 
     return values, default, labels
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

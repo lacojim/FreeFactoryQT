@@ -395,7 +395,7 @@ FreeFactory-service is running.</string>
          </font>
         </property>
         <property name="toolTip">
-         <string>Any fields left empty will default from the input video file.</string>
+         <string>If applicable, all blank fields will follow the input source.</string>
         </property>
         <property name="styleSheet">
          <string notr="true"/>
@@ -549,6 +549,11 @@ Choosing 'copy' locks most video options (bitrate, size, profile, filters, etc).
          <item>
           <property name="text">
            <string>mpeg2video</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mpeg2_qsv</string>
           </property>
          </item>
          <item>
@@ -853,7 +858,17 @@ Audio File Extension. You CANNOT use both.</string>
          </item>
          <item>
           <property name="text">
+           <string>50.000</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>60.000</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>60000/1001</string>
           </property>
          </item>
          <item>
@@ -1254,7 +1269,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="geometry">
           <rect>
            <x>410</x>
-           <y>55</y>
+           <y>25</y>
            <width>91</width>
            <height>25</height>
           </rect>
@@ -1308,7 +1323,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="geometry">
           <rect>
            <x>340</x>
-           <y>58</y>
+           <y>28</y>
            <width>41</width>
            <height>17</height>
           </rect>
@@ -1399,6 +1414,11 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <item>
           <property name="text">
            <string>yuvj420p</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>yuv420p10le</string>
           </property>
          </item>
          <item>
@@ -1513,6 +1533,36 @@ You can also manually add extra options after the rate such as minrate 50M maxra
            <string>high444</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>--DNxHD--</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>dnxhr_lb</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>dnxhr_sq</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>dnxhr_hq</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>dnxhr_hqx</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>dnxhr_444</string>
+          </property>
+         </item>
         </widget>
         <widget class="QComboBox" name="VideoProfileLevel">
          <property name="enabled">
@@ -1521,7 +1571,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="geometry">
           <rect>
            <x>410</x>
-           <y>25</y>
+           <y>55</y>
            <width>91</width>
            <height>25</height>
           </rect>
@@ -1655,7 +1705,7 @@ You can also manually add extra options after the rate such as minrate 50M maxra
          <property name="geometry">
           <rect>
            <x>340</x>
-           <y>28</y>
+           <y>58</y>
            <width>71</width>
            <height>17</height>
           </rect>
@@ -1700,7 +1750,7 @@ Usually only needed for professional codecs.</string>
          <property name="geometry">
           <rect>
            <x>570</x>
-           <y>55</y>
+           <y>85</y>
            <width>111</width>
            <height>25</height>
           </rect>
@@ -1723,7 +1773,7 @@ Usually only needed for professional codecs.</string>
          <property name="geometry">
           <rect>
            <x>520</x>
-           <y>58</y>
+           <y>88</y>
            <width>51</width>
            <height>17</height>
           </rect>
@@ -1747,7 +1797,7 @@ Usually only needed for professional codecs.</string>
           <rect>
            <x>76</x>
            <y>160</y>
-           <width>471</width>
+           <width>601</width>
            <height>25</height>
           </rect>
          </property>
@@ -2052,6 +2102,75 @@ Ensures strict frame pacing by duplicating or dropping frames as needed.
           <string>Force Constant Frame Rate</string>
          </property>
         </widget>
+        <widget class="QComboBox" name="VideoTag">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>570</x>
+           <y>55</y>
+           <width>111</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Add Specific video tags. Adds -tag:v to cmmand line.
+ie. For Apple mobile device compatibility, add hvc1.</string>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>hvc1</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QLabel" name="l_VideoTag">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>520</x>
+           <y>58</y>
+           <width>41</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Add Specific video tags. Adds -tag:v to cmmand line.</string>
+         </property>
+         <property name="text">
+          <string>Tags</string>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QWidget" name="tabAudio">
@@ -2075,7 +2194,7 @@ Ensures strict frame pacing by duplicating or dropping frames as needed.
          </font>
         </property>
         <property name="toolTip">
-         <string>Any fields left empty will default from the input audio file.</string>
+         <string>If applicable, all blank fields will follow the input source.</string>
         </property>
         <property name="title">
          <string>Audio Encode Options</string>
@@ -2156,6 +2275,11 @@ Choosing 'copy' locks most audio options (bitrate, sample rate, channels, filter
          </item>
          <item>
           <property name="text">
+           <string>libopus</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>libvorbis</string>
           </property>
          </item>
@@ -2182,11 +2306,6 @@ Choosing 'copy' locks most audio options (bitrate, sample rate, channels, filter
          <item>
           <property name="text">
            <string>pcm_s32le</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>s302m</string>
           </property>
          </item>
         </widget>
@@ -3572,7 +3691,7 @@ For advanced/broadcast workflows only.
           <widget class="QLabel" name="l_ColorPrimaries">
            <property name="geometry">
             <rect>
-             <x>200</x>
+             <x>240</x>
              <y>60</y>
              <width>81</width>
              <height>16</height>
@@ -3592,9 +3711,9 @@ For advanced/broadcast workflows only.
           <widget class="QComboBox" name="ColorPrimaries">
            <property name="geometry">
             <rect>
-             <x>330</x>
+             <x>370</x>
              <y>57</y>
-             <width>81</width>
+             <width>101</width>
              <height>22</height>
             </rect>
            </property>
@@ -3697,7 +3816,7 @@ For advanced/broadcast workflows only.
             <rect>
              <x>100</x>
              <y>57</y>
-             <width>81</width>
+             <width>121</width>
              <height>22</height>
             </rect>
            </property>
@@ -3795,7 +3914,7 @@ For advanced/broadcast workflows only.
             <rect>
              <x>100</x>
              <y>24</y>
-             <width>81</width>
+             <width>121</width>
              <height>22</height>
             </rect>
            </property>
@@ -3948,7 +4067,7 @@ For advanced/broadcast workflows only.
             <rect>
              <x>100</x>
              <y>87</y>
-             <width>81</width>
+             <width>121</width>
              <height>22</height>
             </rect>
            </property>
@@ -4065,7 +4184,7 @@ For advanced/broadcast workflows only.
           <widget class="QLabel" name="l_ColorSampleLocation">
            <property name="geometry">
             <rect>
-             <x>200</x>
+             <x>240</x>
              <y>27</y>
              <width>131</width>
              <height>16</height>
@@ -4085,9 +4204,9 @@ For advanced/broadcast workflows only.
           <widget class="QComboBox" name="ColorSampleLocation">
            <property name="geometry">
             <rect>
-             <x>330</x>
+             <x>370</x>
              <y>24</y>
-             <width>81</width>
+             <width>101</width>
              <height>22</height>
             </rect>
            </property>
@@ -4773,33 +4892,49 @@ mpeg2video</string>
          <attribute name="title">
           <string>Flags Builders</string>
          </attribute>
-         <widget class="QGroupBox" name="groupFlags">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
+         <widget class="QTabWidget" name="tabWidget_2">
           <property name="geometry">
            <rect>
-            <x>10</x>
-            <y>10</y>
-            <width>401</width>
-            <height>121</height>
+            <x>0</x>
+            <y>0</y>
+            <width>831</width>
+            <height>171</height>
            </rect>
           </property>
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-            <italic>false</italic>
-            <bold>true</bold>
-           </font>
+          <property name="currentIndex">
+           <number>0</number>
           </property>
-          <property name="toolTip">
-           <string>Advanced encoder bitstream flags (-flags). 
+          <widget class="QWidget" name="tabFlags_and_Flags_2">
+           <attribute name="title">
+            <string>Flags and Flags2</string>
+           </attribute>
+           <widget class="QGroupBox" name="groupFlags">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>10</y>
+              <width>401</width>
+              <height>121</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <italic>false</italic>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>Advanced encoder bitstream flags (-flags). 
 Optional; most encodes don’t need these.
 Checked items are collected into FLAGS as +tokens. 
 Disabled when Video Codec=copy.</string>
-          </property>
-          <property name="whatsThis">
-           <string>Flags Builder (-flags)
+            </property>
+            <property name="whatsThis">
+             <string>Flags Builder (-flags)
 These are low-level encoder switches. Use only when required by your workflow.
     Common cases:
      • +ildct +ilme → interlaced encoding (with interlaced field order)
@@ -4808,402 +4943,402 @@ These are low-level encoder switches. Use only when required by your workflow.
     Notes:
      • Order doesn’t matter; the text box shows the exact string that will be passed.
      • Ignored when Video Codec is ‘copy’. Saved to the factory as FLAGS=…</string>
-          </property>
-          <property name="title">
-           <string>Flags Builder</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
-          </property>
-          <widget class="QLineEdit" name="FlagsCollector">
-           <property name="geometry">
-            <rect>
-             <x>30</x>
-             <y>90</y>
-             <width>361</width>
-             <height>22</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Flags Builder</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_unaligned">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>20</y>
-             <width>82</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Allow decoders to produce unaligned output.</string>
-           </property>
-           <property name="text">
-            <string>unaligned</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_mv4">
-           <property name="geometry">
-            <rect>
-             <x>340</x>
-             <y>60</y>
-             <width>41</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Use four motion vectors per macroblock (MPEG-4).</string>
-           </property>
-           <property name="text">
-            <string>mv4</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_qpel">
-           <property name="geometry">
-            <rect>
-             <x>190</x>
-             <y>20</y>
-             <width>41</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Use 1/4-pel motion compensation.</string>
-           </property>
-           <property name="text">
-            <string>qpel</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_loop">
-           <property name="geometry">
-            <rect>
-             <x>270</x>
-             <y>20</y>
-             <width>41</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Use loop filter.</string>
-           </property>
-           <property name="text">
-            <string>loop</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_gray">
-           <property name="geometry">
-            <rect>
-             <x>340</x>
-             <y>20</y>
-             <width>41</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Only decode/encode grayscale.</string>
-           </property>
-           <property name="text">
-            <string>gray</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_psnr">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>40</y>
-             <width>41</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Error[?] variables will be set during encoding.</string>
-           </property>
-           <property name="text">
-            <string>psnr</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_ildct">
-           <property name="geometry">
-            <rect>
-             <x>110</x>
-             <y>40</y>
-             <width>41</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Use interlaced DCT.</string>
-           </property>
-           <property name="text">
-            <string>ildct</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_low_delay">
-           <property name="geometry">
-            <rect>
-             <x>190</x>
-             <y>40</y>
-             <width>71</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Force low delay.</string>
-           </property>
-           <property name="text">
-            <string>low_delay</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_global_header">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>60</y>
-             <width>91</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Place global headers in extradata instead of every keyframe.</string>
-           </property>
-           <property name="text">
-            <string>global_header</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_bitexact">
-           <property name="geometry">
-            <rect>
-             <x>110</x>
-             <y>60</y>
-             <width>71</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Use only bitexact functions (except (I)DCT).</string>
-           </property>
-           <property name="text">
-            <string>bitexact</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_aic">
-           <property name="geometry">
-            <rect>
-             <x>270</x>
-             <y>40</y>
-             <width>41</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>H.263 advanced intra coding / MPEG-4 AC prediction.</string>
-           </property>
-           <property name="text">
-            <string>aic</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_ilme">
-           <property name="geometry">
-            <rect>
-             <x>110</x>
-             <y>20</y>
-             <width>41</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Interlaced motion estimation.</string>
-           </property>
-           <property name="text">
-            <string>ilme</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_cgop">
-           <property name="geometry">
-            <rect>
-             <x>340</x>
-             <y>40</y>
-             <width>41</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Closed GOP.</string>
-           </property>
-           <property name="text">
-            <string>cgop</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags_output_corrupt">
-           <property name="geometry">
-            <rect>
-             <x>190</x>
-             <y>60</y>
-             <width>91</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Output even potentially corrupted frames.</string>
-           </property>
-           <property name="text">
-            <string>output_corrupt</string>
-           </property>
-          </widget>
-          <widget class="QToolButton" name="clearFlags">
-           <property name="geometry">
-            <rect>
-             <x>3</x>
-             <y>91</y>
-             <width>28</width>
-             <height>21</height>
-            </rect>
-           </property>
-           <property name="toolTip">
-            <string>Clear Flags</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
-           </property>
-          </widget>
-         </widget>
-         <widget class="QGroupBox" name="groupFlags2">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>420</x>
-            <y>10</y>
-            <width>391</width>
-            <height>121</height>
-           </rect>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-            <italic>false</italic>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="toolTip">
-           <string>Additional/legacy flags (-flags2). Mostly for analysis or bitstream quirks.
+            </property>
+            <property name="title">
+             <string>Flags Builder</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+            <widget class="QLineEdit" name="FlagsCollector">
+             <property name="geometry">
+              <rect>
+               <x>30</x>
+               <y>90</y>
+               <width>361</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Flags Builder</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_unaligned">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>20</y>
+               <width>82</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Allow decoders to produce unaligned output.</string>
+             </property>
+             <property name="text">
+              <string>unaligned</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_mv4">
+             <property name="geometry">
+              <rect>
+               <x>340</x>
+               <y>60</y>
+               <width>41</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Use four motion vectors per macroblock (MPEG-4).</string>
+             </property>
+             <property name="text">
+              <string>mv4</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_qpel">
+             <property name="geometry">
+              <rect>
+               <x>190</x>
+               <y>20</y>
+               <width>41</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Use 1/4-pel motion compensation.</string>
+             </property>
+             <property name="text">
+              <string>qpel</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_loop">
+             <property name="geometry">
+              <rect>
+               <x>270</x>
+               <y>20</y>
+               <width>41</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Use loop filter.</string>
+             </property>
+             <property name="text">
+              <string>loop</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_gray">
+             <property name="geometry">
+              <rect>
+               <x>340</x>
+               <y>20</y>
+               <width>41</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Only decode/encode grayscale.</string>
+             </property>
+             <property name="text">
+              <string>gray</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_psnr">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>40</y>
+               <width>41</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Error[?] variables will be set during encoding.</string>
+             </property>
+             <property name="text">
+              <string>psnr</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_ildct">
+             <property name="geometry">
+              <rect>
+               <x>110</x>
+               <y>40</y>
+               <width>41</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Use interlaced DCT.</string>
+             </property>
+             <property name="text">
+              <string>ildct</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_low_delay">
+             <property name="geometry">
+              <rect>
+               <x>190</x>
+               <y>40</y>
+               <width>71</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Force low delay.</string>
+             </property>
+             <property name="text">
+              <string>low_delay</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_global_header">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>60</y>
+               <width>91</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Place global headers in extradata instead of every keyframe.</string>
+             </property>
+             <property name="text">
+              <string>global_header</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_bitexact">
+             <property name="geometry">
+              <rect>
+               <x>110</x>
+               <y>60</y>
+               <width>71</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Use only bitexact functions (except (I)DCT).</string>
+             </property>
+             <property name="text">
+              <string>bitexact</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_aic">
+             <property name="geometry">
+              <rect>
+               <x>270</x>
+               <y>40</y>
+               <width>41</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>H.263 advanced intra coding / MPEG-4 AC prediction.</string>
+             </property>
+             <property name="text">
+              <string>aic</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_ilme">
+             <property name="geometry">
+              <rect>
+               <x>110</x>
+               <y>20</y>
+               <width>41</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Interlaced motion estimation.</string>
+             </property>
+             <property name="text">
+              <string>ilme</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_cgop">
+             <property name="geometry">
+              <rect>
+               <x>340</x>
+               <y>40</y>
+               <width>41</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Closed GOP.</string>
+             </property>
+             <property name="text">
+              <string>cgop</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags_output_corrupt">
+             <property name="geometry">
+              <rect>
+               <x>190</x>
+               <y>60</y>
+               <width>91</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Output even potentially corrupted frames.</string>
+             </property>
+             <property name="text">
+              <string>output_corrupt</string>
+             </property>
+            </widget>
+            <widget class="QToolButton" name="clearFlags">
+             <property name="geometry">
+              <rect>
+               <x>3</x>
+               <y>91</y>
+               <width>28</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="toolTip">
+              <string>Clear Flags</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
+             </property>
+            </widget>
+           </widget>
+           <widget class="QGroupBox" name="groupFlags2">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="geometry">
+             <rect>
+              <x>410</x>
+              <y>10</y>
+              <width>401</width>
+              <height>121</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <italic>false</italic>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>Additional/legacy flags (-flags2). Mostly for analysis or bitstream quirks.
 Checked items are collected into FLAGS2 as +tokens. 
 Often ignored by some encoders.</string>
-          </property>
-          <property name="whatsThis">
-           <string>Flags2 Builder (-flags2)
+            </property>
+            <property name="whatsThis">
+             <string>Flags2 Builder (-flags2)
 Specialized/auxiliary flags. These are rarely needed for typical encodes.
     Examples:
      • +export_mvs → expose motion vectors (useful with -vf codecview for analysis)
@@ -5212,282 +5347,648 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
     Notes:
      • Many flags are codec- or container-specific; harmless if unsupported.
      • Ignored when Video Codec is ‘copy’. Saved to the factory as FLAGS2=…</string>
-          </property>
-          <property name="title">
-           <string>Flags2 Builder</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
-          </property>
-          <widget class="QLineEdit" name="Flags2Collector">
-           <property name="geometry">
-            <rect>
-             <x>30</x>
-             <y>90</y>
-             <width>351</width>
-             <height>22</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Flags2 Builder</string>
-           </property>
+            </property>
+            <property name="title">
+             <string>Flags2 Builder</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+            <widget class="QLineEdit" name="Flags2Collector">
+             <property name="geometry">
+              <rect>
+               <x>30</x>
+               <y>90</y>
+               <width>351</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Flags2 Builder</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags2_fast">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>20</y>
+               <width>41</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Allow non-spec-compliant speedup tricks.</string>
+             </property>
+             <property name="text">
+              <string>fast</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags2_noout">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>20</y>
+               <width>51</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Skip bitstream encoding.</string>
+             </property>
+             <property name="text">
+              <string>noout</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags2_ignorecrop">
+             <property name="geometry">
+              <rect>
+               <x>130</x>
+               <y>20</y>
+               <width>81</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Ignore cropping information from sps.</string>
+             </property>
+             <property name="text">
+              <string>ignorecrop</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags2_local_header">
+             <property name="geometry">
+              <rect>
+               <x>220</x>
+               <y>20</y>
+               <width>81</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Place global headers at every keyframe instead of in extradata.</string>
+             </property>
+             <property name="text">
+              <string>local_header</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags2_chunks">
+             <property name="geometry">
+              <rect>
+               <x>320</x>
+               <y>20</y>
+               <width>61</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Frame data might be split into multiple chunks.</string>
+             </property>
+             <property name="text">
+              <string>chunks</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags2_showall">
+             <property name="geometry">
+              <rect>
+               <x>320</x>
+               <y>40</y>
+               <width>61</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Show all frames before the first keyframe.</string>
+             </property>
+             <property name="text">
+              <string>showall</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags2_export_mvs">
+             <property name="geometry">
+              <rect>
+               <x>130</x>
+               <y>40</y>
+               <width>81</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Export motion vectors through frame side data.</string>
+             </property>
+             <property name="text">
+              <string>export_mvs</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags2_skip_manual">
+             <property name="geometry">
+              <rect>
+               <x>220</x>
+               <y>40</y>
+               <width>81</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Do not skip samples and export skip information as frame side data.</string>
+             </property>
+             <property name="text">
+              <string>skip_manual</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags2_ass_ro_flush_noop">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>40</y>
+               <width>111</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Do not reset ASS ReadOrder field on flush.</string>
+             </property>
+             <property name="text">
+              <string>ass_ro_flush_noop</string>
+             </property>
+            </widget>
+            <widget class="QToolButton" name="clearFlags2">
+             <property name="geometry">
+              <rect>
+               <x>3</x>
+               <y>91</y>
+               <width>28</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="toolTip">
+              <string>Clear Flags2</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFlags2_icc_profiles">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>60</y>
+               <width>81</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Generate/parse embedded ICC profiles from/to colorimetry tags.</string>
+             </property>
+             <property name="text">
+              <string>icc_profiles</string>
+             </property>
+            </widget>
+           </widget>
           </widget>
-          <widget class="QCheckBox" name="checkFlags2_fast">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>20</y>
-             <width>41</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Allow non-spec-compliant speedup tricks.</string>
-           </property>
-           <property name="text">
-            <string>fast</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags2_noout">
-           <property name="geometry">
-            <rect>
-             <x>70</x>
-             <y>20</y>
-             <width>51</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Skip bitstream encoding.</string>
-           </property>
-           <property name="text">
-            <string>noout</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags2_ignorecrop">
-           <property name="geometry">
-            <rect>
-             <x>130</x>
-             <y>20</y>
-             <width>81</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Ignore cropping information from sps.</string>
-           </property>
-           <property name="text">
-            <string>ignorecrop</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags2_local_header">
-           <property name="geometry">
-            <rect>
-             <x>220</x>
-             <y>20</y>
-             <width>81</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Place global headers at every keyframe instead of in extradata.</string>
-           </property>
-           <property name="text">
-            <string>local_header</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags2_chunks">
-           <property name="geometry">
-            <rect>
-             <x>320</x>
-             <y>20</y>
-             <width>61</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Frame data might be split into multiple chunks.</string>
-           </property>
-           <property name="text">
-            <string>chunks</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags2_showall">
-           <property name="geometry">
-            <rect>
-             <x>320</x>
-             <y>40</y>
-             <width>61</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Show all frames before the first keyframe.</string>
-           </property>
-           <property name="text">
-            <string>showall</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags2_export_mvs">
-           <property name="geometry">
-            <rect>
-             <x>130</x>
-             <y>40</y>
-             <width>81</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Export motion vectors through frame side data.</string>
-           </property>
-           <property name="text">
-            <string>export_mvs</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags2_skip_manual">
-           <property name="geometry">
-            <rect>
-             <x>220</x>
-             <y>40</y>
-             <width>81</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Do not skip samples and export skip information as frame side data.</string>
-           </property>
-           <property name="text">
-            <string>skip_manual</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags2_ass_ro_flush_noop">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>40</y>
-             <width>111</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Do not reset ASS ReadOrder field on flush.</string>
-           </property>
-           <property name="text">
-            <string>ass_ro_flush_noop</string>
-           </property>
-          </widget>
-          <widget class="QToolButton" name="clearFlags2">
-           <property name="geometry">
-            <rect>
-             <x>3</x>
-             <y>91</y>
-             <width>28</width>
-             <height>21</height>
-            </rect>
-           </property>
-           <property name="toolTip">
-            <string>Clear Flags2</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkFlags2_icc_profiles">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>60</y>
-             <width>81</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Generate/parse embedded ICC profiles from/to colorimetry tags.</string>
-           </property>
-           <property name="text">
-            <string>icc_profiles</string>
-           </property>
+          <widget class="QWidget" name="tabFFlags">
+           <attribute name="title">
+            <string>FFlags</string>
+           </attribute>
+           <widget class="QGroupBox" name="groupFFlags">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>10</y>
+              <width>401</width>
+              <height>121</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <italic>false</italic>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>Additional/legacy flags (-flags2). Mostly for analysis or bitstream quirks.
+Checked items are collected into FLAGS2 as +tokens. 
+Often ignored by some encoders.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Flags2 Builder (-flags2)
+Specialized/auxiliary flags. These are rarely needed for typical encodes.
+    Examples:
+     • +export_mvs → expose motion vectors (useful with -vf codecview for analysis)
+     • +ignorecrop, +local_header, +chunks → bitstream/container behavior toggles
+     • +fast, +showall, etc. → niche/legacy behaviors that may be ignored by codecs
+    Notes:
+     • Many flags are codec- or container-specific; harmless if unsupported.
+     • Ignored when Video Codec is ‘copy’. Saved to the factory as FLAGS2=…</string>
+            </property>
+            <property name="title">
+             <string>FFlags Builder</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+            <widget class="QLineEdit" name="FFlagsCollector">
+             <property name="geometry">
+              <rect>
+               <x>30</x>
+               <y>90</y>
+               <width>351</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Flags2 Builder</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFFlags_ignidx">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>20</y>
+               <width>51</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Ignore index.</string>
+             </property>
+             <property name="text">
+              <string>ignidx</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFFlags_igndts">
+             <property name="geometry">
+              <rect>
+               <x>80</x>
+               <y>20</y>
+               <width>51</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Ignore dts.</string>
+             </property>
+             <property name="text">
+              <string>igndts</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFFlags_discardcorrupt">
+             <property name="geometry">
+              <rect>
+               <x>150</x>
+               <y>20</y>
+               <width>91</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Discard corrupted frames.</string>
+             </property>
+             <property name="text">
+              <string>discardcorrupt</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFFlags_fastseek">
+             <property name="geometry">
+              <rect>
+               <x>250</x>
+               <y>20</y>
+               <width>81</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Fast but inaccurate seeks.</string>
+             </property>
+             <property name="text">
+              <string>fastseek</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFFlags_nobuffer">
+             <property name="geometry">
+              <rect>
+               <x>250</x>
+               <y>40</y>
+               <width>61</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Reduce the latency introduced by optional buffering.</string>
+             </property>
+             <property name="text">
+              <string>nobuffer</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFFlags_sortdts">
+             <property name="geometry">
+              <rect>
+               <x>80</x>
+               <y>40</y>
+               <width>61</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Try to interleave outputted packets by dts.</string>
+             </property>
+             <property name="text">
+              <string>sortdts</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFFlags_flush_packets">
+             <property name="geometry">
+              <rect>
+               <x>150</x>
+               <y>40</y>
+               <width>91</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Reduce the latency by flushing out packets immediately.</string>
+             </property>
+             <property name="text">
+              <string>flush_packets</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFFlags_nofillin">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>40</y>
+               <width>51</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Do not fill in missing values that can be exactly calculated.</string>
+             </property>
+             <property name="text">
+              <string>nofillin</string>
+             </property>
+            </widget>
+            <widget class="QToolButton" name="clearFFlags">
+             <property name="geometry">
+              <rect>
+               <x>3</x>
+               <y>91</y>
+               <width>28</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="toolTip">
+              <string>Clear Flags2</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFFlags_genpts">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>60</y>
+               <width>61</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Generate pts.</string>
+             </property>
+             <property name="text">
+              <string>genpts</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFFlags_bitexact">
+             <property name="geometry">
+              <rect>
+               <x>80</x>
+               <y>60</y>
+               <width>71</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Do not write random/volatile data.</string>
+             </property>
+             <property name="text">
+              <string>bitexact</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFFlags_autobsf">
+             <property name="geometry">
+              <rect>
+               <x>150</x>
+               <y>60</y>
+               <width>81</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Add needed bsfs automatically.</string>
+             </property>
+             <property name="text">
+              <string>autobsf</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkFFlags_noparse">
+             <property name="geometry">
+              <rect>
+               <x>250</x>
+               <y>60</y>
+               <width>61</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Disable AVParsers.
+This needs nofillin too.</string>
+             </property>
+             <property name="text">
+              <string>noparse</string>
+             </property>
+            </widget>
+           </widget>
           </widget>
          </widget>
         </widget>
@@ -5840,8 +6341,8 @@ If you need this on Input (which is more efficient), use Manual Input Opts below
      <widget class="QGroupBox" name="groupServiceOptions">
       <property name="geometry">
        <rect>
-        <x>240</x>
-        <y>470</y>
+        <x>239</x>
+        <y>490</y>
         <width>341</width>
         <height>41</height>
        </rect>
@@ -6085,7 +6586,7 @@ the final output file (-f / filename) and are not otherwise available through th
 otherwise available through the GUI.</string>
       </property>
       <property name="placeholderText">
-       <string>-f lavfi -sample_rate 44100 -f s16le</string>
+       <string>-hwaccel cuda -hwaccel_output_format cuda</string>
       </property>
      </widget>
      <widget class="QPushButton" name="PreviewCommand">
@@ -6160,15 +6661,7 @@ substituted with real paths when the job runs.</string>
        <string/>
       </property>
       <property name="styleSheet">
-       <string notr="true">QGroupBox {
-    background-color: #e8e8e8;
-    border: 1px solid #448aff;
-    border-radius: 6px;
-	margin-top: 1.5em;
-}
-QGroupBox QComboBox {
-    font: 8pt &quot;Sans Serif&quot;;
-}</string>
+       <string notr="true"/>
       </property>
       <property name="title">
        <string>Final Output (Video/Audio)</string>
@@ -6185,6 +6678,7 @@ QGroupBox QComboBox {
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -6353,9 +6847,9 @@ FFmpeg command string.</string>
      <widget class="QGroupBox" name="groupBox_2">
       <property name="geometry">
        <rect>
-        <x>700</x>
+        <x>680</x>
         <y>470</y>
-        <width>191</width>
+        <width>211</width>
         <height>51</height>
        </rect>
       </property>
@@ -6375,7 +6869,7 @@ FFmpeg command string.</string>
       <widget class="QCheckBox" name="checkDisableData">
        <property name="geometry">
         <rect>
-         <x>100</x>
+         <x>120</x>
          <y>30</y>
          <width>91</width>
          <height>20</height>
@@ -6444,7 +6938,7 @@ FFmpeg command string.</string>
       <widget class="QCheckBox" name="checkDisableAudio">
        <property name="geometry">
         <rect>
-         <x>100</x>
+         <x>120</x>
          <y>14</y>
          <width>91</width>
          <height>20</height>
@@ -6468,8 +6962,8 @@ FFmpeg command string.</string>
      <widget class="QCheckBox" name="checkMultiOutput">
       <property name="geometry">
        <rect>
-        <x>250</x>
-        <y>510</y>
+        <x>240</x>
+        <y>464</y>
         <width>141</width>
         <height>20</height>
        </rect>
@@ -6533,6 +7027,19 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
       </property>
       <property name="text">
        <string>Enable Multi-Output</string>
+      </property>
+     </widget>
+     <widget class="Line" name="line_5">
+      <property name="geometry">
+       <rect>
+        <x>625</x>
+        <y>400</y>
+        <width>20</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
       </property>
      </widget>
     </widget>
