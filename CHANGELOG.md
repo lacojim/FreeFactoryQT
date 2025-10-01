@@ -3,10 +3,29 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.36-dev] - 2025-10-01
+
+### Various small fixes.
+
+
+## [1.1.35-dev] - 2025-09-24
+
+### Bug Fix
+- **Delete Factory**
+  - Deleting a factory was not clearing all fields. Fixed.
+  
+
+## [1.1.34-dev] - 2025-09-22
+
+### Added
+- **FFlags**
+  - Added FFlags to the Video Advanced Flags Builders tab.
+    - Further expanded flag options.
+
 
 ## [1.1.33-dev] - 2025-09-21
 
-### Added
+### Bug Fix
 - **UI**
   - Bug Fix **ComboBoxes data cleared when clicking New Factory**
     - By making the newer comboboxes editable, then locking them from manual input, it makes clearing them so much easier. Before doing this fix, all comboboxes were being completely cleared which was very bad.
