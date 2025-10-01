@@ -322,6 +322,7 @@ class FreeFactoryApp(QMainWindow):
         self.ViewLicense.clicked.connect(self.show_license)
         self.AboutFreeFactory.clicked.connect(self.show_about)
         self.toolButton_outputDir.clicked.connect(self.select_output_directory)
+        self.toolButton_notifyDir.clicked.connect(self.select_notify_directory)
         self.PreviewCommand.clicked.connect(self.on_generate_command)
        
         # FreeFactory Factory Management Buttons

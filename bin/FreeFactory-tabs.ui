@@ -3422,8 +3422,8 @@ Supported by mpeg2video, H.264 and HEVC video codecs.</string>
           <widget class="QComboBox" name="FrameStrategy">
            <property name="geometry">
             <rect>
-             <x>330</x>
-             <y>60</y>
+             <x>314</x>
+             <y>47</y>
              <width>51</width>
              <height>25</height>
             </rect>
@@ -3451,11 +3451,6 @@ Range and Defaults are codec dependent.</string>
            </item>
            <item>
             <property name="text">
-             <string>-1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
              <string>0</string>
             </property>
            </item>
@@ -3473,8 +3468,8 @@ Range and Defaults are codec dependent.</string>
           <widget class="QLabel" name="l_VideoGroupPicSize">
            <property name="geometry">
             <rect>
-             <x>152</x>
-             <y>64</y>
+             <x>136</x>
+             <y>51</y>
              <width>51</width>
              <height>17</height>
             </rect>
@@ -3493,8 +3488,8 @@ Range and Defaults are codec dependent.</string>
           <widget class="QLabel" name="l_FrameStrategy">
            <property name="geometry">
             <rect>
-             <x>250</x>
-             <y>63</y>
+             <x>234</x>
+             <y>50</y>
              <width>81</width>
              <height>17</height>
             </rect>
@@ -3516,8 +3511,8 @@ Range and Defaults are codec dependent.</string>
            </property>
            <property name="geometry">
             <rect>
-             <x>98</x>
-             <y>24</y>
+             <x>82</x>
+             <y>11</y>
              <width>101</width>
              <height>25</height>
             </rect>
@@ -3583,8 +3578,8 @@ For advanced/broadcast workflows only.
           <widget class="QLabel" name="l_VideoBFrames">
            <property name="geometry">
             <rect>
-             <x>27</x>
-             <y>63</y>
+             <x>11</x>
+             <y>50</y>
              <width>51</width>
              <height>17</height>
             </rect>
@@ -3603,8 +3598,8 @@ For advanced/broadcast workflows only.
           <widget class="QLineEdit" name="VideoBFrames">
            <property name="geometry">
             <rect>
-             <x>99</x>
-             <y>60</y>
+             <x>83</x>
+             <y>47</y>
              <width>31</width>
              <height>25</height>
             </rect>
@@ -3623,8 +3618,8 @@ For advanced/broadcast workflows only.
           <widget class="QLabel" name="l_VideoFormat">
            <property name="geometry">
             <rect>
-             <x>26</x>
-             <y>28</y>
+             <x>10</x>
+             <y>15</y>
              <width>71</width>
              <height>17</height>
             </rect>
@@ -3643,8 +3638,8 @@ For advanced/broadcast workflows only.
           <widget class="QLineEdit" name="VideoGroupPicSize">
            <property name="geometry">
             <rect>
-             <x>200</x>
-             <y>60</y>
+             <x>184</x>
+             <y>47</y>
              <width>31</width>
              <height>25</height>
             </rect>
