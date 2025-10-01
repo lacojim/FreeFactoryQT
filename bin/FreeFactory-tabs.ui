@@ -2122,7 +2122,7 @@ Ensures strict frame pacing by duplicating or dropping frames as needed.
           </font>
          </property>
          <property name="toolTip">
-          <string>Add Specific video tags. Adds -tag:v to cmmand line.
+          <string>Add Specific video tags. Adds -tag:v to command line.
 ie. For Apple mobile device compatibility, add hvc1.</string>
          </property>
          <property name="editable">
@@ -2165,7 +2165,7 @@ ie. For Apple mobile device compatibility, add hvc1.</string>
           </font>
          </property>
          <property name="toolTip">
-          <string>Add Specific video tags. Adds -tag:v to cmmand line.</string>
+          <string>Add Specific video tags. Adds -tag:v to command line.</string>
          </property>
          <property name="text">
           <string>Tags</string>
@@ -7928,7 +7928,7 @@ Should be on when streaming files</string>
       </property>
       <property name="toolTip">
        <string>Choose Streaming/Record Operational Mode: Off, Stream, Record only, or both.
-When Off, all widgets below are inaccessable.</string>
+When Off, all widgets below are inaccessible.</string>
       </property>
       <item>
        <property name="text">
@@ -8731,9 +8731,9 @@ or Factory Testing</string>
 
 - All files dropped here will use the selected Factory. You cannot yet mix different Factories for batch processing. We may add this in the future.
 
-- If you chage the Factory on the Builder tab while this is running, all unprocessed items will revert to the currently selected Factory and will most likely fail.
+- If you change the Factory on the Builder tab while this is running, all unprocessed items will revert to the currently selected Factory and will most likely fail.
 
-- If you need parallel processing and have the robust hardware to handle it, it is highly recommened you use the FreeFactory service instead. </string>
+- If you need parallel processing and have the robust hardware to handle it, it is highly recommended you use the FreeFactory service instead. </string>
       </property>
      </widget>
     </widget>

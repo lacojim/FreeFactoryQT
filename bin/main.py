@@ -589,13 +589,13 @@ class FreeFactoryApp(QMainWindow):
         self._refresh_video_profiles()  # initial populate from current codec
         self.VideoProfile.setAttribute(Qt.WidgetAttribute.WA_AlwaysShowToolTips, True)
 
-        # Add Support for Multiple Ouputs
+        # Add Support for Multiple Outputs
         assert hasattr(self, "checkMultiOutput"), "QCheckBox 'checkMultiOutput' not found"
         self.checkMultiOutput.toggled.connect(self.update_output_ui_state)
         self.update_output_ui_state()
        
         
-        # Intialize flags builders
+        # Initialize flags builders
         self._init_flags_builders()
 
     def _init_flags_builders(self):
@@ -689,7 +689,7 @@ class FreeFactoryApp(QMainWindow):
     def closeEvent(self, event):
         self._is_closing = True
 
-        # UI-managed activity only (doe NOT touch FreeFactoryConversion.py processes)
+        # UI-managed activity only (does NOT touch FreeFactoryConversion.py processes)
         active_threads = list(getattr(self, "active_threads", []))
         has_threads = any(getattr(t, "isRunning", lambda: False)() for t, _ in active_threads)
         has_streams = bool(getattr(self, "active_streams_by_row", {}))
@@ -1125,7 +1125,7 @@ class FreeFactoryApp(QMainWindow):
 # --- 4) Codec / copy-lock mechanics ------------------------------------------
     # ============================
     #     Copy Codec Handlers 
-    #   Ghosts releated widgets 
+    #   Ghosts related widgets 
     #   when codec "copy" is selected
     # ============================
     def _apply_group_copy_lock(self, names: list[str], *, is_copy: bool, clear_on_disable: bool):
