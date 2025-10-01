@@ -4,13 +4,13 @@ In the future, it is hoped this can also be used to create a dynamic UI by only 
 
 Presently there are seven python scripts used to create this database. I will include those here at some point. Once they are more refined. They can be used to create a new database completely based on the version of the FFmpeg you have installed on your system.
 
-As I am not normally a database administrator, I am sure there are many ways to make this much more efficient and much better. Database experts welcomed to offer improvments, please.
+As I am not normally a database administrator, I am sure there are many ways to make this much more efficient and much better. Database experts welcomed to offer improvements, please.
 
 
 FFmpeg Database tools descriptions:
 These scripts will use YOUR installed version FFmpeg to build the database. There is no guarantee these scripts will work with your version. These were written for FFmpeg 7.1.1. Make a backup of the existing .db file before attempting this. 
 
-rebuild_database.sh: This will DELETE ffmpeg_options.db and run the following python scipts in the following order:
+rebuild_database.sh: This will DELETE ffmpeg_options.db and run the following python scripts in the following order:
 
 - ffmpeg_db_builder.py --mode rebuild
 This will rebuild the database in a basic state and creates and populates the following tables: bitstream_filters, codecs, filters, muxers, pixel_formats

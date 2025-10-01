@@ -41,7 +41,7 @@ exec tclsh "$0" "$@"
 
 # 2025-08-09
 # Added MANUALOPTIONSINPUT
-# Added check for NVENC availibility
+# Added check for NVENC availability
 
 # 2025-08-15
 # Added VIDEOFILTERS (-vf) and AUDIOFILTERS (-af)
