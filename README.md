@@ -1,6 +1,7 @@
 ![image](https://github.com/user-attachments/assets/9cca7be8-736b-4768-8cd6-79cbd008605a)
 # FreeFactoryQT
-<img width="1102" height="748" alt="image" src="https://github.com/user-attachments/assets/044cd03a-9ed5-4c4f-9634-daca00260a40" />
+<img width="1105" height="749" alt="image" src="https://github.com/user-attachments/assets/57baf7fd-f8a9-4179-97df-c17e461df275" />
+
 
 > ⚠️ **Note:** Changelogs: https://github.com/lacojim/FreeFactoryQT/blob/main/CHANGELOG.md
 
