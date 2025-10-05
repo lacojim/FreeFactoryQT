@@ -152,8 +152,9 @@ Highly specialized output commands can be stored in a Factory too. For example:
 ```bash
 -intra_vlc 1 -bufsize 17825792 -rc_init_occupancy 17825792 -bf 2 -non_linear_quant 1 -color_primaries bt709 -color_trc bt709 -colorspace bt709 -seq_disp_ext 1 -video_format component -color_range 1 -chroma_sample_location topleft -signal_standard 4 -dc 8 -qmin 5 -qmax 23 -g 12 -field_order tt -top 1 -flags +ildct+ilme -alternate_scan 1
 ```
-
 These would be stored under the `Manual Output Ops` field in your Factory, and saved for future use.
+
+**NOTE: Most all of the above manual output options are now in GUI options. It remains here for reference only.**
 
 ---
 
