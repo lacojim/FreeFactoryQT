@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.37-dev] - 2025-10-10
+
+### Add movflags builder support (under Flags Builder tab). All flags (flags, flags2, fflags, movflags have tooltips from the FFmpeg help.
+
+
 ## [1.1.36-dev] - 2025-10-01
 
 ### Various small fixes.
@@ -53,7 +58,7 @@ This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and
   - New **Most of Video Advanced now working** 
     Color / HDR tab now fully functional. Standards / Field tab now fully functional. DC, Qmin & Qmax moved to DepPage until I can map it out in a more sensible manner.
   - Fixed bug where default factory always showed the first item in the list (if not set) but then saving Globals would make that first item the default. Fixed by forcing a blank field in the first register.
-  - Added button to select the Factories directory instead of manually typing it in.
+  - Added button to select the Factories directory intead of manually typing it in.
 
 ## [1.1.27-dev] - 2025-09-16
 
@@ -180,7 +185,7 @@ This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and
 ## [1.1.1] - 2025-08-28
 
 ### Added
-- **Factory Tools Updated**: Now includes batch import/export as both flat files or zipped. Local paths and filename keys within factories are removed automatically on export. If you need to retain these keys for in house use, just copy the needed factory file(s) to the new location or use the Backup feature. Import/Export is meant to used for sharing factories publicly on the Internet. Not for backing up.
+- **Factory Tools Updated**: Now includes batch import/export as both flat files or zipped. Local paths and filename keys within factories are removed automatically on export. If you need to retain these keys for in house use, just copy the needed factory file(s) to the new location or use the Backup feature. Import/Export is meant to used for sharing factories publically on the Internet. Not for backing up.
 - **UI updates**
 - **Menu**: Added Custom menu which contains "Add Factory to Stream Table" or use CTRL+INS. This simplifies having to select a Factory on the Builder tab, then click to the Streaming tab and click "Add Stream" there. Just use CTRL+INS, click the next streaming factory, repeat. Builds the list without changing tabs. (Largely untested and Experimental)
 

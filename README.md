@@ -1,7 +1,6 @@
 ![image](https://github.com/user-attachments/assets/9cca7be8-736b-4768-8cd6-79cbd008605a)
 # FreeFactoryQT
-<img width="1105" height="749" alt="image" src="https://github.com/user-attachments/assets/57baf7fd-f8a9-4179-97df-c17e461df275" />
-
+<img width="1102" height="748" alt="image" src="https://github.com/user-attachments/assets/044cd03a-9ed5-4c4f-9634-daca00260a40" />
 
 > ⚠️ **Note:** Changelogs: https://github.com/lacojim/FreeFactoryQT/blob/main/CHANGELOG.md
 
@@ -11,7 +10,7 @@
 
 **FreeFactory** is a powerful, user-friendly media conversion system designed for both casual users and broadcast professionals. Originally developed for in-house use at a television station by a broadcast engineer with 40 years of experience, it has evolved from a set of BASH scripts into a full-featured Python3 application with a Qt6 interface.
 
-While **FreeFactory** is designed to make using FFmpeg easier, it supports nearly EVERY FFmpeg option available making FreeFactory the most capable front end for FFmpeg in existence today. While we attempt to hide options that are not compatible with each other from being selected, it is and will be an ongoing process as FFmpeg is a most complicated project. Most common options are currently supported. We thrive to be the closest GUI to an (un)official GUI as possible, which does not exist.
+While **FreeFactory** is designed to make using FFmpeg easier, it supports nearly EVERY FFmpeg option available making FreeFactory the most capible front end for FFmpeg in existence today. While we attempt to hide options that are not compatible with each other from being selected, it is and will be an ongoing process as FFmpeg is a most complicated project. Most common options are currently supported. We thrive to be the closest GUI to an (un)offical GUI as possible, which does not exist.
 
 **FreeFactory** simplifies complex encoding workflows into reusable, sharable *Factories*. While FFmpeg is incredibly powerful, its syntax can be intimidating — **FreeFactory** makes it all accessible without sacrificing any advanced capability.
 
@@ -27,10 +26,10 @@ The real hidden power within **FreeFactory** is the notify service. This allows 
 - GUI-based direct conversion of single or batch files
 - Supports drag-and-drop and watched folders
 - Clean separation between UI (FreeFactoryQT) and background service (`FreeFactoryConversion.py`)
-- Fully compatible with FFmpeg — **FFmbc support has been deprecated**
+- Fully compatible with FFmpeg (tested on FFmpeg v7+)
+- Easy to use **Flags Builder** for -flags, -flags2, -fflags and -movflags.
 
 FreeFactory makes sharing encoding setups easy: import a Factory, update the Output and Notify directories, and you're ready to go.
-
 > 📦 Factories are portable and easy to exchange. Only minor path edits are usually required.
 
 ---
@@ -152,9 +151,8 @@ Highly specialized output commands can be stored in a Factory too. For example:
 ```bash
 -intra_vlc 1 -bufsize 17825792 -rc_init_occupancy 17825792 -bf 2 -non_linear_quant 1 -color_primaries bt709 -color_trc bt709 -colorspace bt709 -seq_disp_ext 1 -video_format component -color_range 1 -chroma_sample_location topleft -signal_standard 4 -dc 8 -qmin 5 -qmax 23 -g 12 -field_order tt -top 1 -flags +ildct+ilme -alternate_scan 1
 ```
-These would be stored under the `Manual Output Ops` field in your Factory, and saved for future use.
 
-**NOTE: Most all of the above manual output options are now in GUI options. It remains here for reference only.**
+These would be stored under the `Manual Output Ops` field in your Factory, and saved for future use.
 
 ---
 
