@@ -603,6 +603,7 @@ class FreeFactoryApp(QMainWindow):
         if hasattr(self, "FlagsCollector"):  self.FlagsCollector.setReadOnly(True)
         if hasattr(self, "Flags2Collector"): self.Flags2Collector.setReadOnly(True)
         if hasattr(self, "FFlagsCollector"): self.FFlagsCollector.setReadOnly(True)
+        if hasattr(self, "MovFlagsCollector"): self.MovFlagsCollector.setReadOnly(True)
 
         for name in self._flags_map().keys():
             w = self._w(name)
@@ -613,6 +614,9 @@ class FreeFactoryApp(QMainWindow):
         for name in self._fflags_map().keys():
             w = self._w(name)
             if w: w.toggled.connect(self._update_flags_collectors)
+        for name in self._movflags_map().keys():
+            w = self._w(name)
+            if w: w.toggled.connect(self._update_flags_collectors)
 
         if hasattr(self, "clearFlags"):
             self.clearFlags.clicked.connect(lambda: self._set_flags_checked(False))
@@ -620,6 +624,8 @@ class FreeFactoryApp(QMainWindow):
             self.clearFlags2.clicked.connect(lambda: self._set_flags2_checked(False))
         if hasattr(self, "clearFFlags"):
             self.clearFFlags.clicked.connect(lambda: self._set_fflags_checked(False))
+        if hasattr(self, "clearMovFlags"):
+            self.clearMovFlags.clicked.connect(lambda: self._set_movflags_checked(False))
             
         self._update_flags_collectors()
 
@@ -970,6 +976,34 @@ class FreeFactoryApp(QMainWindow):
             "checkFFlags_nobuffer": "nobuffer",
             "checkFFlags_noparse": "noparse",
         }
+    
+    def _movflags_map(self) -> dict[str, str]:
+        return {
+            "checkMovFlags_cmaf": "cmaf",
+            "checkMovFlags_dash": "dash",
+            "checkMovFlags_default_base_moof": "default_base_moof",
+            "checkMovFlags_delay_moov": "delay_moov",
+            "checkMovFlags_disable_chpl": "disable_chpl",
+            "checkMovFlags_empty_moov": "empty_moov",
+            "checkMovFlags_faststart": "faststart",
+            "checkMovFlags_frag_custom": "frag_custom",
+            "checkMovFlags_frag_discont": "frag_discont",
+            "checkMovFlags_frag_every_frame": "frag_every_frame",
+            "checkMovFlags_frag_keyframe": "frag_keyframe",
+            "checkMovFlags_global_sidx": "global_sidx",
+            "checkMovFlags_isml": "isml",
+            "checkMovFlags_negative_cts_offsets": "negative_cts_offsets",
+            "checkMovFlags_omit_tfhd_offset": "omit_tfhd_offset",
+            "checkMovFlags_prefer_icc": "prefer_icc",
+            "checkMovFlags_rtphint": "rtphint",
+            "checkMovFlags_separate_moof": "separate_moof",
+            "checkMovFlags_skip_sidx": "skip_sidx ",
+            "checkMovFlags_skip_trailer": "skip_trailer",
+            "checkMovFlags_use_metadata_tags": "use_metadata_tags",
+            "checkMovFlags_write_colr": "write_colr",
+            "checkMovFlags_write_gama": "write_gama",
+            "checkMovFlags_hybrid_fragmented": "hybrid_fragmented",
+        }
 
     def _collect_flags_text(self, mapping: dict[str, str]) -> str:
         toks = []
@@ -986,6 +1020,8 @@ class FreeFactoryApp(QMainWindow):
             self.Flags2Collector.setText(self._collect_flags_text(self._flags2_map()))
         if hasattr(self, "FFlagsCollector"):
             self.FFlagsCollector.setText(self._collect_flags_text(self._fflags_map()))
+        if hasattr(self, "MovFlagsCollector"):
+            self.MovFlagsCollector.setText(self._collect_flags_text(self._movflags_map()))
 
     def _set_flags_checked(self, on: bool):
         for n in self._flags_map().keys():
@@ -1001,6 +1037,12 @@ class FreeFactoryApp(QMainWindow):
     
     def _set_fflags_checked(self, on: bool):
         for n in self._fflags_map().keys():
+            w = self._w(n)
+            if w: w.setChecked(on)
+        self._update_flags_collectors()
+        
+    def _set_movflags_checked(self, on: bool):
+        for n in self._movflags_map().keys():
             w = self._w(n)
             if w: w.setChecked(on)
         self._update_flags_collectors()
@@ -1045,6 +1087,7 @@ class FreeFactoryApp(QMainWindow):
             "FlagsCollector":           "FLAGS",                    # QLineEdit
             "Flags2Collector":          "FLAGS2",                   # QLineEdit
             "FFlagsCollector":          "FFLAGS",                   # QLineEdit
+            "MovFlagsCollector":        "MOVFLAGS",                   # QLineEdit
             
             # Advanced Video Options
             "ColorSpace":               "COLORSPACE",               # QComboBox
@@ -1143,7 +1186,7 @@ class FreeFactoryApp(QMainWindow):
         self._apply_group_copy_lock(VIDEO_COPY_WIDGETS, is_copy=is_copy, clear_on_disable=clear_on_disable)
         
         # Flags builders live in their own group boxes; Labels in sync using l_groupFlags / l_groupFlags2
-        for name in ("groupFlags", "groupFlags2", "groupFFlags", "FlagsCollector", "Flags2Collector", "FFlagsCollector", "clearFlags", "clearFlags2", "clearFFlags"):
+        for name in ("groupFlags", "groupFlags2", "groupFFlags", "groupMovFlags", "FlagsCollector", "Flags2Collector", "FFlagsCollector", "MovFlagsCollector", "clearFlags", "clearFlags2", "clearFFlags", "clearMovFlags"):
             w   = self._w(name)
             lbl = self._lbl(name)
             self._set_enabled_pair(w, lbl, enabled=not is_copy)
@@ -1151,6 +1194,7 @@ class FreeFactoryApp(QMainWindow):
             self._set_flags_checked(False)
             self._set_flags2_checked(False)
             self._set_fflags_checked(False)
+            self._set_movflags_checked(False)
 
     def _apply_audio_copy_lock(self, *, clear_on_disable: bool):
         is_copy = self._is_copy_text(self._w("AudioCodec").currentText()) if self._w("AudioCodec") else False
@@ -2336,7 +2380,8 @@ class FreeFactoryApp(QMainWindow):
         self._apply_flags_from_string(factory_data.get("FLAGS",  ""),  self._flags_map())
         self._apply_flags_from_string(factory_data.get("FLAGS2", ""), self._flags2_map())
         self._apply_flags_from_string(factory_data.get("FFLAGS", ""), self._fflags_map())
-
+        self._apply_flags_from_string(factory_data.get("MOVFLAGS", ""), self._movflags_map())
+        
         self._sync_stream_selector_to_builder(factory_name)
         self.update_stream_ui_state()
         

@@ -237,6 +237,7 @@ class FreeFactoryCore:
         video_flags         = factory_data.get("FLAGS", "").strip()
         video_flags2        = factory_data.get("FLAGS2", "").strip()
         video_fflags        = factory_data.get("FFLAGS", "").strip()
+        video_movflags      = factory_data.get("MOVFLAGS", "").strip()
         video_bitrate       = factory_data.get("VIDEOBITRATE", "").strip()
         video_framerate     = factory_data.get("VIDEOFRAMERATE", "").strip()
         video_framerate_cfr = factory_data.get("FRAMERATECFR", "").strip()                  #CHECK
@@ -331,6 +332,9 @@ class FreeFactoryCore:
 
         if video_fflags:
             cmd += ["-fflags", video_fflags]
+
+        if video_movflags:
+            cmd += ["-movflags", video_movflags]
 
         if video_bitrate:
             cmd += ["-b:v", video_bitrate]
@@ -530,6 +534,7 @@ class FreeFactoryCore:
         video_flags     = factory_data.get("FLAGS", "").strip()
         video_flags2    = factory_data.get("FLAGS2", "").strip()
         video_fflags    = factory_data.get("FFLAGS", "").strip()
+        video_movflags  = factory_data.get("MOVFLAGS", "").strip()
         audio_codec     = factory_data.get("AUDIOCODECS", "").strip()
         preset          = factory_data.get("VIDEOPRESET", "").strip()
         video_bitrate   = factory_data.get("VIDEOBITRATE", "").strip()
@@ -549,6 +554,8 @@ class FreeFactoryCore:
             flags += ["-flags2", video_flags2]
         if video_fflags:
             flags += ["-fflags", video_fflags]
+        if video_movflags:
+            flags += ["-movflags", video_movflags]
         if video_bitrate:
             flags += ["-b:v", video_bitrate]
         if preset:

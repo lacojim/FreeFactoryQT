@@ -4887,7 +4887,7 @@ mpeg2video</string>
          <attribute name="title">
           <string>Flags Builders</string>
          </attribute>
-         <widget class="QTabWidget" name="tabWidget_2">
+         <widget class="QTabWidget" name="FlagsBuilderTab">
           <property name="geometry">
            <rect>
             <x>0</x>
@@ -5981,6 +5981,649 @@ This needs nofillin too.</string>
              </property>
              <property name="text">
               <string>noparse</string>
+             </property>
+            </widget>
+           </widget>
+          </widget>
+          <widget class="QWidget" name="tab_5">
+           <attribute name="title">
+            <string>MovFlags</string>
+           </attribute>
+           <widget class="QGroupBox" name="groupMovFlags">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>10</y>
+              <width>811</width>
+              <height>121</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <italic>false</italic>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>Additional/legacy flags (-flags2). Mostly for analysis or bitstream quirks.
+Checked items are collected into FLAGS2 as +tokens. 
+Often ignored by some encoders.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Flags2 Builder (-flags2)
+Specialized/auxiliary flags. These are rarely needed for typical encodes.
+    Examples:
+     • +export_mvs → expose motion vectors (useful with -vf codecview for analysis)
+     • +ignorecrop, +local_header, +chunks → bitstream/container behavior toggles
+     • +fast, +showall, etc. → niche/legacy behaviors that may be ignored by codecs
+    Notes:
+     • Many flags are codec- or container-specific; harmless if unsupported.
+     • Ignored when Video Codec is ‘copy’. Saved to the factory as FLAGS2=…</string>
+            </property>
+            <property name="title">
+             <string>MovFlags Builder</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+            <widget class="QLineEdit" name="MovFlagsCollector">
+             <property name="geometry">
+              <rect>
+               <x>30</x>
+               <y>90</y>
+               <width>751</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Flags2 Builder</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_cmaf">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>20</y>
+               <width>51</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Write CMAF compatible fragmented MP4</string>
+             </property>
+             <property name="text">
+              <string>cmaf</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_write_colr">
+             <property name="geometry">
+              <rect>
+               <x>564</x>
+               <y>20</y>
+               <width>71</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Write colr atom even if the color info is unspecified
+(Experimental, may be renamed or changed, do not use from scripts).</string>
+             </property>
+             <property name="text">
+              <string>write_colr</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_delay_moov">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>20</y>
+               <width>91</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Delay writing the initial moov until the first fragment is cut,
+or until the first fragment flush.</string>
+             </property>
+             <property name="text">
+              <string>delay_moov</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_faststart">
+             <property name="geometry">
+              <rect>
+               <x>164</x>
+               <y>20</y>
+               <width>61</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Run a second pass to put the index (moov atom) at the beginning of the file.</string>
+             </property>
+             <property name="text">
+              <string>faststart</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_frag_custom">
+             <property name="geometry">
+              <rect>
+               <x>164</x>
+               <y>40</y>
+               <width>81</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Flush fragments on caller requests.</string>
+             </property>
+             <property name="text">
+              <string>frag_custom</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_write_gama">
+             <property name="geometry">
+              <rect>
+               <x>564</x>
+               <y>40</y>
+               <width>81</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Write deprecated gama atom.</string>
+             </property>
+             <property name="text">
+              <string>write_gama</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_disable_chpl">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>40</y>
+               <width>91</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Disable Nero chapter atom.</string>
+             </property>
+             <property name="text">
+              <string>disable_chpl</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_dash">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>40</y>
+               <width>51</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Write DASH compatible fragmented MP4.</string>
+             </property>
+             <property name="text">
+              <string>dash</string>
+             </property>
+            </widget>
+            <widget class="QToolButton" name="clearMovFlags">
+             <property name="geometry">
+              <rect>
+               <x>3</x>
+               <y>91</y>
+               <width>28</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="toolTip">
+              <string>Clear Flags2</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_default_base_moof">
+             <property name="geometry">
+              <rect>
+               <x>684</x>
+               <y>20</y>
+               <width>111</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Set the default-base-is-moof flag in tfhd atoms.</string>
+             </property>
+             <property name="text">
+              <string>default_base_moof</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_hybrid_fragmented">
+             <property name="geometry">
+              <rect>
+               <x>564</x>
+               <y>60</y>
+               <width>121</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>For recoverability, write a fragmented file that is converted
+to non-fragmented at the end.</string>
+             </property>
+             <property name="text">
+              <string>hybrid_fragmented</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_empty_moov">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>60</y>
+               <width>91</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Make the initial moov atom empty.</string>
+             </property>
+             <property name="text">
+              <string>empty_moov</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_frag_discont">
+             <property name="geometry">
+              <rect>
+               <x>361</x>
+               <y>20</y>
+               <width>81</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Signal that the next fragment is discontinuous from earlier ones.</string>
+             </property>
+             <property name="text">
+              <string>frag_discont</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_rtphint">
+             <property name="geometry">
+              <rect>
+               <x>484</x>
+               <y>20</y>
+               <width>61</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Add RTP hint tracks.</string>
+             </property>
+             <property name="text">
+              <string>rtphint</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_prefer_icc">
+             <property name="geometry">
+              <rect>
+               <x>164</x>
+               <y>60</y>
+               <width>91</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>If writing colr atom prioritise usage of ICC profile if it 
+exists in stream packet side data.</string>
+             </property>
+             <property name="text">
+              <string>prefer_icc</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_global_sidx">
+             <property name="geometry">
+              <rect>
+               <x>250</x>
+               <y>60</y>
+               <width>81</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Write a global sidx index at the start of the file.</string>
+             </property>
+             <property name="text">
+              <string>global_sidx</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_skip_trailer">
+             <property name="geometry">
+              <rect>
+               <x>484</x>
+               <y>60</y>
+               <width>71</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Skip writing the mfra/tfra/mfro trailer for fragmented files.</string>
+             </property>
+             <property name="text">
+              <string>skip_trailer</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_frag_every_frame">
+             <property name="geometry">
+              <rect>
+               <x>250</x>
+               <y>20</y>
+               <width>111</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Fragment at every frame.</string>
+             </property>
+             <property name="text">
+              <string>frag_every_frame</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_frag_keyframe">
+             <property name="geometry">
+              <rect>
+               <x>250</x>
+               <y>40</y>
+               <width>91</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Fragment at video keyframes.</string>
+             </property>
+             <property name="text">
+              <string>frag_keyframe</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_negative_cts_offsets">
+             <property name="geometry">
+              <rect>
+               <x>361</x>
+               <y>40</y>
+               <width>121</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Use negative CTS offsets (reducing the need for edit lists).</string>
+             </property>
+             <property name="text">
+              <string>negative_cts_offsets</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_isml">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>60</y>
+               <width>51</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Create a live smooth streaming feed (for pushing to a publishing point).</string>
+             </property>
+             <property name="text">
+              <string>isml</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_omit_tfhd_offset">
+             <property name="geometry">
+              <rect>
+               <x>361</x>
+               <y>60</y>
+               <width>101</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Omit the base data offset in tfhd atoms.</string>
+             </property>
+             <property name="text">
+              <string>omit_tfhd_offset</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_separate_moof">
+             <property name="geometry">
+              <rect>
+               <x>684</x>
+               <y>60</y>
+               <width>91</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Write separate moof/mdat atoms for each track.</string>
+             </property>
+             <property name="text">
+              <string>separate_moof</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_use_metadata_tags">
+             <property name="geometry">
+              <rect>
+               <x>684</x>
+               <y>40</y>
+               <width>121</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Use mdta atom for metadata.</string>
+             </property>
+             <property name="text">
+              <string>use_metadata_tags</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMovFlags_skip_sidx">
+             <property name="geometry">
+              <rect>
+               <x>484</x>
+               <y>40</y>
+               <width>71</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Skip writing of sidx atom.</string>
+             </property>
+             <property name="text">
+              <string>skip_sidx</string>
              </property>
             </widget>
            </widget>
@@ -10845,655 +11488,6 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
       </property>
       <property name="text">
        <string>SS</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider">
-      <property name="geometry">
-       <rect>
-        <x>228</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_16">
-      <property name="geometry">
-       <rect>
-        <x>220</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>65Hz</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_18">
-      <property name="geometry">
-       <rect>
-        <x>268</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>92Hz</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_2">
-      <property name="geometry">
-       <rect>
-        <x>276</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_19">
-      <property name="geometry">
-       <rect>
-        <x>356</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>185Hz</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_3">
-      <property name="geometry">
-       <rect>
-        <x>364</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_20">
-      <property name="geometry">
-       <rect>
-        <x>313</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>131Hz</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_4">
-      <property name="geometry">
-       <rect>
-        <x>321</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_41">
-      <property name="geometry">
-       <rect>
-        <x>448</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>370Hz</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_42">
-      <property name="geometry">
-       <rect>
-        <x>536</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>740Hz</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_9">
-      <property name="geometry">
-       <rect>
-        <x>544</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_43">
-      <property name="geometry">
-       <rect>
-        <x>493</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>523Hz</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_10">
-      <property name="geometry">
-       <rect>
-        <x>501</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_11">
-      <property name="geometry">
-       <rect>
-        <x>456</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_44">
-      <property name="geometry">
-       <rect>
-        <x>400</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>262Hz</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_12">
-      <property name="geometry">
-       <rect>
-        <x>408</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_13">
-      <property name="geometry">
-       <rect>
-        <x>586</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_45">
-      <property name="geometry">
-       <rect>
-        <x>578</x>
-        <y>305</y>
-        <width>41</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>1khz</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_46">
-      <property name="geometry">
-       <rect>
-        <x>845</x>
-        <y>305</y>
-        <width>41</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>8.5khz</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_47">
-      <property name="geometry">
-       <rect>
-        <x>665</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>2khz</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_48">
-      <property name="geometry">
-       <rect>
-        <x>753</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>4khz</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_14">
-      <property name="geometry">
-       <rect>
-        <x>761</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_15">
-      <property name="geometry">
-       <rect>
-        <x>805</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_49">
-      <property name="geometry">
-       <rect>
-        <x>710</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>3khz</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_50">
-      <property name="geometry">
-       <rect>
-        <x>797</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>6khz</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_16">
-      <property name="geometry">
-       <rect>
-        <x>983</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_17">
-      <property name="geometry">
-       <rect>
-        <x>718</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_51">
-      <property name="geometry">
-       <rect>
-        <x>975</x>
-        <y>305</y>
-        <width>51</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>20khz</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_18">
-      <property name="geometry">
-       <rect>
-        <x>941</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_52">
-      <property name="geometry">
-       <rect>
-        <x>933</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>16khz</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_19">
-      <property name="geometry">
-       <rect>
-        <x>673</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_53">
-      <property name="geometry">
-       <rect>
-        <x>617</x>
-        <y>305</y>
-        <width>41</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>1.5khz</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_20">
-      <property name="geometry">
-       <rect>
-        <x>898</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_54">
-      <property name="geometry">
-       <rect>
-        <x>890</x>
-        <y>305</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>12khz</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_21">
-      <property name="geometry">
-       <rect>
-        <x>625</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="verticalSlider_22">
-      <property name="geometry">
-       <rect>
-        <x>853</x>
-        <y>140</y>
-        <width>16</width>
-        <height>160</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_21">
-      <property name="geometry">
-       <rect>
-        <x>230</x>
-        <y>110</y>
-        <width>141</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>18 Band EQ Audio Filter</string>
-      </property>
-      <property name="scaledContents">
-       <bool>false</bool>
-      </property>
-      <property name="wordWrap">
-       <bool>false</bool>
       </property>
      </widget>
     </widget>
