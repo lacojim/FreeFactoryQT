@@ -5,15 +5,15 @@ This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and
 
 ## 2026-03-23
 
-### Added a few new factories to normalize audio in LUFS.
+- Added a few new factories to normalize audio in LUFS.
 
 ## [1.1.38-dev unreleased] - 2025-12-27
 
-### Rearranged flags to advanced section in dictionary. Added early Piper support.
+- Rearranged flags to advanced section in dictionary. Added early Piper support.
 
 ## [1.1.37-dev] - 2025-10-10
 
-### Add movflags builder support (under Flags Builder tab). All flags (flags, flags2, fflags, movflags have tooltips from the FFmpeg help.
+- Add movflags builder support (under Flags Builder tab). All flags (flags, flags2, fflags, movflags have tooltips from the FFmpeg help.
 
 
 ## [1.1.36-dev] - 2025-10-01
