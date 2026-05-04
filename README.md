@@ -175,8 +175,4 @@ These would be stored under the `Manual Output Ops` field in your Factory, and s
 > - Use the GUI for hands-on or dropzone-based encoding
 > - Use the service for fully automated background workflows
 
-FreeFactoryQT will eventually support integration with external tools like:
-- [Demucs](https://github.com/facebookresearch/demucs) for stem separation
-- [sox-dsd](https://github.com/peterekepeter/sox-dsd) for DSD audio processing
-
 ---
