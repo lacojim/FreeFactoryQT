@@ -34,6 +34,18 @@ FreeFactory makes sharing encoding setups easy: import a Factory, update the Out
 
 ---
 
+## What's New
+- 2026-05-10 Added Audio and Video analysis. Audio portition is mostly working now in alpha versions. What this can do for example is when correcting audio levels for Broadcast (-24LUFS) or YouTube (-16LUFS), it will scan the file first and build a table of the levels, then on the final pass it will use those anaylized numbers for the full correction, while keeping dynamic range. For now, loudnorm and volumedetect are supported.This has been a long overdue feature and needed badly for correcting audio on files in our playback server at work. Fix it at the source instead of relying on automatic audio levelers which induce pumping or breathing effects when working.
+<img width="818" height="224" alt="image" src="https://github.com/user-attachments/assets/5834e189-ea46-407a-ab9c-2bdb79d0e0e8" />
+As you can see in the photo, you first set the filter to something close to what you need, this is the reference point. Once FreeFactory via FFMpeg anaylsis the file, it will replace the filter (behind the scenes) with the new filter command then renders the file with the new parameters. So the filter becomes this:
+
+   ```bash
+   -af loudnorm=I=-16:TP=-1.5:LRA=11:measured_I=...:measured_TP=...:measured_LRA=...:measured_thresh=...:offset=...:linear=true
+   ```
+
+
+---
+
 ## 🖥️ Installation
 
 **Requirements:**
