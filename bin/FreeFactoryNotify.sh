@@ -18,9 +18,21 @@ export PYTHONUNBUFFERED=1
 # ----- settle time (default 2s; override via ~/.freefactoryrc AppleDelaySeconds=NN) -----
 SETTLE_SECS=2
 RC="$HOME/.freefactoryrc"
+
 if [[ -f "$RC" ]]; then
-  rc_settle="$(grep -E '^AppleDelaySeconds=' "$RC" | sed -E 's/^[^=]+=([0-9]+)/\1/' || true)"
-  if [[ -n "$rc_settle" ]]; then SETTLE_SECS="$rc_settle"; fi
+  rc_settle="$(
+    awk -F= '
+      $1 == "AppleDelaySeconds" {
+        gsub(/^[ \t]+|[ \t]+$/, "", $2)
+        print $2
+        exit
+      }
+    ' "$RC"
+  )"
+
+  if [[ "$rc_settle" =~ ^[0-9]+$ ]]; then
+    SETTLE_SECS="$rc_settle"
+  fi
 fi
 
 settle_file() {

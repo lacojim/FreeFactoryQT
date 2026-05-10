@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>675</width>
-    <height>356</height>
+    <height>377</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>10</y>
       <width>431</width>
-      <height>91</height>
+      <height>121</height>
      </rect>
     </property>
     <property name="font">
@@ -142,12 +142,37 @@
       <string>Check for NotifyDirectory Duplicates</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="CreateFactoryCommandLine">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>411</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="toolTip">
+      <string>Create a new Factory from a Linux style FFMpeg command line.</string>
+     </property>
+     <property name="text">
+      <string>Create Factory from FFMpeg Command Line (Experimental)</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
+      <y>140</y>
       <width>431</width>
       <height>211</height>
      </rect>
@@ -454,7 +479,7 @@ without doing anything.</string>
       <x>450</x>
       <y>24</y>
       <width>211</width>
-      <height>271</height>
+      <height>301</height>
      </rect>
     </property>
     <property name="font">
@@ -487,7 +512,7 @@ without doing anything.</string>
     <property name="geometry">
      <rect>
       <x>450</x>
-      <y>300</y>
+      <y>330</y>
       <width>211</width>
       <height>21</height>
      </rect>

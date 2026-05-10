@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 # main.py (Phase 2 Refactor: Grouping + Cleanup)
 
 #############################################################################
@@ -8,9 +8,9 @@
 #
 #                           Free Factory
 #
-#                       Copyright 2013-2025
+#                       Copyright 2013-2026
 #                               by
-#                     Jim Hines and Karl Swisher
+#                     Jim Hines and Karl Swisher 
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -134,7 +134,7 @@ VIDEO_COPY_WIDGETS = [
 ]
 
 AUDIO_COPY_WIDGETS = [
-    "AudioExtension",   # remove if you decide it's not needed
+    "AudioExtension",   
     "AudioBitrate",
     "AudioSampleRate",
     "AudioChannels",
@@ -231,7 +231,7 @@ class AboutDialog(QDialog):
         <b>FreeFactory</b><br>
         Version {get_version()}<br>
         An open-source professional media<br>conversion frontend for FFmpeg.<br><br>
-        © 2013–2025 James Hines and Karl Swisher<br>
+        © 2013–2026 James Hines and Karl Swisher<br>
         Licensed under <a href='https://www.gnu.org/licenses/gpl-3.0.html'>GPLv3</a><br>
         <a href='https://github.com/lacojim/FreeFactoryQT'>github.com/lacojim/FreeFactoryQT</a>
         """
@@ -593,6 +593,15 @@ class FreeFactoryApp(QMainWindow):
         assert hasattr(self, "checkMultiOutput"), "QCheckBox 'checkMultiOutput' not found"
         self.checkMultiOutput.toggled.connect(self.update_output_ui_state)
         self.update_output_ui_state()
+
+        # Add Support for A/V Analysis
+        self.checkAnalyzeAudio.toggled.connect(self._update_audio_analysis_state)
+        self.AudioAnalysisType.currentTextChanged.connect(self._update_audio_analysis_state)
+        self._update_audio_analysis_state()
+
+        self.checkAnalyzeVideo.toggled.connect(self._update_video_analysis_state)
+        self.VideoAnalysisType.currentTextChanged.connect(self._update_video_analysis_state)
+        self._update_video_analysis_state()
        
         
         # Initialize flags builders
@@ -634,6 +643,48 @@ class FreeFactoryApp(QMainWindow):
     #       End UI Setup Logic
     # =================================
 
+
+    def _update_audio_analysis_state(self, *_):
+        enabled = self.checkAnalyzeAudio.isChecked()
+        
+        self.AudioAnalysisType.setEnabled(enabled)
+        if hasattr(self, "l_AudioAnalysisType"):
+            self.l_AudioAnalysisType.setEnabled(enabled)
+
+        # Show Audio Analysis Report checkbox
+        if hasattr(self, "checkShowAudioAnalysisReport"):
+            self.checkShowAudioAnalysisReport.setEnabled(enabled)
+            if not enabled:
+                self.checkShowAudioAnalysisReport.setChecked(False)
+        # This checks the Report Box if VolumeDetect is selected, since VolumeDetect is a report only filter.
+        analysis_type = self.AudioAnalysisType.currentText().strip().lower()
+
+        if hasattr(self, "checkShowAudioAnalysisReport"):
+            self.checkShowAudioAnalysisReport.setEnabled(enabled)
+
+            if not enabled:
+                self.checkShowAudioAnalysisReport.setChecked(False)
+
+            elif analysis_type == "volumedetect":
+                self.checkShowAudioAnalysisReport.setChecked(True)
+                self.checkShowAudioAnalysisReport.setEnabled(False)
+
+
+    def _update_video_analysis_state(self, *_):
+        enabled = self.checkAnalyzeVideo.isChecked()
+        
+        self.VideoAnalysisType.setEnabled(enabled)
+        if hasattr(self, "l_VideoAnalysisType"):
+            self.l_VideoAnalysisType.setEnabled(enabled)
+
+        # Show Video Analysis Report checkbox
+        if hasattr(self, "checkShowVideoAnalysisReport"):
+            self.checkShowVideoAnalysisReport.setEnabled(enabled)
+            if not enabled:
+                self.checkShowVideoAnalysisReport.setChecked(False)
+            
+
+        
 
 
     # Ghost single output widgets when Multi-Outputs is checked
@@ -678,13 +729,6 @@ class FreeFactoryApp(QMainWindow):
         ...
         fac["MULTIOUTPUT"] = "True" if self.checkMultiOutput.isChecked() else "False"
         return fac
-
-
-
-
-
-
-
 
 
     # ===================================
@@ -1058,6 +1102,7 @@ class FreeFactoryApp(QMainWindow):
     # Set up the Dictionary for all Widgets and Factory keys
     def _combo_key_map(self) -> dict[str, str]:
         return {
+            "FactoryType":              "FACTORYTYPE",              # QComboBox
             "FactoryDescription":       "FACTORYDESCRIPTION",       # QLineEdit
             "NotifyDirectory":          "NOTIFYDIRECTORY",          # QLineEdit
             "OutputDirectory":          "OUTPUTDIRECTORY",          # QLineEdit
@@ -1084,10 +1129,6 @@ class FreeFactoryApp(QMainWindow):
             "ForceFormat":              "FORCEFORMAT",              # QComboBox
             "EncodeLength":             "ENCODELENGTH",             # QLineEdit
             "VideoStartTimeOffset":     "STARTTIMEOFFSET",          # QLineEdit
-            "FlagsCollector":           "FLAGS",                    # QLineEdit
-            "Flags2Collector":          "FLAGS2",                   # QLineEdit
-            "FFlagsCollector":          "FFLAGS",                   # QLineEdit
-            "MovFlagsCollector":        "MOVFLAGS",                   # QLineEdit
             
             # Advanced Video Options
             "ColorSpace":               "COLORSPACE",               # QComboBox
@@ -1106,6 +1147,10 @@ class FreeFactoryApp(QMainWindow):
             "lineEdit_Qmax":            "QMAX",                     # QLineEdit
             "RcInitOccupancy":          "RCINITOCCUPANCY",          # QLineEdit
             "BufSize":                  "BUFSIZE",                  # QLineEdit
+            "FlagsCollector":           "FLAGS",                    # QLineEdit
+            "Flags2Collector":          "FLAGS2",                   # QLineEdit
+            "FFlagsCollector":          "FFLAGS",                   # QLineEdit
+            "MovFlagsCollector":        "MOVFLAGS",                 # QLineEdit
 
             # Subtitles
             "SubtitleCodecs":           "SUBTITLECODECS",           # QComboBox
@@ -1121,6 +1166,14 @@ class FreeFactoryApp(QMainWindow):
             "AudioChannels":            "AUDIOCHANNELS",            # QComboBox
             "AudioStreamID":            "AUDIOSTREAMID",            # QLineEdit
             #"AudioDitherMethod":        "AUDIODITHERMETHOD",        # QComboBox
+
+            # A/V Analysis
+            "checkAnalyzeAudio":        "ANALYZEAUDIO",             # QCheckBox
+            "checkAnalyzeVideo":        "ANALYZEVIDEO",             # QCheckBox
+            "AudioAnalysisType":        "AUDIOANALYSISTYPE",        # QComboBox
+            "VideoAnalysisType":        "VIDEOANALYSISTYPE",        # QComboBox
+            #"checkShowAudioAnalysisReport": "SHOWAUDIOANALYSISREPORT",  #QCheckBox
+            #"checkShowVideoAnalysisReport": "SHOWVIDEOANALYSISREPORT",  #QCheckBox
 
             # Manual options
             "ManualOptionsOutput":      "MANUALOPTIONSOUTPUT",      # QLineEdit
@@ -1186,7 +1239,9 @@ class FreeFactoryApp(QMainWindow):
         self._apply_group_copy_lock(VIDEO_COPY_WIDGETS, is_copy=is_copy, clear_on_disable=clear_on_disable)
         
         # Flags builders live in their own group boxes; Labels in sync using l_groupFlags / l_groupFlags2
-        for name in ("groupFlags", "groupFlags2", "groupFFlags", "groupMovFlags", "FlagsCollector", "Flags2Collector", "FFlagsCollector", "MovFlagsCollector", "clearFlags", "clearFlags2", "clearFFlags", "clearMovFlags"):
+        for name in ("groupFlags", "groupFlags2", "groupFFlags", "groupMovFlags", 
+            "FlagsCollector", "Flags2Collector", "FFlagsCollector", "MovFlagsCollector",
+            "clearFlags", "clearFlags2", "clearFFlags", "clearMovFlags"):
             w   = self._w(name)
             lbl = self._lbl(name)
             self._set_enabled_pair(w, lbl, enabled=not is_copy)
@@ -2048,7 +2103,11 @@ class FreeFactoryApp(QMainWindow):
         factory_name = self.FactoryFilename.text().strip()
         factory_path = Path(self.config.get("FactoryLocation")) / factory_name
         factory_data = self.core.load_factory(factory_path)
-        cmd = self.core.build_ffmpeg_command(input_path, factory_data)
+        
+        runtime_factory = self._with_runtime_analysis_flags(factory_data)
+        cmd = self.core.build_ffmpeg_command(input_path, runtime_factory)
+        #cmd = self.core.build_ffmpeg_command(input_path, factory_data)
+        report_path = self.core.get_analysis_report_path(input_path, runtime_factory)
 
         self.conversionQueueTable.setItem(self.current_queue_index, 2, QTableWidgetItem("Processing..."))
 
@@ -2056,7 +2115,7 @@ class FreeFactoryApp(QMainWindow):
             if not cmd or not isinstance(cmd, (list, tuple)):
                 raise ValueError("Invalid command passed to FFmpegWorker.")
 
-            self.worker = FFmpegWorker(cmd)
+            self.worker = FFmpegWorker(cmd, report_path=report_path)
             self.worker.result.connect(self.handle_worker_result)
             self.worker.finished.connect(self.worker.deleteLater)
             self.worker.start()
@@ -2107,11 +2166,15 @@ class FreeFactoryApp(QMainWindow):
         for file_path in files:
             self.dropZone.appendPlainText(f"🔄 Processing: {file_path}")
             try:
-                cmd = self.core.build_ffmpeg_command(file_path, factory_data)
+                runtime_factory = self._with_runtime_analysis_flags(factory_data)
+                cmd = self.core.build_ffmpeg_command(file_path, runtime_factory)
+                #cmd = self.core.build_ffmpeg_command(file_path, factory_data)
+                report_path = self.core.get_analysis_report_path(file_path, runtime_factory)
+                
                 self.dropZone.appendPlainText(f"⚙️ Running command:{' '.join(cmd)}")
 
                 thread = QThread()
-                worker = FFmpegWorkerZone(cmd)
+                worker = FFmpegWorkerZone(cmd, report_path=report_path)
                 worker.moveToThread(thread)
 
                 worker.finished.connect(lambda msg, fp=file_path: self.dropZone.appendPlainText(f"{msg}✔️ File: {fp}"))
@@ -2151,7 +2214,9 @@ class FreeFactoryApp(QMainWindow):
         factory_data = self.core.load_factory(factory_path)
 
         for input_path in files:
-            cmd = self.core.build_ffmpeg_command(input_path, factory_data)
+            runtime_factory = self._with_runtime_analysis_flags(factory_data)
+            cmd = self.core.build_ffmpeg_command(input_path, runtime_factory)
+            #cmd = self.core.build_ffmpeg_command(input_path, factory_data)
             output_path = cmd[-1]
             self.add_file_to_queue(input_path, output_path)
 
@@ -2527,9 +2592,44 @@ class FreeFactoryApp(QMainWindow):
             )
         else:
             # …your existing preview path (conversion/stream)…
-            cmd = self.core.build_ffmpeg_command(Path("input.filename"), factory_data, preview=True)
+            runtime_factory = self._with_runtime_analysis_flags(factory_data)
+            cmd = self.core.build_ffmpeg_command(Path("input.filename"), runtime_factory, preview=True)
+            #cmd = self.core.build_ffmpeg_command(Path("input.filename"), factory_data, preview=True)
 
         self.PreviewCommandLine.setText(" ".join(cmd))
+        
+        
+        
+        
+        
+        
+    # This picks up the UI settings in realtime (not from the Factory), mostly just for Report check boxes for now.    
+    def _with_runtime_analysis_flags(self, factory_data):
+        runtime_factory = dict(factory_data)
+
+        if hasattr(self, "checkShowAudioAnalysisReport"):
+            runtime_factory["SHOWAUDIOANALYSISREPORT"] = (
+                self.checkShowAudioAnalysisReport.isChecked()
+            )
+
+        if hasattr(self, "checkShowVideoAnalysisReport"):
+            runtime_factory["SHOWVIDEOANALYSISREPORT"] = (
+                self.checkShowVideoAnalysisReport.isChecked()
+            )
+
+        return runtime_factory        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
     # ============================
     #     Menu Support

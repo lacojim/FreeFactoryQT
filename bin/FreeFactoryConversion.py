@@ -6,7 +6,7 @@
 #
 #                           Free Factory
 #
-#                      Copyright 2013 - 2025
+#                      Copyright 2013 - 2026
 #                               by
 #                     Jim Hines and Karl Swisher
 #

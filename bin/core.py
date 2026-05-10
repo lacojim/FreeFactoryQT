@@ -5,9 +5,9 @@
 #    The following terms apply to all files associated with the software
 #    unless explicitly disclaimed in individual files or parts of files.
 #
-#                           Free Factory
+#                          Free Factory
 #
-#                          Copyright 2025
+#                       Copyright 2013-2026
 #                               by
 #                     Jim Hines and Karl Swisher
 #
@@ -38,14 +38,27 @@ import re, shutil
 class FFmpegWorker(QThread):
     result = pyqtSignal(int, str, str)  # returncode, stdout, stderr
 
-    def __init__(self, cmd):
+    def __init__(self, cmd, report_path=None):
         super().__init__()
         self.cmd = cmd
+        self.report_path = report_path
         self.error = None
 
     def run(self):
-        import subprocess
         process = subprocess.run(self.cmd, capture_output=True, text=True)
+
+        if self.report_path:
+            try:
+                report_text = ""
+                if process.stdout:
+                    report_text += process.stdout
+                if process.stderr:
+                    report_text += process.stderr
+
+                Path(self.report_path).write_text(report_text, encoding="utf-8")
+            except Exception as e:
+                process.stderr += f"\n⚠️ Could not write report file: {e}\n"
+
         self.result.emit(process.returncode, process.stdout, process.stderr)
 
 
@@ -54,17 +67,35 @@ class FFmpegWorkerZone(QObject):
     finished = pyqtSignal(str)
     error = pyqtSignal(str)
 
-    def __init__(self, cmd):
+    def __init__(self, cmd, report_path=None):
         super().__init__()
         self.cmd = cmd
+        self.report_path = report_path
 
     def run(self):
         try:
             process = subprocess.run(self.cmd, capture_output=True, text=True)
+
+            if self.report_path:
+                try:
+                    report_text = ""
+                    if process.stdout:
+                        report_text += process.stdout
+                    if process.stderr:
+                        report_text += process.stderr
+
+                    Path(self.report_path).write_text(report_text, encoding="utf-8")
+                except Exception as e:
+                    process.stderr += f"\n⚠️ Could not write report file: {e}\n"
+
             if process.returncode == 0:
-                self.finished.emit("✅ Conversion complete.")
+                if self.report_path:
+                    self.finished.emit(f"✅ Analysis complete.\n📄 Report saved: {self.report_path}")
+                else:
+                    self.finished.emit("✅ Conversion complete.")
             else:
                 self.error.emit(f"❌ Error:\n{process.stderr}")
+
         except Exception as e:
             self.error.emit(f"⚠️ Exception: {str(e)}")
             
@@ -195,6 +226,32 @@ class FreeFactoryCore:
         except Exception as e:
             print(f"[DEBUG] Exception occurred while reading factory: {e}")
             return None
+        
+     # Get Analysis Report    
+    def get_analysis_report_path(self, input_path, factory_data):
+        input_path = Path(input_path)
+
+        output_dir = factory_data.get("OUTPUTDIRECTORY") or "."
+        output_dir = Path(output_dir)
+
+        analyze_audio = self._truthy(factory_data.get("ANALYZEAUDIO", "False"))
+        analyze_video = self._truthy(factory_data.get("ANALYZEVIDEO", "False"))
+
+        show_audio_report = self._truthy(factory_data.get("SHOWAUDIOANALYSISREPORT", "False"))
+        show_video_report = self._truthy(factory_data.get("SHOWVIDEOANALYSISREPORT", "False"))
+
+        audio_analysis = (factory_data.get("AUDIOANALYSISTYPE") or "").strip().lower()
+        video_analysis = (factory_data.get("VIDEOANALYSISTYPE") or "").strip().lower()
+
+        if analyze_audio and show_audio_report:
+            suffix = audio_analysis or "audio"
+            return output_dir / f"{input_path.stem}_{suffix}_audio_report.txt"
+
+        if analyze_video and show_video_report:
+            suffix = video_analysis or "video"
+            return output_dir / f"{input_path.stem}_{suffix}_video_report.txt"
+
+        return None        
 
 # Multi-Outputs Helpers
     @staticmethod
@@ -212,6 +269,135 @@ class FreeFactoryCore:
     @staticmethod
     def _truthy(v) -> bool:
         return str(v).strip().lower() in {"1", "true", "yes", "on"}
+
+
+# Two LoudNorm Helpers
+    @staticmethod
+    def _extract_loudnorm_json(text: str) -> dict | None:
+        """
+        Extract the JSON object printed by FFmpeg's loudnorm filter.
+        FFmpeg writes loudnorm output to stderr.
+        """
+        import json
+        import re
+
+        if not text:
+            return None
+
+        matches = re.findall(r"\{[\s\S]*?\}", text)
+        for block in reversed(matches):
+            try:
+                data = json.loads(block)
+                if "input_i" in data and "input_tp" in data:
+                    return data
+            except Exception:
+                pass
+
+        return None
+
+
+    @staticmethod
+    def _parse_loudnorm_targets(filter_text: str) -> dict:
+        """
+        Parse target values from a loudnorm filter string.
+        Example:
+        loudnorm=I=-16:TP=-1.5:LRA=11
+        """
+        targets = {
+            "I": "-16",
+            "TP": "-1.5",
+            "LRA": "11",
+        }
+
+        if not filter_text or not filter_text.startswith("loudnorm"):
+            return targets
+
+        _, _, options = filter_text.partition("=")
+
+        for part in options.split(":"):
+            if "=" not in part:
+                continue
+            key, value = part.split("=", 1)
+            key = key.strip()
+            value = value.strip()
+
+            if key in targets:
+                targets[key] = value
+
+        return targets
+# END Reports Helpers
+
+# Build LoudNorm Second Pass Filter
+    @staticmethod
+    def _build_loudnorm_second_pass_filter(original_filter: str, measured: dict) -> str:
+        """
+        Build a second-pass loudnorm filter using measured values from the
+        first-pass loudnorm analysis.
+        """
+        targets = FreeFactoryCore._parse_loudnorm_targets(original_filter)
+
+        return (
+            f"loudnorm="
+            f"I={targets['I']}:"
+            f"TP={targets['TP']}:"
+            f"LRA={targets['LRA']}:"
+            f"measured_I={measured['input_i']}:"
+            f"measured_TP={measured['input_tp']}:"
+            f"measured_LRA={measured['input_lra']}:"
+            f"measured_thresh={measured['input_thresh']}:"
+            f"offset={measured['target_offset']}:"
+            f"linear=true:"
+            f"print_format=summary"
+        )
+
+# END Build LoudNorm Second Pass
+
+# Run the LoudNorm Analysis
+    def _run_loudnorm_analysis(self, input_path, original_filter):
+        """
+        Run a temporary first-pass loudnorm analysis and return the parsed JSON.
+        """
+
+        import subprocess
+
+        analysis_filter = original_filter
+
+        if "print_format=" not in analysis_filter:
+            analysis_filter += ":print_format=json"
+
+        cmd = [
+            "ffmpeg",
+            "-hide_banner",
+            "-y",
+            "-i", str(input_path),
+            "-vn",
+            "-af", analysis_filter,
+            "-f", "null",
+            "-"
+        ]
+
+        process = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True
+        )
+
+        stderr_text = process.stderr or ""
+
+        measured = self._extract_loudnorm_json(stderr_text)
+
+        if not measured:
+            raise RuntimeError(
+                "Could not extract loudnorm analysis JSON from FFmpeg output."
+            )
+        return measured
+
+        print(
+            f"[LOUDNORM RENDER] "
+            f"Applying correction: "
+            f"{input_i} LUFS -> {target_i} LUFS"
+        )
+# END Run the LoudNorm Analysis
     
 
 # This builds the ffmpeg command via cmd. 
@@ -258,6 +444,7 @@ class FreeFactoryCore:
         gop_size            = factory_data.get("GROUPPICSIZE", "").strip()
         video_format        = factory_data.get("VIDEOFORMAT", "").strip()
         pix_format          = factory_data.get("VIDEOPIXFORMAT", "").strip()
+        video_aspect        = factory_data.get("ASPECT", "").strip()
         start_offset        = factory_data.get("STARTTIMEOFFSET", "").strip()
         encode_length       = factory_data.get("ENCODELENGTH", "").strip()
         force_format        = factory_data.get("FORCEFORMAT", "").strip()
@@ -266,6 +453,37 @@ class FreeFactoryCore:
         subs_stream_id      = factory_data.get("SUBTITLESTREAMID", "").strip()
         vf                  = (factory_data.get("VIDEOFILTERS")  or "").strip()
         af                  = (factory_data.get("AUDIOFILTERS")  or "").strip()
+        """# DEBUG REPORTs FIRST AND SECOND PASSES
+        print("DEBUG loudnorm targets:", self._parse_loudnorm_targets(af))
+        report_text = Path("/video/Rich_Lopez_loudnorm_audio_report.txt").read_text()
+        print("DEBUG loudnorm json:", self._extract_loudnorm_json(report_text))
+        print(
+            "DEBUG second pass filter:",
+            self._build_loudnorm_second_pass_filter(af, self._extract_loudnorm_json(report_text))
+        )
+        measured = self._run_loudnorm_analysis(
+            input_path,
+            af
+        )
+
+        print("DEBUG measured:", measured)
+
+        second_pass = self._build_loudnorm_second_pass_filter(
+            af,
+            measured
+        )
+
+        print("DEBUG second pass:", second_pass)        
+        # END DEBUG"""
+        
+        #A/V Analysis
+        analyze_audio       = self._truthy(factory_data.get("ANALYZEAUDIO", "False"))
+        audio_analysis      = (factory_data.get("AUDIOANALYSISTYPE") or "").strip().lower()
+        analyze_video       = self._truthy(factory_data.get("ANALYZEVIDEO", "False"))
+        video_analysis      = (factory_data.get("VIDEOANALYSISTYPE") or "").strip().lower()
+        show_audio_report   = self._truthy(factory_data.get("SHOWAUDIOANALYSISREPORT", "False"))
+        show_video_report   = self._truthy(factory_data.get("SHOWVIDEOANALYSISREPORT", "False"))
+        
         disablevideo        = (factory_data.get("DISABLEVIDEO")  or "").strip()
         disableaudio        = (factory_data.get("DISABLEAUDIO")  or "").strip()
         disablesubs         = (factory_data.get("DISABLESUBS")  or "").strip()
@@ -295,6 +513,115 @@ class FreeFactoryCore:
         if manual_input:
             cmd += shlex.split(manual_input)
         cmd += ["-i", str(input_path)]
+        
+        
+        
+        
+        
+        
+        # ============================
+        #      A/V Analysis Reports
+        # ============================
+        #
+        # If Show Report is enabled, run an analysis-only FFmpeg command
+        # and return immediately. This avoids creating a converted output file.
+        #
+        # Report mode may temporarily modify filter strings for command generation,
+        # but it must never write those changes back to factory_data or the UI.
+
+        # Audio Reports
+        if analyze_audio and show_audio_report:
+            if audio_analysis == "loudnorm":
+                analysis_filter = af or "loudnorm=I=-24:LRA=7:TP=-2"
+
+                if not analysis_filter.startswith("loudnorm"):
+                    raise ValueError(
+                        "Audio loudnorm analysis requires AUDIOFILTERS to contain a loudnorm filter."
+                    )
+
+                if "," in analysis_filter:
+                    raise ValueError(
+                        "Loudnorm report mode currently supports only one audio filter."
+                    )
+
+                if "print_format=" not in analysis_filter:
+                    analysis_filter += ":print_format=json"
+
+                cmd += [
+                    "-vn",
+                    "-af", analysis_filter,
+                    "-f", "null",
+                    "-"
+                ]
+                return cmd
+
+            elif audio_analysis == "volumedetect":
+                cmd += [
+                    "-vn",
+                    "-af", "volumedetect",
+                    "-f", "null",
+                    "-"
+                ]
+                return cmd
+
+        # Video Reports
+        if analyze_video and show_video_report:
+            if video_analysis == "blackdetect":
+                analysis_filter = vf or "blackdetect=d=2:pix_th=0.10"
+
+                cmd += [
+                    "-an",
+                    "-vf", analysis_filter,
+                    "-f", "null",
+                    "-"
+                ]
+                return cmd
+
+            elif video_analysis == "blackframe":
+                analysis_filter = vf or "blackframe"
+
+                cmd += [
+                    "-an",
+                    "-vf", analysis_filter,
+                    "-f", "null",
+                    "-"
+                ]
+                return cmd
+
+            elif video_analysis == "freezedetect":
+                analysis_filter = vf or "freezedetect=n=-60dB:d=2"
+
+                cmd += [
+                    "-an",
+                    "-vf", analysis_filter,
+                    "-f", "null",
+                    "-"
+                ]
+                return cmd
+
+            elif video_analysis == "idet":
+                analysis_filter = vf or "idet"
+
+                cmd += [
+                    "-an",
+                    "-vf", analysis_filter,
+                    "-f", "null",
+                    "-"
+                ]
+                return cmd
+
+            elif video_analysis == "signalstats":
+                analysis_filter = vf or "signalstats"
+
+                cmd += [
+                    "-an",
+                    "-vf", analysis_filter,
+                    "-f", "null",
+                    "-"
+                ]
+                return cmd
+        # End A/V Analysis Reports
+
 
         #=======Disable Select Streams
         disablevideo_flag    = str(disablevideo).strip().lower() in ("1", "true", "yes") # Ignore unless True, yes or 1. 
@@ -323,6 +650,9 @@ class FreeFactoryCore:
         video_framerate_cfr_flag    = str(video_framerate_cfr).strip().lower() in ("1", "true", "yes")
         if video_framerate_cfr_flag:
             cmd += ["-fps_mode:v", "cfr"]
+            
+        if video_aspect:
+            cmd += ["-aspect", video_aspect]
 
         if video_flags:
             cmd += ["-flags", video_flags]
@@ -354,7 +684,7 @@ class FreeFactoryCore:
                 strip_flag("-maxrate")
                 cmd += ["-minrate", video_bitrate, "-maxrate", video_bitrate]
 
-# Insert Advanced Video Here: WORK IN PROGRESS
+        # Insert Advanced Video Here:
         # Chroma settings
         if adv_colorspace:
             cmd += ["-colorspace", adv_colorspace]
@@ -407,7 +737,7 @@ class FreeFactoryCore:
                 cmd[-1] = adv_qmin  # replace qmax value
         except ValueError:
             pass
-# End Advanced Video:
+        # End Advanced Video:
 
         if video_profile:
             cmd += ["-profile:v", video_profile]
@@ -425,7 +755,7 @@ class FreeFactoryCore:
             cmd += ["-b_strategy", frame_strategy]
         if video_format:
             cmd += ["-video_format", video_format]
-        
+   
             
         # --- VIDEO filters / size
         if vf and not vf.endswith("="):
@@ -435,6 +765,7 @@ class FreeFactoryCore:
             cmd += ["-s", size]          
         if pix_format:
             cmd += ["-pix_fmt", pix_format]
+
             
         #=======Subtitles
         # normalize the flag (handles None, "false", "False", etc.)
@@ -456,6 +787,61 @@ class FreeFactoryCore:
             cmd += ["-ac", audio_channels]
 
         # Audio Filters
+        
+        # ============================
+        #    Automatic Loudnorm Pass
+        # ============================
+        if (
+            analyze_audio
+            and not show_audio_report
+            and audio_analysis == "loudnorm"
+            and af
+            and af.startswith("loudnorm")
+        ):
+            measured = self._run_loudnorm_analysis(input_path, af)
+            target_i = float(self._parse_loudnorm_targets(af)["I"])
+            input_i = float(measured["input_i"])
+
+            print(
+                f"[LOUDNORM ANALYSIS] "
+                f"File: {Path(input_path).name} | "
+                f"Input: {measured['input_i']} LUFS | "
+                f"Target: {target_i} LUFS"
+            )
+            delta = abs(input_i - target_i)
+            tolerance = 0.3
+
+            if delta <= tolerance:
+                print(
+                    f"INFO: Loudness already within tolerance "
+                    f"({input_i} LUFS target {target_i} LUFS). "
+                    f"Skipping loudnorm render pass."
+                )
+                
+                return [
+                    "ffmpeg",
+                    "-hide_banner",
+                    "-y",
+                    "-i", str(input_path),
+                    "-f", "null",
+                    "-"
+                ]
+                
+            else:
+                af = self._build_loudnorm_second_pass_filter(
+                    af,
+                    measured
+                )
+
+                print(
+                    f"[LOUDNORM RENDER] "
+                    f"Applying correction: "
+                    f"{input_i} LUFS -> {target_i} LUFS "
+                    f"(delta {delta:.2f} LU)"
+                )
+                
+        #    END Automatic Loudnorm Pass
+        
         if af and not af.endswith("="):
             cmd += ["-af", af]
         

@@ -176,77 +176,17 @@ def _render_inotify_block(valid_folders: list[str]) -> str:
 
 def write_notify_runner_sh(main_window, dest: Path | None = None) -> Path:
     """
-    Rewrites FreeFactoryNotifyRunner.sh so its inotifywait line includes all
-    (valid) folders listed in Global 'NotifyFolders'. Missing folders are
-    commented in the script and surfaced to the UI status list.
+    Legacy compatibility function.
+
+    The notify runner is now static/read-only. Notify folders are read
+    dynamically from ~/.freefactoryrc by FreeFactoryNotifyRunner.sh.
     """
-    # Get config
-    cfg = getattr(main_window, "config", None)
-    if cfg is None:
-        from config_manager import ConfigManager
-        cfg = ConfigManager()
 
-    # Pull and normalize folders from rc
-    raw_folders = []
-    if hasattr(cfg, "get_notify_folders"):
-        raw_folders = cfg.get_notify_folders()
-    else:
-        raw = (cfg.get("NotifyFolders", "") or "").strip()
-        if raw:
-            raw_folders = [s.strip() for s in raw.replace("\n", ";").split(";") if s.strip()]
-
-    expanded = [os.path.expanduser(p.strip()) for p in raw_folders]
-    valid = [p for p in expanded if os.path.isdir(p)]
-    missing = [p for p in expanded if p not in valid]
-
-    # Build script content
-    lines = [HEADER.rstrip(), ""]
-    if missing:
-        lines.append("# WARNING: the following configured folders do not exist right now:")
-        lines += [f"#   {p}" for p in missing]
-        lines.append("# They were skipped to avoid inotify errors.")
-        lines.append("")
-
-    # Add the format annotation BEFORE rendering the command
-    lines.append(f"# FORMAT: {'4 fields time|dir|event|file' if INOTIFY_USE_TIMESTAMP else '3 fields dir|event|file'}")
-    lines.append("")
-
-    # Append the inotify command block
-    lines.append(_render_inotify_block(valid).rstrip() + "\n")
-
-    content = "\n".join(lines)
-
-
-
-    # Write file
-    dest = dest or RUNNER_PATH
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    dest.write_text(content, encoding="utf-8")
-    dest.chmod(0o755)
-    
-    
     if hasattr(main_window, "listNotifyServiceStatus"):
-        fmt_note = "4-field (time|dir|event|file)" if INOTIFY_USE_TIMESTAMP else "3-field (dir|event|file)"
-        main_window.listNotifyServiceStatus.addItem(f"📝 Notify runner updated using {fmt_note}.")
+        main_window.listNotifyServiceStatus.addItem(
+            "ℹ️ Notify runner is static; notify folders are read from ~/.freefactoryrc."
+        )
 
-    
-    
-
-    # Surface status in the UI if available
-    if hasattr(main_window, "listNotifyServiceStatus"):
-        if valid:
-            main_window.listNotifyServiceStatus.addItem(
-                f"📝 Notify runner updated: {len(valid)} folder(s)."
-            )
-        else:
-            main_window.listNotifyServiceStatus.addItem(
-                "⚠️ No valid notify folders. Runner will print a warning and exit."
-            )
-        if missing:
-            main_window.listNotifyServiceStatus.addItem(
-                f"⚠️ Skipped {len(missing)} missing folder(s): " + ", ".join(missing)
-            )
-
-    return dest
+    return dest or RUNNER_PATH
 
 
