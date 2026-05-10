@@ -3,7 +3,54 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
-## 2026-03-23
+## [1.1.43-dev unreleased] - 2026-05-10
+
+### Fixed
+- **Notify Service / Packaging**
+  - Fixed a major RPM/COPR packaging issue where Global Settings attempted to rewrite:
+    `/opt/FreeFactory/bin/FreeFactoryNotifyRunner.sh`
+    which fails on packaged installs because the file is root-owned.
+  - `FreeFactoryNotifyRunner.sh` is now intended to become a static/read-only script.
+  - Notify folders are now read dynamically from `~/.freefactoryrc` instead of regenerating the runner script.
+  - Hardened `FreeFactoryNotify.sh` parsing and validation for `AppleDelaySeconds`.
+
+### Added
+- **Audio Loudness Analysis / Normalization**
+  - Added fully working two-pass FFmpeg `loudnorm` support.
+  - Added automatic loudness analysis with measured-value second-pass correction.
+  - Added tolerance-based smart rendering:
+    - files already within tolerance are skipped automatically.
+  - Added batch-safe logging output for future CSV/report generation.
+  - Added support for report-only analysis mode.
+  - Added support for `volumedetect` analysis reports.
+
+### Improved
+- **Audio Processing**
+  - Improved loudnorm defaults and testing workflows for music and broadcast PCM sources.
+  - Verified proper operation through:
+    - GUI rendering
+    - dropZone processing
+    - FreeFactoryNotify.sh
+    - FreeFactoryConversion.py daemon processing
+
+## [1.1.42-dev unreleased] - 2026-05-10
+
+### Added
+- Initial implementation of audio analysis framework.
+- Added early `loudnorm` integration and report generation support.
+- Added initial `volumedetect` analysis support.
+
+## [1.1.41-dev unreleased] 2026-05-06
+
+- BUG FIX: Added the support in core.py for missing Aspect Ratio flag. The widget was there, but the code was missing so it didn't do anything. 
+- Added code support for the new audio and video analysis features.
+
+
+## [1.1.40-dev unreleased] 2026-05-01
+
+- Added new widgets to support audio and video analysis.
+
+## [1.1.39-dev unreleased] 2026-03-23
 
 - Added a few new factories to normalize audio in LUFS.
 
@@ -18,7 +65,7 @@ This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and
 
 ## [1.1.36-dev] - 2025-10-01
 
-### Various small fixes.
+- Various small fixes.
 
 
 ## [1.1.35-dev] - 2025-09-24
