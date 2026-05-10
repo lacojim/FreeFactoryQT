@@ -42,6 +42,7 @@ As you can see in the photo, you first set the filter to something close to what
    ```bash
    -af loudnorm=I=-16:TP=-1.5:LRA=11:measured_I=...:measured_TP=...:measured_LRA=...:measured_thresh=...:offset=...:linear=true
    ```
+This feature also allows for creating a report text file so you may see the full analysis report for your file(s). This file gets saved into the Output Directory.  NOTE: If Report is checked, it ONLY creates the analysis report and does not render any files. The checkbox is read in real time and is NOT saved in the Factory file. 
 
 
 ---
