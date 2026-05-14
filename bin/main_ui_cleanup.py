@@ -36,6 +36,7 @@ import shutil
 import subprocess
 import atexit
 import time
+import argparse
 
 from pathlib import Path
 from datetime import datetime
@@ -96,6 +97,20 @@ def asset(*parts: str) -> Path:
 
 
 STATUS_COL = 5
+
+######################################
+# Add the Option to specify a .ui file
+######################################
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "-u", "-ui", "--ui",
+    default="FreeFactory-tabs.ui",
+    help="Specify alternate UI file"
+)
+
+args = parser.parse_args()
+UI_PATH = Path(__file__).resolve().parent / args.ui
+
 
 
 # --- copy-lock widget lists (module-level constants) ---
@@ -262,8 +277,14 @@ class FreeFactoryApp(QMainWindow):
         self._stream_row_seq = 0          # monotonic uid for stream rows
         self._is_closing = False          # Prevents noisey exiting
         self._is_stopping_recording = False
-        UI_PATH = asset("FreeFactory-tabs.ui")
+        #UI_PATH = asset("FreeFactory-tabs.ui")
+        ui_path = Path(__file__).resolve().parent / args.ui
+        if not ui_path.exists():
+            print(f"UI file not found: {ui_path}")
+            sys.exit(1)        
         uic.loadUi(str(UI_PATH), self)
+        print(f"Loading UI file: {ui_path}")
+
 
         # Apply combo lock behavior right after loading UI
         self._lock_combos()
