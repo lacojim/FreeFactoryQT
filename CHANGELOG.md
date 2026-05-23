@@ -3,14 +3,20 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.50-dev unreleased] - 2026-05-23
+ - Added new make_ui_compat.py utility to convert the .ui files for older Qt6/PyQt6 Designer. 
+ - Fix Preview crash when Analysis Reports are enabled.
+ - Added CRF (Constant Rate Factor) support to the Video tab.
+ - Added **Factory Summary** bar at the bottom of the Factory Builder tab.
+
+
 ## [1.1.44-dev unreleased] - 2026-05-14
 - **Addressed Campatibility issue between PyQt6 v6.6 and v6.10+**
  - Added command line option to load a different UI file (-u, -ui, --ui all work).
  - Now includes a compat .ui file (FreeFactory-tabs-compat.ui)
  - At this point, only the alpha FreeFactory file, main_ui_cleanup.py is updated. Please test and once confirmed working, I will push these changes to main.py.
-
+ 
 ## [1.1.43-dev unreleased] - 2026-05-10
-
 ### Fixed
 - **Notify Service / Packaging**
   - Fixed a major RPM/COPR packaging issue where Global Settings attempted to rewrite:
