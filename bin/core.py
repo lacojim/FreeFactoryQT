@@ -227,7 +227,7 @@ class FreeFactoryCore:
             print(f"[DEBUG] Exception occurred while reading factory: {e}")
             return None
         
-     # Get Analysis Report    
+    # Get Analysis Report    
     def get_analysis_report_path(self, input_path, factory_data):
         input_path = Path(input_path)
 
@@ -429,6 +429,9 @@ class FreeFactoryCore:
         video_framerate_cfr = factory_data.get("FRAMERATECFR", "").strip()                  #CHECK
         video_profile       = factory_data.get("VIDEOPROFILE", "").strip()
         video_profile_level = factory_data.get("VIDEOPROFILELEVEL", "").strip()
+        video_tags          = factory_data.get("VIDEOTAGS", "").strip()
+        video_crf           = factory_data.get("VIDEOCRF", "").strip()
+        audio_tags          = factory_data.get("AUDIOTAGS", "").strip()
         size                = factory_data.get("VIDEOSIZE", "").strip()
         video_preset        = factory_data.get("VIDEOPRESET", "").strip()
         subtitle            = factory_data.get("SUBTITLECODECS", "").strip()
@@ -669,6 +672,9 @@ class FreeFactoryCore:
         if video_bitrate:
             cmd += ["-b:v", video_bitrate]
 
+        if video_crf:
+            cmd += ["-crf", video_crf]
+
             # MATCHMINMAXBITRATE support
             match_minmax = factory_data.get("MATCHMINMAXBITRATE", "False").strip().lower() == "true"
             if match_minmax:
@@ -746,7 +752,7 @@ class FreeFactoryCore:
         
         
         if video_preset:
-            cmd += ["-preset:v", video_preset]
+            cmd += ["-preset", video_preset]
         if gop_size:
             cmd += ["-g", gop_size]
         if bframes:
@@ -755,6 +761,8 @@ class FreeFactoryCore:
             cmd += ["-b_strategy", frame_strategy]
         if video_format:
             cmd += ["-video_format", video_format]
+        if video_tags:
+            cmd += ["-tag:v", video_tags]
    
             
         # --- VIDEO filters / size
@@ -785,6 +793,8 @@ class FreeFactoryCore:
             cmd += ["-ar", sample_rate]
         if audio_channels:
             cmd += ["-ac", audio_channels]
+        if audio_tags:
+            cmd += ["-tag:a", audio_tags]
 
         # Audio Filters
         
@@ -798,47 +808,45 @@ class FreeFactoryCore:
             and af
             and af.startswith("loudnorm")
         ):
-            measured = self._run_loudnorm_analysis(input_path, af)
-            target_i = float(self._parse_loudnorm_targets(af)["I"])
-            input_i = float(measured["input_i"])
-
-            print(
-                f"[LOUDNORM ANALYSIS] "
-                f"File: {Path(input_path).name} | "
-                f"Input: {measured['input_i']} LUFS | "
-                f"Target: {target_i} LUFS"
-            )
-            delta = abs(input_i - target_i)
-            tolerance = 0.3
-
-            if delta <= tolerance:
-                print(
-                    f"INFO: Loudness already within tolerance "
-                    f"({input_i} LUFS target {target_i} LUFS). "
-                    f"Skipping loudnorm render pass."
-                )
-                
-                return [
-                    "ffmpeg",
-                    "-hide_banner",
-                    "-y",
-                    "-i", str(input_path),
-                    "-f", "null",
-                    "-"
-                ]
-                
-            else:
-                af = self._build_loudnorm_second_pass_filter(
-                    af,
-                    measured
-                )
+            if not preview:
+                measured = self._run_loudnorm_analysis(input_path, af)
+                target_i = float(self._parse_loudnorm_targets(af)["I"])
+                input_i = float(measured["input_i"])
 
                 print(
-                    f"[LOUDNORM RENDER] "
-                    f"Applying correction: "
-                    f"{input_i} LUFS -> {target_i} LUFS "
-                    f"(delta {delta:.2f} LU)"
+                    f"[LOUDNORM ANALYSIS] "
+                    f"File: {Path(input_path).name} | "
+                    f"Input: {measured['input_i']} LUFS | "
+                    f"Target: {target_i} LUFS"
                 )
+
+                delta = abs(input_i - target_i)
+                tolerance = 0.3
+
+                if delta <= tolerance:
+                    print(
+                        f"INFO: Loudness already within tolerance "
+                        f"({input_i} LUFS target {target_i} LUFS). "
+                        f"Skipping loudnorm render pass."
+                    )
+
+                    return [
+                        "ffmpeg",
+                        "-hide_banner",
+                        "-y",
+                        "-i", str(input_path),
+                        "-f", "null",
+                        "-"
+                    ]
+                else:
+                    af = self._build_loudnorm_second_pass_filter(af, measured)
+
+                    print(
+                        f"[LOUDNORM RENDER] "
+                        f"Applying correction: "
+                        f"{input_i} LUFS -> {target_i} LUFS "
+                        f"(delta {delta:.2f} LU)"
+                    )
                 
         #    END Automatic Loudnorm Pass
         

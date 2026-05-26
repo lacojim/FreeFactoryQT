@@ -119,6 +119,7 @@ VIDEO_COPY_WIDGETS = [
     "VideoPixFormat",
     "VideoProfile",
     "VideoProfileLevel",
+    "VideoTags",
     "VideoBitrate",
     "VideoFrameRate",
     "VideoAspect",
@@ -129,6 +130,7 @@ VIDEO_COPY_WIDGETS = [
     "FrameStrategy",
     "VideoFormat",
     "checkRemoveA53cc",
+    "VideoCRF",
     #Advanced Video Options
     "ColorSpace",
     "ColorRange",
@@ -152,6 +154,7 @@ AUDIO_COPY_WIDGETS = [
     "AudioExtension",   
     "AudioBitrate",
     "AudioSampleRate",
+    "AudioTags",
     "AudioChannels",
     "audioFiltersCombo",
     "AudioDitherMethod",
@@ -1142,6 +1145,8 @@ class FreeFactoryApp(QMainWindow):
             "VideoProfile":             "VIDEOPROFILE",             # QComboBox
             "VideoProfileLevel":        "VIDEOPROFILELEVEL",        # QComboBox
             "VideoPreset":              "VIDEOPRESET",              # QComboBox
+            "VideoTags":                "VIDEOTAGS",                # QComboBox
+            "VideoCRF":                 "VIDEOCRF",                 
             "VideoStreamID":            "VIDEOSTREAMID",            # QLineEdit
             "VideoGroupPicSize":        "GROUPPICSIZE",             # QLineEdit
             "VideoBFrames":             "BFRAMES",                  # QLineEdit
@@ -1182,6 +1187,7 @@ class FreeFactoryApp(QMainWindow):
             "AudioCodec":               "AUDIOCODECS",              # QComboBox
             "AudioBitrate":             "AUDIOBITRATE",             # QComboBox
             "AudioSampleRate":          "AUDIOSAMPLERATE",          # QComboBox
+            "AudioTags":                "AUDIOTAGS",                # QComboBox
             "AudioExtension":           "AUDIOFILEEXTENSION",       # QComboBox
             "audioFiltersCombo":        "AUDIOFILTERS",             # QComboBox
             "AudioChannels":            "AUDIOCHANNELS",            # QComboBox
@@ -2347,6 +2353,7 @@ class FreeFactoryApp(QMainWindow):
 
     def new_factory(self):
         self.FactoryFilename.clear()
+        self.FactorySummary.clear()
         self.listFactoryFiles.clearSelection()
         for field in self.findChildren(QLineEdit):
             field.clear()
@@ -2473,6 +2480,8 @@ class FreeFactoryApp(QMainWindow):
         
         self._apply_video_copy_lock(clear_on_disable=False)
         self._apply_audio_copy_lock(clear_on_disable=False)
+        
+        self.update_factory_summary(factory_data)
 
 
 
@@ -2923,6 +2932,71 @@ class FreeFactoryApp(QMainWindow):
         # Default selection = blank (so we omit -profile unless user chooses)
         self.VideoProfile.setCurrentIndex(0)
         self.VideoProfile.blockSignals(False)
+
+
+    # ============================
+    #     Factory Summary
+    # ============================
+
+    def update_factory_summary(self, factory_data):
+        parts = []
+
+        factory_type = (factory_data.get("FACTORYTYPE") or "").strip()
+        video_codec = (factory_data.get("VIDEOCODECS") or "").strip()
+        audio_codec = (factory_data.get("AUDIOCODECS") or "").strip()
+        sample_rate = (factory_data.get("AUDIOSAMPLERATE") or "").strip()
+        audio_filters = (factory_data.get("AUDIOFILTERS") or "").strip()
+        video_filters = (factory_data.get("VIDEOFILTERS") or "").strip()
+        wrapper = (factory_data.get("VIDEOWRAPPER") or "").strip().lstrip(".")
+        audio_ext = (factory_data.get("AUDIOFILEEXTENSION") or "").strip().lstrip(".")
+        notify_dir = (factory_data.get("NOTIFYDIRECTORY") or "").strip().lstrip(".")
+
+        disable_video = str(factory_data.get("DISABLEVIDEO", "")).lower() in ("1", "true", "yes")
+        disable_audio = str(factory_data.get("DISABLEAUDIO", "")).lower() in ("1", "true", "yes")
+
+        if disable_video and not disable_audio:
+            parts.append("[AUDIO ONLY]")
+        elif disable_audio and not disable_video:
+            parts.append("[VIDEO ONLY]")
+        elif factory_type:
+            parts.append(f"[{factory_type.upper()}]")
+        
+        if notify_dir:
+            parts.append(f"[{"NOTIFY"}]")
+            
+        if video_codec:
+            parts.append(f"[{video_codec}]")
+
+        if audio_codec:
+            parts.append(f"[{audio_codec}]")
+
+        if sample_rate:
+            parts.append(f"[{sample_rate}]")
+
+        if audio_filters:
+            if audio_filters.startswith("loudnorm"):
+                parts.append("[loudnorm]")
+            else:
+                parts.append("[audio filters]")
+        
+        if video_filters:
+                parts.append("[video filters]")
+
+
+        
+        #if hasattr(self, "checkShowAudioAnalysisReport") and self.checkShowAudioAnalysisReport.isChecked():
+        #    parts.append("[REPORT]")
+        #if hasattr(self, "checkShowVideoAnalysisReport") and self.checkShowVideoAnalysisReport.isChecked():
+        #    parts.append("[REPORT]")
+
+        ext = wrapper or audio_ext
+        if ext:
+            parts.append(f"[{ext}]")
+
+        self.FactorySummary.setText(" ".join(parts) if parts else "[No active factory summary]")
+
+    # End Factory Summary 
+
 
 
 

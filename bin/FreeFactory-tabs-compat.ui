@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1103</width>
-    <height>723</height>
+    <height>751</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
       <x>0</x>
       <y>0</y>
       <width>1101</width>
-      <height>681</height>
+      <height>711</height>
      </rect>
     </property>
     <property name="font">
@@ -73,7 +73,7 @@
         <x>10</x>
         <y>50</y>
         <width>221</width>
-        <height>591</height>
+        <height>631</height>
        </rect>
       </property>
       <property name="font">
@@ -129,7 +129,7 @@
          <x>10</x>
          <y>106</y>
          <width>201</width>
-         <height>431</height>
+         <height>481</height>
         </rect>
        </property>
        <property name="font">
@@ -140,30 +140,7 @@
         </font>
        </property>
        <property name="editTriggers">
-        <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_13">
-       <property name="geometry">
-        <rect>
-         <x>15</x>
-         <y>538</y>
-         <width>191</width>
-         <height>51</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Import/Export and Backup are now located in FactoryTools. This space will be used for Factory Filtering in the future.</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
+        <set>QAbstractItemView::NoEditTriggers</set>
        </property>
       </widget>
       <widget class="QComboBox" name="FactoryType">
@@ -186,8 +163,7 @@
         </font>
        </property>
        <property name="toolTip">
-        <string>Video Bitrate: Adds the flag -b:v to the command line
-You can also manually add extra options after the rate such as minrate 50M maxrate 50M.</string>
+        <string>Selects the Factory Type</string>
        </property>
        <property name="editable">
         <bool>true</bool>
@@ -272,6 +248,39 @@ You can also manually add extra options after the rate such as minrate 50M maxra
        </property>
        <property name="text">
         <string>Factory Type</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ExecuteInternalFactory">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>600</y>
+         <width>201</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>This button will execute an Internal Factory.
+
+Internal Factories are used to create countdowns, colorbars,
+etc. 
+
+An Internal Factory MUST first be selected or this will do 
+absolutely nothing. The Factory must also be of Factory Type:
+Internal.</string>
+       </property>
+       <property name="text">
+        <string>Execute Internal Factory</string>
        </property>
       </widget>
      </widget>
@@ -656,6 +665,16 @@ Choosing 'copy' locks most video options (bitrate, size, profile, filters, etc).
          </item>
          <item>
           <property name="text">
+           <string>libvpx</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>libvpx-vp9</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>mjpeg</string>
           </property>
          </item>
@@ -687,16 +706,6 @@ Choosing 'copy' locks most video options (bitrate, size, profile, filters, etc).
          <item>
           <property name="text">
            <string>prores_ks</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>vp8</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>vp9</string>
           </property>
          </item>
          <item>
@@ -2230,9 +2239,9 @@ Ensures strict frame pacing by duplicating or dropping frames as needed.
           <string>Lock Frame Rate</string>
          </property>
         </widget>
-        <widget class="QComboBox" name="VideoTag">
+        <widget class="QComboBox" name="VideoTags">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="geometry">
           <rect>
@@ -2249,9 +2258,33 @@ Ensures strict frame pacing by duplicating or dropping frames as needed.
            <bold>false</bold>
           </font>
          </property>
+         <property name="acceptDrops">
+          <bool>false</bool>
+         </property>
          <property name="toolTip">
           <string>Add Specific video tags. Adds -tag:v to command line.
-ie. For Apple mobile device compatibility, add hvc1.</string>
+ie. For Apple mobile device compatibility, add hvc1.
+Other Tags:
+
+- H.264         avc1	Standard MP4/iOS H.264n
+- HEVC/H.265    hvc1	Preferred by Apple/iOS
+- HEVC/H.265    hev1	FFmpeg often defaults to this
+- MPEG-4 Part 2	mp4v	Old DivX/Xvid-style MPEG-4
+- DV	        dvc / dvcp / dvh5	DV/DVCPro variants
+- ProRes	apcn, apch, ap4h, apco	Different ProRes profiles
+- DNxHD/DNxHR	AVdn	Avid
+- MJPEG	        mjpa / jpeg	MOV variants
+- CineForm	CFHD	GoPro CineForm
+- VC-1	        WVC1	Rare now
+- HuffYUV	HFYU	AVI mostly
+
+----ProRes Tags----
+- ProRes Proxy	apco
+- ProRes LT	apcs
+- ProRes 422	apcn
+- ProRes HQ	apch
+- ProRes 4444	ap4h
+- ProRes XQ	ap4x</string>
          </property>
          <property name="editable">
           <bool>true</bool>
@@ -2269,13 +2302,108 @@ ie. For Apple mobile device compatibility, add hvc1.</string>
          </item>
          <item>
           <property name="text">
+           <string>avc1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>hvc1</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>hev1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mp4v</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>dvc</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>dvcp</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>dvh5</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>AVdn</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mjpa</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>jpeg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>CFHD</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>WVC1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>HFYU</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>----ProRes Tags----</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>apco</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>apcs</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>apcn</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>apch</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ap4h</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ap4x</string>
+          </property>
+         </item>
         </widget>
-        <widget class="QLabel" name="l_VideoTag">
+        <widget class="QLabel" name="l_VideoTags">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="geometry">
           <rect>
@@ -2296,7 +2424,7 @@ ie. For Apple mobile device compatibility, add hvc1.</string>
           <string>Add Specific video tags. Adds -tag:v to command line.</string>
          </property>
          <property name="text">
-          <string>Tags</string>
+          <string>VTags</string>
          </property>
         </widget>
         <widget class="QLabel" name="l_VideoAnalysisType">
@@ -2501,6 +2629,84 @@ adjustments during the actual rendering.</string>
          </property>
          <property name="text">
           <string>Analyze Video</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="l_VideoCRF">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>700</x>
+           <y>30</y>
+           <width>21</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Encoding duration (e.g., 30, 00:01:00, 00:00:30.500)</string>
+         </property>
+         <property name="text">
+          <string>CRF</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="VideoCRF">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>728</x>
+           <y>27</y>
+           <width>41</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Constant Rate Factor (CRF)
+
+Controls perceptual video quality using variable bitrate encoding.
+
+Lower values = higher quality / larger files
+Higher values = lower quality / smaller files
+
+Typical ranges:
+  x264 / x265:
+    18-20   Visually lossless
+    21-23   High quality (recommended)
+    24-28   Medium quality
+    29+     Low quality
+
+  AV1:
+    18-28   High quality
+    29-36   Medium quality
+    37+     Lower quality
+
+General CRF range:
+  0-51
+
+Notes:
+- CRF is ignored by some codecs.
+- Lower CRF greatly increases bitrate and encode time.
+- CRF is usually preferred over fixed bitrate for file delivery.
+- Use bitrate-based encoding instead for strict broadcast delivery specs.</string>
+         </property>
+         <property name="placeholderText">
+          <string/>
          </property>
         </widget>
        </widget>
@@ -3506,6 +3712,138 @@ adjustments to parameters such as loudnorm, TP and LRA.</string>
          <property name="text">
           <string>Analyze Audio</string>
          </property>
+        </widget>
+        <widget class="QLabel" name="l_AudioTags">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>480</x>
+           <y>28</y>
+           <width>41</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Add Specific audio tags. Adds -tag:a to command line.</string>
+         </property>
+         <property name="text">
+          <string>ATags</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="AudioTags">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>520</x>
+           <y>25</y>
+           <width>111</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="acceptDrops">
+          <bool>false</bool>
+         </property>
+         <property name="toolTip">
+          <string>Add Specific audio tags. Adds -tag:a to command line.
+
+AAC         mp4a        Standard MP4 AAC
+MP3         .mp3/mp3    Depends on container
+PCM S16LE   sowt        QuickTime PCM
+PCM BE      twos        Old Mac PCM
+ALAC        alac        Apple Lossless
+AC3         ac-3        Dolby Digital
+E-AC3       ec-3        Dolby Digital Plus
+Opus        Opus        Mostly Matroska/WebM
+FLAC        fLaC        FLAC-in-MOV/MP4 sometimes
+DTS         dtsc        DTS core</string>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mp4a</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mp3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>.mp3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>sowt</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>twos</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>alac</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ac-3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ec-3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Opus</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>fLaC</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>dtsc</string>
+          </property>
+         </item>
         </widget>
        </widget>
       </widget>
@@ -4802,7 +5140,7 @@ For advanced/broadcast workflows only.
            <string>Quantizer / Misc</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
           </property>
           <widget class="QCheckBox" name="checkIntraVLC">
            <property name="enabled">
@@ -4841,7 +5179,7 @@ For advanced/broadcast workflows only.
             </rect>
            </property>
            <property name="orientation">
-            <enum>Qt::Orientation::Vertical</enum>
+            <enum>Qt::Vertical</enum>
            </property>
           </widget>
           <widget class="QLineEdit" name="BufSize">
@@ -4959,7 +5297,7 @@ For advanced/broadcast workflows only.
             </rect>
            </property>
            <property name="orientation">
-            <enum>Qt::Orientation::Vertical</enum>
+            <enum>Qt::Vertical</enum>
            </property>
           </widget>
           <widget class="QLabel" name="l_lineEdit_DC">
@@ -5041,7 +5379,7 @@ For advanced/broadcast workflows only.
             </rect>
            </property>
            <property name="orientation">
-            <enum>Qt::Orientation::Vertical</enum>
+            <enum>Qt::Vertical</enum>
            </property>
           </widget>
           <widget class="QLineEdit" name="lineEdit_DC">
@@ -5459,7 +5797,7 @@ These are low-level encoder switches. Use only when required by your workflow.
              <string>Flags Builder</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignCenter</set>
+             <set>Qt::AlignCenter</set>
             </property>
             <widget class="QLineEdit" name="FlagsCollector">
              <property name="geometry">
@@ -5863,7 +6201,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
              <string>Flags2 Builder</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignCenter</set>
+             <set>Qt::AlignCenter</set>
             </property>
             <widget class="QLineEdit" name="Flags2Collector">
              <property name="geometry">
@@ -6172,7 +6510,7 @@ Checked items are collected into MOVFLAGS as +tokens.</string>
              <string>MovFlags Builder</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignCenter</set>
+             <set>Qt::AlignCenter</set>
             </property>
             <widget class="QLineEdit" name="MovFlagsCollector">
              <property name="geometry">
@@ -6815,7 +7153,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
              <string>FFlags Builder</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignCenter</set>
+             <set>Qt::AlignCenter</set>
             </property>
             <widget class="QLineEdit" name="FFlagsCollector">
              <property name="geometry">
@@ -7140,168 +7478,6 @@ This needs nofillin too.</string>
         </widget>
        </widget>
       </widget>
-      <widget class="QWidget" name="tab_6">
-       <attribute name="title">
-        <string>Piper</string>
-       </attribute>
-       <widget class="QComboBox" name="piperVoiceModel">
-        <property name="geometry">
-         <rect>
-          <x>80</x>
-          <y>6</y>
-          <width>81</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Amy</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>arctic</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>bryce</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>danny</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>hfc_female</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>hfc_male</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Joe</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>john</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>kathleen</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>kristin</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>kusal</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>l2arctic</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>lessac</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>libritts</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>libritts_r</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>ljspeech</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>norman</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>resa_ibrahim</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>ryan</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>sam</string>
-         </property>
-        </item>
-       </widget>
-       <widget class="QComboBox" name="piperLengthScale">
-        <property name="geometry">
-         <rect>
-          <x>81</x>
-          <y>36</y>
-          <width>81</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-       <widget class="QLabel" name="l_piperVoiceModel">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>71</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Voice Model</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="l_piperLengthScale">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>40</y>
-          <width>71</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Length Scale</string>
-        </property>
-       </widget>
-      </widget>
      </widget>
      <widget class="QLineEdit" name="FactoryDescription">
       <property name="geometry">
@@ -7330,7 +7506,7 @@ This needs nofillin too.</string>
       <property name="geometry">
        <rect>
         <x>1020</x>
-        <y>124</y>
+        <y>93</y>
         <width>29</width>
         <height>25</height>
        </rect>
@@ -7342,7 +7518,7 @@ This needs nofillin too.</string>
        <bool>false</bool>
       </property>
       <property name="arrowType">
-       <enum>Qt::ArrowType::UpArrow</enum>
+       <enum>Qt::UpArrow</enum>
       </property>
      </widget>
      <widget class="QLabel" name="l_FactoryDescription">
@@ -7369,7 +7545,7 @@ This needs nofillin too.</string>
       <property name="geometry">
        <rect>
         <x>240</x>
-        <y>128</y>
+        <y>97</y>
         <width>91</width>
         <height>17</height>
        </rect>
@@ -7385,36 +7561,11 @@ This needs nofillin too.</string>
        <string>Output Directory</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="NotifyDirectory">
-      <property name="geometry">
-       <rect>
-        <x>340</x>
-        <y>94</y>
-        <width>681</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string>Notify Directory. Not used or required for local conversions.
-Only needed by the FreeFactory-service and is
-only used on Linux installations.</string>
-      </property>
-      <property name="placeholderText">
-       <string>/video/dropbox</string>
-      </property>
-     </widget>
      <widget class="QLineEdit" name="OutputDirectory">
       <property name="geometry">
        <rect>
         <x>340</x>
-        <y>124</y>
+        <y>93</y>
         <width>681</width>
         <height>25</height>
        </rect>
@@ -7433,45 +7584,6 @@ background service encoding.</string>
       </property>
       <property name="placeholderText">
        <string>/video/output</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="l_NotifyDirectory">
-      <property name="geometry">
-       <rect>
-        <x>240</x>
-        <y>98</y>
-        <width>91</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Notify Directory</string>
-      </property>
-     </widget>
-     <widget class="QToolButton" name="toolButton_notifyDir">
-      <property name="geometry">
-       <rect>
-        <x>1020</x>
-        <y>94</y>
-        <width>29</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>...</string>
-      </property>
-      <property name="icon">
-       <iconset theme="QIcon::ThemeIcon::FolderNew"/>
-      </property>
-      <property name="arrowType">
-       <enum>Qt::ArrowType::UpArrow</enum>
       </property>
      </widget>
      <widget class="DropTextEdit" name="dropZone">
@@ -7562,7 +7674,7 @@ Value in seconds. Adds the -ss flag to the commandline.
 If you need this on Input (which is more efficient), use Manual Input Opts below.</string>
        </property>
        <property name="inputMethodHints">
-        <set>Qt::InputMethodHint::ImhNone</set>
+        <set>Qt::ImhNone</set>
        </property>
        <property name="text">
         <string/>
@@ -7917,7 +8029,7 @@ The input and output filenames are generic.</string>
      <widget class="QLineEdit" name="PreviewCommandLine">
       <property name="geometry">
        <rect>
-        <x>397</x>
+        <x>403</x>
         <y>620</y>
         <width>671</width>
         <height>25</height>
@@ -8352,7 +8464,103 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
        </rect>
       </property>
       <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="l_FactorySummary">
+      <property name="geometry">
+       <rect>
+        <x>238</x>
+        <y>652</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Factory Summary:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="FactorySummary">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>650</y>
+        <width>721</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="NotifyDirectory">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>122</y>
+        <width>681</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Notify Directory: This field is REQUIRED for the FreeFactory-notify.service. 
+This field is not used for drag and drop encoding.</string>
+      </property>
+      <property name="placeholderText">
+       <string>/video/dropbox</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="toolButton_notifyDir">
+      <property name="geometry">
+       <rect>
+        <x>1020</x>
+        <y>122</y>
+        <width>29</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>...</string>
+      </property>
+      <property name="icon">
+       <iconset theme="QIcon::ThemeIcon::FolderNew"/>
+      </property>
+      <property name="arrowType">
+       <enum>Qt::UpArrow</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="l_NotifyDirectory">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>126</y>
+        <width>91</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Notify Directory</string>
       </property>
      </widget>
     </widget>
@@ -8532,7 +8740,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
         <bool>true</bool>
        </property>
        <property name="insertPolicy">
-        <enum>QComboBox::InsertPolicy::NoInsert</enum>
+        <enum>QComboBox::NoInsert</enum>
        </property>
        <item>
         <property name="text">
@@ -8595,7 +8803,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
         <bool>true</bool>
        </property>
        <property name="insertPolicy">
-        <enum>QComboBox::InsertPolicy::NoInsert</enum>
+        <enum>QComboBox::NoInsert</enum>
        </property>
        <item>
         <property name="text">
@@ -8852,7 +9060,7 @@ Multi-Output is local encode only and not supported by FreeFactory service.</str
         <string>Password for destination auth (used when mode is ‘url’)</string>
        </property>
        <property name="inputMethodHints">
-        <set>Qt::InputMethodHint::ImhSensitiveData</set>
+        <set>Qt::ImhSensitiveData</set>
        </property>
        <property name="maxLength">
         <number>255</number>
@@ -9824,10 +10032,10 @@ When Off, all widgets below are inaccessible.</string>
        </rect>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <widget class="QTableWidget" name="conversionQueueTable">
        <property name="geometry">
@@ -9965,16 +10173,16 @@ When Off, all widgets below are inaccessible.</string>
 or Factory Testing</string>
       </property>
       <property name="inputMethodHints">
-       <set>Qt::InputMethodHint::ImhNone</set>
+       <set>Qt::ImhNone</set>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Sunken</enum>
+       <enum>QFrame::Sunken</enum>
       </property>
       <property name="documentTitle">
        <string/>
       </property>
       <property name="lineWrapMode">
-       <enum>QPlainTextEdit::LineWrapMode::NoWrap</enum>
+       <enum>QPlainTextEdit::NoWrap</enum>
       </property>
       <property name="plainText">
        <string/>
@@ -10036,7 +10244,7 @@ or Factory Testing</string>
        </font>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::NoFrame</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="undoRedoEnabled">
        <bool>false</bool>
@@ -10490,7 +10698,7 @@ will process in parallel (1 = safest).</string>
          </font>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Shape::NoFrame</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="undoRedoEnabled">
          <bool>false</bool>
@@ -10683,7 +10891,7 @@ Takes effect for new jobs; running jobs are not interrupted.
          </rect>
         </property>
         <property name="orientation">
-         <enum>Qt::Orientation::Horizontal</enum>
+         <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </widget>
@@ -10765,7 +10973,7 @@ Takes effect for new jobs; running jobs are not interrupted.
         <iconset theme="QIcon::ThemeIcon::FolderNew"/>
        </property>
        <property name="arrowType">
-        <enum>Qt::ArrowType::UpArrow</enum>
+        <enum>Qt::UpArrow</enum>
        </property>
       </widget>
      </widget>
@@ -11385,7 +11593,7 @@ Right-click to refresh service mode.</string>
         <string/>
        </property>
        <property name="inputMethodHints">
-        <set>Qt::InputMethodHint::ImhNoAutoUppercase|Qt::InputMethodHint::ImhNoPredictiveText|Qt::InputMethodHint::ImhSensitiveData</set>
+        <set>Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData</set>
        </property>
        <property name="text">
         <string/>
@@ -11394,7 +11602,7 @@ Right-click to refresh service mode.</string>
         <bool>true</bool>
        </property>
        <property name="echoMode">
-        <enum>QLineEdit::EchoMode::PasswordEchoOnEdit</enum>
+        <enum>QLineEdit::PasswordEchoOnEdit</enum>
        </property>
        <property name="placeholderText">
         <string>Password</string>
@@ -11479,7 +11687,7 @@ Right-click to refresh service mode.</string>
        </rect>
       </property>
       <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
+       <enum>Qt::Vertical</enum>
       </property>
      </widget>
     </widget>
@@ -11523,7 +11731,7 @@ Right-click to refresh service mode.</string>
         </font>
        </property>
        <property name="frameShape">
-        <enum>QFrame::Shape::NoFrame</enum>
+        <enum>QFrame::NoFrame</enum>
        </property>
        <property name="documentTitle">
         <string/>
@@ -11560,7 +11768,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <string/>
        </property>
        <property name="alignment">
-        <set>Qt::AlignmentFlag::AlignCenter</set>
+        <set>Qt::AlignCenter</set>
        </property>
        <widget class="QPushButton" name="helpAllHelp">
         <property name="geometry">
@@ -11756,7 +11964,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
         <string>Filters</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignmentFlag::AlignCenter</set>
+        <set>Qt::AlignCenter</set>
        </property>
        <widget class="QLineEdit" name="helpMuxersFilter">
         <property name="geometry">
@@ -12038,7 +12246,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
        </font>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff5454;&quot;&gt;THIS TAB IS FOR DEVELOPMENT PURPOSES ONLY AND IS A PLACEHOLDER FOR EXPERIMENTAL OR DEPRECATED FEATURES.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff5454;&quot;&gt;THIS TAB IS FOR DEVELOPMENT PURPOSES ONLY AND IS A PLACEHOLDER FOR EXPERIMENTAL OR SOON TO BE DEPRECATED FEATURES.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -12054,7 +12262,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
        </rect>
       </property>
       <property name="buttonSymbols">
-       <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
+       <enum>QAbstractSpinBox::UpDownArrows</enum>
       </property>
       <property name="maximum">
        <number>23</number>
@@ -12403,7 +12611,6 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
  </customwidgets>
  <tabstops>
   <tabstop>FactoryDescription</tabstop>
-  <tabstop>NotifyDirectory</tabstop>
   <tabstop>OutputDirectory</tabstop>
   <tabstop>tabWidgetMain</tabstop>
   <tabstop>VideoCodec</tabstop>
@@ -12451,7 +12658,6 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
   <tabstop>toolButton_outputDir</tabstop>
   <tabstop>listFactoryFiles</tabstop>
   <tabstop>NewFactory</tabstop>
-  <tabstop>toolButton_notifyDir</tabstop>
   <tabstop>dropZone</tabstop>
   <tabstop>VideoStartTimeOffset</tabstop>
   <tabstop>EncodeLength</tabstop>
