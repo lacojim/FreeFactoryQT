@@ -41,7 +41,7 @@ import argparse
 from pathlib import Path
 from datetime import datetime
 
-from PyQt6.QtCore import Qt, QThread, QTimer, QUrl, QProcess
+from PyQt6.QtCore import Qt, QThread, QTimer, QUrl, QProcess, PYQT_VERSION_STR
 from PyQt6.QtGui import QPixmap, QDesktopServices, QPalette, QColor, QIntValidator
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QListWidgetItem, QMessageBox,
@@ -104,13 +104,11 @@ STATUS_COL = 5
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "-u", "-ui", "--ui",
-    default="FreeFactory-tabs.ui",
+    default=None,
     help="Specify alternate UI file"
 )
 
 args = parser.parse_args()
-UI_PATH = Path(__file__).resolve().parent / args.ui
-
 
 
 # --- copy-lock widget lists (module-level constants) ---
@@ -280,13 +278,40 @@ class FreeFactoryApp(QMainWindow):
         self._stream_row_seq = 0          # monotonic uid for stream rows
         self._is_closing = False          # Prevents noisey exiting
         self._is_stopping_recording = False
-        #UI_PATH = asset("FreeFactory-tabs.ui")
-        ui_path = Path(__file__).resolve().parent / args.ui
+
+
+
+        ## Load UI File and CHECK for PyQt Version ##
+        base_dir = Path(__file__).resolve().parent
+
+        normal_ui = base_dir / "FreeFactory-tabs.ui"
+        compat_ui = base_dir / "FreeFactory-tabs-compat.ui"
+
+        detected_pyqt_version = PYQT_VERSION_STR
+
+        # !!! TEST ONLY. DO NOT LEAVE UNCOMMENTED EXCEPT TO TEST !!!
+        #detected_pyqt_version = "6.6.1"
+
+        major, minor, *_ = detected_pyqt_version.split(".")
+        pyqt_version = (int(major), int(minor))
+
+        if args.ui:
+            ui_path = base_dir / args.ui
+        elif pyqt_version <= (6, 6) and compat_ui.exists():
+            ui_path = compat_ui
+        else:
+            ui_path = normal_ui
+
         if not ui_path.exists():
             print(f"UI file not found: {ui_path}")
-            sys.exit(1)        
-        uic.loadUi(str(UI_PATH), self)
+            sys.exit(1)
+
         print(f"Loading UI file: {ui_path}")
+        print(f"PyQt Version: {detected_pyqt_version}")
+
+        uic.loadUi(str(ui_path), self)
+
+
 
 
         # Apply combo lock behavior right after loading UI
@@ -332,6 +357,25 @@ class FreeFactoryApp(QMainWindow):
         # after loading factories & building tabs
         if hasattr(self, "_wire_stream_tab_minimal"):
             self._wire_stream_tab_minimal()
+
+    ## Method to Detect which UI file to load based on PyQt version ##
+    def select_default_ui_file():
+        base_dir = Path(__file__).resolve().parent
+
+        normal_ui = base_dir / "FreeFactory-tabs.ui"
+        compat_ui = base_dir / "FreeFactory-tabs-compat.ui"
+
+        major, minor, *_ = PYQT_VERSION_STR.split(".")
+        pyqt_version = (int(major), int(minor))
+
+        print(f"PyQt Version: {PYQT_VERSION_STR}")
+
+        if pyqt_version <= (6, 6) and compat_ui.exists():
+            print(f"Using compatibility UI file: {compat_ui}")
+            return compat_ui
+
+        print(f"Using standard UI file: {normal_ui}")
+        return normal_ui
 
 
     # =============================
