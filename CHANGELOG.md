@@ -3,7 +3,13 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
-## [1.1.50-dev unreleased] - 2026-05-23
+## [1.1.51-dev] - 2026-05-23
+ - Added automatic PyQt6 version detection.
+ - If PyQt6 <= v6.6 is detected, FreeFactoryQT will automatically load the compatibility UI file (FreeFactory-tabs-compat.ui).
+ - Using the -u|-ui|--ui flags overrides automatic UI selection.
+ 
+
+## [1.1.50-dev] - 2026-05-23
  - Added new make_ui_compat.py utility to convert the .ui files for older Qt6/PyQt6 Designer. 
  - Fix Preview crash when Analysis Reports are enabled.
  - Added CRF (Constant Rate Factor) support to the Video tab.
