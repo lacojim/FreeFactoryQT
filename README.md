@@ -177,11 +177,11 @@ These would be stored under the `Manual Output Ops` field in your Factory, and s
 - ✅ Dynamic UI: only show valid `pix_fmt`, audio, and video profiles based on selected codec
 - ✅ Batch queue with mixed Factories
 - ✅ Rewrite `FreeFactoryConversion.tcl` in Python (as of 2025-08-22 this has been completed). FreeFactoryConversion.tcl is now officially broken. It still remains in the archive for reference purposes only but is no longer used.
+- ✅ Factory Types. These could include internal, audioonly, video+audio, streaming+record, etc.
 - 🪟 Add to Factory Tools an option to create a Factory from a FFMpeg Linux command line.
 - 🪟 Create voice-overs using Piper from a text file. This would use a calibration script (text, not code) for each voice model in order to get a proper length estimate.
-- 🪟 Add Internal Factories. This would be for creating video countdowns, tone and bars, etc either for streaming or creating a file. This would be selected from a FactoryType field saved with the factory. Would also allow for easy sorting. 
-- 🪟 Factory Types. These could include internal, audioonly, video+audio, streaming+record, etc.
-- 🪟 Port FreeFactoryQT to Windows.
+- 🪟 Add Internal Factories. This would be for creating video countdowns, tone and bars, etc either for streaming or creating a file.
+- 🪟 Port FreeFactoryQT to Windows. (Is this really necessary now with WSL?)
   
 ---
 
