@@ -28,6 +28,7 @@ The real hidden power within **FreeFactory** is the notify service. This allows 
 - Clean separation between UI (FreeFactoryQT) and background service (`FreeFactoryConversion.py`)
 - Fully compatible with FFmpeg (tested on FFmpeg v7+)
 - Easy to use **Flags Builder** for -flags, -flags2, -fflags and -movflags.
+- Supports audio/video analysis via two passes. Operates in two modes: Analysis reports only or full analysis and render for audio. Video only supports reports at the moment.
 
 FreeFactory makes sharing encoding setups easy: import a Factory, update the Output and Notify directories, and you're ready to go.
 > 📦 Factories are portable and easy to exchange. Only minor path edits are usually required.
