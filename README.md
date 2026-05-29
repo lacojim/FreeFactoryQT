@@ -9,15 +9,25 @@
 
 ## 🎬 What is FreeFactoryQT?
 
-**FreeFactory** is a powerful, user-friendly media conversion system designed for both casual users and broadcast professionals. Originally developed for in-house use at a television station by a broadcast engineer with 40 years of experience, it has evolved from a set of BASH scripts into a full-featured Python3 application with a Qt6 interface.
+**FreeFactory** is a powerful, user-friendly media conversion system designed for both casual users and broadcast professionals. Originally developed for in-house use at a television station by a broadcast engineer with over 40 years of experience, it has evolved from a collection of shell scripts into a full-featured Python 3 application with a Qt6 interface.
 
-While **FreeFactory** is designed to make using FFmpeg easier, it supports nearly EVERY FFmpeg option available making FreeFactory the most capable front end for FFmpeg in existence today. While we attempt to hide options that are not compatible with each other from being selected, it is and will be an ongoing process as FFmpeg is a most complicated project. Most common options are currently supported. We thrive to be the closest GUI to an (un)offical GUI as possible, which does not exist.
+While **FreeFactory** is designed to make FFmpeg easier to use, it supports nearly every FFmpeg option available, making it one of the most capable front ends for FFmpeg available today. While we attempt to prevent incompatible options from being selected together, FFmpeg is an extremely powerful and complex project, and maintaining complete compatibility remains an ongoing effort. Most commonly used FFmpeg features are currently supported. We strive to provide the closest experience possible to an "official" FFmpeg graphical interface—even though no official FFmpeg GUI exists.
 
-**FreeFactory** simplifies complex encoding workflows into reusable, shareable *Factories*. While FFmpeg is incredibly powerful, its syntax can be intimidating — **FreeFactory** makes it all accessible without sacrificing any advanced capability.
+**FreeFactory** simplifies complex encoding workflows into reusable, shareable *Factories*. While FFmpeg is incredibly powerful, its syntax can be intimidating — **FreeFactory** makes it all accessible without sacrificing advanced capability.
 
-The real hidden power within **FreeFactory** is the notify service. This allows creating shared (local or network) dropboxes which have a dedicated Factory assigned to each of them. Once a file is copied into one of these drop folders, the background service will pick it up, process it according to factory specifications of the folder and deliver to the outbox. Completely transparent to the user. This is a fantastic feature for production houses, television stations and news operations alike. It is highly recommended to have a dedicated FreeFactory server for high usage facilities. 
+The real hidden power within **FreeFactory** is the Notify Service. This allows the creation of shared local or network-accessible drop folders, each with a dedicated Factory assigned to it. Once a file is copied into one of these monitored folders, the background service automatically processes it according to the Factory's specifications and delivers the completed output to the designated destination. The process is completely transparent to the user.
 
-FreeFactory is currently included with the **AVLinux** distribution: https://www.bandshed.net/2026/03/01/av-linux-and-mx-moksha-25-1-released/ . Also available for Fedora Linux through the FreeFactoryQT COPR repository: https://copr.fedorainfracloud.org/coprs/lexridge/freefactoryqt/ . Supported releases for Fedora 42, 43 and 44. We would most welcome packagers for other distributions to help make this more available to package managers.
+This feature is particularly valuable for production houses, television stations, educational institutions, government facilities, and other organizations that need reliable media conversion without requiring users to understand FFmpeg. For high-volume environments, a dedicated FreeFactory server is strongly recommended.
+
+FreeFactory is currently included with the **AVLinux** distribution:
+https://www.bandshed.net/2026/03/01/av-linux-and-mx-moksha-25-1-released/
+
+It is also available for Fedora Linux through the FreeFactoryQT COPR repository:
+https://copr.fedorainfracloud.org/coprs/lexridge/freefactoryqt/
+
+Currently supported Fedora releases are 42, 43, and 44.
+
+We would welcome package maintainers for additional Linux distributions who are interested in making FreeFactory more widely available through native package managers.
 
 ---
 
