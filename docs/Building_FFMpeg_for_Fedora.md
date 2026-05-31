@@ -1,5 +1,6 @@
-**To build your own version of FFMpeg on Fedora Linux that is very feature rich you may follow these instructions:**
-***Important:*** You may not distribute your own binary builds of FFMpeg. This is why these instructions are here.
+# To build your own version of FFMpeg on Fedora Linux from sourcecode that is very feature rich, just follow these instructions:
+
+## ***Important:*** You may not distribute your own non-free binary builds of FFMpeg.
 
 First, you will need to download the sourcecode for the latest FFMpeg. 
 
@@ -29,3 +30,12 @@ Configure Options for Fedora 43:
 
 Other Optional configure options:
 --enable-libplacebo --enable-whisper --enable-chromaprint
+
+Once configure has completed hopefully without errors, you can then build it.
+
+```
+make -jN ; make install
+```
+The -jN flag is how many CPU threads you want the compiler to use.
+
+Good Luck!
