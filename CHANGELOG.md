@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.54-dev] - 2026-06-01
+ - Fixed broken -minrate/-maxrate due to bad indention.
+ - Changed -dc to -intra_dc_precision as dc is deprecated. 
+
+## [1.1.52-dev] - 2026-05-30
+ - Discovered that RPM-packaged installs cannot write factories under `/opt/FreeFactory/Factories`. Factory and configuration storage is being reworked to use XDG-style user-writable locations under `~/.config/FreeFactory` and `~/.local/share/FreeFactory`. This should be fully resolved in the next update.
+ - The Default Factories Directory browser in Global Settings can now access hidden directories such as `~/.local` and `~/.config`.
+ - Made several cosmetic improvements to the Factory Builder tab, including clearer factory action buttons.
+
+
 ## [1.1.51-dev] - 2026-05-23
  - Added automatic PyQt6 version detection.
  - If PyQt6 <= v6.6 is detected, FreeFactoryQT will automatically load the compatibility UI file (FreeFactory-tabs-compat.ui).
