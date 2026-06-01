@@ -41,7 +41,7 @@ import argparse
 from pathlib import Path
 from datetime import datetime
 
-from PyQt6.QtCore import Qt, QThread, QTimer, QUrl, QProcess, PYQT_VERSION_STR
+from PyQt6.QtCore import Qt, QThread, QTimer, QUrl, QProcess, QDir, PYQT_VERSION_STR
 from PyQt6.QtGui import QPixmap, QDesktopServices, QPalette, QColor, QIntValidator
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QListWidgetItem, QMessageBox,
@@ -2541,9 +2541,22 @@ class FreeFactoryApp(QMainWindow):
     # ============================
     #     Global Config Logic
     # ============================
+    # this directory dialog was changed on 2026-05-29 to allow hidden folders
     def select_factories_directory(self):
-        directory = QFileDialog.getExistingDirectory(self, "Select Factories Directory")
-        if directory:
+        dialog = QFileDialog(self, "Select Factories Directory")
+
+        dialog.setFileMode(QFileDialog.FileMode.Directory)
+        dialog.setOption(QFileDialog.Option.ShowDirsOnly, True)
+        dialog.setOption(QFileDialog.Option.DontUseNativeDialog, True)
+
+        dialog.setFilter(
+            QDir.Filter.AllDirs |
+            QDir.Filter.Hidden |
+            QDir.Filter.NoDotAndDotDot
+        )
+
+        if dialog.exec():
+            directory = dialog.selectedFiles()[0]
             self.PathtoFactoriesGlobal.setText(directory)
             
     def select_notify_directory(self):

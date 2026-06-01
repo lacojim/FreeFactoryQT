@@ -397,7 +397,7 @@ Internal.</string>
        <string/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tabVideo">
        <attribute name="title">
@@ -4150,7 +4150,7 @@ Supported by mpeg2video, H.264 and HEVC video codecs.</string>
          <string/>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="tabGopFrame">
          <attribute name="title">
@@ -5207,7 +5207,7 @@ For advanced/broadcast workflows only.
              <x>443</x>
              <y>30</y>
              <width>21</width>
-             <height>16</height>
+             <height>20</height>
             </rect>
            </property>
            <property name="font">
@@ -5218,7 +5218,7 @@ For advanced/broadcast workflows only.
             </font>
            </property>
            <property name="text">
-            <string>DC</string>
+            <string>IDC</string>
            </property>
           </widget>
           <widget class="QLabel" name="l_lineEdit_Qmax">
@@ -5297,7 +5297,7 @@ For advanced/broadcast workflows only.
             </font>
            </property>
            <property name="toolTip">
-            <string>intra_dc_precision (from -8 to 16) (default 0)</string>
+            <string>intra_dc_precision (from -1 to 3) (default -1)</string>
            </property>
           </widget>
           <widget class="QLineEdit" name="lineEdit_Qmin">

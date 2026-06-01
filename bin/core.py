@@ -675,20 +675,20 @@ class FreeFactoryCore:
         if video_crf:
             cmd += ["-crf", video_crf]
 
-            # MATCHMINMAXBITRATE support
-            match_minmax = factory_data.get("MATCHMINMAXBITRATE", "False").strip().lower() == "true"
-            if match_minmax:
-                # Clean up any existing -minrate/-maxrate from manual options (just in case)
-                def strip_flag(flagname):
-                    try:
-                        while flagname in cmd:
-                            i = cmd.index(flagname)
-                            del cmd[i:i+2]
-                    except:
-                        pass
-                strip_flag("-minrate")
-                strip_flag("-maxrate")
-                cmd += ["-minrate", video_bitrate, "-maxrate", video_bitrate]
+        # MATCHMINMAXBITRATE support
+        match_minmax = factory_data.get("MATCHMINMAXBITRATE", "False").strip().lower() == "true"
+        if match_minmax:
+            # Clean up any existing -minrate/-maxrate from manual options (just in case)
+            def strip_flag(flagname):
+                try:
+                    while flagname in cmd:
+                        i = cmd.index(flagname)
+                        del cmd[i:i+2]
+                except:
+                    pass
+            strip_flag("-minrate")
+            strip_flag("-maxrate")
+            cmd += ["-minrate", video_bitrate, "-maxrate", video_bitrate]
 
         # Insert Advanced Video Here:
         # Chroma settings
@@ -728,7 +728,7 @@ class FreeFactoryCore:
             cmd += ["-bufsize", adv_bufsize]
             
         if adv_dc:
-            cmd += ["-dc", str(adv_dc)]
+            cmd += ["-intra_dc_precision", str(adv_dc)]
 
         if adv_qmin:
             cmd += ["-qmin", str(adv_qmin)]
