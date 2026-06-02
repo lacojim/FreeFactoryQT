@@ -5297,7 +5297,22 @@ For advanced/broadcast workflows only.
             </font>
            </property>
            <property name="toolTip">
-            <string>intra_dc_precision (from -1 to 3) (default -1)</string>
+            <string>Intra DC Precision (MPEG-2)
+
+Controls the number of bits used for intra-frame DC coefficients.
+
+-1 = Encoder default
+ 0 = 8-bit precision
+ 1 = 9-bit precision
+ 2 = 10-bit precision
+ 3 = 11-bit precision
+
+Higher values may improve picture quality in smooth gradients and low-detail areas, but can reduce compatibility with some older decoders.
+
+Recommended:
+-1 = Automatic (default)
+ 2 = Common broadcast setting
+ 3 = Highest precision</string>
            </property>
           </widget>
           <widget class="QLineEdit" name="lineEdit_Qmin">
