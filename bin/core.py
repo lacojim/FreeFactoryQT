@@ -504,7 +504,7 @@ class FreeFactoryCore:
         adv_seqdispext      = (factory_data.get("SEQDISPEXT")  or "").strip()
         adv_fieldorder      = (factory_data.get("FIELDORDER")  or "").strip()
         adv_intravlc        = (factory_data.get("INTRAVLC")  or "").strip()        
-        adv_dc              = (factory_data.get("DC")  or "").strip()
+        adv_idc              = (factory_data.get("DC")  or "").strip()
         adv_qmin            = (factory_data.get("QMIN")  or "").strip()
         adv_qmax            = (factory_data.get("QMAX")  or "").strip()
         adv_rcinitoccup     = (factory_data.get("RCINITOCCUPANCY")  or "").strip()
@@ -727,8 +727,8 @@ class FreeFactoryCore:
         if adv_bufsize:
             cmd += ["-bufsize", adv_bufsize]
             
-        if adv_dc:
-            cmd += ["-intra_dc_precision", str(adv_dc)]
+        if adv_idc:
+            cmd += ["-intra_dc_precision", str(adv_idc)]
 
         if adv_qmin:
             cmd += ["-qmin", str(adv_qmin)]
@@ -827,17 +827,10 @@ class FreeFactoryCore:
                     print(
                         f"INFO: Loudness already within tolerance "
                         f"({input_i} LUFS target {target_i} LUFS). "
-                        f"Skipping loudnorm render pass."
+                        f"Rendering without loudnorm."
                     )
 
-                    return [
-                        "ffmpeg",
-                        "-hide_banner",
-                        "-y",
-                        "-i", str(input_path),
-                        "-f", "null",
-                        "-"
-                    ]
+                    af = ""
                 else:
                     af = self._build_loudnorm_second_pass_filter(af, measured)
 

@@ -461,6 +461,7 @@ class FreeFactoryApp(QMainWindow):
         self.actionFreeFactory_Manual.triggered.connect(self.open_manual)
         self.actionAbout_QT.triggered.connect(QApplication.instance().aboutQt)
         self.actionAboutFFmpeg.triggered.connect(self.show_about_ffmpeg)
+        self.actionAboutGPL.triggered.connect(self.show_license)
         self.actionAboutFreeFactory.triggered.connect(self.show_about_dialog_existing)
         self.actionAddFactorytoStreamTable.triggered.connect(self.add_stream_to_table)
 

@@ -12712,6 +12712,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
     <addaction name="actionFreeFactory_Manual"/>
     <addaction name="actionAbout_QT"/>
     <addaction name="actionAboutFFmpeg"/>
+    <addaction name="actionAboutGPL"/>
     <addaction name="actionAboutFreeFactory"/>
    </widget>
    <widget class="QMenu" name="menuCustom">
@@ -12888,6 +12889,15 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
    </property>
    <property name="shortcut">
     <string>Ctrl+Ins</string>
+   </property>
+  </action>
+  <action name="actionAboutGPL">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Pics/License-32x32.gif</normaloff>../Pics/License-32x32.gif</iconset>
+   </property>
+   <property name="text">
+    <string>About GPL License</string>
    </property>
   </action>
  </widget>
