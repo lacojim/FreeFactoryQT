@@ -3,10 +3,15 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.55-dev] - 2026-06-04
+ - Fixed automatic loudnorm processing when audio was already within tolerance. Previously, some commercials could be analyzed and marked as successful, but the actual render/conversion was skipped. Files within tolerance now render normally without loudnorm correction.
+ 
+ 
 ## [1.1.54-dev] - 2026-06-01
  - Fixed broken -minrate/-maxrate due to bad indention.
  - Changed -dc to -intra_dc_precision as dc is deprecated. 
 
+ 
 ## [1.1.52-dev] - 2026-05-30
  - Discovered that RPM-packaged installs cannot write factories under `/opt/FreeFactory/Factories`. Factory and configuration storage is being reworked to use XDG-style user-writable locations under `~/.config/FreeFactory` and `~/.local/share/FreeFactory`. This should be fully resolved in the next update.
  - The Default Factories Directory browser in Global Settings can now access hidden directories such as `~/.local` and `~/.config`.
