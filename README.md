@@ -17,7 +17,7 @@ While **FreeFactory** is designed to make FFmpeg easier to use, it supports near
 
 The real hidden power within **FreeFactory** is the Notify Service. This allows the creation of shared local or network-accessible drop folders, each with a dedicated Factory assigned to it. Once a file is copied into one of these monitored folders, the background service automatically processes it according to the Factory's specifications and delivers the completed output to the designated destination. The process is completely transparent to the user.
 
-This feature is particularly valuable for production houses, television stations, educational institutions, government facilities, and other organizations that need reliable media conversion without requiring users to understand FFmpeg. For high-volume environments, a dedicated FreeFactory server is strongly recommended.
+This feature is particularly valuable for production houses, television stations, educational institutions, government facilities, influencers and other organizations that need reliable media conversion without requiring users to understand FFmpeg. For high-volume environments, a dedicated FreeFactory server is strongly recommended.
 
 FreeFactory is currently included with the **AVLinux** distribution:
 https://www.bandshed.net/2026/03/01/av-linux-and-mx-moksha-25-1-released/
