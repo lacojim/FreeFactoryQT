@@ -45,6 +45,7 @@ import argparse
 import sys
 import time
 import subprocess
+import hashlib
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
@@ -139,16 +140,6 @@ def acquire_concurrency_slot(is_gpu: bool, cfg: ConfigManager):
                 fcntl.flock(lf, fcntl.LOCK_UN)
 
 
-
-
-
-
-
-
-
-
-
-
 def _as_bool(val: Optional[str]) -> bool:
     s = (val or "").strip().lower()
     return s in ("true", "yes", "1", "on")
@@ -197,7 +188,28 @@ def ensure_log_dir() -> Path:
         except Exception:
             continue
     return PROJECT_ROOT
-    
+
+def factory_provenance(factory_path: Optional[Path]) -> List[str]:
+    if not factory_path:
+        return ["Factory: Unknown\n"]
+
+    try:
+        st = factory_path.stat()
+        modified = datetime.fromtimestamp(st.st_mtime).strftime("%Y-%m-%d %H:%M:%S")
+        digest = hashlib.sha256(factory_path.read_bytes()).hexdigest()
+
+        return [
+            f"Factory: {factory_path.name}\n",
+            f"Factory Path: {factory_path}\n",
+            f"Factory Modified: {modified}\n",
+            f"Factory Size: {st.st_size} bytes\n",
+            f"Factory SHA256: {digest}\n",
+        ]
+    except Exception as e:
+        return [
+            f"Factory: {factory_path}\n",
+            f"Factory Provenance Error: {e}\n",
+        ]
 
 def build_log_path(log_dir: Path, input_file: Path) -> Path:
     safe_parent = "_".join(input_file.parent.parts[-2:]) if len(input_file.parent.parts) >= 2 else input_file.parent.name
@@ -225,7 +237,8 @@ def _which_accel(factory: dict) -> str:
 
 
 
-def run_ffmpeg(core: FreeFactoryCore, input_file: Path, factory_data: Dict[str, str], preview: bool=False) -> int:
+#def run_ffmpeg(core: FreeFactoryCore, input_file: Path, factory_data: Dict[str, str], preview: bool=False) -> int:
+def run_ffmpeg(core: FreeFactoryCore, input_file: Path, factory_data: Dict[str, str], factory_path: Optional[Path] = None, preview: bool = False) -> int:
     cmd = core.build_ffmpeg_command(input_file, factory_data, preview=preview)
     cmd = [str(x) for x in cmd]
 
@@ -243,8 +256,8 @@ def run_ffmpeg(core: FreeFactoryCore, input_file: Path, factory_data: Dict[str, 
 
     with log_path.open("a", encoding="utf-8") as lf:
         lf.write(f"\n==== {datetime.now().isoformat()} ====\n")
+        lf.writelines(factory_provenance(factory_path))
         lf.write("CMD: " + " ".join(cmd) + "\n\n")
-        lf.flush()
         proc = subprocess.Popen(
             cmd,
             stdin=subprocess.DEVNULL,           # key: don't let ffmpeg read our TTY
@@ -264,8 +277,8 @@ def run_ffmpeg(core: FreeFactoryCore, input_file: Path, factory_data: Dict[str, 
     return proc.returncode
 
 
-def process_file(core: FreeFactoryCore, input_file: Path, factory_data: Dict[str, str]):
-    rc = run_ffmpeg(core, input_file, factory_data, preview=False)
+def process_file(core: FreeFactoryCore, input_file: Path, factory_data: Dict[str, str], factory_path: Optional[Path] = None):
+    rc = run_ffmpeg(core, input_file, factory_data, factory_path=factory_path, preview=False)
 
     # Delete conversion logs on success if requested
     if rc == 0 and _as_bool(factory_data.get("DELETECONVERSIONLOGS")):
@@ -388,7 +401,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     core = FreeFactoryCore(cfg)
     is_gpu = bool(_which_accel(factory_data))  # '' -> CPU, 'NVENC'/'QSV'/... -> GPU
     with acquire_concurrency_slot(is_gpu, cfg):
-        process_file(core, input_file, factory_data)
+        #process_file(core, input_file, factory_data)
+        process_file(core, input_file, factory_data, factory_path)
     return 0
 
 

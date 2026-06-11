@@ -2385,16 +2385,34 @@ class FreeFactoryApp(QMainWindow):
 
     def delete_current_factory(self):
         factory_name = self.FactoryFilename.text().strip()
-        if factory_name:
-            self.core.delete_factory_file(factory_name)
-            self.populate_factory_list()
-            self.FactoryFilename.clear()
+        if not factory_name:
+            return
 
-            # Clear all fields on delete 
-            for field in self.findChildren(QLineEdit):
-                field.clear()
-  
-            QMessageBox.information(self, "Deleted", f"Factory '{factory_name}' has been deleted.")
+        reply = QMessageBox.question(
+            self,
+            "Delete Factory?",
+            f"Are you sure you want to delete factory:\n\n{factory_name}\n\n"
+            "This cannot be undone.",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No
+        )
+
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+
+        self.core.delete_factory_file(factory_name)
+        self.populate_factory_list()
+        self.FactoryFilename.clear()
+
+        # Clear all fields on delete
+        for field in self.findChildren(QLineEdit):
+            field.clear()
+
+        QMessageBox.information(
+            self,
+            "Deleted",
+            f"Factory '{factory_name}' has been deleted."
+        )
 
     def new_factory(self):
         self.FactoryFilename.clear()
