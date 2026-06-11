@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.57-dev] - 2026-06-10
+ - Added a confirmation dialog before deleting a Factory to prevent accidental deletions.
+ - FreeFactoryConversion.py now provides enhanced logging including Factory name, path, modification date/time, file size, and SHA256 checksum. These additions make it much easier to determine exactly which Factory version processed a file when troubleshooting or auditing conversions.
+
+
 ## [1.1.55-dev] - 2026-06-04
  - Fixed automatic loudnorm processing when audio was already within tolerance. Previously, some commercials could be analyzed and marked as successful, but the actual render/conversion was skipped. Files within tolerance now render normally without loudnorm correction.
  
