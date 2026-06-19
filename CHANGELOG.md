@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.58-dev] - 2026-06-19
+ - Added a New Factory dialog that prompts for Factory Filename, Output Directory, and optional Description when creating a new Factory.
+ - Added validation to the New Factory dialog to prevent creation of Factories with missing required information.
+ - Added a Default Output Path setting to Global Settings. New Factories now automatically use this path as the default Output Directory.
+ - Fixed New Factory clearing behavior. Factory reset operations are now scoped to the Factory Builder and Stream/Record Manager tabs and no longer clear settings on the Global Settings tab.
+ - Assigned object names to the main application tabs to support scoped UI operations and improve future maintainability.
+
 ## [1.1.57-dev] - 2026-06-10
  - Added a confirmation dialog before deleting a Factory to prevent accidental deletions.
  - FreeFactoryConversion.py now provides enhanced logging including Factory name, path, modification date/time, file size, and SHA256 checksum. These additions make it much easier to determine exactly which Factory version processed a file when troubleshooting or auditing conversions.
