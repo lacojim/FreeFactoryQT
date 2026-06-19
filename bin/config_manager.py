@@ -12,6 +12,7 @@ class ConfigManager:
         self.defaults = {
             "CompanyNameGlobal": "ACME Broadcasting",
             "FactoryLocation": "/opt/FreeFactory/Factories",
+            "DefaultOutputPath": "",
             "DefaultFactory": "",
             "MaxConcurrentJobsCPU": "1",
             "MaxConcurrentJobsGPU": "1",

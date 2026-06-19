@@ -47,7 +47,8 @@ from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QListWidgetItem, QMessageBox,
     QTableWidgetItem, QDialog, QVBoxLayout, QPlainTextEdit,
     QPushButton, QFileDialog, QHeaderView, QLabel, QComboBox,
-    QLineEdit, QMenu, QCheckBox, QTextEdit, QTextBrowser, QLCDNumber
+    QLineEdit, QMenu, QCheckBox, QTextEdit, QTextBrowser, QLCDNumber,
+    QFormLayout, QDialogButtonBox
 )
 from PyQt6 import QtCore
 from PyQt6.uic import loadUi
@@ -74,6 +75,7 @@ from importexport import ExportFactoryDialog, export_factory_logic, backup_facto
 
 from ffpresets import get_presets_for
 from ffprofiles import get_profiles_for
+
 
 # Absolute path to the real script location, even when launched via a symlink
 # This allows FreeFactory to launch from say /usr/local/bin/FreeFactory symlink
@@ -110,6 +112,13 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+
+# --- Internal Factory-lock widget lists (module-level constants) ---
+INTERNAL_FACTORY_WIDGETS = [
+    "dropZone",
+    "conversionQueueTable",
+    "queueDropZone",
+]
 
 # --- copy-lock widget lists (module-level constants) ---
 VIDEO_COPY_WIDGETS = [
@@ -345,6 +354,7 @@ class FreeFactoryApp(QMainWindow):
         self.PathtoFFmpegGlobal.setText(self.config.get("PathtoFFmpegGlobal"))
         self.PathtoFactoriesGlobal.setText(self.config.get("FactoryLocation"))
         self.DefaultFactoryGlobal.setCurrentText(self.config.get("DefaultFactory"))
+        self.DefaultOutputPath.setText(self.config.get("DefaultOutputPath"))
 
         # Auto-select and load the default factory
         default_factory = self.config.get("DefaultFactory")
@@ -2414,41 +2424,147 @@ class FreeFactoryApp(QMainWindow):
             f"Factory '{factory_name}' has been deleted."
         )
 
-    def new_factory(self):
-        self.FactoryFilename.clear()
-        self.FactorySummary.clear()
-        self.listFactoryFiles.clearSelection()
-        for field in self.findChildren(QLineEdit):
-            field.clear()
 
-        self.factory_dirty = True
+
+
+
+    def new_factory(self):
+        # Clear current builder fields first
+        self.FactoryFilename.clear()
+        self.FactoryDescription.clear()
+        self.listFactoryFiles.clearSelection()
+
+        for parent_tab in (self.tabFactoryBuilder, self.tabStreamRecordMgr):
+            for field in parent_tab.findChildren(QLineEdit):
+                field.clear()
+
         self.streamUsername.clear()
         self.streamPassword.clear()
 
+        # New Factory dialog
+        dlg = QDialog(self)
+        dlg.setWindowTitle("New Factory")
+        dlg.setMinimumWidth(500)
+
+        layout = QVBoxLayout(dlg)
+        form = QFormLayout()
+
+        name_edit = QLineEdit()
+        outdir_edit = QLineEdit()
+        desc_edit = QLineEdit()
+
+        # Pre-fill from Global Settings DefaultOutputPath if available
+        try:
+            outdir_edit.setText(self.DefaultOutputPath.text().strip())
+        except Exception:
+            pass
+
+        browse_btn = QPushButton("Browse...")
+
+        def browse_output_dir():
+            path = QFileDialog.getExistingDirectory(
+                dlg,
+                "Select Output Directory",
+                outdir_edit.text().strip()
+            )
+            if path:
+                outdir_edit.setText(path)
+
+        browse_btn.clicked.connect(browse_output_dir)
+
+        form.addRow("Factory Filename:", name_edit)
+        form.addRow("Output Directory:", outdir_edit)
+        form.addRow("", browse_btn)
+        form.addRow("Description (Optional):", desc_edit)
+
+        layout.addLayout(form)
+
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok |
+            QDialogButtonBox.StandardButton.Cancel
+        )
+        layout.addWidget(buttons)
+
+        def validate_and_accept():
+            factory_name = name_edit.text().strip()
+            output_dir = outdir_edit.text().strip()
+
+            if not factory_name:
+                QMessageBox.warning(
+                    dlg,
+                    "Missing Factory Filename",
+                    "Please enter a factory filename."
+                )
+                return
+
+            invalid_chars = '/\\:*?"<>|'
+            if any(c in factory_name for c in invalid_chars):
+                QMessageBox.warning(
+                    dlg,
+                    "Invalid Factory Filename",
+                    'Factory filenames cannot contain: / \\ : * ? " < > |'
+                )
+                return
+
+            if not output_dir:
+                QMessageBox.warning(
+                    dlg,
+                    "Missing Output Directory",
+                    "Please select an output directory."
+                )
+                return
+
+            if not os.path.isdir(output_dir):
+                QMessageBox.warning(
+                    dlg,
+                    "Invalid Output Directory",
+                    "The selected output directory does not exist."
+                )
+                return
+
+            dlg.accept()
+
+        buttons.accepted.connect(validate_and_accept)
+        buttons.rejected.connect(dlg.reject)
+
+        if dlg.exec() != QDialog.DialogCode.Accepted:
+            if hasattr(self, "statusBar"):
+                self.statusBar().showMessage("New Factory canceled", 5000)
+            return
+
+        # Apply dialog values to the freshly-cleared builder
+        self.FactoryFilename.setText(name_edit.text().strip())
+
+        try:
+            self.OutputDirectory.setText(outdir_edit.text().strip())
+        except Exception:
+            pass
+
+        try:
+            self.FactoryDescription.setText(desc_edit.text().strip())
+        except Exception:
+            pass
+
         # Snap tabs to defaults for a fresh factory
         try:
-            # Top-level: Video
             main = self.tabWidgetMain
             main.setCurrentIndex(main.indexOf(self.tabVideo))
         except Exception:
             pass
 
         try:
-            # Video Advanced sub-tab: GOP/Frame
             adv = self.tabWidgetVideoAdvanced
             adv.setCurrentIndex(adv.indexOf(self.tabGopFrame))
         except Exception:
             pass
-        
+
         try:
-            self.StreamMgrMode.setCurrentIndex(0)   # 0 == "Off"
-            # keep UI in sync (enable/disable inputs, etc.)
+            self.StreamMgrMode.setCurrentIndex(0)
             if hasattr(self, "update_stream_ui_state"):
                 self.update_stream_ui_state()
         except Exception:
             pass
-       
-        # Don’t call .clear() on the QComboBox itself (that nukes items)
+
         try:
             self.ForceFormatInputVideo.setCurrentIndex(-1)
             self.ForceFormatInputVideo.setEditText("")
@@ -2456,14 +2572,18 @@ class FreeFactoryApp(QMainWindow):
             self.ForceFormatInputAudio.setEditText("")
         except Exception:
             pass
+
         try:
             self.checkReadFilesRealTime.setChecked(False)
         except Exception:
             pass
+
         # Clear all checkboxes
-        for box in self.findChildren(QCheckBox):
-            self._clear_value(box)   # calls setChecked(False)
-        # Re-enable the few needed checkboxes 
+        for parent_tab in (self.tabFactoryBuilder, self.tabStreamRecordMgr):
+            for box in parent_tab.findChildren(QCheckBox):
+                self._clear_value(box)
+
+        # Re-enable default checkboxes
         try:
             self.EnableFactory.setChecked(True)
             self.DeleteConversionLogs.setChecked(True)
@@ -2471,12 +2591,28 @@ class FreeFactoryApp(QMainWindow):
         except Exception:
             pass
 
-        # Optional feedback
         if hasattr(self, "statusBar"):
             try:
-                self.statusBar().showMessage("New Factory: fields cleared", 5000)
+                self.statusBar().showMessage(
+                    "New Factory started — save when finished",
+                    5000
+                )
             except Exception:
                 pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def load_selected_factory(self, item):
         self.PreviewCommandLine.clear()
@@ -2606,6 +2742,7 @@ class FreeFactoryApp(QMainWindow):
         self.config.set("DefaultFactory", self.DefaultFactoryGlobal.currentText())
         self.config.set("FactoryLocation", self.PathtoFactoriesGlobal.text().strip())
         self.config.set("PathtoFFmpegGlobal", self.PathtoFFmpegGlobal.text().strip())
+        self.config.set("DefaultOutputPath", self.DefaultOutputPath.text().strip())
 
  
         # CPU/GPU concurrency with safe parsing
