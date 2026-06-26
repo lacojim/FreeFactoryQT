@@ -36,7 +36,7 @@
      <bool>false</bool>
     </property>
     <property name="toolTip">
-     <string>Monitors the FreeFactory Notify Service</string>
+     <string/>
     </property>
     <property name="layoutDirection">
      <enum>Qt::LayoutDirection::LeftToRight</enum>
