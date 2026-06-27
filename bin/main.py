@@ -681,8 +681,52 @@ class FreeFactoryApp(QMainWindow):
         self.checkAnalyzeVideo.toggled.connect(self._update_video_analysis_state)
         self.VideoAnalysisType.currentTextChanged.connect(self._update_video_analysis_state)
         self._update_video_analysis_state()
-       
+
+        # Add Timecode widgets (under advanced video)
+        self.TimeCodeMode.currentIndexChanged.connect(self._update_timecode_state)
+        self.TimeCodeMode.currentIndexChanged.connect(self._fix_timecode_separator)
+        self.TimeCodeStart.editingFinished.connect(self._fix_timecode_separator)
+
+        self._update_timecode_state()
         
+        
+    # Add Timecode widgets intelligence (under advanced video) This makes sure you have the correct ";" or ":" for DF or NDF.
+    def _update_timecode_state(self, *_):
+        mode = self.TimeCodeMode.currentText().strip().upper()
+        enabled = mode in ("DF", "NDF")
+
+        self.TimeCodeStart.setEnabled(enabled)
+        if hasattr(self, "l_TimeCodeStart"):
+            self.l_TimeCodeStart.setEnabled(enabled)
+
+        if not enabled:
+            return
+
+        if not self.TimeCodeStart.text().strip():
+            self.TimeCodeStart.setText("00:00:00;00" if mode == "DF" else "00:00:00:00")
+
+    def _fix_timecode_separator(self):
+        mode = self.TimeCodeMode.currentText().strip().upper()
+        if mode not in ("DF", "NDF"):
+            return
+
+        tc = self.TimeCodeStart.text().strip()
+        if not tc:
+            return
+
+        sep = ";" if mode == "DF" else ":"
+
+        # Only touch full-ish timecode strings.
+        # Example: 00:00:00:00 or 00:00:00;00
+        if len(tc) >= 11:
+            fixed = tc[:-3] + sep + tc[-2:]
+            if fixed != tc:
+                self.TimeCodeStart.blockSignals(True)
+                self.TimeCodeStart.setText(fixed)
+                self.TimeCodeStart.blockSignals(False)
+    # END Timecode widgets intelligence
+
+
         # Initialize flags builders
         self._init_flags_builders()
 
@@ -716,6 +760,9 @@ class FreeFactoryApp(QMainWindow):
             self.clearMovFlags.clicked.connect(lambda: self._set_movflags_checked(False))
             
         self._update_flags_collectors()
+
+
+
 
 
     # =================================
@@ -1232,6 +1279,8 @@ class FreeFactoryApp(QMainWindow):
             "Flags2Collector":          "FLAGS2",                   # QLineEdit
             "FFlagsCollector":          "FFLAGS",                   # QLineEdit
             "MovFlagsCollector":        "MOVFLAGS",                 # QLineEdit
+            "TimeCodeMode":             "TIMECODEMODE",             # QComboBox
+            "TimeCodeStart":            "TIMECODESTART",            # QLineEdit
 
             # Subtitles
             "SubtitleCodecs":           "SUBTITLECODECS",           # QComboBox

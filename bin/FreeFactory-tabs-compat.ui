@@ -4407,6 +4407,129 @@ For advanced/broadcast workflows only.
             <string>Group of Pictures Size: Adds the flag -g to the command line</string>
            </property>
           </widget>
+          <widget class="QLabel" name="l_TimeCodeMode">
+           <property name="geometry">
+            <rect>
+             <x>200</x>
+             <y>13</y>
+             <width>91</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>8</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Timecode Mode</string>
+           </property>
+          </widget>
+          <widget class="QComboBox" name="TimeCodeMode">
+           <property name="geometry">
+            <rect>
+             <x>286</x>
+             <y>10</y>
+             <width>71</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <family>Sans Serif</family>
+             <pointsize>8</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="toolTip">
+            <string>Default
+Use FFmpeg's default behavior (does not add the -timecode option).
+
+DF
+Drop Frame: Adds -timecode using a semicolon
+(e.g. 00:00:00;00).
+
+NDF
+Non-Drop Frame: Adds -timecode using a colon
+(e.g. 00:00:00:00).
+
+When encoding for many professional NTSC broadcast
+playout systems, Drop Frame timecode is typically used.</string>
+           </property>
+           <property name="editable">
+            <bool>true</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>Default</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>DF</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>NDF</string>
+            </property>
+           </item>
+          </widget>
+          <widget class="QLabel" name="l_TimeCodeStart">
+           <property name="geometry">
+            <rect>
+             <x>370</x>
+             <y>14</y>
+             <width>81</width>
+             <height>17</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>8</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Start Timecode</string>
+           </property>
+          </widget>
+          <widget class="QLineEdit" name="TimeCodeStart">
+           <property name="geometry">
+            <rect>
+             <x>450</x>
+             <y>10</y>
+             <width>81</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>8</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="toolTip">
+            <string>Start Timecode:
+
+When Timecode Mode is set to DF or NDF, enter the
+desired starting timecode.
+
+Leave this field empty to use 00:00:00;00 (DF)
+or 00:00:00:00 (NDF).
+
+This field is disabled when Timecode Mode
+is set to Default.</string>
+           </property>
+           <property name="placeholderText">
+            <string>HH:MM:SS:FF</string>
+           </property>
+          </widget>
          </widget>
         </widget>
         <widget class="QWidget" name="tabColorHDR">

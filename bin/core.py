@@ -504,11 +504,14 @@ class FreeFactoryCore:
         adv_seqdispext      = (factory_data.get("SEQDISPEXT")  or "").strip()
         adv_fieldorder      = (factory_data.get("FIELDORDER")  or "").strip()
         adv_intravlc        = (factory_data.get("INTRAVLC")  or "").strip()        
-        adv_idc              = (factory_data.get("DC")  or "").strip()
+        adv_idc             = (factory_data.get("DC")  or "").strip()
         adv_qmin            = (factory_data.get("QMIN")  or "").strip()
         adv_qmax            = (factory_data.get("QMAX")  or "").strip()
         adv_rcinitoccup     = (factory_data.get("RCINITOCCUPANCY")  or "").strip()
         adv_bufsize         = (factory_data.get("BUFSIZE")  or "").strip()
+        tc_mode             = (factory_data.get("TIMECODEMODE") or "").strip()
+        tc_start            = (factory_data.get("TIMECODESTART") or "").strip()
+        
 
         
         # --- Build base, add manual *input* flags BEFORE -i ---
@@ -690,7 +693,7 @@ class FreeFactoryCore:
             strip_flag("-maxrate")
             cmd += ["-minrate", video_bitrate, "-maxrate", video_bitrate]
 
-        # Insert Advanced Video Here:
+        # Insert Advanced Video Options Here:
         # Chroma settings
         if adv_colorspace:
             cmd += ["-colorspace", adv_colorspace]
@@ -743,6 +746,23 @@ class FreeFactoryCore:
                 cmd[-1] = adv_qmin  # replace qmax value
         except ValueError:
             pass
+        
+        # Timecode Support 
+        if tc_mode == "DF":
+            if not tc_start:
+                tc_start = "00:00:00;00"
+            cmd += ["-timecode", tc_start]
+
+        elif tc_mode == "NDF":
+            if not tc_start:
+                tc_start = "00:00:00:00"
+            cmd += ["-timecode", tc_start]
+
+        # Default:
+        # Do nothing. Let FFmpeg use its own behavior.
+        
+        
+        
         # End Advanced Video:
 
         if video_profile:
