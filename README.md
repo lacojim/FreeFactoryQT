@@ -193,7 +193,8 @@ These would be stored under the `Manual Output Ops` field in your Factory, and s
 - ✅ Factory Types. These could include internal, audioonly, video+audio, streaming+record, etc.
 - 🪟 Add to Factory Tools an option to create a Factory from a FFMpeg Linux command line.
 - 🪟 Create voice-overs using Piper from a text file. This would use a calibration script (text, not code) for each voice model in order to get a proper length estimate.
-- 🪟 Add Internal Factories. This would be for creating video countdowns, tone and bars, etc either for streaming or creating a file.
+- 🪟 **In Progress:** Add Internal Factories. This would be for creating video countdowns, tone and bars, etc either for streaming or writing as a file.
+- 🪟 **In Progress:** Add a new commandline program called *ffcmd*. This will allow running factories using *ffcmd -factory name*. This will allow scripting or cron job the running of Factories, which is really the point of this. 
 - 🪟 Port FreeFactoryQT to Windows. (Is this really necessary now with WSL?)
   
 ---
