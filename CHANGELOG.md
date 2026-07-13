@@ -16,7 +16,7 @@ This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and
 
 
 ## [1.1.59-dev] - 2026-06-25
- - Removed a really annoying tooltip that kept appearing on black spaces in the UI. 
+ - Removed a really annoying tooltip that kept appearing on empty spaces in the UI. 
 
 ## [1.1.58-dev] - 2026-06-19
  - Added a New Factory dialog that prompts for Factory Filename, Output Directory, and optional Description when creating a new Factory.
