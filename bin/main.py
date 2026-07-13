@@ -155,6 +155,7 @@ VIDEO_COPY_WIDGETS = [
     "lineEdit_Qmax",
     "RcInitOccupancy",
     "BufSize",
+    "checkGopTimecode",
 ]
 
 AUDIO_COPY_WIDGETS = [
@@ -397,8 +398,8 @@ class FreeFactoryApp(QMainWindow):
 
         self.LoadFactoryTools.clicked.connect(self.launch_factory_tools)
       
-        self.ViewLicense.clicked.connect(self.show_license)
-        self.AboutFreeFactory.clicked.connect(self.show_about)
+        #self.ViewLicense.clicked.connect(self.show_license)        # Removed the Widget
+        #self.AboutFreeFactory.clicked.connect(self.show_about)     # Removed the Widget
         self.toolButton_outputDir.clicked.connect(self.select_output_directory)
         self.toolButton_notifyDir.clicked.connect(self.select_notify_directory)
         self.PreviewCommand.clicked.connect(self.on_generate_command)
@@ -736,6 +737,7 @@ class FreeFactoryApp(QMainWindow):
         if hasattr(self, "Flags2Collector"): self.Flags2Collector.setReadOnly(True)
         if hasattr(self, "FFlagsCollector"): self.FFlagsCollector.setReadOnly(True)
         if hasattr(self, "MovFlagsCollector"): self.MovFlagsCollector.setReadOnly(True)
+        if hasattr(self, "MPVFlagsCollector"): self.MPVFlagsCollector.setReadOnly(True)
 
         for name in self._flags_map().keys():
             w = self._w(name)
@@ -746,7 +748,7 @@ class FreeFactoryApp(QMainWindow):
         for name in self._fflags_map().keys():
             w = self._w(name)
             if w: w.toggled.connect(self._update_flags_collectors)
-        for name in self._movflags_map().keys():
+        for name in self._mpvflags_map().keys():
             w = self._w(name)
             if w: w.toggled.connect(self._update_flags_collectors)
 
@@ -758,6 +760,8 @@ class FreeFactoryApp(QMainWindow):
             self.clearFFlags.clicked.connect(lambda: self._set_fflags_checked(False))
         if hasattr(self, "clearMovFlags"):
             self.clearMovFlags.clicked.connect(lambda: self._set_movflags_checked(False))
+        if hasattr(self, "clearMPVFlags"):
+            self.clearMPVFlags.clicked.connect(lambda: self._set_mpvflags_checked(False))
             
         self._update_flags_collectors()
 
@@ -1174,6 +1178,16 @@ class FreeFactoryApp(QMainWindow):
             "checkMovFlags_write_gama": "write_gama",
             "checkMovFlags_hybrid_fragmented": "hybrid_fragmented",
         }
+    
+    def _mpvflags_map(self) -> dict[str, str]:
+        return {
+            "checkMPVFlags_skip_rd": "skip_rd",
+            "checkMPVFlags_strict_gop": "strict_gop",
+            "checkMPVFlags_qp_rd": "qp_rd",
+            "checkMPVFlags_cbp_rd": "cbp_rd",
+            "checkMPVFlags_naq": "naq",
+            "checkMPVFlags_mv0": "mv0",
+        }
 
     def _collect_flags_text(self, mapping: dict[str, str]) -> str:
         toks = []
@@ -1192,6 +1206,8 @@ class FreeFactoryApp(QMainWindow):
             self.FFlagsCollector.setText(self._collect_flags_text(self._fflags_map()))
         if hasattr(self, "MovFlagsCollector"):
             self.MovFlagsCollector.setText(self._collect_flags_text(self._movflags_map()))
+        if hasattr(self, "MPVFlagsCollector"):
+            self.MPVFlagsCollector.setText(self._collect_flags_text(self._mpvflags_map()))
 
     def _set_flags_checked(self, on: bool):
         for n in self._flags_map().keys():
@@ -1213,6 +1229,12 @@ class FreeFactoryApp(QMainWindow):
         
     def _set_movflags_checked(self, on: bool):
         for n in self._movflags_map().keys():
+            w = self._w(n)
+            if w: w.setChecked(on)
+        self._update_flags_collectors()
+        
+    def _set_mpvflags_checked(self, on: bool):
+        for n in self._mpvflags_map().keys():
             w = self._w(n)
             if w: w.setChecked(on)
         self._update_flags_collectors()
@@ -1279,8 +1301,10 @@ class FreeFactoryApp(QMainWindow):
             "Flags2Collector":          "FLAGS2",                   # QLineEdit
             "FFlagsCollector":          "FFLAGS",                   # QLineEdit
             "MovFlagsCollector":        "MOVFLAGS",                 # QLineEdit
+            "MPVFlagsCollector":        "MPVFLAGS",                 # QLineEdit
             "TimeCodeMode":             "TIMECODEMODE",             # QComboBox
             "TimeCodeStart":            "TIMECODESTART",            # QLineEdit
+            "checkGopTimecode":         "TIMECODEGOP",              # QCheckBox
 
             # Subtitles
             "SubtitleCodecs":           "SUBTITLECODECS",           # QComboBox
@@ -1370,9 +1394,9 @@ class FreeFactoryApp(QMainWindow):
         self._apply_group_copy_lock(VIDEO_COPY_WIDGETS, is_copy=is_copy, clear_on_disable=clear_on_disable)
         
         # Flags builders live in their own group boxes; Labels in sync using l_groupFlags / l_groupFlags2
-        for name in ("groupFlags", "groupFlags2", "groupFFlags", "groupMovFlags", 
-            "FlagsCollector", "Flags2Collector", "FFlagsCollector", "MovFlagsCollector",
-            "clearFlags", "clearFlags2", "clearFFlags", "clearMovFlags"):
+        for name in ("groupFlags", "groupFlags2", "groupFFlags", "groupMovFlags", "groupMPVFlags",
+            "FlagsCollector", "Flags2Collector", "FFlagsCollector", "MovFlagsCollector", "MPVFlagsCollector",
+            "clearFlags", "clearFlags2", "clearFFlags", "clearMovFlags", "clearMPVFlags"):
             w   = self._w(name)
             lbl = self._lbl(name)
             self._set_enabled_pair(w, lbl, enabled=not is_copy)
@@ -1381,6 +1405,7 @@ class FreeFactoryApp(QMainWindow):
             self._set_flags2_checked(False)
             self._set_fflags_checked(False)
             self._set_movflags_checked(False)
+            self._set_mpvflags_checked(False)
 
     def _apply_audio_copy_lock(self, *, clear_on_disable: bool):
         is_copy = self._is_copy_text(self._w("AudioCodec").currentText()) if self._w("AudioCodec") else False
@@ -2722,6 +2747,7 @@ class FreeFactoryApp(QMainWindow):
         self._apply_flags_from_string(factory_data.get("FLAGS2", ""), self._flags2_map())
         self._apply_flags_from_string(factory_data.get("FFLAGS", ""), self._fflags_map())
         self._apply_flags_from_string(factory_data.get("MOVFLAGS", ""), self._movflags_map())
+        self._apply_flags_from_string(factory_data.get("MPVFLAGS", ""), self._mpvflags_map())
         
         self._sync_stream_selector_to_builder(factory_name)
         self.update_stream_ui_state()

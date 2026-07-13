@@ -424,6 +424,7 @@ class FreeFactoryCore:
         video_flags2        = factory_data.get("FLAGS2", "").strip()
         video_fflags        = factory_data.get("FFLAGS", "").strip()
         video_movflags      = factory_data.get("MOVFLAGS", "").strip()
+        video_mpvflags      = factory_data.get("MPVFLAGS", "").strip()
         video_bitrate       = factory_data.get("VIDEOBITRATE", "").strip()
         video_framerate     = factory_data.get("VIDEOFRAMERATE", "").strip()
         video_framerate_cfr = factory_data.get("FRAMERATECFR", "").strip()                  #CHECK
@@ -511,6 +512,7 @@ class FreeFactoryCore:
         adv_bufsize         = (factory_data.get("BUFSIZE")  or "").strip()
         tc_mode             = (factory_data.get("TIMECODEMODE") or "").strip()
         tc_start            = (factory_data.get("TIMECODESTART") or "").strip()
+        tc_gop              = (factory_data.get("TIMECODEGOP") or "").strip()
         
 
         
@@ -672,6 +674,9 @@ class FreeFactoryCore:
         if video_movflags:
             cmd += ["-movflags", video_movflags]
 
+        if video_mpvflags:
+            cmd += ["-mpv_flags", video_mpvflags]
+
         if video_bitrate:
             cmd += ["-b:v", video_bitrate]
 
@@ -757,7 +762,14 @@ class FreeFactoryCore:
             if not tc_start:
                 tc_start = "00:00:00:00"
             cmd += ["-timecode", tc_start]
-
+           
+        tc_gop_flag    = str(tc_gop).strip().lower() in ("1", "true", "yes")
+        
+        if tc_gop_flag:
+            if not tc_start:
+                tc_start = "00:00:00;00"
+            cmd += ["-gop_timecode", tc_start]
+        
         # Default:
         # Do nothing. Let FFmpeg use its own behavior.
         

@@ -4168,13 +4168,16 @@ Supported by mpeg2video, H.264 and HEVC video codecs.</string>
             <height>151</height>
            </rect>
           </property>
+          <property name="toolTip">
+           <string/>
+          </property>
           <property name="title">
            <string/>
           </property>
           <widget class="QComboBox" name="FrameStrategy">
            <property name="geometry">
             <rect>
-             <x>314</x>
+             <x>490</x>
              <y>47</y>
              <width>51</width>
              <height>25</height>
@@ -4220,7 +4223,7 @@ Range and Defaults are codec dependent.</string>
           <widget class="QLabel" name="l_VideoGroupPicSize">
            <property name="geometry">
             <rect>
-             <x>136</x>
+             <x>306</x>
              <y>51</y>
              <width>51</width>
              <height>17</height>
@@ -4240,7 +4243,7 @@ Range and Defaults are codec dependent.</string>
           <widget class="QLabel" name="l_FrameStrategy">
            <property name="geometry">
             <rect>
-             <x>234</x>
+             <x>406</x>
              <y>50</y>
              <width>81</width>
              <height>17</height>
@@ -4264,7 +4267,7 @@ Range and Defaults are codec dependent.</string>
            <property name="geometry">
             <rect>
              <x>82</x>
-             <y>11</y>
+             <y>47</y>
              <width>101</width>
              <height>25</height>
             </rect>
@@ -4330,7 +4333,7 @@ For advanced/broadcast workflows only.
           <widget class="QLabel" name="l_VideoBFrames">
            <property name="geometry">
             <rect>
-             <x>11</x>
+             <x>200</x>
              <y>50</y>
              <width>51</width>
              <height>17</height>
@@ -4350,7 +4353,7 @@ For advanced/broadcast workflows only.
           <widget class="QLineEdit" name="VideoBFrames">
            <property name="geometry">
             <rect>
-             <x>83</x>
+             <x>260</x>
              <y>47</y>
              <width>31</width>
              <height>25</height>
@@ -4371,7 +4374,7 @@ For advanced/broadcast workflows only.
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>15</y>
+             <y>51</y>
              <width>71</width>
              <height>17</height>
             </rect>
@@ -4390,7 +4393,7 @@ For advanced/broadcast workflows only.
           <widget class="QLineEdit" name="VideoGroupPicSize">
            <property name="geometry">
             <rect>
-             <x>184</x>
+             <x>360</x>
              <y>47</y>
              <width>31</width>
              <height>25</height>
@@ -4410,7 +4413,7 @@ For advanced/broadcast workflows only.
           <widget class="QLabel" name="l_TimeCodeMode">
            <property name="geometry">
             <rect>
-             <x>200</x>
+             <x>10</x>
              <y>13</y>
              <width>91</width>
              <height>20</height>
@@ -4430,7 +4433,7 @@ For advanced/broadcast workflows only.
           <widget class="QComboBox" name="TimeCodeMode">
            <property name="geometry">
             <rect>
-             <x>286</x>
+             <x>96</x>
              <y>10</y>
              <width>71</width>
              <height>25</height>
@@ -4445,8 +4448,11 @@ For advanced/broadcast workflows only.
             </font>
            </property>
            <property name="toolTip">
-            <string>Default
-Use FFmpeg's default behavior (does not add the -timecode option).
+            <string>Metadata Timecode
+
+Default
+Use FFmpeg's default behavior (does not add the -timecode option and 
+defaults to Non-Drop Frame NDF timecode).
 
 DF
 Drop Frame: Adds -timecode using a semicolon
@@ -4457,7 +4463,9 @@ Non-Drop Frame: Adds -timecode using a colon
 (e.g. 00:00:00:00).
 
 When encoding for many professional NTSC broadcast
-playout systems, Drop Frame timecode is typically used.</string>
+playout systems, Drop Frame timecode is typically needed.
+
+Adds -timecode flag to the command line.</string>
            </property>
            <property name="editable">
             <bool>true</bool>
@@ -4481,7 +4489,7 @@ playout systems, Drop Frame timecode is typically used.</string>
           <widget class="QLabel" name="l_TimeCodeStart">
            <property name="geometry">
             <rect>
-             <x>370</x>
+             <x>180</x>
              <y>14</y>
              <width>81</width>
              <height>17</height>
@@ -4501,7 +4509,7 @@ playout systems, Drop Frame timecode is typically used.</string>
           <widget class="QLineEdit" name="TimeCodeStart">
            <property name="geometry">
             <rect>
-             <x>450</x>
+             <x>260</x>
              <y>10</y>
              <width>81</width>
              <height>25</height>
@@ -4515,19 +4523,46 @@ playout systems, Drop Frame timecode is typically used.</string>
             </font>
            </property>
            <property name="toolTip">
-            <string>Start Timecode:
-
-When Timecode Mode is set to DF or NDF, enter the
-desired starting timecode.
+            <string>Start Timecode: When Timecode Mode is set to DF or NDF,
+enter the desired starting timecode.
 
 Leave this field empty to use 00:00:00;00 (DF)
 or 00:00:00:00 (NDF).
 
 This field is disabled when Timecode Mode
-is set to Default.</string>
+is set to Default.
+
+This field is also shared with GOP Timecode.</string>
            </property>
            <property name="placeholderText">
             <string>HH:MM:SS:FF</string>
+           </property>
+          </widget>
+          <widget class="QCheckBox" name="checkGopTimecode">
+           <property name="geometry">
+            <rect>
+             <x>360</x>
+             <y>13</y>
+             <width>101</width>
+             <height>19</height>
+            </rect>
+           </property>
+           <property name="toolTip">
+            <string>GOP Timecode
+
+When this is checked, will write timecode to the Group of Pictures (GOP). 
+This requires re-rendering video when checked. This will use the Start 
+Timecode field when using Metadata Time code. Otherwise it defaults to drop 
+frame 00:00:00;00. 
+
+If you need a custom GOP timecode without metadata timecode, uncheck this box 
+and add -gop_timecode to Manual Options. It is perfectly fine to use matching 
+metadata timecode and GOP timecode together.
+
+Adds -gop_timecode to the command line.</string>
+           </property>
+           <property name="text">
+            <string>GOP Timecode</string>
            </property>
           </widget>
          </widget>
@@ -5786,6 +5821,9 @@ mpeg2video</string>
             <height>171</height>
            </rect>
           </property>
+          <property name="toolTip">
+           <string/>
+          </property>
           <property name="currentIndex">
            <number>0</number>
           </property>
@@ -6511,7 +6549,7 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
             </widget>
            </widget>
           </widget>
-          <widget class="QWidget" name="tab_5">
+          <widget class="QWidget" name="tabMovFlags">
            <attribute name="title">
             <string>MovFlags</string>
            </attribute>
@@ -7506,6 +7544,231 @@ This needs nofillin too.</string>
              </property>
              <property name="text">
               <string>noparse</string>
+             </property>
+            </widget>
+           </widget>
+          </widget>
+          <widget class="QWidget" name="tabMPVFlags">
+           <attribute name="title">
+            <string>MPV Flags</string>
+           </attribute>
+           <widget class="QGroupBox" name="groupMPVFlags">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>10</y>
+              <width>401</width>
+              <height>121</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <italic>false</italic>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>MPEG2 Flags (-mpv_flags). Flags common for all mpegvideo-based encoders. (default 0)</string>
+            </property>
+            <property name="whatsThis">
+             <string>Flags2 Builder (-flags2)
+Specialized/auxiliary flags. These are rarely needed for typical encodes.
+    Examples:
+     • +export_mvs → expose motion vectors (useful with -vf codecview for analysis)
+     • +ignorecrop, +local_header, +chunks → bitstream/container behavior toggles
+     • +fast, +showall, etc. → niche/legacy behaviors that may be ignored by codecs
+    Notes:
+     • Many flags are codec- or container-specific; harmless if unsupported.
+     • Ignored when Video Codec is ‘copy’. Saved to the factory as FLAGS2=…</string>
+            </property>
+            <property name="title">
+             <string>MPV Flags Builder</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+            <widget class="QLineEdit" name="MPVFlagsCollector">
+             <property name="geometry">
+              <rect>
+               <x>30</x>
+               <y>90</y>
+               <width>351</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Flags2 Builder</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMPVFlags_skip_rd">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>20</y>
+               <width>61</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>RD optimal MB level residual skipping
+</string>
+             </property>
+             <property name="text">
+              <string>skip_rd</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMPVFlags_cbp_rd">
+             <property name="geometry">
+              <rect>
+               <x>100</x>
+               <y>20</y>
+               <width>51</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Use rate distortion optimization for CBP
+.</string>
+             </property>
+             <property name="text">
+              <string>cbp_rd</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMPVFlags_naq">
+             <property name="geometry">
+              <rect>
+               <x>100</x>
+               <y>40</y>
+               <width>61</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Normalize adaptive quantization</string>
+             </property>
+             <property name="text">
+              <string>naq</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMPVFlags_strict_gop">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>40</y>
+               <width>71</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Strictly enforce gop size</string>
+             </property>
+             <property name="text">
+              <string>strict_gop</string>
+             </property>
+            </widget>
+            <widget class="QToolButton" name="clearMPVFlags">
+             <property name="geometry">
+              <rect>
+               <x>3</x>
+               <y>91</y>
+               <width>28</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="toolTip">
+              <string>Clear Flags2</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMPVFlags_qp_rd">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>60</y>
+               <width>61</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Use rate distortion optimization for qp selection</string>
+             </property>
+             <property name="text">
+              <string>qp_rd</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkMPVFlags_mv0">
+             <property name="geometry">
+              <rect>
+               <x>100</x>
+               <y>60</y>
+               <width>71</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>always try a mb with mv=&lt;0,0&gt;</string>
+             </property>
+             <property name="text">
+              <string>mv0</string>
              </property>
             </widget>
            </widget>
@@ -9664,6 +9927,9 @@ Should be on when streaming files</string>
       </widget>
      </widget>
      <widget class="QComboBox" name="streamInputProfile">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>860</x>
@@ -9738,6 +10004,9 @@ Should be on when streaming files</string>
       </item>
      </widget>
      <widget class="QLabel" name="l_streamInputPreset">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>794</x>
@@ -10372,6 +10641,9 @@ When Off, all widgets below are inaccessible.</string>
        </property>
       </widget>
       <widget class="QPushButton" name="PreviewRecInput">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>360</x>
@@ -12823,241 +13095,6 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
       </property>
       <property name="wordWrap">
        <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QSpinBox" name="spinBox">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>532</y>
-        <width>42</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="buttonSymbols">
-       <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
-      </property>
-      <property name="maximum">
-       <number>23</number>
-      </property>
-     </widget>
-     <widget class="QSpinBox" name="spinBox_2">
-      <property name="geometry">
-       <rect>
-        <x>72</x>
-        <y>532</y>
-        <width>42</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>59</number>
-      </property>
-     </widget>
-     <widget class="QSpinBox" name="spinBox_3">
-      <property name="geometry">
-       <rect>
-        <x>125</x>
-        <y>532</y>
-        <width>42</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>59</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_9">
-      <property name="geometry">
-       <rect>
-        <x>65</x>
-        <y>535</y>
-        <width>16</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_10">
-      <property name="geometry">
-       <rect>
-        <x>118</x>
-        <y>535</y>
-        <width>16</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_12">
-      <property name="geometry">
-       <rect>
-        <x>25</x>
-        <y>520</y>
-        <width>16</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>HH</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_14">
-      <property name="geometry">
-       <rect>
-        <x>76</x>
-        <y>520</y>
-        <width>16</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>MM</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_17">
-      <property name="geometry">
-       <rect>
-        <x>130</x>
-        <y>520</y>
-        <width>16</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>SS</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="ViewLicense">
-      <property name="geometry">
-       <rect>
-        <x>60</x>
-        <y>140</y>
-        <width>31</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>FreeFactory License</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>../Pics/License-32x32.gif</normaloff>../Pics/License-32x32.gif</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="AboutFreeFactory">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>140</y>
-        <width>31</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>About FreeFactory</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>../Pics/FreeFactoryQT.ico</normaloff>../Pics/FreeFactoryQT.ico</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QLabel" name="l_FolderLocations_2">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>290</y>
-        <width>41</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Misc</string>
-      </property>
-     </widget>
-     <widget class="QSpinBox" name="spinHelpWindowFontSize">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>190</x>
-        <y>310</y>
-        <width>61</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="minimum">
-       <number>10</number>
-      </property>
-      <property name="maximum">
-       <number>18</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="l_spinHelpWindowFontSize">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>313</y>
-        <width>121</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Help Window Font Size</string>
       </property>
      </widget>
     </widget>
