@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.62-dev] - 2026-07-12
+ - Added MPV Flags (mpeg flags) to Flags Builder.
+
+## [1.1.61-dev] - 2026-07-05
+ - Added checkbox for GOP Timecode.
+
 ## [1.1.60-dev] - 2026-06-27
  - Added **Timecode Mode** and **Start Timecode** controls to the **Advanced Video** tab. Timecode Mode provides three options: **Default**, **DF (Drop Frame)**, and **NDF (Non-Drop Frame)**. Selecting DF or NDF automatically formats the Start Timecode field using the appropriate separator (semicolon or colon) and allows the starting timecode to be customized.
  - By default, FFmpeg writes MXF files using **Non-Drop Frame (NDF)** timecode unless the `-timecode` option is specified. This can cause compatibility issues with some professional broadcast playout systems that expect **Drop Frame (DF)** timecode. The new Timecode controls allow this behavior to be overridden without using **Manual Output Options**.
