@@ -1,8 +1,12 @@
 # ffmpeghelp.py
+# FFmpeg's "-codecs" output has changed over time and no longer
+# reliably lists all implementation names (e.g. libx264, libx265,
+# libmp3lame, libopus). Build the "Codecs All" views from the
+# authoritative -decoders and -encoders commands instead.
 
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPlainTextEdit, QPushButton
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPlainTextEdit, QPushButton, QApplication
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QTextOption
+from PyQt6.QtGui import QTextOption, QTextCursor, QShortcut, QKeySequence
 from PyQt6.QtWidgets import QLineEdit, QHBoxLayout, QLabel
 from PyQt6.QtGui import QFont
 import subprocess
@@ -22,12 +26,17 @@ class FFmpegHelpDialog(QDialog):
 
         # Search bar
         search_layout = QHBoxLayout()
-        search_label = QLabel("Find:")
+        search_label = QLabel("Search:")
         self.search_input = QLineEdit()
-        self.search_input.setPlaceholderText("Search (disabled on this system)")
-        self.search_input.returnPressed.connect(self.search_text)
+        self.search_input.setPlaceholderText("Search help text; press Enter for next match")
         search_layout.addWidget(search_label)
         search_layout.addWidget(self.search_input)
+
+        self.clear_search_btn = QPushButton("Clear Search")
+        self.clear_search_btn.setAutoDefault(False)
+        self.clear_search_btn.clicked.connect(self.clear_search)
+        search_layout.addWidget(self.clear_search_btn)
+
         layout.addLayout(search_layout)
 
         # Output area
@@ -42,7 +51,22 @@ class FFmpegHelpDialog(QDialog):
 
         layout.addWidget(self.text_area)
 
+        # Make Enter search again regardless of which child widget has focus.
+        self.find_next_shortcut = QShortcut(QKeySequence(Qt.Key.Key_Return), self)
+        self.find_next_shortcut.setContext(Qt.ShortcutContext.WidgetWithChildrenShortcut)
+        self.find_next_shortcut.activated.connect(self.search_text)
+
+        self.find_next_keypad_shortcut = QShortcut(QKeySequence(Qt.Key.Key_Enter), self)
+        self.find_next_keypad_shortcut.setContext(Qt.ShortcutContext.WidgetWithChildrenShortcut)
+        self.find_next_keypad_shortcut.activated.connect(self.search_text)
+
+        self.clear_search_shortcut = QShortcut(QKeySequence(Qt.Key.Key_Escape), self)
+        self.clear_search_shortcut.setContext(Qt.ShortcutContext.WidgetWithChildrenShortcut)
+        self.clear_search_shortcut.activated.connect(self.clear_search)
+
         close_btn = QPushButton("Close")
+        close_btn.setAutoDefault(False)
+        close_btn.setDefault(False)
         close_btn.clicked.connect(self.close)
         layout.addWidget(close_btn, alignment=Qt.AlignmentFlag.AlignRight)
 
@@ -63,23 +87,46 @@ class FFmpegHelpDialog(QDialog):
                 return shutil.which(p) or p
             return shutil.which("ffmpeg") or "ffmpeg"
 
-        try:
-            program = resolve_ffmpeg()
+        def run_help_command(command_args: list[str]) -> str:
             result = subprocess.run(
-                [program, "-hide_banner", *args],
+                [program, "-hide_banner", *command_args],
                 capture_output=True,
                 text=True,
                 check=False,
             )
-            output = (result.stdout or "") + ("\n" if result.stdout else "") + (result.stderr or "")
+            return (result.stdout or "") + ("\n" if result.stdout else "") + (result.stderr or "")
+
+        try:
+            program = resolve_ffmpeg()
+            output = run_help_command(args)
         except Exception as e:
             output = f"Error running ffmpeg:\n{e}"
 
         title = self.windowTitle().lower()
         if args == ["-codecs"] and title.startswith("video codecs"):
-            output = self.filter_video_codecs(output)
+            try:
+                decoder_output = run_help_command(["-decoders"])
+                encoder_output = run_help_command(["-encoders"])
+                output = self.build_codecs_all(
+                    decoder_output,
+                    encoder_output,
+                    media_type="V",
+                    media_label="video",
+                )
+            except Exception as e:
+                output = f"Error reading video codecs:\n{e}"
         elif args == ["-codecs"] and title.startswith("audio codecs"):
-            output = self.filter_audio_codecs(output)
+            try:
+                decoder_output = run_help_command(["-decoders"])
+                encoder_output = run_help_command(["-encoders"])
+                output = self.build_codecs_all(
+                    decoder_output,
+                    encoder_output,
+                    media_type="A",
+                    media_label="audio",
+                )
+            except Exception as e:
+                output = f"Error reading audio codecs:\n{e}"
         elif args == ["-filters"] and title.startswith("video filters"):
             output = self.filter_video_filters(output)
         elif args == ["-filters"] and title.startswith("audio filters"):
@@ -88,7 +135,67 @@ class FFmpegHelpDialog(QDialog):
         self.text_area.setPlainText(output)
 
 
-#===Methods for ffmpeg help filtering        
+#===Methods for ffmpeg help filtering
+    def build_codecs_all(
+        self,
+        decoder_output: str,
+        encoder_output: str,
+        media_type: str,
+        media_label: str,
+    ) -> str:
+        """Build one alphabetized decoder/encoder implementation list.
+
+        Current FFmpeg exposes implementation names authoritatively through
+        ``-decoders`` and ``-encoders``. Combining both commands provides a
+        complete "Codecs All" view for either video or audio while retaining
+        D/E capability information.
+        """
+        entries: dict[str, dict[str, object]] = {}
+
+        def add_entries(raw_output: str, capability: str) -> None:
+            expected_prefix = f" {media_type}"
+
+            for line in raw_output.splitlines():
+                if len(line) < 8 or not line.startswith(expected_prefix):
+                    continue
+
+                parts = line[7:].strip().split(maxsplit=1)
+                if not parts:
+                    continue
+
+                name = parts[0]
+                description = parts[1] if len(parts) > 1 else ""
+
+                entry = entries.setdefault(
+                    name,
+                    {"capabilities": set(), "description": description},
+                )
+                entry["capabilities"].add(capability)
+
+                if not entry["description"] and description:
+                    entry["description"] = description
+
+        add_entries(decoder_output, "D")
+        add_entries(encoder_output, "E")
+
+        if not entries:
+            return f"No {media_label} decoders or encoders found."
+
+        lines = [
+            " D/E  NAME                     DESCRIPTION",
+            " ---  -----------------------  ----------------------------------------",
+        ]
+
+        for name in sorted(entries, key=str.casefold):
+            entry = entries[name]
+            capabilities = entry["capabilities"]
+            marker = "DE" if capabilities == {"D", "E"} else next(iter(capabilities))
+            description = entry["description"]
+            lines.append(f" {marker:<3}  {name:<23}  {description}")
+
+        return "\n".join(lines)
+
+
     def filter_video_codecs(self, raw_output: str) -> str:
         lines = raw_output.splitlines()
         filtered = []
@@ -143,6 +250,33 @@ class FFmpegHelpDialog(QDialog):
 #===End Filtering Methods
 
         
-    def search_text(self):
-        print("[DEBUG] Search disabled for stability. Feature will return in future version.")
+    def search_text(self) -> None:
+        """Find the next occurrence of the search text, wrapping at the end."""
+        query = self.search_input.text().strip()
+        if not query:
+            return
+
+        found = self.text_area.find(query)
+
+        if not found:
+            # Wrap to the beginning and try once more.
+            cursor = self.text_area.textCursor()
+            cursor.movePosition(QTextCursor.MoveOperation.Start)
+            self.text_area.setTextCursor(cursor)
+            found = self.text_area.find(query)
+
+        if not found:
+            QApplication.beep()
+            self.search_input.setFocus()
+            self.search_input.selectAll()
+
+    def clear_search(self) -> None:
+        """Clear the search text and remove the current match selection."""
+        self.search_input.clear()
+
+        cursor = self.text_area.textCursor()
+        cursor.clearSelection()
+        self.text_area.setTextCursor(cursor)
+
+        self.search_input.setFocus()
 
