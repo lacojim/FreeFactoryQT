@@ -3,6 +3,28 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.66-dev] - 2026-11-08
+
+- **Factory Builder Output Redesign:** Reorganized the Output section into four dedicated tabs:
+  - **Final Output and Dropbox** — Output format, stream controls, multi-output configuration, and drag-and-drop media conversion.
+  - **Manual Options** — Manual FFmpeg input and output arguments.
+  - **Timing Controls** — Start Offset, Encode Length, Timecode Mode, Start Timecode, and GOP Timecode.
+  - **Factory Management** — FreeFactory Notify service permissions and file operations.
+
+- **Timecode Controls:** Relocated Timecode Mode, Start Timecode, and GOP Timecode from Video Advanced → GOP / Frame Control to Output → Timing Controls. Existing widget names and functionality were preserved, requiring no changes to the underlying timecode processing code.
+
+- **Manual Options Improvements:**
+  - Replaced the single-line `QLineEdit` controls with multiline `QPlainTextEdit` editors, allowing long FFmpeg argument strings to wrap automatically and remain visible.
+  - Added support for manually entered line breaks. Newlines are normalized to spaces when saving factories, preserving compatibility with the existing factory file format.
+  - Updated factory save, load, and clearing routines to support the new editors.
+  - Improved the explanatory text and warnings describing manual FFmpeg options and automatic input generation.
+
+- **Factory Management:** Reorganized Notify service settings into two clearly labeled sections: **Allow Service to run Factory** and **Allow Service File Operations**. These settings remain exclusive to FreeFactory Notify.
+
+- **UI Cleanup:** Improved the organization and readability of the Factory Builder without increasing the application's overall window dimensions or changing existing factory file keys.
+
+## [1.1.65-dev] - 2026-09-12
+ - Finally added code for the Default Outpath Dialog in Global Settings. Not sure how that got overlooked. 
 
 ## [1.1.64-dev] - 2026-07-30
  - While this was something not on the todo list, I had to fix it: The **FFMpeg Help** tab has been re-written and works much better now including search, which had been disabled since day one. This has always annoyed me as I use the built in FFMpeg help feature a lot.
