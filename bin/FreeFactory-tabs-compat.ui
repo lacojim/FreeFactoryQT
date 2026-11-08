@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>FreeFactory v1.1.2</string>
   </property>
+  <property name="inputMethodHints">
+   <set>Qt::ImhMultiLine|Qt::ImhNoEditMenu</set>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabMain">
     <property name="enabled">
@@ -139,7 +142,17 @@
            </brush>
           </colorrole>
          </inactive>
-         <disabled/>
+         <disabled>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>236</green>
+             <blue>235</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
         </palette>
        </property>
        <property name="font">
@@ -183,7 +196,17 @@
            </brush>
           </colorrole>
          </inactive>
-         <disabled/>
+         <disabled>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>236</green>
+             <blue>235</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
         </palette>
        </property>
        <property name="font">
@@ -233,7 +256,17 @@
            </brush>
           </colorrole>
          </inactive>
-         <disabled/>
+         <disabled>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>236</green>
+             <blue>235</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
         </palette>
        </property>
        <property name="font">
@@ -2131,7 +2164,7 @@ Hover to see full content. Also see FFmpeg help.</string>
          <property name="toolTip">
           <string>Convert Variable Frame Rate (VFR) to Constant Frame Rate (CFR).
 Ensures strict frame pacing by duplicating or dropping frames as needed.
-- Adds -fps_mode:v cfr to the commandl line.</string>
+- Adds -fps_mode:v cfr to the command line.</string>
          </property>
          <property name="text">
           <string>Lock Frame Rate</string>
@@ -2510,7 +2543,26 @@ Analysis Only: Media file will not be rendered when checked.</string>
              </brush>
             </colorrole>
            </inactive>
-           <disabled/>
+           <disabled>
+            <colorrole role="WindowText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>13</red>
+               <green>13</green>
+               <blue>13</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Text">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>13</red>
+               <green>13</green>
+               <blue>13</blue>
+              </color>
+             </brush>
+            </colorrole>
+           </disabled>
           </palette>
          </property>
          <property name="font">
@@ -3592,7 +3644,26 @@ Analysis Only: Media file will not be rendered when checked.</string>
              </brush>
             </colorrole>
            </inactive>
-           <disabled/>
+           <disabled>
+            <colorrole role="WindowText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>13</red>
+               <green>13</green>
+               <blue>13</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Text">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>13</red>
+               <green>13</green>
+               <blue>13</blue>
+              </color>
+             </brush>
+            </colorrole>
+           </disabled>
           </palette>
          </property>
          <property name="font">
@@ -4178,7 +4249,7 @@ Supported by mpeg2video, H.264 and HEVC video codecs.</string>
            <property name="geometry">
             <rect>
              <x>490</x>
-             <y>47</y>
+             <y>16</y>
              <width>51</width>
              <height>25</height>
             </rect>
@@ -4224,7 +4295,7 @@ Range and Defaults are codec dependent.</string>
            <property name="geometry">
             <rect>
              <x>306</x>
-             <y>51</y>
+             <y>20</y>
              <width>51</width>
              <height>17</height>
             </rect>
@@ -4244,7 +4315,7 @@ Range and Defaults are codec dependent.</string>
            <property name="geometry">
             <rect>
              <x>406</x>
-             <y>50</y>
+             <y>19</y>
              <width>81</width>
              <height>17</height>
             </rect>
@@ -4267,7 +4338,7 @@ Range and Defaults are codec dependent.</string>
            <property name="geometry">
             <rect>
              <x>82</x>
-             <y>47</y>
+             <y>16</y>
              <width>101</width>
              <height>25</height>
             </rect>
@@ -4334,7 +4405,7 @@ For advanced/broadcast workflows only.
            <property name="geometry">
             <rect>
              <x>200</x>
-             <y>50</y>
+             <y>19</y>
              <width>51</width>
              <height>17</height>
             </rect>
@@ -4354,7 +4425,7 @@ For advanced/broadcast workflows only.
            <property name="geometry">
             <rect>
              <x>260</x>
-             <y>47</y>
+             <y>16</y>
              <width>31</width>
              <height>25</height>
             </rect>
@@ -4374,7 +4445,7 @@ For advanced/broadcast workflows only.
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>51</y>
+             <y>20</y>
              <width>71</width>
              <height>17</height>
             </rect>
@@ -4394,7 +4465,7 @@ For advanced/broadcast workflows only.
            <property name="geometry">
             <rect>
              <x>360</x>
-             <y>47</y>
+             <y>16</y>
              <width>31</width>
              <height>25</height>
             </rect>
@@ -4410,159 +4481,24 @@ For advanced/broadcast workflows only.
             <string>Group of Pictures Size: Adds the flag -g to the command line</string>
            </property>
           </widget>
-          <widget class="QLabel" name="l_TimeCodeMode">
+          <widget class="QLabel" name="label_14">
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>13</y>
-             <width>91</width>
-             <height>20</height>
+             <y>60</y>
+             <width>441</width>
+             <height>16</height>
             </rect>
            </property>
            <property name="font">
             <font>
              <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
+             <italic>true</italic>
+             <bold>true</bold>
             </font>
            </property>
            <property name="text">
-            <string>Timecode Mode</string>
-           </property>
-          </widget>
-          <widget class="QComboBox" name="TimeCodeMode">
-           <property name="geometry">
-            <rect>
-             <x>96</x>
-             <y>10</y>
-             <width>71</width>
-             <height>25</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <family>Sans Serif</family>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Metadata Timecode
-
-Default
-Use FFmpeg's default behavior (does not add the -timecode option and 
-defaults to Non-Drop Frame NDF timecode).
-
-DF
-Drop Frame: Adds -timecode using a semicolon
-(e.g. 00:00:00;00).
-
-NDF
-Non-Drop Frame: Adds -timecode using a colon
-(e.g. 00:00:00:00).
-
-When encoding for many professional NTSC broadcast
-playout systems, Drop Frame timecode is typically needed.
-
-Adds -timecode flag to the command line.</string>
-           </property>
-           <property name="editable">
-            <bool>true</bool>
-           </property>
-           <item>
-            <property name="text">
-             <string>Default</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>DF</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>NDF</string>
-            </property>
-           </item>
-          </widget>
-          <widget class="QLabel" name="l_TimeCodeStart">
-           <property name="geometry">
-            <rect>
-             <x>180</x>
-             <y>14</y>
-             <width>81</width>
-             <height>17</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Start Timecode</string>
-           </property>
-          </widget>
-          <widget class="QLineEdit" name="TimeCodeStart">
-           <property name="geometry">
-            <rect>
-             <x>260</x>
-             <y>10</y>
-             <width>81</width>
-             <height>25</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Start Timecode: When Timecode Mode is set to DF or NDF,
-enter the desired starting timecode.
-
-Leave this field empty to use 00:00:00;00 (DF)
-or 00:00:00:00 (NDF).
-
-This field is disabled when Timecode Mode
-is set to Default.
-
-This field is also shared with GOP Timecode.</string>
-           </property>
-           <property name="placeholderText">
-            <string>HH:MM:SS:FF</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkGopTimecode">
-           <property name="geometry">
-            <rect>
-             <x>360</x>
-             <y>13</y>
-             <width>101</width>
-             <height>19</height>
-            </rect>
-           </property>
-           <property name="toolTip">
-            <string>GOP Timecode
-
-When this is checked, will write timecode to the Group of Pictures (GOP). 
-This requires re-rendering video when checked. This will use the Start 
-Timecode field when using Metadata Time code. Otherwise it defaults to drop 
-frame 00:00:00;00. 
-
-If you need a custom GOP timecode without metadata timecode, uncheck this box 
-and add -gop_timecode to Manual Options. It is perfectly fine to use matching 
-metadata timecode and GOP timecode together.
-
-Adds -gop_timecode to the command line.</string>
-           </property>
-           <property name="text">
-            <string>GOP Timecode</string>
+            <string>Timecode options have been moved to the output section, Timing Controls.</string>
            </property>
           </widget>
          </widget>
@@ -7699,7 +7635,9 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
               </font>
              </property>
              <property name="toolTip">
-              <string>Strictly enforce gop size</string>
+              <string>Strict GOP
+Keeps the GOP structure as constant as possible. Useful for some broadcast
+and legacy MPEG workflows where variable GOPs may cause compatibility issues.</string>
              </property>
              <property name="text">
               <string>strict_gop</string>
@@ -7742,7 +7680,9 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
               </font>
              </property>
              <property name="toolTip">
-              <string>Use rate distortion optimization for qp selection</string>
+              <string>Rate-Distortion QP Optimization
+Uses additional analysis when selecting quantization parameters.
+Can improve quality at the expense of slower encoding. Intended for advanced users.</string>
              </property>
              <property name="text">
               <string>qp_rd</string>
@@ -7765,7 +7705,10 @@ Specialized/auxiliary flags. These are rarely needed for typical encodes.
               </font>
              </property>
              <property name="toolTip">
-              <string>always try a mb with mv=&lt;0,0&gt;</string>
+              <string>MV0 (Motion Vector Zero Test)
+Tries encoding macroblocks with a
+zero motion vector and chooses the better result.
+Mainly useful for experimentation; rarely needed for normal encoding.</string>
              </property>
              <property name="text">
               <string>mv0</string>
@@ -7885,919 +7828,11 @@ background service encoding.</string>
        <string>/video/output</string>
       </property>
      </widget>
-     <widget class="DropTextEdit" name="dropZone">
-      <property name="geometry">
-       <rect>
-        <x>902</x>
-        <y>410</y>
-        <width>171</width>
-        <height>201</height>
-       </rect>
-      </property>
-      <property name="palette">
-       <palette>
-        <active>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>255</green>
-            <blue>221</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </active>
-        <inactive>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>255</green>
-            <blue>221</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </inactive>
-        <disabled/>
-       </palette>
-      </property>
-      <property name="toolTip">
-       <string>Drop Media Files Here for Direct Conversion
-or Factory Testing</string>
-      </property>
-      <property name="placeholderText">
-       <string>Drop Media File Here.</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="l_DirectMediaConvert">
-      <property name="geometry">
-       <rect>
-        <x>918</x>
-        <y>390</y>
-        <width>141</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string>Convert media files on the fly. 
-Uses loaded factory.</string>
-      </property>
-      <property name="text">
-       <string>- Direct Media Convert -</string>
-      </property>
-     </widget>
-     <widget class="QGroupBox" name="groupFinalOutput_2">
-      <property name="geometry">
-       <rect>
-        <x>240</x>
-        <y>400</y>
-        <width>341</width>
-        <height>61</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string/>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="title">
-       <string>Timing Controls</string>
-      </property>
-      <widget class="QLineEdit" name="VideoStartTimeOffset">
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>20</y>
-         <width>71</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Start Position Offset: Decodes but discards input until the timestamps reach position.
-Value in seconds. Adds the -ss flag to the commandline.
-If you need this on Input (which is more efficient), use Manual Input Opts below.</string>
-       </property>
-       <property name="inputMethodHints">
-        <set>Qt::ImhNone</set>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="maxLength">
-        <number>8</number>
-       </property>
-       <property name="placeholderText">
-        <string>hh:mm:ss</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="l_EncodeLength">
-       <property name="geometry">
-        <rect>
-         <x>150</x>
-         <y>25</y>
-         <width>91</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Encoding duration (e.g., 30, 00:01:00, 00:00:30.500)</string>
-       </property>
-       <property name="text">
-        <string>Encode Length</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="l_VideoStartTimeOffset">
-       <property name="geometry">
-        <rect>
-         <x>6</x>
-         <y>24</y>
-         <width>61</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Start Position Offset: Decodes but discards input until the timestamps reach position.
-Value in seconds. Adds the -ss flag to the commandline.
-If you need this on Input (which is more efficient), use Manual Input Opts below.</string>
-       </property>
-       <property name="text">
-        <string>Start Offset</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="EncodeLength">
-       <property name="geometry">
-        <rect>
-         <x>230</x>
-         <y>20</y>
-         <width>101</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Encoding duration (e.g., 30, 00:01:00, 00:00:30.500)</string>
-       </property>
-       <property name="placeholderText">
-        <string>hh:mm:ss[.xxx]</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="groupServiceOptions">
-      <property name="geometry">
-       <rect>
-        <x>239</x>
-        <y>490</y>
-        <width>341</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string>These options only affect FreeFactory Service</string>
-      </property>
-      <property name="title">
-       <string>FreeFactory Service Options</string>
-      </property>
-      <widget class="QCheckBox" name="DeleteSource">
-       <property name="geometry">
-        <rect>
-         <x>230</x>
-         <y>16</y>
-         <width>101</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Delete Source. Default: Enabled
-This only affects files dropped into
-drop folders and has no affect on
-direct encoding.</string>
-       </property>
-       <property name="text">
-        <string>Delete Source</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="DeleteConversionLogs">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>16</y>
-         <width>91</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Remove Logs only applies to FreeFactory Service. Default: Disabled
-Direct Encoding is unaffected.</string>
-       </property>
-       <property name="text">
-        <string>Remove Logs</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="EnableFactory">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>16</y>
-         <width>101</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Enable this Factory. Default: Enabled
-This is only valid when using the FreeFactory Service.</string>
-       </property>
-       <property name="text">
-        <string>Enable Factory</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QToolButton" name="clearDropZoneButton">
-      <property name="geometry">
-       <rect>
-        <x>902</x>
-        <y>590</y>
-        <width>28</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Clear Drop Zone</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
-      </property>
-     </widget>
-     <widget class="QLabel" name="l_CommandLine">
-      <property name="geometry">
-       <rect>
-        <x>237</x>
-        <y>623</y>
-        <width>81</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Command Line</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_11">
-      <property name="geometry">
-       <rect>
-        <x>347</x>
-        <y>535</y>
-        <width>511</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>true</italic>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>If you define -i and/or -f flag here, FreeFactory will ignore ALL automatic input generation.</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="l_ManualOptionsInput">
-      <property name="geometry">
-       <rect>
-        <x>237</x>
-        <y>557</y>
-        <width>101</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string>Manual Input and Global Options</string>
-      </property>
-      <property name="text">
-       <string>Manual Input Opts</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="ManualOptionsOutput">
-      <property name="geometry">
-       <rect>
-        <x>347</x>
-        <y>587</y>
-        <width>541</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Output Options: Use this field for FFmpeg options that apply after the input file
-(e.g., codec-specific flags, -vf, -af). These flags are inserted after -i and before
-the final output file (-f / filename) and are not otherwise available through the GUI.</string>
-      </property>
-      <property name="placeholderText">
-       <string>-c:s copy -c:v copy -c:a copy</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="l_ManualOptionsOutput">
-      <property name="geometry">
-       <rect>
-        <x>237</x>
-        <y>591</y>
-        <width>111</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string>Manual Output Options</string>
-      </property>
-      <property name="text">
-       <string>Manual Output Opts</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="ManualOptionsInput">
-      <property name="geometry">
-       <rect>
-        <x>347</x>
-        <y>553</y>
-        <width>541</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Input / Global Options: Use this field for FFmpeg options that apply before the input file
-(e.g., -threads, -re, -f). These flags are inserted before the -i argument and are not
-otherwise available through the GUI.</string>
-      </property>
-      <property name="placeholderText">
-       <string>-hwaccel cuda -hwaccel_output_format cuda</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="PreviewCommand">
-      <property name="geometry">
-       <rect>
-        <x>317</x>
-        <y>620</y>
-        <width>51</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Generates FFmpeg command based on current GUI settings.
-The input and output filenames are generic.</string>
-      </property>
-      <property name="text">
-       <string>Preview</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="PreviewCommandLine">
-      <property name="geometry">
-       <rect>
-        <x>403</x>
-        <y>620</y>
-        <width>671</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Preview Command: Shows the FFmpeg command line that would be generated from the
-current GUI settings. Input and output filenames are placeholders only; they are
-substituted with real paths when the job runs.</string>
-      </property>
-     </widget>
-     <widget class="QToolButton" name="clearPreviewButton">
-      <property name="geometry">
-       <rect>
-        <x>370</x>
-        <y>620</y>
-        <width>28</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Clear Preview</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
-      </property>
-     </widget>
-     <widget class="QGroupBox" name="groupFinalOutput">
-      <property name="geometry">
-       <rect>
-        <x>680</x>
-        <y>400</y>
-        <width>211</width>
-        <height>61</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string/>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="title">
-       <string>Final Output (Video/Audio)</string>
-      </property>
-      <widget class="QLabel" name="l_ForceFormat">
-       <property name="geometry">
-        <rect>
-         <x>7</x>
-         <y>31</y>
-         <width>111</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Force Output Format</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="ForceFormat">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>116</x>
-         <y>28</y>
-         <width>91</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Force Format: Adds the flag -f to the command line.
-This can be used for either audio or video.
-This appends to the output.
-This will always be the last flag applied to the
-FFmpeg command string.</string>
-       </property>
-       <property name="editable">
-        <bool>true</bool>
-       </property>
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <property name="placeholderText">
-        <string/>
-       </property>
-       <item>
-        <property name="text">
-         <string/>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>aac</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>asf</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>avi</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>dash</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>flac</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>flv</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>hls</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>matroska</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>mov</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>mp3</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>mp4</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>mpeg</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>mpeg1video</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>mpeg2video</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>mpegts</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>mxf</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>mxf_d10</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>mxf_opatom</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>null</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>nut</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>ogg</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>m4a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>wav</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>webm</string>
-        </property>
-       </item>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_2">
-      <property name="geometry">
-       <rect>
-        <x>680</x>
-        <y>470</y>
-        <width>211</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string>Allows to disable Video, Audio, Subtitle and Data streams.</string>
-      </property>
-      <property name="title">
-       <string>Streams Disable</string>
-      </property>
-      <widget class="QCheckBox" name="checkDisableData">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>30</y>
-         <width>91</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Disable Data Stream. Adds -dn to command line</string>
-       </property>
-       <property name="text">
-        <string>Disable Data</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="checkDisableVideo">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>14</y>
-         <width>91</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Disable Video Stream. Adds -vn to command line</string>
-       </property>
-       <property name="text">
-        <string>Disable Video</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="checkDisableSubs">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>30</y>
-         <width>81</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Disable Subtitle Stream. Adds -sn to command line</string>
-       </property>
-       <property name="text">
-        <string>Disable Subs</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="checkDisableAudio">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>14</y>
-         <width>91</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Disable Audio Stream. Adds -an to command line</string>
-       </property>
-       <property name="text">
-        <string>Disable Audio</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QCheckBox" name="checkMultiOutput">
-      <property name="geometry">
-       <rect>
-        <x>240</x>
-        <y>464</y>
-        <width>141</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="palette">
-       <palette>
-        <active>
-         <colorrole role="WindowText">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>0</green>
-            <blue>0</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Text">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>26</red>
-            <green>26</green>
-            <blue>26</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </active>
-        <inactive>
-         <colorrole role="WindowText">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>0</green>
-            <blue>0</blue>
-           </color>
-          </brush>
-         </colorrole>
-         <colorrole role="Text">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>26</red>
-            <green>26</green>
-            <blue>26</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </inactive>
-        <disabled/>
-       </palette>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string>When enabled, FreeFactory will NOT add an implicit single output. Your Manual Output
- Options must include full output paths (use {outdir} and {stem}).
-Multi-Output is local encode only and not supported by FreeFactory service.</string>
-      </property>
-      <property name="text">
-       <string>Enable Multi-Output</string>
-      </property>
-     </widget>
-     <widget class="Line" name="line_5">
-      <property name="geometry">
-       <rect>
-        <x>625</x>
-        <y>400</y>
-        <width>20</width>
-        <height>111</height>
-       </rect>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-     </widget>
      <widget class="QLabel" name="l_FactorySummary">
       <property name="geometry">
        <rect>
         <x>238</x>
-        <y>652</y>
+        <y>654</y>
         <width>101</width>
         <height>16</height>
        </rect>
@@ -9213,6 +8248,1196 @@ This field is not used for drag and drop encoding.</string>
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
+     <widget class="QLabel" name="l_CommandLine">
+      <property name="geometry">
+       <rect>
+        <x>238</x>
+        <y>628</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Command Line</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="PreviewCommand">
+      <property name="geometry">
+       <rect>
+        <x>318</x>
+        <y>625</y>
+        <width>51</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Generates FFmpeg command based on current GUI settings.
+The input and output filenames are generic.</string>
+      </property>
+      <property name="text">
+       <string>Preview</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="PreviewCommandLine">
+      <property name="geometry">
+       <rect>
+        <x>404</x>
+        <y>625</y>
+        <width>671</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Preview Command: Shows the FFmpeg command line that would be generated from the
+current GUI settings. Input and output filenames are placeholders only; they are
+substituted with real paths when the job runs.</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="clearPreviewButton">
+      <property name="geometry">
+       <rect>
+        <x>371</x>
+        <y>625</y>
+        <width>28</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Clear Preview</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
+      </property>
+     </widget>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>400</y>
+        <width>831</width>
+        <height>211</height>
+       </rect>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tabFinalOutputDropbox">
+       <attribute name="title">
+        <string>Final Output and Dropbox</string>
+       </attribute>
+       <widget class="DropTextEdit" name="dropZone">
+        <property name="geometry">
+         <rect>
+          <x>252</x>
+          <y>20</y>
+          <width>571</width>
+          <height>161</height>
+         </rect>
+        </property>
+        <property name="palette">
+         <palette>
+          <active>
+           <colorrole role="Base">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>255</red>
+              <green>255</green>
+              <blue>221</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </active>
+          <inactive>
+           <colorrole role="Base">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>255</red>
+              <green>255</green>
+              <blue>221</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </inactive>
+          <disabled>
+           <colorrole role="Base">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>237</red>
+              <green>236</green>
+              <blue>235</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </disabled>
+         </palette>
+        </property>
+        <property name="toolTip">
+         <string>Drop Media Files Here for Direct Conversion
+or Factory Testing</string>
+        </property>
+        <property name="placeholderText">
+         <string>Drop Media File Here.</string>
+        </property>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>80</y>
+          <width>211</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Allows to disable Video, Audio, Subtitle and Data streams.</string>
+        </property>
+        <property name="title">
+         <string>Streams Disable</string>
+        </property>
+        <widget class="QCheckBox" name="checkDisableData">
+         <property name="geometry">
+          <rect>
+           <x>120</x>
+           <y>30</y>
+           <width>91</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Disable Data Stream. Adds -dn to command line</string>
+         </property>
+         <property name="text">
+          <string>Disable Data</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="checkDisableVideo">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>14</y>
+           <width>91</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Disable Video Stream. Adds -vn to command line</string>
+         </property>
+         <property name="text">
+          <string>Disable Video</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="checkDisableSubs">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>30</y>
+           <width>81</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Disable Subtitle Stream. Adds -sn to command line</string>
+         </property>
+         <property name="text">
+          <string>Disable Subs</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="checkDisableAudio">
+         <property name="geometry">
+          <rect>
+           <x>120</x>
+           <y>14</y>
+           <width>91</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Disable Audio Stream. Adds -an to command line</string>
+         </property>
+         <property name="text">
+          <string>Disable Audio</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QLabel" name="l_DirectMediaConvert">
+        <property name="geometry">
+         <rect>
+          <x>248</x>
+          <y>2</y>
+          <width>201</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Convert media files on the fly. 
+Uses loaded factory.</string>
+        </property>
+        <property name="text">
+         <string>- Drag and Drop Media Convert -</string>
+        </property>
+       </widget>
+       <widget class="QGroupBox" name="groupFinalOutput">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>211</width>
+          <height>61</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="title">
+         <string>Output Format (Video/Audio)</string>
+        </property>
+        <widget class="QLabel" name="l_ForceFormat">
+         <property name="geometry">
+          <rect>
+           <x>7</x>
+           <y>31</y>
+           <width>111</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Force Output Format</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="ForceFormat">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>116</x>
+           <y>28</y>
+           <width>91</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Sans Serif</family>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Force Format: Adds the flag -f to the command line.
+This can be used for either audio or video.
+This appends to the output.
+This will always be the last flag applied to the
+FFmpeg command string.</string>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>aac</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>asf</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>avi</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>dash</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>flac</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>flv</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>hls</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>matroska</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mov</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mp3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mp4</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mpeg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mpeg1video</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mpeg2video</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mpegts</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mxf</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mxf_d10</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mxf_opatom</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>null</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>nut</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ogg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>m4a</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>wav</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>webm</string>
+          </property>
+         </item>
+        </widget>
+       </widget>
+       <widget class="QToolButton" name="clearDropZoneButton">
+        <property name="geometry">
+         <rect>
+          <x>252</x>
+          <y>160</y>
+          <width>28</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>Clear Drop Zone</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>../Pics/Broom.png</normaloff>../Pics/Broom.png</iconset>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkMultiOutput">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>150</y>
+          <width>141</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="palette">
+         <palette>
+          <active>
+           <colorrole role="WindowText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>255</red>
+              <green>0</green>
+              <blue>0</blue>
+             </color>
+            </brush>
+           </colorrole>
+           <colorrole role="Text">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>26</red>
+              <green>26</green>
+              <blue>26</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </active>
+          <inactive>
+           <colorrole role="WindowText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>255</red>
+              <green>0</green>
+              <blue>0</blue>
+             </color>
+            </brush>
+           </colorrole>
+           <colorrole role="Text">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>26</red>
+              <green>26</green>
+              <blue>26</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </inactive>
+          <disabled>
+           <colorrole role="WindowText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>13</red>
+              <green>13</green>
+              <blue>13</blue>
+             </color>
+            </brush>
+           </colorrole>
+           <colorrole role="Text">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>13</red>
+              <green>13</green>
+              <blue>13</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </disabled>
+         </palette>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>When enabled, FreeFactory will NOT add an implicit single output. Your Manual Output
+ Options must include full output paths (use {outdir} and {stem}).
+Multi-Output is local encode only and not supported by FreeFactory service.</string>
+        </property>
+        <property name="text">
+         <string>Enable Multi-Output</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tabManualOptions">
+       <attribute name="title">
+        <string>Manual Options</string>
+       </attribute>
+       <widget class="QLabel" name="l_ManualOptionsInput">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>84</y>
+          <width>121</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Manual Input and Global Options</string>
+        </property>
+        <property name="text">
+         <string>Manual Input Options</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="l_ManualOptionsOutput">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>144</y>
+          <width>121</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Manual Output Options</string>
+        </property>
+        <property name="text">
+         <string>Manual Output Options</string>
+        </property>
+       </widget>
+       <widget class="Line" name="line_10">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>60</y>
+          <width>831</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="ManualOptionsDescription">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>801</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>true</italic>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Manual Options: Allows FFmpeg arguments not provided by the UI. An entire factory can be configured using only Manual Options if desired.
+
+Important: If you define -i and/or -f flag here, FreeFactory will ignore ALL automatic input generation.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QPlainTextEdit" name="ManualOptionsInput">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>80</y>
+          <width>681</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>Input / Global Options: Use this field for FFmpeg options that apply before the input file
+(e.g., -threads, -re, -f). These flags are inserted before the -i argument and are not
+otherwise available through the GUI.</string>
+        </property>
+        <property name="plainText">
+         <string/>
+        </property>
+        <property name="placeholderText">
+         <string>-hwaccel cuda -hwaccel_output_format cuda</string>
+        </property>
+       </widget>
+       <widget class="QPlainTextEdit" name="ManualOptionsOutput">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>130</y>
+          <width>681</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>Output Options: Use this field for FFmpeg options that apply after the input file
+(e.g., codec-specific flags, -vf, -af). These flags are inserted after -i and before
+the final output file (-f / filename) and are not otherwise available through the GUI.</string>
+        </property>
+        <property name="placeholderText">
+         <string>-c:s copy -c:v copy -c:a copy</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tabTimingControls">
+       <attribute name="title">
+        <string>Timing Controls</string>
+       </attribute>
+       <widget class="QCheckBox" name="checkGopTimecode">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>130</y>
+          <width>101</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>GOP Timecode
+
+When this is checked, will write timecode to the Group of Pictures (GOP). 
+This requires re-rendering video when checked. This will use the Start 
+Timecode field when using Metadata Time code. Otherwise it defaults to drop 
+frame 00:00:00;00. 
+
+If you need a custom GOP timecode without metadata timecode, uncheck this box 
+and add -gop_timecode to Manual Options. It is perfectly fine to use matching 
+metadata timecode and GOP timecode together.
+
+Adds -gop_timecode to the command line.</string>
+        </property>
+        <property name="text">
+         <string>GOP Timecode</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="l_TimeCodeStart">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>101</y>
+          <width>81</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Start Timecode</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="l_TimeCodeMode">
+        <property name="geometry">
+         <rect>
+          <x>18</x>
+          <y>100</y>
+          <width>91</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Timecode Mode</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="TimeCodeStart">
+        <property name="geometry">
+         <rect>
+          <x>270</x>
+          <y>97</y>
+          <width>81</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Start Timecode: When Timecode Mode is set to DF or NDF,
+enter the desired starting timecode.
+
+Leave this field empty to use 00:00:00;00 (DF)
+or 00:00:00:00 (NDF).
+
+This field is disabled when Timecode Mode
+is set to Default.
+
+This field is also shared with GOP Timecode.</string>
+        </property>
+        <property name="placeholderText">
+         <string>HH:MM:SS:FF</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="TimeCodeMode">
+        <property name="geometry">
+         <rect>
+          <x>104</x>
+          <y>97</y>
+          <width>71</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>Sans Serif</family>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Metadata Timecode
+
+Default
+Use FFmpeg's default behavior (does not add the -timecode option and 
+defaults to Non-Drop Frame NDF timecode).
+
+DF
+Drop Frame: Adds -timecode using a semicolon
+(e.g. 00:00:00;00).
+
+NDF
+Non-Drop Frame: Adds -timecode using a colon
+(e.g. 00:00:00:00).
+
+When encoding for many professional NTSC broadcast
+playout systems, Drop Frame timecode is typically needed.
+
+Adds -timecode flag to the command line.</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>Default</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>DF</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>NDF</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QLineEdit" name="EncodeLength">
+        <property name="geometry">
+         <rect>
+          <x>240</x>
+          <y>22</y>
+          <width>101</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Encoding duration (e.g., 30, 00:01:00, 00:00:30.500)</string>
+        </property>
+        <property name="placeholderText">
+         <string>hh:mm:ss[.xxx]</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="VideoStartTimeOffset">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>22</y>
+          <width>71</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Start Position Offset: Decodes but discards input until the timestamps reach position.
+Value in seconds. Adds the -ss flag to the commandline.
+If you need this on Input (which is more efficient), use Manual Input Opts below.</string>
+        </property>
+        <property name="inputMethodHints">
+         <set>Qt::ImhNone</set>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="maxLength">
+         <number>8</number>
+        </property>
+        <property name="placeholderText">
+         <string>hh:mm:ss</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="l_VideoStartTimeOffset">
+        <property name="geometry">
+         <rect>
+          <x>16</x>
+          <y>26</y>
+          <width>61</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Start Position Offset: Decodes but discards input until the timestamps reach position.
+Value in seconds. Adds the -ss flag to the commandline.
+If you need this on Input (which is more efficient), use Manual Input Opts below.</string>
+        </property>
+        <property name="text">
+         <string>Start Offset</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="l_EncodeLength">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>27</y>
+          <width>91</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Encoding duration (e.g., 30, 00:01:00, 00:00:30.500)</string>
+        </property>
+        <property name="text">
+         <string>Encode Length</string>
+        </property>
+       </widget>
+       <widget class="Line" name="line_5">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>60</y>
+          <width>821</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_9">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>2</y>
+          <width>91</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Trim / Duration</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_10">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>80</y>
+          <width>71</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Timecode</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tabFactoryMgmt">
+       <attribute name="title">
+        <string>Factory Management</string>
+       </attribute>
+       <widget class="QCheckBox" name="DeleteSource">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>140</y>
+          <width>101</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Delete Source. Default: Enabled
+This only affects files dropped into
+drop folders and has no affect on
+direct encoding.</string>
+        </property>
+        <property name="text">
+         <string>Delete Source</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="DeleteConversionLogs">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>120</y>
+          <width>91</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Remove Logs only applies to FreeFactory Service. Default: Disabled
+Direct Encoding is unaffected.</string>
+        </property>
+        <property name="text">
+         <string>Remove Logs</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="EnableFactory">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>40</y>
+          <width>101</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Enable this Factory. Default: Enabled
+This is only valid when using the FreeFactory Service.</string>
+        </property>
+        <property name="text">
+         <string>Enable Factory</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_12">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>171</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Allow Service to run Factory</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_13">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>100</y>
+          <width>191</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+          <italic>false</italic>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Allow Service File Operations</string>
+        </property>
+       </widget>
+       <widget class="Line" name="line_9">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>80</y>
+          <width>821</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </widget>
+     </widget>
     </widget>
     <widget class="QWidget" name="tabStreamRecordMgr">
      <attribute name="title">
@@ -9290,15 +9515,15 @@ This field is not used for drag and drop encoding.</string>
         </font>
        </property>
        <property name="text">
-        <string>RTMP URL</string>
+        <string>Stream URL</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="streamRTMPUrl">
        <property name="geometry">
         <rect>
-         <x>70</x>
+         <x>80</x>
          <y>78</y>
-         <width>241</width>
+         <width>311</width>
          <height>22</height>
         </rect>
        </property>
@@ -9308,6 +9533,9 @@ This field is not used for drag and drop encoding.</string>
          <italic>false</italic>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="toolTip">
+        <string>Enter the stream URL here.</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="streamKey">
@@ -9925,6 +10153,32 @@ Should be on when streaming files</string>
         <string>...</string>
        </property>
       </widget>
+      <widget class="QCheckBox" name="checkFFmpegSRTBugHandler">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>840</x>
+         <y>110</y>
+         <width>131</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Attempts to fix the bug where ffmpeg crashes when caller disconnects.</string>
+       </property>
+       <property name="text">
+        <string>Use SRT Bug Handler</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QComboBox" name="streamInputProfile">
       <property name="enabled">
@@ -10170,13 +10424,13 @@ When Off, all widgets below are inaccessible.</string>
        </font>
       </property>
       <property name="title">
-       <string>Multiple Streams Table</string>
+       <string>Streaming Table</string>
       </property>
       <widget class="QPushButton" name="StopStream">
        <property name="geometry">
         <rect>
-         <x>100</x>
-         <y>204</y>
+         <x>330</x>
+         <y>180</y>
          <width>80</width>
          <height>21</height>
         </rect>
@@ -10195,8 +10449,8 @@ When Off, all widgets below are inaccessible.</string>
       <widget class="QPushButton" name="StopAllStreams">
        <property name="geometry">
         <rect>
-         <x>300</x>
-         <y>204</y>
+         <x>530</x>
+         <y>180</y>
          <width>101</width>
          <height>21</height>
         </rect>
@@ -10216,7 +10470,7 @@ When Off, all widgets below are inaccessible.</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>50</y>
+         <y>20</y>
          <width>1031</width>
          <height>151</height>
         </rect>
@@ -10245,7 +10499,17 @@ When Off, all widgets below are inaccessible.</string>
            </brush>
           </colorrole>
          </inactive>
-         <disabled/>
+         <disabled>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>236</green>
+             <blue>235</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
         </palette>
        </property>
        <property name="font">
@@ -10275,8 +10539,8 @@ When Off, all widgets below are inaccessible.</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>21</y>
-         <width>101</width>
+         <y>180</y>
+         <width>91</width>
          <height>21</height>
         </rect>
        </property>
@@ -10294,9 +10558,9 @@ When Off, all widgets below are inaccessible.</string>
       <widget class="QPushButton" name="RemoveStream">
        <property name="geometry">
         <rect>
-         <x>120</x>
-         <y>21</y>
-         <width>101</width>
+         <x>110</x>
+         <y>180</y>
+         <width>91</width>
          <height>21</height>
         </rect>
        </property>
@@ -10314,8 +10578,8 @@ When Off, all widgets below are inaccessible.</string>
       <widget class="QPushButton" name="StartStream">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>204</y>
+         <x>240</x>
+         <y>180</y>
          <width>80</width>
          <height>21</height>
         </rect>
@@ -10334,8 +10598,8 @@ When Off, all widgets below are inaccessible.</string>
       <widget class="QPushButton" name="StartAllStreams">
        <property name="geometry">
         <rect>
-         <x>190</x>
-         <y>204</y>
+         <x>420</x>
+         <y>180</y>
          <width>101</width>
          <height>21</height>
         </rect>
@@ -10375,7 +10639,7 @@ When Off, all widgets below are inaccessible.</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>230</y>
+         <y>210</y>
          <width>151</width>
          <height>16</height>
         </rect>
@@ -10395,9 +10659,9 @@ When Off, all widgets below are inaccessible.</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>250</y>
+         <y>230</y>
          <width>1031</width>
-         <height>71</height>
+         <height>91</height>
         </rect>
        </property>
        <property name="palette">
@@ -10424,7 +10688,17 @@ When Off, all widgets below are inaccessible.</string>
            </brush>
           </colorrole>
          </inactive>
-         <disabled/>
+         <disabled>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>236</green>
+             <blue>235</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
         </palette>
        </property>
        <property name="font">
@@ -10433,6 +10707,19 @@ When Off, all widgets below are inaccessible.</string>
          <italic>false</italic>
          <bold>false</bold>
         </font>
+       </property>
+      </widget>
+      <widget class="Line" name="line_8">
+       <property name="geometry">
+        <rect>
+         <x>213</x>
+         <y>175</y>
+         <width>16</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
       </widget>
      </widget>
@@ -10783,7 +11070,17 @@ When Off, all widgets below are inaccessible.</string>
            </brush>
           </colorrole>
          </inactive>
-         <disabled/>
+         <disabled>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>236</green>
+             <blue>235</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
         </palette>
        </property>
        <property name="columnCount">
@@ -10932,7 +11229,17 @@ When Off, all widgets below are inaccessible.</string>
           </brush>
          </colorrole>
         </inactive>
-        <disabled/>
+        <disabled>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>237</red>
+            <green>236</green>
+            <blue>235</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </disabled>
        </palette>
       </property>
       <property name="toolTip">
@@ -11644,7 +11951,7 @@ Takes effect for new jobs; running jobs are not interrupted.
         <enum>Qt::UpArrow</enum>
        </property>
       </widget>
-      <widget class="QToolButton" name="toolButton_FactoriesPath_2">
+      <widget class="QToolButton" name="toolButton_Default_Output_Path">
        <property name="geometry">
         <rect>
          <x>442</x>
@@ -11841,7 +12148,17 @@ with those changes. </string>
            </brush>
           </colorrole>
          </inactive>
-         <disabled/>
+         <disabled>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>236</green>
+             <blue>235</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
         </palette>
        </property>
        <property name="font">
@@ -11971,7 +12288,17 @@ Be sure to Save Global after.</string>
            </brush>
           </colorrole>
          </inactive>
-         <disabled/>
+         <disabled>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>236</green>
+             <blue>235</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
         </palette>
        </property>
        <property name="font">
@@ -13097,6 +13424,42 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
        <bool>true</bool>
       </property>
      </widget>
+     <widget class="QLineEdit" name="ManualOptionsInput1">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>260</y>
+        <width>681</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Input / Global Options: Use this field for FFmpeg options that apply before the input file
+(e.g., -threads, -re, -f). These flags are inserted before the -i argument and are not
+otherwise available through the GUI.</string>
+      </property>
+      <property name="placeholderText">
+       <string>-hwaccel cuda -hwaccel_output_format cuda</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ManualOptionsOutput1">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>320</y>
+        <width>681</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Output Options: Use this field for FFmpeg options that apply after the input file
+(e.g., codec-specific flags, -vf, -af). These flags are inserted after -i and before
+the final output file (-f / filename) and are not otherwise available through the GUI.</string>
+      </property>
+      <property name="placeholderText">
+       <string>-c:s copy -c:v copy -c:a copy</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
@@ -13340,7 +13703,7 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
   <customwidget>
    <class>DropTextEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header location="global">main</header>
+   <header>main</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -13389,23 +13752,6 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
   <tabstop>toolButton_outputDir</tabstop>
   <tabstop>listFactoryFiles</tabstop>
   <tabstop>NewFactory</tabstop>
-  <tabstop>dropZone</tabstop>
-  <tabstop>VideoStartTimeOffset</tabstop>
-  <tabstop>EncodeLength</tabstop>
-  <tabstop>DeleteSource</tabstop>
-  <tabstop>DeleteConversionLogs</tabstop>
-  <tabstop>EnableFactory</tabstop>
-  <tabstop>clearDropZoneButton</tabstop>
-  <tabstop>ManualOptionsOutput</tabstop>
-  <tabstop>ManualOptionsInput</tabstop>
-  <tabstop>PreviewCommand</tabstop>
-  <tabstop>PreviewCommandLine</tabstop>
-  <tabstop>clearPreviewButton</tabstop>
-  <tabstop>ForceFormat</tabstop>
-  <tabstop>checkDisableData</tabstop>
-  <tabstop>checkDisableVideo</tabstop>
-  <tabstop>checkDisableSubs</tabstop>
-  <tabstop>checkDisableAudio</tabstop>
   <tabstop>streamRTMPUrl</tabstop>
   <tabstop>streamKey</tabstop>
   <tabstop>ForceFormatInputVideo</tabstop>

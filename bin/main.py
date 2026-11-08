@@ -395,7 +395,7 @@ class FreeFactoryApp(QMainWindow):
     def setup_ui(self):
         self.SaveFFConfigGlobal.clicked.connect(self.save_global_config)
         self.toolButton_FactoriesPath.clicked.connect(self.select_factories_directory)
-
+        self.toolButton_Default_Output_Path.clicked.connect(self.select_default_output_path)
         self.LoadFactoryTools.clicked.connect(self.launch_factory_tools)
       
         #self.ViewLicense.clicked.connect(self.show_license)        # Removed the Widget
@@ -2416,13 +2416,15 @@ class FreeFactoryApp(QMainWindow):
         # 1) Primary fields written in the order of the map
         for obj_name, key in combo_key_map.items():
             w = getattr(self, obj_name, None) or self.findChild(
-                (QLineEdit, QComboBox, QCheckBox), obj_name
+                (QLineEdit, QPlainTextEdit, QComboBox, QCheckBox), obj_name
             )
             if not w:
                 continue
 
             if isinstance(w, QLineEdit):
                 val = (w.text() or "").strip()
+            elif isinstance(w, QPlainTextEdit):
+                val = " ".join(w.toPlainText().splitlines()).strip()
             elif isinstance(w, QComboBox):
                 val = (w.currentText() or "").strip()
             elif isinstance(w, QCheckBox):
@@ -2489,8 +2491,11 @@ class FreeFactoryApp(QMainWindow):
         self.FactoryFilename.clear()
 
         # Clear all fields on delete
-        for field in self.findChildren(QLineEdit):
+        for field in self.findChildren((QLineEdit, QPlainTextEdit)):
             field.clear()
+            
+        self.ManualOptionsInput.clear()
+        self.ManualOptionsOutput.clear()
 
         QMessageBox.information(
             self,
@@ -2509,8 +2514,11 @@ class FreeFactoryApp(QMainWindow):
         self.listFactoryFiles.clearSelection()
 
         for parent_tab in (self.tabFactoryBuilder, self.tabStreamRecordMgr):
-            for field in parent_tab.findChildren(QLineEdit):
+            for field in parent_tab.findChildren((QLineEdit, QPlainTextEdit)):
                 field.clear()
+                
+        self.ManualOptionsInput.clear()
+        self.ManualOptionsOutput.clear()
 
         self.streamUsername.clear()
         self.streamPassword.clear()
@@ -2711,7 +2719,7 @@ class FreeFactoryApp(QMainWindow):
             "AUTOMAPAV":            "False",
         }
 
-        for w in self.findChildren((QLineEdit, QComboBox, QCheckBox)):
+        for w in self.findChildren((QLineEdit, QPlainTextEdit, QComboBox, QCheckBox)):
             key = combo_key_map.get(w.objectName())
             if not key:
                 continue
@@ -2719,6 +2727,9 @@ class FreeFactoryApp(QMainWindow):
 
             if isinstance(w, QLineEdit):
                 w.setText(raw)
+                
+            elif isinstance(w, QPlainTextEdit):
+                w.setPlainText(str(raw))
 
             elif isinstance(w, QComboBox):
                 val = (raw or "").strip()
@@ -2774,6 +2785,24 @@ class FreeFactoryApp(QMainWindow):
     # this directory dialog was changed on 2026-05-29 to allow hidden folders
     def select_factories_directory(self):
         dialog = QFileDialog(self, "Select Factories Directory")
+
+        dialog.setFileMode(QFileDialog.FileMode.Directory)
+        dialog.setOption(QFileDialog.Option.ShowDirsOnly, True)
+        dialog.setOption(QFileDialog.Option.DontUseNativeDialog, True)
+
+        dialog.setFilter(
+            QDir.Filter.AllDirs |
+            QDir.Filter.Hidden |
+            QDir.Filter.NoDotAndDotDot
+        )
+
+        if dialog.exec():
+            directory = dialog.selectedFiles()[0]
+            self.PathtoFactoriesGlobal.setText(directory)
+            
+    # this directory dialog was added on 2026-09-12 and adds the Default Output Path code to the button.
+    def select_default_output_path(self):
+        dialog = QFileDialog(self, "Select Default Output Path")
 
         dialog.setFileMode(QFileDialog.FileMode.Directory)
         dialog.setOption(QFileDialog.Option.ShowDirsOnly, True)
