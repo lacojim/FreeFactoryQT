@@ -3,6 +3,23 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.67-dev] - 2026-11-15
+
+### Changed
+- **Streaming/Recording Command Builders:** Consolidated live input argument generation in `core.py` through a shared helper used by both streaming and recording commands, reducing duplicated logic.
+- **Streaming Worker Cleanup:** Simplified `ffstreaming.py` by removing obsolete streaming command construction and legacy start/stop helpers. Stream commands continue to be built by `core.py`; the module now focuses on worker/process lifecycle management.
+- **Command Preview:** Updated the alpha GUI's Generate Command path to preview Stream, Record, and Stream + Record modes using the corresponding core command builders. This was not working correctly in previous versions.
+
+### Fixed
+- **Stop All:** Corrected delayed display of the “All streams stopped” log message by deferring the GUI update with `QTimer.singleShot(0, ...)`. Also clear both active-stream tracking maps and bound subprocess termination waits with a kill fallback.
+- **Recording Input Selection:** Removed hardcoded PulseAudio (`-f pulse -i default`) input from both the alpha GUI's recording launch path and its recording command preview. RTSP sources with embedded audio no longer receive an unintended second input.
+- **Recording Preview Consistency:** Verified that the generated recording command matches the command launched by the Record button, aside from the resolved FFmpeg executable path.
+
+### Tested / Notes
+- Verified SRT and RTMP streaming, including multiple-stream start/stop behavior and playback in VLC.
+- Verified GUI recording from an RTSP camera to MP4 using H.264 video and AAC audio. 
+- Confirmed that `ffrecording.py` has no static Python import references in the searched source tree, so it has been removed.
+
 ## [1.1.66-dev] - 2026-11-08
 
 - **Factory Builder Output Redesign:** Reorganized the Output section into four dedicated tabs:
