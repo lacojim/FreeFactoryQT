@@ -101,7 +101,8 @@ Preset-driven FFmpeg configurations for power users and broadcasters:
 
 Fully editable factories with support for complex options:
 
-<img width="1099" height="749" alt="livestreamandrecordmgr" src="https://github.com/user-attachments/assets/c85bbc20-8b0d-4ef6-8dc2-9b517c6725b2" />
+<img width="1110" height="777" alt="image" src="https://github.com/user-attachments/assets/43a0d33a-c946-442f-8321-831088416e29" />
+
 
 
 
