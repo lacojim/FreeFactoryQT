@@ -60,11 +60,7 @@ from droptextedit import DropTextEdit
 from ffmpeghelp import FFmpegHelpDialog
 from version import get_version
 
-from ffstreaming import (
-    StreamWorker, start_single_stream, stop_single_stream,
-    start_all_streams, stop_all_streams,
-    handle_stream_stopped
-)
+from ffstreaming import StreamWorker, stop_all_streams
 
 from ffnotifyservice import (
     connect_notify_service_controls,
@@ -2009,8 +2005,8 @@ class FreeFactoryApp(QMainWindow):
         # Inputs & formats
         video_input = (self.RecordInput.text().strip() if hasattr(self, "RecordInput") else "") or ":0.0+0,0"
         video_fmt = "x11grab" if video_input.startswith(":") else "file"
-        audio_input = "default"  # later: add a widget if you want a selectable source
-        audio_fmt = "pulse"
+        audio_input = ""
+        audio_fmt = ""
         out_path = self._resolve_record_output_path()
         re_for_files = bool(getattr(self, "checkReadFilesRealTime", None) and self.checkReadFilesRealTime.isChecked())
 
@@ -2906,50 +2902,88 @@ class FreeFactoryApp(QMainWindow):
     #   (Builder/Streamer/Recorder)
     # ============================
     def on_generate_command(self):
-        factory_name = self.FactoryFilename.text().strip()
-        if not factory_name:
-            QMessageBox.warning(self, "No Factory Selected", "Please select or create a factory first.")
+        """Preview commands built by core, using current controls (not table rows)."""
+        mode = self._get_stream_mode()
+        factory_root = Path(self.config.get("FactoryLocation") or "/opt/FreeFactory/Factories")
+        commands = []
+
+        def load_preview_factory(name):
+            name = (name or "").strip()
+            if not name:
+                raise ValueError("Please select a factory first.")
+            data = self.core.load_factory(factory_root / name)
+            if not data:
+                raise ValueError(f"Could not load factory: {factory_root / name}")
+            return data
+
+        try:
+            if mode in ("Stream", "Record+Stream"):
+                stream_factory_name = self.streamFactorySelect.currentText().strip()
+                stream_factory = load_preview_factory(stream_factory_name)
+
+                base_url = self.streamRTMPUrl.text().strip().rstrip("/")
+                stream_key = self.streamKey.text().strip()
+                output_url = f"{base_url}/{stream_key}" if stream_key else base_url
+                if not output_url:
+                    raise ValueError("Please enter a streaming destination URL.")
+
+                if (hasattr(self, "streamAuthMode") and
+                        self.streamAuthMode.currentText().strip() == "url"):
+                    username = self.streamUsername.text().strip()
+                    password = self.streamPassword.text().strip()
+                    if username and password and "@" not in output_url.split("://", 1)[-1]:
+                        scheme, rest = (output_url.split("://", 1) if "://" in output_url
+                                        else ("rtmp", output_url))
+                        output_url = f"{scheme}://{username}:{password}@{rest}"
+
+                def current_input(widget):
+                    return (widget.currentText() if hasattr(widget, "currentText")
+                            else widget.text()).strip()
+
+                stream_cmd = self.core.build_streaming_command(
+                    stream_factory,
+                    video_input=current_input(self.streamInputVideo),
+                    audio_input=current_input(self.streamInputAudio),
+                    video_input_format=self.ForceFormatInputVideo.currentText().strip().lower(),
+                    audio_input_format=self.ForceFormatInputAudio.currentText().strip().lower(),
+                    output_url=output_url,
+                    re_for_file_inputs=self.checkReadFilesRealTime.isChecked(),
+                )
+                commands.append(("Streaming", stream_cmd))
+
+            if mode in ("Record", "Record+Stream"):
+                record_factory_name = self.FactoryFilename.text().strip()
+                record_factory = load_preview_factory(record_factory_name)
+                video_input = (self.RecordInput.text().strip() if hasattr(self, "RecordInput") else "") or ":0.0+0,0"
+                record_cmd = self.core.build_recording_command(
+                    record_factory,
+                    video_input=video_input,
+                    audio_input="",
+                    video_input_format="x11grab" if video_input.startswith(":") else "file",
+                    audio_input_format="",
+                    output_path=str(self._resolve_record_output_path()),
+                    re_for_file_inputs=self.checkReadFilesRealTime.isChecked(),
+                )
+                commands.append(("Recording", record_cmd))
+
+            if mode == "Off":
+                factory = load_preview_factory(self.FactoryFilename.text().strip())
+                runtime_factory = self._with_runtime_analysis_flags(factory)
+                commands.append(("Conversion", self.core.build_ffmpeg_command(
+                    Path("input.filename"), runtime_factory, preview=True)))
+
+        except (ValueError, OSError) as exc:
+            QMessageBox.warning(self, "Command Preview", str(exc))
             return
 
-        factory_path = Path(self.config.get("FactoryLocation")) / factory_name
-        factory_data = self.core.load_factory(factory_path)
-        if not factory_data:
-            QMessageBox.warning(self, "Error", f"Could not load factory: {factory_path}")
-            return
-
-        mode = (self.StreamMgrMode.currentText() or "Off").strip().lower() if hasattr(self, "StreamMgrMode") else "off"
-        
-        
-        if mode == "record":
-            video_input = (self.RecordInput.text().strip() if hasattr(self, "RecordInput") else "") or ":0.0+0,0"
-            video_fmt = "x11grab" if video_input.startswith(":") else "file"
-            audio_input = "default"
-            audio_fmt = "pulse"
-            out_path = self._resolve_record_output_path()
-            re_for_files = bool(getattr(self, "checkReadFilesRealTime", None) and self.checkReadFilesRealTime.isChecked())
-
-            cmd = self.core.build_recording_command(
-                factory_data,
-                video_input=video_input,
-                audio_input=audio_input,
-                video_input_format=video_fmt,
-                audio_input_format=audio_fmt,
-                output_path=str(out_path),
-                re_for_file_inputs=re_for_files,
-            )
+        if len(commands) == 1:
+            preview = shlex.join(commands[0][1])
         else:
-            # …your existing preview path (conversion/stream)…
-            runtime_factory = self._with_runtime_analysis_flags(factory_data)
-            cmd = self.core.build_ffmpeg_command(Path("input.filename"), runtime_factory, preview=True)
-            #cmd = self.core.build_ffmpeg_command(Path("input.filename"), factory_data, preview=True)
+            preview = "\n\n".join(f"# {label}\n{shlex.join(cmd)}" for label, cmd in commands)
+        self.PreviewCommandLine.setPlainText(preview) if hasattr(
+            self.PreviewCommandLine, "setPlainText") else self.PreviewCommandLine.setText(preview)
 
-        self.PreviewCommandLine.setText(" ".join(cmd))
-        
-        
-        
-        
-        
-        
+
     # This picks up the UI settings in realtime (not from the Factory), mostly just for Report check boxes for now.    
     def _with_runtime_analysis_flags(self, factory_data):
         runtime_factory = dict(factory_data)

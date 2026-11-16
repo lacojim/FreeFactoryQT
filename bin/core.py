@@ -31,6 +31,7 @@ import shlex
 from pathlib import Path
 from PyQt6.QtCore import QObject, pyqtSignal, QThread
 import re, shutil
+from datetime import datetime, timezone
 
 
 
@@ -894,6 +895,29 @@ class FreeFactoryCore:
             print("DEBUG force_format raw value:", repr(force_format))
 
         #======= MULTI-OUTPUT + Manual options
+#        multi = self._truthy(factory_data.get("MULTIOUTPUT", "False"))
+#
+#        if manual_output:
+#            manual_output = self._expand_multioutput_tokens(
+#                manual_output,
+#                str(input_path),
+#                output_dir
+#            )
+#            cmd += shlex.split(manual_output)
+#
+#        if not multi:
+#            if force_format:
+#                cmd += ["-f", force_format]
+#            cmd.append(output_path.as_posix())
+#        else:
+#            # Safety rail: require explicit destinations in MANUALOPTIONSOUTPUT
+#            if not (manual_output and manual_output.strip()):
+#                raise ValueError("MULTIOUTPUT=True but MANUALOPTIONSOUTPUT is empty; no outputs would be produced.")
+#
+#        #print("DEBUG final cmd:", cmd)
+#        return cmd
+
+        #======= MULTI-OUTPUT + Manual options NEW
         multi = self._truthy(factory_data.get("MULTIOUTPUT", "False"))
 
         if manual_output:
@@ -905,13 +929,23 @@ class FreeFactoryCore:
             cmd += shlex.split(manual_output)
 
         if not multi:
+            # Automatically write the current creation timestamp to containers
+            # that support it. FFmpeg does not generate this metadata by default.
+            creation_time = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            cmd += ["-metadata", f"creation_time={creation_time}"]
+
             if force_format:
                 cmd += ["-f", force_format]
+
             cmd.append(output_path.as_posix())
+
         else:
             # Safety rail: require explicit destinations in MANUALOPTIONSOUTPUT
             if not (manual_output and manual_output.strip()):
-                raise ValueError("MULTIOUTPUT=True but MANUALOPTIONSOUTPUT is empty; no outputs would be produced.")
+                raise ValueError(
+                    "MULTIOUTPUT=True but MANUALOPTIONSOUTPUT is empty; "
+                    "no outputs would be produced."
+                )
 
         #print("DEBUG final cmd:", cmd)
         return cmd
@@ -999,6 +1033,45 @@ class FreeFactoryCore:
 # ============================
 #      Build Streaming Command
 # ============================
+    def _build_live_input_args(
+        self, *, manual_input: str, video_input: str, audio_input: str,
+        video_input_format: str, audio_input_format: str,
+        include_tqs: bool, tqs_size: str, re_for_file_inputs: bool,
+    ) -> list[str]:
+        """Shared input arguments for streaming and recording.
+
+        Preserve the existing ordering and manual-input override semantics.
+        """
+        import shlex
+
+        args: list[str] = []
+        tokens = shlex.split(manual_input) if manual_input else []
+        if "-i" in tokens:
+            return tokens
+
+        def add_input(fmt: str, src: str, *, pre_first: bool = False):
+            if not src:
+                return
+            fmt_norm = (fmt or "").strip().lower()
+            is_filelike = fmt_norm in ("file", "", "concat")
+            if pre_first and not is_filelike:
+                args.extend(tokens)
+            if not is_filelike and fmt_norm:
+                args.extend(["-f", fmt_norm])
+            if include_tqs and tqs_size and not is_filelike:
+                args.extend(["-thread_queue_size", str(tqs_size)])
+            if is_filelike and re_for_file_inputs:
+                args.append("-re")
+            args.extend(["-i", src])
+
+        video_is_capture = bool(video_input) and (
+            (video_input_format or "").strip().lower() not in ("file", "", "concat")
+        )
+        add_input(video_input_format, video_input, pre_first=video_is_capture)
+        add_input(audio_input_format, audio_input)
+        return args
+
+
     def build_streaming_command(
         self,
         factory_data: dict,
@@ -1046,54 +1119,16 @@ class FreeFactoryCore:
             cmd += ["-fflags", "nobuffer"]
 
         # -------------------- INPUTS --------------------
-        tokens = shlex.split(manual_input) if manual_input else []
-        has_i  = any(tok == "-i" for tok in tokens)
-
-        def add_input(fmt: str, src: str, pre_first: bool):
-            if not src:
-                return
-
-            fmt_norm = (fmt or "").strip().lower()
-            is_filelike = fmt_norm in ("file", "", "concat")  # treat concat like file
-
-            # Only put pre-video manual opts before capture inputs, not file/concat
-            if pre_first and not is_filelike:
-                cmd.extend(tokens)
-
-            # For capture formats include -f
-            if not is_filelike and fmt_norm:
-                cmd.extend(["-f", fmt_norm])
-
-            # Thread queue only for capture inputs
-            if include_tqs and tqs_size and not is_filelike:
-                cmd.extend(["-thread_queue_size", str(tqs_size)])
-
-            # Throttle file-like inputs (-re) right before their -i
-            if is_filelike and re_for_file_inputs:
-                cmd.append("-re")
-
-            cmd.extend(["-i", src])
-
-
-
-        if manual_input and has_i:
-            cmd += tokens
-        else:
-            # Only treat ManualOptionsInput as pre-video when the *video* is capture (not "File")
-            #pre_before_video = bool(video_input) and ((video_input_format or "").strip().lower() != "file")
-            pre_before_video = bool(video_input) and (
-                (video_input_format or "").strip().lower() not in ("file", "", "concat")
-
-            )
-
-            # VIDEO input
-            add_input(video_input_format, video_input, pre_before_video)
-
-            # AUDIO input
-            add_input(audio_input_format, audio_input, pre_first=False)
-
-        # ...below unchanged...
-
+        cmd.extend(self._build_live_input_args(
+            manual_input=manual_input,
+            video_input=video_input,
+            audio_input=audio_input,
+            video_input_format=video_input_format,
+            audio_input_format=audio_input_format,
+            include_tqs=include_tqs,
+            tqs_size=tqs_size,
+            re_for_file_inputs=re_for_file_inputs,
+        ))
 
         # -------------------- FLAGS FROM WIDGETS --------------------
         cmd += self.build_streaming_flags(factory_data)
@@ -1160,38 +1195,16 @@ class FreeFactoryCore:
         if low_latency:
             cmd += ["-fflags", "nobuffer"]
 
-        tokens = shlex.split(manual_input) if manual_input else []
-        has_i  = any(tok == "-i" for tok in tokens)
-
-        def add_input(fmt: str, src: str, pre_first: bool):
-            # nonlocal cmd  # optional safety if you ever reintroduce +=
-            if not src:
-                return
-
-            fmt_norm = (fmt or "").strip().lower()
-            is_filelike = fmt_norm in ("file", "", "concat")
-
-            if pre_first and not is_filelike:
-                cmd.extend(tokens)
-
-            if not is_filelike and fmt_norm:
-                cmd.extend(["-f", fmt_norm])
-
-            if include_tqs and tqs_size and not is_filelike:
-                cmd.extend(["-thread_queue_size", str(tqs_size)])
-
-            if is_filelike and re_for_file_inputs:
-                cmd.append("-re")
-
-            cmd.extend(["-i", src])
-
-
-        if manual_input and has_i:
-            cmd += tokens
-        else:
-            pre_before_video = bool(video_input) and ((video_input_format or "").strip().lower() not in ("file", "", "concat"))
-            add_input(video_input_format, video_input, pre_before_video)
-            add_input(audio_input_format, audio_input, pre_first=False)
+        cmd.extend(self._build_live_input_args(
+            manual_input=manual_input,
+            video_input=video_input,
+            audio_input=audio_input,
+            video_input_format=video_input_format,
+            audio_input_format=audio_input_format,
+            include_tqs=include_tqs,
+            tqs_size=tqs_size,
+            re_for_file_inputs=re_for_file_inputs,
+        ))
 
         # Reuse your existing flag builder (same knobs as streaming/encodes)
         cmd += self.build_streaming_flags(factory_data)

@@ -10435,6 +10435,43 @@ When Off, all widgets below are inaccessible.</string>
          <height>21</height>
         </rect>
        </property>
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>51</green>
+             <blue>59</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>51</green>
+             <blue>59</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>51</green>
+             <blue>59</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
+       </property>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
@@ -10449,11 +10486,48 @@ When Off, all widgets below are inaccessible.</string>
       <widget class="QPushButton" name="StopAllStreams">
        <property name="geometry">
         <rect>
-         <x>530</x>
+         <x>560</x>
          <y>180</y>
          <width>101</width>
          <height>21</height>
         </rect>
+       </property>
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>51</green>
+             <blue>59</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>51</green>
+             <blue>59</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>237</red>
+             <green>51</green>
+             <blue>59</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
        </property>
        <property name="font">
         <font>
@@ -10544,6 +10618,43 @@ When Off, all widgets below are inaccessible.</string>
          <height>21</height>
         </rect>
        </property>
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>249</red>
+             <green>240</green>
+             <blue>107</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>249</red>
+             <green>240</green>
+             <blue>107</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>249</red>
+             <green>240</green>
+             <blue>107</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
+       </property>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
@@ -10563,6 +10674,43 @@ When Off, all widgets below are inaccessible.</string>
          <width>91</width>
          <height>21</height>
         </rect>
+       </property>
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>229</red>
+             <green>165</green>
+             <blue>10</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>229</red>
+             <green>165</green>
+             <blue>10</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>229</red>
+             <green>165</green>
+             <blue>10</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
        </property>
        <property name="font">
         <font>
@@ -10584,6 +10732,43 @@ When Off, all widgets below are inaccessible.</string>
          <height>21</height>
         </rect>
        </property>
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>153</red>
+             <green>193</green>
+             <blue>241</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>153</red>
+             <green>193</green>
+             <blue>241</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>153</red>
+             <green>193</green>
+             <blue>241</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
+       </property>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
@@ -10598,11 +10783,48 @@ When Off, all widgets below are inaccessible.</string>
       <widget class="QPushButton" name="StartAllStreams">
        <property name="geometry">
         <rect>
-         <x>420</x>
+         <x>450</x>
          <y>180</y>
          <width>101</width>
          <height>21</height>
         </rect>
+       </property>
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>153</red>
+             <green>193</green>
+             <blue>241</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>153</red>
+             <green>193</green>
+             <blue>241</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>153</red>
+             <green>193</green>
+             <blue>241</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
        </property>
        <property name="font">
         <font>
@@ -10714,6 +10936,19 @@ When Off, all widgets below are inaccessible.</string>
         <rect>
          <x>213</x>
          <y>175</y>
+         <width>16</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+      <widget class="Line" name="line_11">
+       <property name="geometry">
+        <rect>
+         <x>423</x>
+         <y>176</y>
          <width>16</width>
          <height>31</height>
         </rect>
@@ -13703,7 +13938,7 @@ the final output file (-f / filename) and are not otherwise available through th
   <customwidget>
    <class>DropTextEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header>main</header>
+   <header>droptextedit</header>
   </customwidget>
  </customwidgets>
  <tabstops>
