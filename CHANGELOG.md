@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.68-dev] - 2026-11-16
+- Fixed a longstanding FreeFactoryQt crash triggered when an SRT caller disconnects. FFmpeg exits with an I/O error, causing premature QThread cleanup due to a conflicting finished signal. Restored proper thread lifecycle handling.
+
 ## [1.1.67-dev] - 2026-11-15
 
 ### Changed
