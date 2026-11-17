@@ -3,7 +3,7 @@ import subprocess
 
 
 class StreamWorker(QThread):
-    finished = pyqtSignal(str)
+#    finished = pyqtSignal(str)
     error = pyqtSignal(str)
     output = pyqtSignal(str)
 
@@ -23,8 +23,8 @@ class StreamWorker(QThread):
             )
             for line in self.process.stdout:
                 self.output.emit(line.strip())
-            self.process.wait()
-            self.finished.emit(self.rtmp_url)
+#            self.process.wait()
+#            self.finished.emit(self.rtmp_url)
         except Exception as e:
             self.error.emit(f"{self.rtmp_url}: {e}")
 

@@ -8252,7 +8252,7 @@ This field is not used for drag and drop encoding.</string>
       <property name="geometry">
        <rect>
         <x>238</x>
-        <y>628</y>
+        <y>625</y>
         <width>81</width>
         <height>17</height>
        </rect>
@@ -8272,10 +8272,47 @@ This field is not used for drag and drop encoding.</string>
       <property name="geometry">
        <rect>
         <x>318</x>
-        <y>625</y>
-        <width>51</width>
+        <y>622</y>
+        <width>61</width>
         <height>25</height>
        </rect>
+      </property>
+      <property name="palette">
+       <palette>
+        <active>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>255</red>
+            <green>255</green>
+            <blue>221</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </active>
+        <inactive>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>255</red>
+            <green>255</green>
+            <blue>221</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </inactive>
+        <disabled>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>255</red>
+            <green>255</green>
+            <blue>221</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </disabled>
+       </palette>
       </property>
       <property name="toolTip">
        <string>Generates FFmpeg command based on current GUI settings.
@@ -8288,11 +8325,38 @@ The input and output filenames are generic.</string>
      <widget class="QLineEdit" name="PreviewCommandLine">
       <property name="geometry">
        <rect>
-        <x>404</x>
-        <y>625</y>
-        <width>671</width>
+        <x>414</x>
+        <y>622</y>
+        <width>661</width>
         <height>25</height>
        </rect>
+      </property>
+      <property name="palette">
+       <palette>
+        <active>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>255</red>
+            <green>255</green>
+            <blue>221</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </active>
+        <inactive>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>255</red>
+            <green>255</green>
+            <blue>221</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </inactive>
+        <disabled/>
+       </palette>
       </property>
       <property name="toolTip">
        <string>Preview Command: Shows the FFmpeg command line that would be generated from the
@@ -8303,8 +8367,8 @@ substituted with real paths when the job runs.</string>
      <widget class="QToolButton" name="clearPreviewButton">
       <property name="geometry">
        <rect>
-        <x>371</x>
-        <y>625</y>
+        <x>383</x>
+        <y>622</y>
         <width>28</width>
         <height>25</height>
        </rect>

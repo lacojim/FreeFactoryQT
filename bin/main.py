@@ -1768,8 +1768,12 @@ class FreeFactoryApp(QMainWindow):
         # Promote status changes
         worker.output.connect(lambda line, r=row: self._maybe_mark_live(r, line))
         worker.output.connect(self.streamLogOutput.appendPlainText)
-        worker.finished.connect(lambda: self._on_stream_finished(row, full_output_url, False))
-        worker.error.connect(lambda m: self._on_stream_error(row, full_output_url, m))
+        worker.finished.connect(
+            lambda: self._on_stream_finished(row, full_output_url, False)
+        )
+        worker.error.connect(
+            lambda m: self.streamLogOutput.appendPlainText(f"🔴 {m}")
+        )
 
         # Store both mappings:
         if not hasattr(self, "active_streams_by_row"):
