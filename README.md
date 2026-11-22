@@ -109,7 +109,7 @@ Common options:
 
 Use 'freefactory COMMAND -h' for detailed help.
 ```
-This utility will gradually be expanded to include more functionality such as potentially running `streaming` or `recording` Factories as well.
+This utility will gradually be expanded to include more functionality such as potentially running `streaming` and `recording` Factories as well.
     
  - **2026-11-08** Redesigned the output section of the Factory Builder into four tabs. **Final Output and Dropbox**, **Manual Options**, **Timing Controls** and **Factory Management**. See changelog for more details.
    
