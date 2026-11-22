@@ -989,10 +989,10 @@ class FreeFactoryCore:
         video_fflags    = factory_data.get("FFLAGS", "").strip()
         video_movflags  = factory_data.get("MOVFLAGS", "").strip()
         audio_codec     = factory_data.get("AUDIOCODECS", "").strip()
+        audio_bitrate   = factory_data.get("AUDIOBITRATE", "").strip()
+        audio_channels  = factory_data.get("AUDIOCHANNELS", "").strip()
         preset          = factory_data.get("VIDEOPRESET", "").strip()
         video_bitrate   = factory_data.get("VIDEOBITRATE", "").strip()
-        audio_bitrate   = factory_data.get("AUDIOBITRATE", "").strip()
-        
         vf_string       = (factory_data.get("VIDEOFILTERS","") or "").strip()
         size            = (factory_data.get("VIDEOSIZE","") or "").strip()
         af_string       = (factory_data.get("AUDIOFILTERS","") or "").strip()
@@ -1017,6 +1017,8 @@ class FreeFactoryCore:
             flags += ["-c:a", audio_codec]
         if audio_bitrate:
             flags += ["-b:a", audio_bitrate]
+        if audio_channels:
+            flags += ["-ac", audio_channels]        
         if vf_string and not vf_string.endswith("="):
             flags += ["-vf", vf_string]
         if size and not self._has_scale(vf_string):

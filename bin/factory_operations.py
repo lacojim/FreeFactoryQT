@@ -1,3 +1,34 @@
+# factory_operations.py
+# 
+#############################################################################
+#               This code is licensed under the GPLv3
+#    The following terms apply to all files associated with the software
+#    unless explicitly disclaimed in individual files or parts of files.
+#
+#                          Free Factory
+#
+#                       Copyright 2013-2026
+#                               by
+#                     Jim Hines and Karl Swisher
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#############################################################################
+#
+# This file has been created to allow creating a new freefactory cli command. This will operate on already existing factories and does not allow the creation of new factorys.
+# You still need to use FreeFactoryQt for building factories.
+#
+#
 # So far implemented.
 #
 # list_factories()
@@ -6,7 +37,7 @@
 # backup_factories()
 # export_factory
 # import_factory
-#
+# run_factory
 
 # Shared, GUI-independent operations for FreeFactory factory files.
 
@@ -143,7 +174,7 @@ def check_notify_duplicates(factory_dir: str | Path) -> dict[str, list[str]]:
 
 def backup_factories(factory_dir: str | Path, backup_path: str | Path) -> int:
     """
-    Back up all extensionless factory files into a ZIP archive.
+    Back up all regular factory files into a ZIP archive.
 
     Returns the number of factories backed up.
     Original factory files are never modified.
@@ -156,10 +187,10 @@ def backup_factories(factory_dir: str | Path, backup_path: str | Path) -> int:
             f"Factory directory not found: {factory_dir}"
         )
 
-    # Factory files have no extension.
+    # Match list_factories(): periods in factory names are valid.
     factory_files = sorted(
         path for path in factory_dir.iterdir()
-        if path.is_file() and not path.suffix
+        if path.is_file()
     )
 
     if not factory_files:
@@ -492,3 +523,149 @@ def import_factory(
 
 
 
+
+# ---------------------------------------------------------------------------
+# Run an existing factory (CLI / FFTools shared operation)
+# ---------------------------------------------------------------------------
+
+def get_factory_directory() -> Path:
+    """Resolve FactoryLocation using FreeFactory's existing configuration."""
+    from config_manager import ConfigManager
+
+    configured = ConfigManager().get("FactoryLocation") or "/opt/FreeFactory/Factories"
+    directory = Path(configured).expanduser()
+    if not directory.is_dir():
+        raise NotADirectoryError(f"Factory directory not found: {directory}")
+    return directory
+
+
+def _numbered_output(path: Path) -> Path:
+    """Find the first available name, preserving multi-dot stems."""
+    if not path.exists():
+        return path
+    index = 1
+    while True:
+        candidate = path.with_name(f"{path.stem}-{index}{path.suffix}")
+        if not candidate.exists():
+            return candidate
+        index += 1
+
+
+def run_factory(
+    factory_name: str,
+    input_file: str | Path,
+    output_dir: str | Path | None = None,
+    *,
+    overwrite: bool = False,
+    ask: bool = False,
+    no_overwrite: bool = False,
+    factory_dir: str | Path | None = None,
+    dry_run: bool = False,
+) -> int | list[str]:
+    """Run an existing single-output factory; return exit code or dry-run command.
+
+    Default collision behavior: append -1, -2, etc. to the output stem.
+    `overwrite` corresponds to CLI -y, `no_overwrite` to -n.
+    `ask` requires an interactive terminal if the output exists.
+    No factory file is changed. Multi-output and analysis-only jobs are
+    deliberately rejected until their destinations can be handled safely.
+    """
+    import sys
+    from config_manager import ConfigManager
+    from core import FreeFactoryCore
+    from FreeFactoryConversion import read_factory, acquire_concurrency_slot, _which_accel
+
+    if sum(bool(x) for x in (overwrite, ask, no_overwrite)) > 1:
+        raise ValueError("Choose only one of overwrite, ask, or no_overwrite")
+
+    directory = Path(factory_dir).expanduser() if factory_dir is not None else get_factory_directory()
+    if not directory.is_dir():
+        raise NotADirectoryError(f"Factory directory not found: {directory}")
+    if not factory_name or Path(factory_name).name != factory_name or factory_name in (".", ".."):
+        raise ValueError("Factory must be a filename, not a path")
+    factory_path = directory / factory_name
+    if not factory_path.is_file():
+        raise FileNotFoundError(f"Factory not found: {factory_path}")
+
+    source = Path(input_file).expanduser().resolve()
+    if not source.is_file():
+        raise FileNotFoundError(f"Input file not found: {source}")
+
+    factory_data = read_factory(factory_path)
+    if str(factory_data.get("MULTIOUTPUT", "")).lower() in ("true", "yes", "1", "on"):
+        raise NotImplementedError("run_factory does not yet support MULTIOUTPUT factories")
+    if any(str(factory_data.get(k, "")).lower() in ("true", "yes", "1", "on")
+           for k in ("SHOWAUDIOANALYSISREPORT", "SHOWVIDEOANALYSISREPORT")):
+        raise NotImplementedError("run_factory does not yet support analysis report destinations")
+
+    data = factory_data.copy()
+    if output_dir is not None:
+        target_dir = Path(output_dir).expanduser().resolve()
+        if not target_dir.is_dir():
+            raise NotADirectoryError(f"Output directory not found: {target_dir}")
+        data["OUTPUTDIRECTORY"] = str(target_dir)
+    else:
+        target_dir = Path(data.get("OUTPUTDIRECTORY") or ".").expanduser().resolve()
+        if not target_dir.is_dir():
+            raise NotADirectoryError(f"Output directory not found: {target_dir}")
+        data["OUTPUTDIRECTORY"] = str(target_dir)
+
+    cfg = ConfigManager()
+    core = FreeFactoryCore(cfg)
+    cmd = [str(part) for part in core.build_ffmpeg_command(source, data)]
+    if not cmd or cmd[-1] == "-" or cmd[-1].startswith("-"):
+        raise ValueError("Factory did not produce a supported file destination")
+    original = Path(cmd[-1])
+    if original.parent.resolve() != target_dir:
+        raise ValueError("Factory output destination does not match configured output directory")
+    if original.resolve() == source:
+        raise ValueError("Refusing to overwrite the input file")
+
+    destination = original
+    if destination.exists():
+        if overwrite:
+            pass
+        elif no_overwrite:
+            raise FileExistsError(f"Output already exists: {destination}")
+        elif ask:
+            if not sys.stdin.isatty():
+                raise RuntimeError("--ask requires an interactive terminal")
+            choice = input(f"Output exists: {destination}\nOverwrite? [y/N] ").strip().lower()
+            if choice not in ("y", "yes"):
+                destination = _numbered_output(destination)
+        else:
+            destination = _numbered_output(destination)
+
+    cmd[-1] = str(destination)
+    # core.py currently supplies -y by default; -n protects against races
+    # and accidental overwrites unless the user explicitly requested -y.
+    cmd = [part for part in cmd if part not in ("-y", "-n")]
+    cmd.insert(1, "-y" if overwrite or (ask and destination == original) else "-n")
+    if "-nostdin" not in cmd:
+        cmd.insert(2, "-nostdin")
+
+    if dry_run:
+        return cmd
+
+    # Use the existing service's execution/logging path, but avoid rebuilding
+    # the command (which would lose the collision-safe destination).
+    import subprocess
+    from FreeFactoryConversion import ensure_log_dir, build_log_path, factory_provenance
+    from datetime import datetime as _datetime
+    from shlex import join as shell_join
+
+    with acquire_concurrency_slot(bool(_which_accel(data)), cfg):
+        log_path = build_log_path(ensure_log_dir(), source)
+        with log_path.open("a", encoding="utf-8") as log:
+            log.write(f"\n==== {_datetime.now().isoformat()} ====\n")
+            log.writelines(factory_provenance(factory_path))
+            log.write("CMD: " + shell_join(cmd) + "\n\n")
+            log.flush()
+            with subprocess.Popen(cmd, stdin=subprocess.DEVNULL,
+                                  stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                  text=True, bufsize=1) as process:
+                for line in process.stdout:
+                    log.write(line)
+                rc = process.wait()
+            log.write(f"\n[exit_code] {rc}\n")
+        return rc

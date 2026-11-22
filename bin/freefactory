@@ -1,0 +1,148 @@
+#!/usr/bin/env python3
+
+# FreeFactory command-line interface for existing factory operations.
+#
+# 
+#############################################################################
+#               This code is licensed under the GPLv3
+#    The following terms apply to all files associated with the software
+#    unless explicitly disclaimed in individual files or parts of files.
+#
+#                          Free Factory
+#
+#                       Copyright 2013-2026
+#                               by
+#                     Jim Hines and Karl Swisher
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#############################################################################
+
+import argparse
+from pathlib import Path
+import shlex
+import sys
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="FreeFactory command-line operations",
+        epilog="""
+    Common options:
+
+    run:
+        -y             Overwrite existing output
+        -n             Fail if output exists
+        --ask          Prompt before overwriting
+        -o DIR         Override factory output directory
+        --dry-run      Display FFmpeg command without executing
+
+    export:
+        -d DIR         Export destination directory
+        --zip          Package exports into a ZIP archive
+
+    Use 'freefactory COMMAND -h' for detailed help.
+    """,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    run = subparsers.add_parser("run", help="Run an existing factory on an input file")
+    run.add_argument("factory", help="Factory name in configured FactoryLocation")
+    run.add_argument("input", help="Input media filename")
+    run.add_argument("-o", "--output-dir", metavar="DIR", help="Override output directory for this run")
+    policy = run.add_mutually_exclusive_group()
+    policy.add_argument("-y", "--overwrite", action="store_true", help="Overwrite existing output")
+    policy.add_argument("-n", "--no-overwrite", action="store_true", help="Fail if output already exists")
+    policy.add_argument("--ask", action="store_true", help="Ask before overwriting an existing output")
+    run.add_argument("--dry-run", action="store_true", help="Print FFmpeg command without running it")
+
+    subparsers.add_parser("list", help="List factory filenames")
+    subparsers.add_parser("check", help="Check factory file formatting")
+    subparsers.add_parser("duplicates", help="Find factories sharing a NOTIFYDIRECTORY")
+
+    backup = subparsers.add_parser("backup", help="Back up all factory files to a ZIP archive")
+    backup.add_argument("archive", help="New ZIP archive path (must not exist)")
+
+    export = subparsers.add_parser("export", help="Export sanitized factory copies")
+    export.add_argument("factories", nargs="+", help="Factory names to export")
+    export.add_argument("-d", "--destination", required=True, metavar="DIR", help="Existing destination directory")
+    export.add_argument("--zip", action="store_true", help="Export to a ZIP archive")
+
+    imp = subparsers.add_parser("import", help="Import factory files or ZIP archives")
+    imp.add_argument("sources", nargs="+", help="Files or ZIP archives to import")
+
+    args = parser.parse_args(argv)
+    try:
+        import factory_operations as fo
+        if args.command == "run":
+            result = fo.run_factory(args.factory, args.input, output_dir=args.output_dir,
+                                    overwrite=args.overwrite, no_overwrite=args.no_overwrite,
+                                    ask=args.ask, dry_run=args.dry_run)
+            if args.dry_run:
+                print(shlex.join(result))
+                return 0
+            print(f"FreeFactory: FFmpeg exited with code {result}")
+            return result
+
+        factory_dir = fo.get_factory_directory()
+        if args.command == "list":
+            names = fo.list_factories(factory_dir)
+            for name in names:
+                print(name)
+            print(f"{len(names)} factory file(s) in {factory_dir}")
+        elif args.command == "check":
+            issues = fo.check_factory_integrity(factory_dir)
+            if issues:
+                for issue in issues:
+                    print(issue)
+                print(f"{len(issues)} issue(s) detected")
+                return 1
+            print("No basic formatting issues detected.")
+        elif args.command == "duplicates":
+            duplicates = fo.check_notify_duplicates(factory_dir)
+            if not duplicates:
+                print("No shared NOTIFYDIRECTORY values found.")
+            else:
+                for directory, names in sorted(duplicates.items()):
+                    print(f"{directory}:")
+                    for name in names:
+                        print(f"  {name}")
+                print(f"{len(duplicates)} shared notify directory/directories")
+        elif args.command == "backup":
+            archive = Path(args.archive).expanduser()
+            count = fo.backup_factories(factory_dir, archive)
+            print(f"Backed up {count} factory file(s) to {archive}")
+        elif args.command == "export":
+            paths = []
+            for name in args.factories:
+                if Path(name).name != name or name in (".", ".."):
+                    raise ValueError(f"Use a factory filename, not a path: {name}")
+                paths.append(factory_dir / name)
+            exported = fo.export_factory(paths, args.destination, as_zip=args.zip)
+            for path in exported:
+                print(f"Exported: {path}")
+        elif args.command == "import":
+            imported = fo.import_factory(args.sources, factory_dir)
+            for path in imported:
+                print(f"Imported: {path}")
+            if not imported:
+                print("No new factories imported (identical files may already exist).")
+        return 0
+    except (OSError, ValueError, RuntimeError, NotImplementedError, ImportError) as exc:
+        print(f"freefactory: {exc}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
