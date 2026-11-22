@@ -3,6 +3,21 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.69-dev] - 2026-11-21
+
+### Added
+- **FreeFactory CLI:** Introduced the `freefactory` command-line utility, backed by the shared `factory_operations.py` library. Commands include `run`, `list`, `check`, `duplicates`, `backup`, `export`, and `import`.
+- **Run Factory:** Execute a named factory against an input file using the factory directory configured in `.freefactoryrc`. Supports dry-run command preview, an optional output-directory override, automatic output filename numbering to avoid collisions, and explicit `-y` overwrite behavior.
+- **Factory Management:** Exposed factory listing, basic formatting checks, shared `NOTIFYDIRECTORY` detection, ZIP backups, sanitized exports (individual files or ZIP), and imports through the CLI. Imports rename colliding factory filenames instead of replacing existing factories.
+
+### Fixed
+- **Factory Backup Completeness:** Corrected factory selection so names containing periods (such as `5.1-to-6ch_discrete-MultiOutput` and `XDCamHD422-29.97-MXF`) are included in backups. Previously, a suffix-based filter silently excluded them.
+
+### Tested / Notes
+- Verified real HEVC NVENC conversion through both the operations library and CLI, including repeated runs with numbered outputs and explicit overwrite.
+- Verified listing 78 factories, basic integrity checks, duplicate-directory checks, individual and ZIP exports, and a complete ZIP backup of all 78 factories.
+- Verified importing an exported factory with automatic collision renaming (`-import`). Multi-output factory execution remains outside the initial CLI `run` implementation.
+
 ## [1.1.68-dev] - 2026-11-16
 - Fixed a longstanding FreeFactoryQt crash triggered when an SRT caller disconnects. FFmpeg exits with an I/O error, causing premature QThread cleanup due to a conflicting finished signal. Restored proper thread lifecycle handling.
 
