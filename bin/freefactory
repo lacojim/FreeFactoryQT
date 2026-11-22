@@ -47,6 +47,11 @@ def main(argv=None):
         -o DIR         Override factory output directory
         --dry-run      Display FFmpeg command without executing
 
+    list:
+        --types        Show discovered FACTORYTYPE values and counts
+        --type TYPE    Filter by FACTORYTYPE
+        --sort type    Sort by FACTORYTYPE (default: name)
+
     export:
         -d DIR         Export destination directory
         --zip          Package exports into a ZIP archive
@@ -67,7 +72,13 @@ def main(argv=None):
     policy.add_argument("--ask", action="store_true", help="Ask before overwriting an existing output")
     run.add_argument("--dry-run", action="store_true", help="Print FFmpeg command without running it")
 
-    subparsers.add_parser("list", help="List factory filenames")
+    listing = subparsers.add_parser("list", help="List factory filenames")
+    listing.add_argument("--types", action="store_true",
+                         help="Show discovered FACTORYTYPE values and counts")
+    listing.add_argument("--type", dest="factory_type", metavar="TYPE",
+                         help="Show only factories matching FACTORYTYPE")
+    listing.add_argument("--sort", choices=("name", "type"), default="name",
+                         help="Sort by filename (default) or FACTORYTYPE")
     subparsers.add_parser("check", help="Check factory file formatting")
     subparsers.add_parser("duplicates", help="Find factories sharing a NOTIFYDIRECTORY")
 
@@ -97,10 +108,31 @@ def main(argv=None):
 
         factory_dir = fo.get_factory_directory()
         if args.command == "list":
-            names = fo.list_factories(factory_dir)
-            for name in names:
-                print(name)
-            print(f"{len(names)} factory file(s) in {factory_dir}")
+            if args.types:
+                types = fo.list_factory_types(factory_dir)
+                if types:
+                    width = max(len(kind or "(undefined)") for kind, _ in types)
+                    for kind, count in types:
+                        print(f"{(kind or '(undefined)'):<{width}}  {count}")
+                print(f"{sum(count for _, count in types)} factory file(s) in {factory_dir}")
+            elif args.sort == "type":
+                entries = fo.list_factories_by_type(
+                    factory_dir, factory_type=args.factory_type,
+                    sort_by=args.sort, include_type=True
+                )
+                width = max((len(kind or "(undefined)") for _, kind in entries), default=4)
+                print(f"{'TYPE':<{width}}  FACTORY")
+                print(f"{'-' * width}  {'-' * 40}")
+                for name, kind in entries:
+                    print(f"{(kind or '(undefined)'):<{width}}  {name}")
+                print(f"{len(entries)} factory file(s) in {factory_dir}")
+            else:
+                names = fo.list_factories_by_type(
+                    factory_dir, factory_type=args.factory_type, sort_by=args.sort
+                )
+                for name in names:
+                    print(name)
+                print(f"{len(names)} factory file(s) in {factory_dir}")
         elif args.command == "check":
             issues = fo.check_factory_integrity(factory_dir)
             if issues:

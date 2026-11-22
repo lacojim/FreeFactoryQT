@@ -55,6 +55,7 @@ from PyQt6.uic import loadUi
 from PyQt6 import uic
 
 from config_manager import ConfigManager
+from factory_operations import list_factories_by_type
 from core import FFmpegWorker, FreeFactoryCore, FFmpegWorkerZone
 from droptextedit import DropTextEdit
 from ffmpeghelp import FFmpegHelpDialog
@@ -408,6 +409,10 @@ class FreeFactoryApp(QMainWindow):
         # Factory List
         self.listFactoryFiles.itemClicked.connect(self.load_selected_factory)   # For Mouse clicks
         self.listFactoryFiles.itemActivated.connect(self.load_selected_factory) # For Keyboard cursor and Enter
+
+        # Filter the Factory list by the selected user-defined FACTORYTYPE.
+        self.checkFilterByType.toggled.connect(self.populate_factory_list)
+        self.FactoryType.activated.connect(self._on_factory_type_filter_activated)
         
         # File Queue Buttons
         self.startQueueButton.clicked.connect(self.start_conversion_queue)
@@ -2770,11 +2775,35 @@ class FreeFactoryApp(QMainWindow):
 
 
 
-    def populate_factory_list(self):
-        self.core.reload_factory_files()  # Now cleaner and centralized
+    def _on_factory_type_filter_activated(self, *_):
+        # Only user selection of a type should refresh the filter; loading a
+        # Factory also changes FactoryType, and must not trigger a refresh.
+        if self.checkFilterByType.isChecked():
+            self.populate_factory_list()
+
+    def populate_factory_list(self, *_):
+        self.core.reload_factory_files()
+        selected = self.listFactoryFiles.currentItem()
+        selected_name = selected.text() if selected else None
+        filter_enabled = self.checkFilterByType.isChecked()
+        chosen_type = self.FactoryType.currentText().strip()
+        allowed_names = None
+        if filter_enabled:
+            # Reuse the same FACTORYTYPE matching logic as the CLI.
+            allowed_names = set(list_factories_by_type(
+                self.core.factory_dir, factory_type=chosen_type
+            ))
+
         self.listFactoryFiles.clear()
         for path in sorted(self.core.factory_files, key=lambda p: p.name.lower()):
+            if allowed_names is not None and path.name not in allowed_names:
+                continue
             self.listFactoryFiles.addItem(path.name)
+
+        if selected_name:
+            matches = self.listFactoryFiles.findItems(selected_name, Qt.MatchFlag.MatchExactly)
+            if matches:
+                self.listFactoryFiles.setCurrentItem(matches[0])
             
 
 

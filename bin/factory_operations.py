@@ -65,6 +65,68 @@ def list_factories(factory_dir: str | Path) -> list[str]:
     return [path.name for path in sorted(directory.iterdir()) if path.is_file()]
 
 
+def _factory_type_entries(factory_dir: str | Path) -> list[tuple[str, str]]:
+    """Read (filename, FACTORYTYPE) without modifying factory files."""
+    directory = Path(factory_dir).expanduser()
+    entries = []
+    for name in list_factories(directory):
+        kind = ""
+        with (directory / name).open("r", encoding="utf-8", errors="ignore") as stream:
+            for line in stream:
+                stripped = line.strip()
+                if not stripped or stripped.startswith("#"):
+                    continue
+                key, separator, value = line.partition("=")
+                if separator and key.strip().upper() == "FACTORYTYPE":
+                    kind = value.strip()
+                    break
+        entries.append((name, kind))
+    return entries
+
+
+def list_factory_types(factory_dir: str | Path) -> list[tuple[str, int]]:
+    """Return discovered (type, count) pairs; empty type means undefined.
+
+    Group type spellings case-insensitively, preserving the first spelling found.
+    """
+    counts = {}
+    for _, kind in _factory_type_entries(factory_dir):
+        folded = kind.casefold()
+        if folded not in counts:
+            counts[folded] = [kind, 0]
+        counts[folded][1] += 1
+    return sorted(((kind, count) for kind, count in counts.values()),
+                  key=lambda item: (item[0] == "", item[0].casefold()))
+
+
+def list_factories_by_type(
+    factory_dir: str | Path,
+    factory_type: str | None = None,
+    sort_by: str = "name",
+    include_type: bool = False,
+) -> list[str] | list[tuple[str, str]]:
+    """Filter/sort factory files by user-defined FACTORYTYPE.
+
+    Default returns filenames as before; include_type returns (name, type) pairs.
+    Type comparisons are case-insensitive. Missing types are empty strings.
+    """
+    if sort_by not in ("name", "type"):
+        raise ValueError(f"Unsupported sort order: {sort_by}")
+    if factory_type is None and sort_by == "name" and not include_type:
+        return list_factories(factory_dir)
+
+    entries = _factory_type_entries(factory_dir)
+    if factory_type is not None:
+        entries = [
+            (name, kind) for name, kind in entries
+            if kind.casefold() == factory_type.casefold()
+            or (factory_type.casefold() == "undefined" and not kind)
+        ]
+    if sort_by == "type":
+        entries.sort(key=lambda item: (item[1] == "", item[1].casefold(), item[0].casefold()))
+    return entries if include_type else [name for name, _ in entries]
+
+
 def check_factory_integrity(factory_dir: str | Path) -> list[str]:
     """
     Check factory files for basic formatting problems.

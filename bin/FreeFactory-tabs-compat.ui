@@ -340,6 +340,11 @@
        </item>
        <item>
         <property name="text">
+         <string>image</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>piper</string>
         </property>
        </item>
@@ -395,6 +400,26 @@ Internal.</string>
        </property>
        <property name="text">
         <string>Run Internal Factory</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="checkFilterByType">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>58</y>
+         <width>91</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Filter by Type</string>
        </property>
       </widget>
      </widget>
@@ -13721,42 +13746,6 @@ To use this tab efficiently, use one of the All buttons to find the codec, filte
       </property>
       <property name="wordWrap">
        <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="ManualOptionsInput1">
-      <property name="geometry">
-       <rect>
-        <x>260</x>
-        <y>260</y>
-        <width>681</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Input / Global Options: Use this field for FFmpeg options that apply before the input file
-(e.g., -threads, -re, -f). These flags are inserted before the -i argument and are not
-otherwise available through the GUI.</string>
-      </property>
-      <property name="placeholderText">
-       <string>-hwaccel cuda -hwaccel_output_format cuda</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="ManualOptionsOutput1">
-      <property name="geometry">
-       <rect>
-        <x>260</x>
-        <y>320</y>
-        <width>681</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Output Options: Use this field for FFmpeg options that apply after the input file
-(e.g., codec-specific flags, -vf, -af). These flags are inserted after -i and before
-the final output file (-f / filename) and are not otherwise available through the GUI.</string>
-      </property>
-      <property name="placeholderText">
-       <string>-c:s copy -c:v copy -c:a copy</string>
       </property>
      </widget>
     </widget>
