@@ -48,13 +48,80 @@ FreeFactory makes sharing encoding setups easy: import a Factory, update the Out
 ---
 
 ## What's New
+
+- **2026-11-21** Introducing the `freefactory` command-line utility, backed by the shared `factory_operations.py` library!
+
+The CLI supports the following commands:
+
+- `run` — Run an existing factory on a media file.
+- `list` — List available factories.
+- `check` — Check factory file formatting.
+- `duplicates` — Find factories sharing a `NOTIFYDIRECTORY`.
+- `backup` — Back up all factory files to a ZIP archive.
+- `export` — Export sanitized factory copies.
+- `import` — Import factory files or ZIP archives.
+
+This opens up some powerful possibilities! For example, you can configure desktop file-manager actions to right-click a media file and process it using a particular Factory. You can also schedule factory operations using cron.
+
+The CLI supports overriding a Factory's configured output directory directly from the command line.
+
+**Example:**
+
+```bash
+freefactory run Audio2MP3 MyFavoriteSong.flac -o /MyMp3Collection
+```
+
+The `-o` option is optional. If omitted, FreeFactory uses the output directory already configured in the Factory.
+
+### Built-in Help
+
+```text
+$ freefactory -h
+usage: freefactory [-h] {run,list,check,duplicates,backup,export,import} ...
+
+FreeFactory command-line operations
+
+positional arguments:
+  {run,list,check,duplicates,backup,export,import}
+    run                 Run an existing factory on an input file
+    list                List factory filenames
+    check               Check factory file formatting
+    duplicates          Find factories sharing a NOTIFYDIRECTORY
+    backup              Back up all factory files to a ZIP archive
+    export              Export sanitized factory copies
+    import              Import factory files or ZIP archives
+
+options:
+  -h, --help            show this help message and exit
+
+Common options:
+
+  run:
+    -y             Overwrite existing output
+    -n             Fail if output exists
+    --ask          Prompt before overwriting
+    -o DIR         Override factory output directory
+    --dry-run      Display FFmpeg command without executing
+
+  export:
+    -d DIR         Export destination directory
+    --zip          Package exports into a ZIP archive
+
+Use 'freefactory COMMAND -h' for detailed help.
+```
+This utility will gradually be expanded to include more functionality such as potentially running `streaming` or `recording` Factories as well.
+    
  - **2026-11-08** Redesigned the output section of the Factory Builder into four tabs. **Final Output and Dropbox**, **Manual Options**, **Timing Controls** and **Factory Management**. See changelog for more details.
+   
+   <img width="852" height="277" alt="image" src="https://github.com/user-attachments/assets/e1a0fe02-e7c1-42da-99df-2f08ba546cb0" />
+
  - **2026-06-27** Added **Timecode Mode** and **Start Timecode** controls to the **Advanced Video** tab. Timecode Mode provides three options: **Default**, **DF (Drop Frame)**, and **NDF (Non-Drop Frame)**. Selecting DF or NDF automatically formats the Start Timecode field using the appropriate separator (semicolon or colon) and allows the starting timecode to be customized.
  - By default, FFmpeg writes MXF files using **Non-Drop Frame (NDF)** timecode unless the `-timecode` option is specified. This can cause compatibility issues with some professional broadcast playout systems that expect **Drop Frame (DF)** timecode. The new Timecode controls allow this behavior to be overridden without using **Manual Output Options**.
  - Timecode is stored as container metadata and can therefore be modified without re-encoding the video or audio. When used with **Video Copy** (`-c:v copy`) and **Audio Copy** (`-c:a copy`), FreeFactory can update the starting timecode by remuxing the file, producing an almost instantaneous conversion with no loss of quality.
 - **2026-05-23** Added CRF (Constant Rate Factor) support to the Video tab. Fixed Preview crash when Analysis Reports are enabled. Added **Factory Summary** bar at the bottom of the Factory Builder tab.
 - **2026-05-10** Added Audio and Video analysis. Audio portition is working now. What this can do for example is when correcting audio levels for Broadcast (-24LUFS) or YouTube (-16LUFS), it will scan the file first and build a table of the levels, then on the final pass it will use those anaylized numbers for the full correction, while keeping dynamic range. For now, loudnorm and volumedetect (volumedetect is report only) are supported.This has been a long overdue feature and needed badly for correcting audio on files in our playback server at work. Fix it at the source instead of relying on automatic audio levelers which induce pumping or breathing effects when working.
-<img width="818" height="224" alt="image" src="https://github.com/user-attachments/assets/5834e189-ea46-407a-ab9c-2bdb79d0e0e8" />
+  
+  <img width="818" height="224" alt="image" src="https://github.com/user-attachments/assets/5834e189-ea46-407a-ab9c-2bdb79d0e0e8" />
 
 As you can see in the photo, you first set the filter to something close to what you need, this is the reference point. Once FreeFactory via FFMpeg runs the analysis on the file, it will replace the filter (behind the scenes) with the new filter command then renders the file with the new parameters. So the filter becomes similar to this:
 
