@@ -41,6 +41,7 @@ We would welcome package maintainers for additional Linux distributions who are 
 - Fully compatible with FFmpeg (tested on FFmpeg v7+)
 - Easy to use **Flags Builder** for -flags, -flags2, -fflags and -movflags.
 - Supports audio/video analysis via two passes. Operates in two modes: Analysis reports only or full analysis and render for audio. Video only supports reports at the moment.
+- Run any Factory using the *freefactory* CLI command. This is a powerful new addition.
 
 FreeFactory makes sharing encoding setups easy: import a Factory, update the Output and Notify directories, and you're ready to go.
 > 📦 Factories are portable and easy to exchange. Only minor path edits are usually required.
@@ -72,6 +73,7 @@ freefactory run Audio2MP3 MyFavoriteSong.flac -o /MyMp3Collection
 ```
 
 The `-o` option is optional. If omitted, FreeFactory uses the output directory already configured in the Factory.
+
 
 ### Built-in Help
 
@@ -257,14 +259,13 @@ These would be stored under the `Manual Output Ops` field in your Factory, and s
 
 ## 🗺️ Planned Features / To-Do
 
-- ✅ Dynamic UI: only show valid `pix_fmt`, audio, and video profiles based on selected codec
-- ✅ Batch queue with mixed Factories
-- ✅ Rewrite `FreeFactoryConversion.tcl` in Python (as of 2025-08-22 this has been completed). FreeFactoryConversion.tcl is now officially broken. 
-- ✅ Factory Types. These could include internal, audioonly, video+audio, streaming+record, etc.
-- 🪟 Add to Factory Tools an option to create a Factory from a FFMpeg Linux command line.
+- ✅ **Completed** Dynamic UI: only show valid `pix_fmt`, audio, and video profiles based on selected codec
+- ✅ **Completed** Batch queue with mixed Factories
+- ✅ **Completed** Rewrite `FreeFactoryConversion.tcl` in Python (as of 2025-08-22 this has been completed). FreeFactoryConversion.tcl is now officially broken. 
+- ✅ **Completed** Factory Types. These could include internal, audioonly, video+audio, streaming+record, etc.
+- ✅ **Completed** Add a new commandline tool called *freefactory*. This will run factories using *freefactory run factoryname inputfilename*. This will allow scripting or cron jobs for executing a factory job. No UI needed once the factory exists.
+- 🪟 Add to Factory Tools and CLI command an option to create a Factory from a FFMpeg Linux command line.
 - 🪟 **In Progress:** Add Internal Factories. This would be for creating video countdowns, tone and bars, etc either for streaming or writing as a file.
-- 🪟 **In Progress:** Add a new commandline tool called *freefactory*. This will run factories using *freefactory -factory /factorypath/name filename*. This will allow scripting or cron jobs for executing a factory job. You can even add to your Linux Menu Actions potentially, which is really the point of this ;). No UI needed once the factory exists.
-- 🪟 Port FreeFactoryQT to Windows. (Is this really necessary now with WSL?)
   
 ---
 
