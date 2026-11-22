@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 This project loosely follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [1.1.70-dev] - 2026-11-22
+
+### Added
+- **Filter by Factory Type** Added a Filter by Type checkbox to the Factory Selection panel. When enabled, the Factory List displays only Factories matching the selected Factory Type. Filtering supports user-defined types and includes Factories with undefined types. Particularly useful when managing large Factory collections.
+
 ## [1.1.69-dev] - 2026-11-21
 
 ### Added
