@@ -259,11 +259,11 @@ These would be stored under the `Manual Output Ops` field in your Factory, and s
 
 ## 🗺️ Planned Features / To-Do
 
-- ✅ **Completed** Dynamic UI: only show valid `pix_fmt`, audio, and video profiles based on selected codec
-- ✅ **Completed** Batch queue with mixed Factories
-- ✅ **Completed** Rewrite `FreeFactoryConversion.tcl` in Python (as of 2025-08-22 this has been completed). FreeFactoryConversion.tcl is now officially broken. 
-- ✅ **Completed** Factory Types. These could include internal, audioonly, video+audio, streaming+record, etc.
-- ✅ **Completed** Add a new commandline tool called *freefactory*. This will run factories using *freefactory run factoryname inputfilename*. This will allow scripting or cron jobs for executing a factory job. No UI needed once the factory exists.
+- ✅ **Completed:** Dynamic UI: only show valid `pix_fmt`, audio, and video profiles based on selected codec
+- ✅ **Completed:** Batch queue with mixed Factories
+- ✅ **Completed:** Rewrite `FreeFactoryConversion.tcl` in Python (as of 2025-08-22 this has been completed). FreeFactoryConversion.tcl is now officially broken. 
+- ✅ **Completed:** Factory Types. These could include internal, audioonly, video+audio, streaming+record, etc.
+- ✅ **Completed:** Add a new commandline tool called *freefactory*. This will run factories using *freefactory run factoryname inputfilename*. This will allow scripting or cron jobs for executing a factory job. No UI needed once the factory exists.
 - ✅ **Completed:** Add Internal Factories. Internal Factories can generate procedural video, synthesized audio, test patterns, countdowns, and other media using FFmpeg's internal sources and filters.
 - 🪟 Add to Factory Tools and CLI command an option to create a Factory from a FFMpeg Linux command line.
   
