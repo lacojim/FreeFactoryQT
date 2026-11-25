@@ -39,7 +39,7 @@ We would welcome package maintainers for additional Linux distributions who are 
 - Supports drag-and-drop and watched folders
 - Clean separation between UI (FreeFactoryQT) and background service (`FreeFactoryConversion.py`)
 - Fully compatible with FFmpeg (tested on FFmpeg v7+)
-- Easy to use **Flags Builder** for -flags, -flags2, -fflags and -movflags.
+- Easy to use **Flags Builder** for -flags, -flags2, -fflags, -movflags and mpvflags.
 - Supports audio/video analysis via two passes. Operates in two modes: Analysis reports only or full analysis and render for audio. Video only supports reports at the moment.
 - Run any Factory using the *freefactory* CLI command. This is a powerful new addition.
 
@@ -264,8 +264,8 @@ These would be stored under the `Manual Output Ops` field in your Factory, and s
 - ✅ **Completed** Rewrite `FreeFactoryConversion.tcl` in Python (as of 2025-08-22 this has been completed). FreeFactoryConversion.tcl is now officially broken. 
 - ✅ **Completed** Factory Types. These could include internal, audioonly, video+audio, streaming+record, etc.
 - ✅ **Completed** Add a new commandline tool called *freefactory*. This will run factories using *freefactory run factoryname inputfilename*. This will allow scripting or cron jobs for executing a factory job. No UI needed once the factory exists.
+- ✅ **Completed:** Add Internal Factories. Internal Factories can generate procedural video, synthesized audio, test patterns, countdowns, and other media using FFmpeg's internal sources and filters.
 - 🪟 Add to Factory Tools and CLI command an option to create a Factory from a FFMpeg Linux command line.
-- 🪟 **In Progress:** Add Internal Factories. This would be for creating video countdowns, tone and bars, etc either for streaming or writing as a file.
   
 ---
 
