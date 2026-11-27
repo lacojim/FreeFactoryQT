@@ -1,6 +1,6 @@
 ![image](https://github.com/user-attachments/assets/9cca7be8-736b-4768-8cd6-79cbd008605a)
 # FreeFactoryQT
-<img width="1109" height="776" alt="image" src="https://github.com/user-attachments/assets/ccd87d79-4468-4209-ae3e-e4b309dee793" />
+<img width="1109" height="775" alt="image" src="https://github.com/user-attachments/assets/60ed5d56-50d8-43d6-9d25-af746640a2c5" />
 
 
 
